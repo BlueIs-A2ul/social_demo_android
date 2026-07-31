@@ -9,6 +9,8 @@ const htmlFiles = fs
   .filter(file => file.endsWith('.html'))
   .map(file => path.join(wwwDir, file))
 
+const capacitorConfigPath = path.join(root, 'capacitor.config.json')
+
 const checks = [
   {
     name: 'fixed prototype viewport meta',
@@ -73,6 +75,20 @@ if (failures.length > 0) {
     )
   })
   process.exit(1)
+}
+
+if (fs.existsSync(capacitorConfigPath)) {
+  const capacitorConfig = JSON.parse(
+    fs.readFileSync(capacitorConfigPath, 'utf8'),
+  )
+  const appStartPath = capacitorConfig.server?.appStartPath
+
+  if (appStartPath && !appStartPath.startsWith('/')) {
+    console.error(
+      `server.appStartPath must start with "/" so Capacitor resolves it under localhost: ${appStartPath}`,
+    )
+    process.exit(1)
+  }
 }
 
 console.log('Responsive layout scan passed.')

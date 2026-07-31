@@ -90,7 +90,7 @@ Copy-Item app\build\outputs\apk\debug\app-debug.apk `
 
 **启动页配置键是 `server.appStartPath`（不是 startPath），否则不生效：**
 ```json
-{ "server": { "androidScheme": "https", "appStartPath": "login.html" } }
+{ "server": { "androidScheme": "https", "appStartPath": "/login.html" } }
 ```
 
 ---
