@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>元社交 - SPA</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        body { 
+            background-color: white; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            color: #333;
+        }
+        ::-webkit-scrollbar { display: none; }
+        
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: rgba(0,0,0,0.8);
+            color: #fff;
+            text-align: center;
+            padding: 12px 24px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 100px;
+            transform: translateX(-50%);
+            font-size: 14px;
+        }
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 100px; opacity: 1;}
+        }
+        @keyframes fadeout {
+            from {bottom: 100px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+        }
+    </style>
+<style data-id="immersive-translate-input-injected-css"></style>
+</head>
+<body class="bg-gray-50 is-mb-ai-setting">
+<div class="max-w-[393px] h-[100dvh] mx-auto bg-white overflow-hidden flex flex-col relative">
+<!-- 中间内容区 (填满剩余空间) -->
+<div class="flex-1 min-h-0 relative">
+<iframe class="w-full h-full border-none" id="content-frame" src="radar.html"></iframe>
+</div>
+<!-- 底部导航栏 -->
+<nav class="h-[64px] bg-white/80 backdrop-blur-lg border-t border-gray-100 flex items-center justify-between px-2 relative z-50">
+<!-- 房间 -->
+<button class="nav-item flex items-center justify-center flex-1 h-full text-gray-400" onclick="switchTab('room_list.html', this)">
+<span class="text-[16px]">房间</span>
+</button>
+<!-- 空间 -->
+<button class="nav-item flex items-center justify-center flex-1 text-gray-400 h-full" onclick="switchTab('profile.html', this)">
+<span class="text-[16px]">空间</span>
+</button>
+<!-- 雷达 (居中凸起) -->
+<div class="flex-1 flex justify-center -mt-8 h-full items-start">
+<button class="nav-item w-14 h-14 bg-gradient-to-tr from-[#ec4899] to-[#a29bfe] rounded-full border-4 border-white shadow-lg flex items-center justify-center transition-transform active:scale-90 overflow-hidden nav-active ring-4 ring-pink-200" onclick="switchTab('radar.html', this)">
+<img alt="Radar" class="w-full h-full object-cover" src="assets/packaged/sq/新雷达图.png"/>
+</button>
+</div>
+<!-- 分享 -->
+<button class="nav-item flex items-center justify-center flex-1 text-gray-400 h-full" onclick="switchTab('publish.html', this)">
+<span class="text-[16px] relative">
+                分享
+                <span class="absolute -top-1 -right-5 bg-red-500 text-white text-[10px] px-1 h-3.5 flex items-center justify-center min-w-[14px]">99+</span>
+</span>
+</button>
+<!-- 公告 -->
+<button class="nav-item flex items-center justify-center flex-1 text-gray-400 h-full" onclick="switchTab('announcements.html', this)">
+<span class="text-[16px]">公告</span>
+</button>
+</nav>
+<!-- Toast -->
+<div id="toast"></div>
+</div>
+<script>
+    function switchTab(url, el) {
+        // Change iframe src
+        document.getElementById('content-frame').src = url;
+        
+        // Reset all nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            // Check if it's the protruding button or a standard button
+            if (!item.classList.contains('rounded-full')) {
+                item.classList.remove('text-[#ec4899]', 'font-bold', 'nav-active');
+                item.classList.add('text-gray-400');
+            } else {
+                item.classList.remove('nav-active', 'ring-4', 'ring-pink-200');
+            }
+        });
+        
+        // Set active item
+        if (!el.classList.contains('rounded-full')) {
+            el.classList.remove('text-gray-400');
+            el.classList.add('text-[#ec4899]', 'font-bold', 'nav-active');
+        } else {
+            el.classList.add('nav-active', 'ring-4', 'ring-pink-200');
+        }
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.className = "show";
+        setTimeout(() => {
+            toast.className = toast.className.replace("show", "");
+        }, 3000);
+    }
+</script>
+</body></html>

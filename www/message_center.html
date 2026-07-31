@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>消息中心</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      body {
+        background-color: #f3f4f6;
+        margin: 0;
+        overflow: hidden;
+        font-family: -apple-system, sans-serif;
+      }
+      .app-container {
+        width: min(100vw, 393px);
+        height: 100dvh;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: white;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      * {
+        border-radius: 0 !important;
+        box-sizing: border-box;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        border: 0;
+        background: transparent;
+        padding: 0;
+        color: inherit;
+        cursor: pointer;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .avatar {
+        border-radius: 9999px !important;
+        display: block;
+        object-fit: cover;
+        flex: none;
+        border: 1px solid #fce7f3;
+        background: #fdf2f8;
+      }
+      .group-avatar {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 2px;
+        padding: 2px;
+        flex: none;
+        border: 1px solid #e5e7eb;
+        background: #f3f4f6;
+      }
+      .group-avatar img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      .flex {
+        display: flex;
+      }
+      .block {
+        display: block;
+      }
+      .hidden {
+        display: none;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .items-start {
+        align-items: flex-start;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .justify-between {
+        justify-content: space-between;
+      }
+      .min-h-screen {
+        min-height: 100dvh;
+      }
+      .relative {
+        position: relative;
+      }
+      .absolute {
+        position: absolute;
+      }
+      .right-0 {
+        right: 0;
+      }
+      .top-0 {
+        top: 0;
+      }
+      .shrink-0 {
+        flex-shrink: 0;
+      }
+      .flex-1 {
+        flex: 1 1 0%;
+      }
+      .min-w-0 {
+        min-width: 0;
+      }
+      .gap-2 {
+        gap: 0.5rem;
+      }
+      .gap-3 {
+        gap: 0.75rem;
+      }
+      .p-1 {
+        padding: 0.25rem;
+      }
+      .p-3 {
+        padding: 0.75rem;
+      }
+      .p-4 {
+        padding: 1rem;
+      }
+      .px-2 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      .px-3 {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+      .px-4 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .py-0\.5 {
+        padding-top: 0.125rem;
+        padding-bottom: 0.125rem;
+      }
+      .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .mt-0\.5 {
+        margin-top: 0.125rem;
+      }
+      .mt-1 {
+        margin-top: 0.25rem;
+      }
+      .mb-2 {
+        margin-bottom: 0.5rem;
+      }
+      .w-1\.5 {
+        width: 0.375rem;
+      }
+      .h-1\.5 {
+        height: 0.375rem;
+      }
+      .w-8 {
+        width: 2rem;
+      }
+      .h-8 {
+        height: 2rem;
+      }
+      .w-10 {
+        width: 2.5rem;
+      }
+      .h-10 {
+        height: 2.5rem;
+      }
+      .w-12 {
+        width: 3rem;
+      }
+      .h-12 {
+        height: 3rem;
+      }
+      .h-11 {
+        height: 2.75rem;
+      }
+      .h-14 {
+        height: 3.5rem;
+      }
+      .w-full {
+        width: 100%;
+      }
+      .overflow-y-auto {
+        overflow-y: auto;
+      }
+      .overflow-hidden {
+        overflow: hidden;
+      }
+      .border {
+        border-width: 1px;
+        border-style: solid;
+      }
+      .border-b {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+      }
+      .border-t {
+        border-top-width: 1px;
+        border-top-style: solid;
+      }
+      .border-gray-100 {
+        border-color: #f3f4f6;
+      }
+      .border-gray-200 {
+        border-color: #e5e7eb;
+      }
+      .border-gray-300 {
+        border-color: #d1d5db;
+      }
+      .border-pink-main {
+        border-color: #ec4899;
+      }
+      .bg-white {
+        background-color: #fff;
+      }
+      .bg-gray-50 {
+        background-color: #f9fafb;
+      }
+      .bg-gray-100 {
+        background-color: #f3f4f6;
+      }
+      .bg-pink-50 {
+        background-color: #fdf2f8;
+      }
+      .bg-pink-main {
+        background-color: #ec4899;
+      }
+      .bg-green-500 {
+        background-color: #22c55e;
+      }
+      .text-white {
+        color: #fff;
+      }
+      .text-pink-main {
+        color: #ec4899;
+      }
+      .text-gray-400 {
+        color: #9ca3af;
+      }
+      .text-gray-500 {
+        color: #6b7280;
+      }
+      .text-gray-600 {
+        color: #4b5563;
+      }
+      .text-gray-900 {
+        color: #111827;
+      }
+      .text-xs {
+        font-size: 0.75rem;
+        line-height: 1rem;
+      }
+      .text-sm {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+      .text-base {
+        font-size: 1rem;
+        line-height: 1.5rem;
+      }
+      .text-\[10px\] {
+        font-size: 10px;
+        line-height: 14px;
+      }
+      .text-\[11px\] {
+        font-size: 11px;
+        line-height: 15px;
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+      .leading-tight {
+        line-height: 1.25;
+      }
+      .leading-relaxed {
+        line-height: 1.625;
+      }
+      .truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .text-left {
+        text-align: left;
+      }
+      .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+      .tab-active {
+        color: #ec4899;
+        border-bottom: 2px solid #ec4899;
+        font-weight: 700;
+      }
+      .panel {
+        display: none;
+      }
+      .panel.active {
+        display: block;
+      }
+      .category-children {
+        display: none;
+      }
+      .category.open .category-children {
+        display: block;
+      }
+      .category.open .chevron {
+        transform: rotate(90deg);
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center min-h-screen">
+    <div class="app-container shadow-2xl">
+      <header
+        class="p-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0"
+      >
+        <div class="flex items-center gap-3">
+          <button class="text-gray-900" onclick="window.location.href='announcements.html'">
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="m15 18-6-6 6-6"></path>
+            </svg>
+          </button>
+          <div>
+            <h1 class="font-bold text-base text-gray-900 leading-tight">
+              消息
+            </h1>
+            <p class="text-[10px] text-gray-400 leading-tight">
+              最近聊天 / 群聊 / 分类联系人
+            </p>
+          </div>
+        </div>
+        <button
+          class="w-8 h-8 flex items-center justify-center text-gray-600"
+          onclick="showSearch()"
+        >
+          <svg
+            fill="none"
+            height="21"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="21"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3.8-3.8"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div
+        class="px-4 py-2 border-b border-gray-100 bg-white hidden"
+        id="searchBar"
+      >
+        <div class="h-11 border border-gray-300 flex items-center px-3 gap-2">
+          <svg
+            fill="none"
+            height="18"
+            stroke="#9ca3af"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="18"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3.8-3.8"></path>
+          </svg>
+          <input
+            class="flex-1 text-sm"
+            style="border: 0; outline: 0"
+            placeholder="搜索群、分类或联系人"
+          />
+        </div>
+      </div>
+
+      <nav
+        class="h-11 border-b border-gray-100 flex items-center justify-center bg-white shrink-0"
+      >
+        <button
+          class="message-tab h-full flex-1 text-sm tab-active"
+          data-target="recentPanel"
+          onclick="switchPanel(this)"
+        >
+          最近
+        </button>
+        <button
+          class="message-tab h-full flex-1 text-sm text-gray-500"
+          data-target="groupPanel"
+          onclick="switchPanel(this)"
+        >
+          群聊
+        </button>
+        <button
+          class="message-tab h-full flex-1 text-sm text-gray-500"
+          data-target="categoryPanel"
+          onclick="switchPanel(this)"
+        >
+          分类
+        </button>
+      </nav>
+
+      <main class="flex-1 overflow-y-auto bg-white">
+        <section class="panel active" id="recentPanel">
+          <div
+            class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400"
+          ></div>
+          <a
+            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
+            href="group_chat.html"
+          >
+            <img
+              class="avatar w-12 h-12"
+              alt="周末空间设计小组"
+              src="assets/packaged/src/generated_avatars/avatar-01.png"
+            />
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <h2 class="text-sm font-bold text-gray-900 truncate">
+                  周末空间设计小组
+                </h2>
+                <span class="text-[10px] text-gray-400">11:52</span>
+              </div>
+              <p class="text-xs text-gray-500 truncate mt-1">
+                小雨：周六的房间沙龙我把名单整理好了
+              </p>
+            </div>
+            <span class="w-1.5 h-1.5 bg-green-500"></span>
+          </a>
+          <a
+            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
+            href="room_chat.html?from=message_center"
+          >
+            <img
+              class="avatar w-12 h-12"
+              alt="小雨"
+              src="assets/packaged/src/generated_avatars/avatar-04.png"
+            />
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <h2 class="text-sm font-bold text-gray-900 truncate">小雨</h2>
+                <span class="text-[10px] text-gray-400">10:38</span>
+              </div>
+              <p class="text-xs text-gray-500 truncate mt-1">
+                我刚看了你的房间，安排得非常不错
+              </p>
+            </div>
+          </a>
+          <a
+            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
+            href="group_settings.html?from=message_center"
+          >
+            <img
+              class="avatar w-12 h-12"
+              alt="家庭群"
+              src="assets/packaged/src/generated_avatars/avatar-10.png"
+            />
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <h2 class="text-sm font-bold text-gray-900 truncate">
+                  家庭周末安排
+                </h2>
+                <span class="text-[10px] text-gray-400">昨天</span>
+              </div>
+              <p class="text-xs text-gray-500 truncate mt-1">
+                林阿姨：这个周末大家按家庭群分类确认一下
+              </p>
+            </div>
+          </a>
+        </section>
+
+        <section class="panel" id="groupPanel">
+          <div
+            class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400"
+          ></div>
+          <a
+            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
+            href="group_create.html"
+          >
+            <div
+              class="w-12 h-12 bg-pink-50 flex items-center justify-center shrink-0"
+            >
+              <svg
+                fill="none"
+                height="22"
+                stroke="#ec4899"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="22"
+              >
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2">
+                <h2 class="text-sm font-bold text-gray-900 truncate">
+                  创建群组
+                </h2>
+                <span
+                  class="px-2 py-0.5 bg-pink-50 text-pink-main text-[10px] font-bold"
+                  >新群组</span
+                >
+              </div>
+              <p class="text-xs text-gray-500 truncate mt-1">
+                和朋友、家人一起创建新的群聊
+              </p>
+            </div>
+          </a>
+          <a
+            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
+            href="group_chat.html"
+          >
+            <div class="group-avatar" aria-label="周末空间设计小组群头像">
+              <img alt="成员头像" src="assets/avatars/member-01.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-02.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-03.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-04.jpg" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2">
+                <h2 class="text-sm font-bold text-gray-900 truncate">
+                  周末空间设计小组
+                </h2>
+                <span
+                  class="px-2 py-0.5 bg-pink-50 text-pink-main text-[10px] font-bold"
+                  >朋友群</span
+                >
+              </div>
+              <p class="text-xs text-gray-500 truncate mt-1">26 人</p>
+            </div>
+          </a>
+          <a
+            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
+            href="group_settings.html?from=message_center"
+          >
+            <div class="group-avatar" aria-label="家庭周末安排群头像">
+              <img alt="成员头像" src="assets/avatars/member-05.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-06.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-07.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-08.jpg" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2">
+                <h2 class="text-sm font-bold text-gray-900 truncate">
+                  家庭周末安排
+                </h2>
+                <span
+                  class="px-2 py-0.5 bg-gray-50 text-gray-600 text-[10px] font-bold border border-gray-200"
+                  >家庭群</span
+                >
+              </div>
+              <p class="text-xs text-gray-500 truncate mt-1">8 人</p>
+            </div>
+          </a>
+          <a
+            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
+            href="group_chat.html"
+          >
+            <div class="group-avatar" aria-label="小商品批发合作群群头像">
+              <img alt="成员头像" src="assets/avatars/member-02.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-04.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-06.jpg" />
+              <img alt="成员头像" src="assets/avatars/member-09.jpg" />
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2">
+                <h2 class="text-sm font-bold text-gray-900 truncate">
+                  小商品批发合作群
+                </h2>
+                <span
+                  class="px-2 py-0.5 bg-gray-50 text-gray-600 text-[10px] font-bold border border-gray-200"
+                  >业务群</span
+                >
+              </div>
+              <p class="text-xs text-gray-500 truncate mt-1">34 人</p>
+            </div>
+          </a>
+        </section>
+
+        <section class="panel" id="categoryPanel">
+          <div
+            class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400"
+          ></div>
+          <div class="category open border-b border-gray-100">
+            <button
+              class="w-full p-4 flex items-center justify-between text-left"
+              onclick="toggleCategory(this)"
+            >
+              <span>
+                <span class="block text-sm font-bold text-gray-900"
+                  >小商品批发类</span
+                >
+                <span class="block text-[11px] text-gray-400 mt-0.5"
+                  >5 个联系人 · 2 个业务群</span
+                >
+              </span>
+              <svg
+                class="chevron"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+              >
+                <path d="M9 18l6-6-6-6"></path>
+              </svg>
+            </button>
+            <div class="category-children bg-gray-50">
+              <a
+                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
+                href="room_chat.html?from=message_center"
+              >
+                <img
+                  class="avatar w-10 h-10"
+                  alt="赛鹏程"
+                  src="assets/packaged/src/generated_avatars/avatar-06.png"
+                />
+                <span class="flex-1 min-w-0"
+                  ><span class="block text-sm font-bold text-gray-900 truncate"
+                    >眼镜店老板</span
+                  ><span class="block text-[11px] text-gray-400 truncate"
+                    >后天发出来</span
+                  ></span
+                >
+              </a>
+              <a
+                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
+                href="group_chat.html"
+              >
+                <img
+                  class="avatar w-10 h-10"
+                  alt="批发合作群"
+                  src="assets/packaged/src/generated_avatars/avatar-03.png"
+                />
+                <span class="flex-1 min-w-0"
+                  ><span class="block text-sm font-bold text-gray-900 truncate"
+                    >批发合作群</span
+                  ><span class="block text-[11px] text-gray-400 truncate"
+                    >34 人 · 报价和发货沟通</span
+                  ></span
+                >
+              </a>
+            </div>
+          </div>
+          <div class="category border-b border-gray-100">
+            <button
+              class="w-full p-4 flex items-center justify-between text-left"
+              onclick="toggleCategory(this)"
+            >
+              <span>
+                <span class="block text-sm font-bold text-gray-900"
+                  >初中同学类</span
+                >
+                <span class="block text-[11px] text-gray-400 mt-0.5"
+                  >12 个联系人</span
+                >
+              </span>
+              <svg
+                class="chevron"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+              >
+                <path d="M9 18l6-6-6-6"></path>
+              </svg>
+            </button>
+            <div class="category-children bg-gray-50">
+              <a
+                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
+                href="room_chat.html?from=message_center"
+              >
+                <img
+                  class="avatar w-10 h-10"
+                  alt="李鹏"
+                  src="assets/packaged/src/generated_avatars/avatar-08.png"
+                />
+                <span class="flex-1 min-w-0"
+                  ><span class="block text-sm font-bold text-gray-900 truncate"
+                    >李鹏同学</span
+                  ><span class="block text-[11px] text-gray-400 truncate"
+                    >还没回复，周五提醒</span
+                  ></span
+                >
+              </a>
+            </div>
+          </div>
+          <div class="category border-b border-gray-100">
+            <button
+              class="w-full p-4 flex items-center justify-between text-left"
+              onclick="toggleCategory(this)"
+            >
+              <span>
+                <span class="block text-sm font-bold text-gray-900"
+                  >大学同学类</span
+                >
+                <span class="block text-[11px] text-gray-400 mt-0.5"
+                  >18 个联系人 · 1 个群</span
+                >
+              </span>
+              <svg
+                class="chevron"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+              >
+                <path d="M9 18l6-6-6-6"></path>
+              </svg>
+            </button>
+            <div class="category-children bg-gray-50">
+              <a
+                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
+                href="group_chat.html"
+              >
+                <img
+                  class="avatar w-10 h-10"
+                  alt="大学同学群"
+                  src="assets/packaged/src/generated_avatars/avatar-02.png"
+                />
+                <span class="flex-1 min-w-0"
+                  ><span class="block text-sm font-bold text-gray-900 truncate"
+                    >大学同学群</span
+                  ><span class="block text-[11px] text-gray-400 truncate"
+                    >聚会报名和房间链接</span
+                  ></span
+                >
+              </a>
+            </div>
+          </div>
+          <div class="category border-b border-gray-100">
+            <button
+              class="w-full p-4 flex items-center justify-between text-left"
+              onclick="toggleCategory(this)"
+            >
+              <span>
+                <span class="block text-sm font-bold text-gray-900"
+                  >社会朋友</span
+                >
+                <span class="block text-[11px] text-gray-400 mt-0.5"
+                  >15个联系人</span
+                >
+              </span>
+              <svg
+                class="chevron"
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="16"
+              >
+                <path d="M9 18l6-6-6-6"></path>
+              </svg>
+            </button>
+            <div class="category-children bg-gray-50">
+              <a
+                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
+                href="room_chat.html?from=message_center"
+              >
+                <img
+                  class="avatar w-10 h-10"
+                  alt="邓猛"
+                  src="assets/packaged/src/generated_avatars/avatar-05.png"
+                />
+                <span class="flex-1 min-w-0"
+                  ><span class="block text-sm font-bold text-gray-900 truncate"
+                    >邓猛老车朋友</span
+                  ><span class="block text-[11px] text-gray-400 truncate"
+                    >老朋友，车友活动联系人</span
+                  ></span
+                >
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      function switchPanel(button) {
+        document.querySelectorAll('.message-tab').forEach(tab => {
+          tab.classList.remove('tab-active')
+          tab.classList.add('text-gray-500')
+        })
+        button.classList.add('tab-active')
+        button.classList.remove('text-gray-500')
+        document
+          .querySelectorAll('.panel')
+          .forEach(panel => panel.classList.remove('active'))
+        document.getElementById(button.dataset.target).classList.add('active')
+      }
+
+      function toggleCategory(button) {
+        button.closest('.category').classList.toggle('open')
+      }
+
+      function showSearch() {
+        document.getElementById('searchBar').classList.toggle('hidden')
+      }
+    </script>
+  </body>
+</html>

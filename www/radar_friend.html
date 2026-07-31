@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+  <title>附近的朋友 - 元宇宙社交</title>
+  <style>
+    * { box-sizing: border-box; border-radius: 0 !important; }
+    body {
+      margin: 0;
+      background: #f3f4f6;
+      color: #111827;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    .phone {
+      width: min(100vw, 393px);
+      height: 100dvh;
+      margin: 0 auto;
+      background: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .header {
+      height: 56px;
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      background: #fff;
+      border-bottom: 1px solid #f3f4f6;
+      z-index: 10;
+    }
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 0;
+      color: #111827;
+      padding: 0;
+    }
+    .title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      background: #fff;
+    }
+    .summary {
+      padding: 10px 16px;
+      background: #f9fafb;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.45;
+    }
+    .filters {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #fff;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .filter-tab {
+      height: 30px;
+      padding: 0 18px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #6b7280;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .filter-tab.active {
+      border-color: #ec4899;
+      background: #ec4899;
+      color: #fff;
+    }
+    .friend-list {
+      padding: 16px 16px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .friend-card {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+    }
+    .friend-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+    }
+    .avatar {
+      width: 50px;
+      height: 50px;
+      flex: none;
+      object-fit: cover;
+      border: 1px solid #f3f4f6;
+      background: #f9fafb;
+    }
+    .friend-main {
+      min-width: 0;
+      flex: 1;
+    }
+    .name-line {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+    .friend-name {
+      max-width: 122px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+    }
+    .user-vip {
+      width: 18px;
+      height: auto;
+      flex: none;
+      object-fit: contain;
+      transform: translateY(1px);
+    }
+    .status-meta {
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+    .online-dot {
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      display: inline-block;
+    }
+    .friend-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 7px;
+    }
+    .friend-tags span {
+      padding: 2px 6px;
+      border: 1px solid #fce7f3;
+      background: #fdf2f8;
+      color: #ec4899;
+      font-size: 10px;
+      line-height: 1.2;
+    }
+    .distance {
+      flex: none;
+      text-align: right;
+      font-size: 10px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid #f9fafb;
+    }
+    .media-item {
+      min-width: 0;
+      cursor: pointer;
+    }
+    .media-cover {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border: 1px solid #f3f4f6;
+      background: #f9fafb;
+    }
+    .media-cover img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .media-badge {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      min-width: 28px;
+      height: 16px;
+      padding: 0 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(17, 24, 39, 0.72);
+      color: #fff;
+      font-size: 10px;
+      line-height: 16px;
+    }
+    .play-dot {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(236, 72, 153, 0.92);
+      color: #fff;
+      font-size: 11px;
+    }
+    .media-title {
+      margin: 5px 0 0;
+      color: #6b7280;
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid #f3f4f6;
+    }
+    .action-btn {
+      height: 38px;
+      border: 1px solid #2563eb;
+      background: #fff;
+      color: #2563eb;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .action-btn.room {
+      border-color: #ec4899;
+      color: #ec4899;
+    }
+    .action-btn.share {
+      border-color: #ec4899;
+      background: #ec4899;
+      color: #fff;
+    }
+    .id-card-content {
+      max-height: 0;
+      overflow: hidden;
+      background: #f9fafb;
+      transition: max-height 0.28s ease-out;
+    }
+    .id-card-content.open {
+      max-height: 520px;
+    }
+    .identity-inner {
+      padding: 14px 14px 16px;
+    }
+    .identity-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e5e7eb;
+      color: #9ca3af;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+    }
+    .identity-mark {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #dbeafe;
+      color: #2563eb;
+    }
+    .identity-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 10px;
+      padding-top: 12px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .identity-grid div.wide {
+      grid-column: 1 / -1;
+    }
+    .identity-label {
+      color: #9ca3af;
+    }
+    .identity-value {
+      color: #374151;
+    }
+    .toast {
+      position: absolute;
+      left: 50%;
+      bottom: 34px;
+      transform: translateX(-50%);
+      padding: 9px 14px;
+      background: rgba(17, 24, 39, 0.84);
+      color: #fff;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 30;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <header class="header">
+      <button class="icon-btn" aria-label="返回" onclick="window.location.href='radar.html'">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" viewBox="0 0 24 24">
+          <path d="M19 12H5M12 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <h1 class="title">附近的朋友</h1>
+      <button class="icon-btn" aria-label="更多">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="5" r="1.5" fill="currentColor"></circle>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+          <circle cx="12" cy="19" r="1.5" fill="currentColor"></circle>
+        </svg>
+      </button>
+    </header>
+
+    <main class="content no-scrollbar">
+      <div class="summary">发现附近正在分享生活、房间和虚拟空间动态的朋友</div>
+
+      <div class="filters">
+        <button class="filter-tab active" onclick="toggleFilter(this)">全部</button>
+        <button class="filter-tab" onclick="toggleFilter(this)">最近在线</button>
+        <button class="filter-tab" onclick="toggleFilter(this)">有房间</button>
+      </div>
+
+      <section class="friend-list">
+        <article class="friend-card">
+          <div class="friend-head">
+            <img class="avatar" src="assets/packaged/src/generated_avatars/avatar-03.png" alt="小云头像">
+            <div class="friend-main">
+              <div class="name-line">
+                <span class="friend-name">小云</span>
+                <img class="user-vip" src="assets/vip/user-vip-star-2.png" alt="个人VIP">
+              </div>
+              <div class="status-meta"><span class="online-dot"></span><span>刚刚在线 · 喜欢城市漫步</span></div>
+              <div class="friend-tags">
+                <span>摄影</span><span>咖啡店</span><span>轻旅行</span>
+              </div>
+            </div>
+            <div class="distance">距你 0.8km<br>同城</div>
+          </div>
+
+          <div class="media-grid">
+            <div class="media-item" onclick="showToast('查看小云的城市分享')">
+              <div class="media-cover">
+                <img src="assets/products/space-cafe-decor.jpg" alt="咖啡店分享">
+                <span class="media-badge">图片</span>
+              </div>
+              <p class="media-title">午后咖啡角落</p>
+            </div>
+            <div class="media-item" onclick="showToast('播放小云的房间视频')">
+              <div class="media-cover">
+                <img src="assets/packaged/sq/房间建模图片1.png" alt="房间视频封面">
+                <span class="media-badge">视频</span>
+                <span class="play-dot">▶</span>
+              </div>
+              <p class="media-title">新布置的小房间</p>
+            </div>
+            <div class="media-item" onclick="showToast('查看小云的生活图片')">
+              <div class="media-cover">
+                <img src="assets/shops/shop-coffee-corner.png" alt="生活图片">
+                <span class="media-badge">图片</span>
+              </div>
+              <p class="media-title">周末探店记录</p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="action-btn id-btn" onclick="toggleIDCard(this, 'id-xiaoyun')">虚拟身份证</button>
+            <a class="action-btn room" href="panorama_room.html?from=radar_friend">进入房间</a>
+            <a class="action-btn share" href="publish.html">进入分享</a>
+          </div>
+
+          <div class="id-card-content" id="id-xiaoyun">
+            <div class="identity-inner">
+              <div class="identity-title">
+                <span>VIRTUAL ID · U2307</span>
+                <span class="identity-mark">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </span>
+              </div>
+              <div class="identity-grid">
+                <div><span class="identity-label">昵称：</span><span class="identity-value">小云</span></div>
+                <div><span class="identity-label">状态：</span><span class="identity-value">在线</span></div>
+                <div><span class="identity-label">城市：</span><span class="identity-value">上海</span></div>
+                <div><span class="identity-label">职业：</span><span class="identity-value">视觉设计</span></div>
+                <div class="wide"><span class="identity-label">兴趣：</span><span class="identity-value">摄影、咖啡店、城市漫步、短途旅行</span></div>
+                <div class="wide"><span class="identity-label">房间：</span><span class="identity-value">开放临时参观，当前主题为木色生活空间</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="friend-card">
+          <div class="friend-head">
+            <img class="avatar" src="assets/packaged/src/generated_avatars/avatar-06.png" alt="约翰逊头像">
+            <div class="friend-main">
+              <div class="name-line">
+                <span class="friend-name">约翰逊</span>
+                <img class="user-vip" src="assets/vip/user-vip-star-6.png" alt="个人VIP">
+              </div>
+              <div class="status-meta"><span class="online-dot"></span><span>5分钟前在线 · 正在装修房间</span></div>
+              <div class="friend-tags">
+                <span>篮球</span><span>房间建模</span><span>音乐</span>
+              </div>
+            </div>
+            <div class="distance">距你 1.6km<br>附近</div>
+          </div>
+
+          <div class="media-grid">
+            <div class="media-item" onclick="showToast('查看约翰逊的房间图片')">
+              <div class="media-cover">
+                <img src="assets/packaged/sq/房间建模图片2.png" alt="房间建模">
+                <span class="media-badge">图片</span>
+              </div>
+              <p class="media-title">今晚刚调的灯光</p>
+            </div>
+            <div class="media-item" onclick="showToast('播放约翰逊的训练视频')">
+              <div class="media-cover">
+                <img src="assets/products/space-living-room.jpg" alt="运动视频封面">
+                <span class="media-badge">视频</span>
+                <span class="play-dot">▶</span>
+              </div>
+              <p class="media-title">投篮小片段</p>
+            </div>
+            <div class="media-item" onclick="showToast('查看约翰逊的分享')">
+              <div class="media-cover">
+                <img src="assets/products/space-lighting.jpg" alt="灯光分享">
+                <span class="media-badge">图片</span>
+              </div>
+              <p class="media-title">房间氛围灯</p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="action-btn id-btn" onclick="toggleIDCard(this, 'id-johnson')">虚拟身份证</button>
+            <a class="action-btn room" href="panorama_room.html?from=radar_friend">进入房间</a>
+            <a class="action-btn share" href="publish.html">进入分享</a>
+          </div>
+
+          <div class="id-card-content" id="id-johnson">
+            <div class="identity-inner">
+              <div class="identity-title">
+                <span>VIRTUAL ID · U1010</span>
+                <span class="identity-mark">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </span>
+              </div>
+              <div class="identity-grid">
+                <div><span class="identity-label">昵称：</span><span class="identity-value">约翰逊</span></div>
+                <div><span class="identity-label">状态：</span><span class="identity-value">在线</span></div>
+                <div><span class="identity-label">城市：</span><span class="identity-value">广州</span></div>
+                <div><span class="identity-label">职业：</span><span class="identity-value">健身教练</span></div>
+                <div class="wide"><span class="identity-label">兴趣：</span><span class="identity-value">篮球、音乐、健身、空间灯光</span></div>
+                <div class="wide"><span class="identity-label">房间：</span><span class="identity-value">开放临时参观，当前主题为运动生活间</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="friend-card">
+          <div class="friend-head">
+            <img class="avatar" src="assets/packaged/src/generated_avatars/avatar-08.png" alt="七七头像">
+            <div class="friend-main">
+              <div class="name-line">
+                <span class="friend-name">七七</span>
+                <img class="user-vip" src="assets/vip/user-vip-star-4.png" alt="个人VIP">
+              </div>
+              <div class="status-meta"><span class="online-dot"></span><span>12分钟前在线 · 分享日常</span></div>
+              <div class="friend-tags">
+                <span>美食</span><span>电影</span><span>穿搭</span>
+              </div>
+            </div>
+            <div class="distance">距你 2.1km<br>可拜访</div>
+          </div>
+
+          <div class="media-grid">
+            <div class="media-item" onclick="showToast('查看七七的美食分享')">
+              <div class="media-cover">
+                <img src="assets/shops/shop-fast-food.png" alt="美食分享">
+                <span class="media-badge">图片</span>
+              </div>
+              <p class="media-title">新发现的小店</p>
+            </div>
+            <div class="media-item" onclick="showToast('播放七七的穿搭视频')">
+              <div class="media-cover">
+                <img src="assets/products/space-shopfront.jpg" alt="穿搭视频封面">
+                <span class="media-badge">视频</span>
+                <span class="play-dot">▶</span>
+              </div>
+              <p class="media-title">出门前试穿</p>
+            </div>
+            <div class="media-item" onclick="showToast('查看七七的房间角落')">
+              <div class="media-cover">
+                <img src="assets/products/space-furniture.jpg" alt="房间角落">
+                <span class="media-badge">图片</span>
+              </div>
+              <p class="media-title">沙发旁边的花</p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="action-btn id-btn" onclick="toggleIDCard(this, 'id-qiqi')">虚拟身份证</button>
+            <a class="action-btn room" href="panorama_room.html?from=radar_friend">进入房间</a>
+            <a class="action-btn share" href="publish.html">进入分享</a>
+          </div>
+
+          <div class="id-card-content" id="id-qiqi">
+            <div class="identity-inner">
+              <div class="identity-title">
+                <span>VIRTUAL ID · U5721</span>
+                <span class="identity-mark">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </span>
+              </div>
+              <div class="identity-grid">
+                <div><span class="identity-label">昵称：</span><span class="identity-value">七七</span></div>
+                <div><span class="identity-label">状态：</span><span class="identity-value">在线</span></div>
+                <div><span class="identity-label">城市：</span><span class="identity-value">杭州</span></div>
+                <div><span class="identity-label">职业：</span><span class="identity-value">内容编辑</span></div>
+                <div class="wide"><span class="identity-label">兴趣：</span><span class="identity-value">美食探店、电影、穿搭、家居布置</span></div>
+                <div class="wide"><span class="identity-label">房间：</span><span class="identity-value">开放临时参观，当前主题为周末休闲房</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <div class="toast" id="toast">已打开</div>
+  </div>
+
+  <script>
+    function toggleFilter(btn) {
+      document.querySelectorAll('.filter-tab').forEach(function (tab) {
+        tab.classList.remove('active');
+      });
+      btn.classList.add('active');
+    }
+
+    function toggleIDCard(btn, id) {
+      var content = document.getElementById(id);
+      var isOpen = content.classList.contains('open');
+
+      document.querySelectorAll('.id-card-content').forEach(function (card) {
+        card.classList.remove('open');
+      });
+      document.querySelectorAll('.id-btn').forEach(function (item) {
+        item.textContent = '虚拟身份证';
+        item.classList.remove('share');
+      });
+
+      if (!isOpen) {
+        content.classList.add('open');
+        btn.textContent = '收起证件';
+      }
+    }
+
+    function showToast(text) {
+      var toast = document.getElementById('toast');
+      toast.textContent = text;
+      toast.classList.add('show');
+      window.clearTimeout(window.friendToastTimer);
+      window.friendToastTimer = window.setTimeout(function () {
+        toast.classList.remove('show');
+      }, 1300);
+    }
+  </script>
+</body>
+</html>

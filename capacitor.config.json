@@ -1,0 +1,9 @@
+{
+  "appId": "com.metasocial.demo",
+  "appName": "元社交",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "appStartPath": "login.html"
+  }
+}

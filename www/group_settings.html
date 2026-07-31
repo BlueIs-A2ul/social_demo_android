@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>群设置</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<style>
+    body { background-color: #f3f4f6; margin: 0; overflow: hidden; font-family: -apple-system, sans-serif; }
+    .app-container { width: min(100vw, 393px); height: 100dvh; margin: 0 auto; position: relative; overflow: hidden; display: flex; flex-direction: column; background: white; }
+    ::-webkit-scrollbar { display: none; }
+    * { border-radius: 0 !important; }
+    .avatar { border-radius: 9999px !important; display: block; border: 1px solid #fce7f3; background: #fdf2f8; object-fit: cover; flex: none; }
+    .text-pink-main { color: #ec4899; }
+    .bg-pink-main { background-color: #ec4899; }
+    .border-pink-main { border-color: #ec4899; }
+    .flex { display: flex; }
+    .grid { display: grid; }
+    .block { display: block; }
+    .items-center { align-items: center; }
+    .items-start { align-items: flex-start; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .min-h-screen { min-height: 100dvh; }
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .bottom-0 { bottom: 0; }
+    .left-0 { left: 0; }
+    .right-0 { right: 0; }
+    .left-1\/2 { left: 50%; }
+    .top-20 { top: 5rem; }
+    .-translate-x-1\/2 { transform: translateX(-50%); }
+    .shrink-0 { flex-shrink: 0; }
+    .flex-1 { flex: 1 1 0%; }
+    .min-w-0 { min-width: 0; }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gap-2 { gap: .5rem; }
+    .gap-3 { gap: .75rem; }
+    .p-3 { padding: .75rem; }
+    .p-4 { padding: 1rem; }
+    .px-1\.5 { padding-left: .375rem; padding-right: .375rem; }
+    .px-3 { padding-left: .75rem; padding-right: .75rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-0\.5 { padding-top: .125rem; padding-bottom: .125rem; }
+    .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
+    .pb-1 { padding-bottom: .25rem; }
+    .pb-24 { padding-bottom: 6rem; }
+    .mb-3 { margin-bottom: .75rem; }
+    .mt-1 { margin-top: .25rem; }
+    .w-5 { width: 1.25rem; }
+    .w-8 { width: 2rem; }
+    .w-9 { width: 2.25rem; }
+    .w-10 { width: 2.5rem; }
+    .w-14 { width: 3.5rem; }
+    .w-full { width: 100%; }
+    .h-8 { height: 2rem; }
+    .h-9 { height: 2.25rem; }
+    .h-10 { height: 2.5rem; }
+    .h-12 { height: 3rem; }
+    .h-14 { height: 3.5rem; }
+    .w-9.h-9, .h-9.w-9 { height: 2.25rem; }
+    .w-10.h-10, .h-10.w-10 { height: 2.5rem; }
+    .w-14.h-14, .h-14.w-14 { height: 3.5rem; }
+    .overflow-y-auto { overflow-y: auto; }
+    .overflow-x-auto { overflow-x: auto; }
+    .object-cover { object-fit: cover; }
+    .shrink-0 { flex-shrink: 0; }
+    .border { border-width: 1px; border-style: solid; }
+    .border-b { border-bottom-width: 1px; border-bottom-style: solid; }
+    .border-t { border-top-width: 1px; border-top-style: solid; }
+    .border-gray-100 { border-color: #f3f4f6; }
+    .border-gray-200 { border-color: #e5e7eb; }
+    .border-gray-300 { border-color: #d1d5db; }
+    .border-pink-100 { border-color: #fce7f3; }
+    .border-pink-main { border-color: #ec4899; }
+    .bg-white { background-color: #fff; }
+    .bg-gray-50 { background-color: #f9fafb; }
+    .bg-gray-100 { background-color: #f3f4f6; }
+    .bg-pink-50 { background-color: #fdf2f8; }
+    .bg-black\/70 { background-color: rgba(0, 0, 0, .7); }
+    .text-white { color: #fff; }
+    .text-gray-400 { color: #9ca3af; }
+    .text-gray-500 { color: #6b7280; }
+    .text-gray-600 { color: #4b5563; }
+    .text-gray-900 { color: #111827; }
+    .text-xs { font-size: .75rem; line-height: 1rem; }
+    .text-sm { font-size: .875rem; line-height: 1.25rem; }
+    .text-base { font-size: 1rem; line-height: 1.5rem; }
+    .text-\[10px\] { font-size: 10px; line-height: 14px; }
+    .text-\[11px\] { font-size: 11px; line-height: 15px; }
+    .font-bold { font-weight: 700; }
+    .leading-tight { line-height: 1.25; }
+    .leading-relaxed { line-height: 1.625; }
+    .text-left { text-align: left; }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .opacity-0 { opacity: 0; }
+    .transition-opacity { transition: opacity .2s ease; }
+    .divide-y > * + * { border-top-width: 1px; border-top-style: solid; }
+    .divide-gray-100 > * + * { border-top-color: #f3f4f6; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0,0,0,.25); }
+    .category-active { background: #ec4899; color: #fff; border-color: #ec4899; }
+    .member-group { display: none; }
+    .member-group.active { display: block; }
+</style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+<div class="app-container shadow-2xl">
+    <header class="p-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
+        <div class="flex items-center gap-3">
+            <button class="text-gray-900" onclick="goBack()">
+                <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <div>
+                <h1 class="font-bold text-base text-gray-900 leading-tight">周末空间设计小组</h1>
+                <p class="text-[10px] text-gray-400 leading-tight">群设置 · 26 人</p>
+            </div>
+        </div>
+        <button class="w-8 h-8 flex items-center justify-center text-gray-600">
+            <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg>
+        </button>
+    </header>
+
+    <main class="flex-1 overflow-y-auto bg-white pb-24">
+        <section class="p-4 border-b border-gray-100">
+            <div class="flex items-start gap-3">
+                <div class="w-14 h-14 bg-pink-50 border border-pink-100 flex items-center justify-center text-pink-main">
+                    <svg fill="none" height="28" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="28"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2">
+                        <h2 class="font-bold text-base text-gray-900 truncate">周末空间设计小组</h2>
+                        <span class="px-1.5 py-0.5 bg-pink-50 text-pink-main border border-pink-100 text-[10px] font-bold">朋友群</span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed mt-1">把家人、朋友和兴趣伙伴按关系整理，方便发起房间活动和线下沟通。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-4 border-b border-gray-100">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="font-bold text-sm text-gray-900">管理员</h2>
+                <button class="text-[11px] text-pink-main font-bold">管理</button>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="border border-gray-200 p-3 flex items-center gap-2">
+                    <img class="avatar w-9 h-9" alt="小云头像" src="assets/packaged/src/generated_avatars/avatar-01.png" />
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-gray-900 truncate">小云</p>
+                        <p class="text-[10px] text-gray-400 truncate">分类整理</p>
+                    </div>
+                </div>
+                <div class="border border-gray-200 p-3 flex items-center gap-2">
+                    <img class="avatar w-9 h-9" alt="约翰逊头像" src="assets/packaged/src/generated_avatars/avatar-07.png" />
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-gray-900 truncate">约翰逊</p>
+                        <p class="text-[10px] text-gray-400 truncate">成员审核</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="p-4 border-b border-gray-100">
+            <h2 class="font-bold text-sm text-gray-900 mb-3">群基础设置</h2>
+            <div class="border border-gray-100">
+                <button class="w-full h-12 px-3 flex items-center justify-between border-b border-gray-100 text-left">
+                    <span>
+                        <span class="block text-sm text-gray-900">群名称</span>
+                        <span class="block text-[10px] text-gray-400">管理员可修改</span>
+                    </span>
+                    <span class="text-xs text-gray-500">周末空间设计小组</span>
+                </button>
+                <button class="w-full h-12 px-3 flex items-center justify-between border-b border-gray-100 text-left">
+                    <span>
+                        <span class="block text-sm text-gray-900">群类型</span>
+                        <span class="block text-[10px] text-gray-400">朋友群 / 家庭群 / 兴趣群</span>
+                    </span>
+                    <span class="text-xs text-pink-main font-bold">朋友群</span>
+                </button>
+                <button class="w-full h-12 px-3 flex items-center justify-between text-left">
+                    <span>
+                        <span class="block text-sm text-gray-900">成员身份介绍</span>
+                        <span class="block text-[10px] text-gray-400">头像旁展示关系说明</span>
+                    </span>
+                    <span class="text-xs text-pink-main font-bold">已开启</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="p-4 border-b border-gray-100">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="font-bold text-sm text-gray-900">成员分类</h2>
+                <button class="text-[11px] text-pink-main font-bold">编辑分类</button>
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-1">
+                <button class="category-tab shrink-0 px-4 h-8 border border-pink-main text-xs font-bold category-active" data-target="admins" onclick="switchCategory(this)">管理员</button>
+                <button class="category-tab shrink-0 px-4 h-8 border border-gray-300 text-xs font-bold text-gray-600" data-target="family" onclick="switchCategory(this)">家人</button>
+                <button class="category-tab shrink-0 px-4 h-8 border border-gray-300 text-xs font-bold text-gray-600" data-target="friends" onclick="switchCategory(this)">朋友</button>
+                <button class="category-tab shrink-0 px-4 h-8 border border-gray-300 text-xs font-bold text-gray-600" data-target="interest" onclick="switchCategory(this)">兴趣伙伴</button>
+            </div>
+        </section>
+
+        <section class="member-group active" id="admins">
+            <div class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400">管理员 · 可修改群名、分类和成员排序</div>
+            <div class="divide-y divide-gray-100">
+                <div class="p-4 flex items-center gap-3">
+                    <span class="w-5 text-[11px] text-gray-400">01</span>
+                    <img class="avatar w-10 h-10" alt="小云头像" src="assets/packaged/src/generated_avatars/avatar-01.png" />
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900">小云</p>
+                        <p class="text-[11px] text-gray-400 truncate">空间设计师，负责群成员分类整理</p>
+                    </div>
+                    <span class="text-[10px] text-pink-main font-bold">管理员</span>
+                </div>
+                <div class="p-4 flex items-center gap-3">
+                    <span class="w-5 text-[11px] text-gray-400">02</span>
+                    <img class="avatar w-10 h-10" alt="约翰逊头像" src="assets/packaged/src/generated_avatars/avatar-07.png" />
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900">约翰逊</p>
+                        <p class="text-[11px] text-gray-400 truncate">家庭联系人，负责入群审核</p>
+                    </div>
+                    <span class="text-[10px] text-pink-main font-bold">管理员</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="member-group" id="family">
+            <div class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400">家人 · 6 人</div>
+            <div class="divide-y divide-gray-100">
+                <div class="p-4 flex items-center gap-3">
+                    <span class="w-5 text-[11px] text-gray-400">01</span>
+                    <img class="avatar w-10 h-10" alt="林阿姨头像" src="assets/packaged/src/generated_avatars/avatar-10.png" />
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900">林阿姨</p>
+                        <p class="text-[11px] text-gray-400 truncate">家人，关注家庭活动和房间相册</p>
+                    </div>
+                    <span class="text-[10px] text-gray-400">置顶</span>
+                </div>
+                <div class="p-4 flex items-center gap-3">
+                    <span class="w-5 text-[11px] text-gray-400">02</span>
+                    <img class="avatar w-10 h-10" alt="阿森头像" src="assets/packaged/src/generated_avatars/avatar-06.png" />
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900">阿森</p>
+                        <p class="text-[11px] text-gray-400 truncate">亲属，负责周末聚会安排</p>
+                    </div>
+                    <span class="text-[10px] text-gray-400">排序</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="member-group" id="friends">
+            <div class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400">朋友 · 12 人</div>
+            <div class="divide-y divide-gray-100">
+                <div class="p-4 flex items-center gap-3">
+                    <span class="w-5 text-[11px] text-gray-400">01</span>
+                    <img class="avatar w-10 h-10" alt="七七头像" src="assets/packaged/src/generated_avatars/avatar-09.png" />
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900">七七</p>
+                        <p class="text-[11px] text-gray-400 truncate">朋友，喜欢摄影和城市漫步</p>
+                    </div>
+                    <span class="text-[10px] text-gray-400">排序</span>
+                </div>
+                <div class="p-4 flex items-center gap-3">
+                    <span class="w-5 text-[11px] text-gray-400">02</span>
+                    <img class="avatar w-10 h-10" alt="小鹿头像" src="assets/packaged/src/generated_avatars/avatar-02.png" />
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900">小鹿</p>
+                        <p class="text-[11px] text-gray-400 truncate">同城好友，经常一起看展</p>
+                    </div>
+                    <span class="text-[10px] text-gray-400">排序</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="member-group" id="interest">
+            <div class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400">兴趣伙伴 · 8 人</div>
+            <div class="divide-y divide-gray-100">
+                <div class="p-4 flex items-center gap-3">
+                    <span class="w-5 text-[11px] text-gray-400">01</span>
+                    <img class="avatar w-10 h-10" alt="星河头像" src="assets/packaged/src/generated_avatars/avatar-03.png" />
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900">星河</p>
+                        <p class="text-[11px] text-gray-400 truncate">3D 建模伙伴，参与房间共创</p>
+                    </div>
+                    <span class="text-[10px] text-gray-400">排序</span>
+                </div>
+                <div class="p-4 flex items-center gap-3">
+                    <span class="w-5 text-[11px] text-gray-400">02</span>
+                    <img class="avatar w-10 h-10" alt="小雨头像" src="assets/packaged/src/generated_avatars/avatar-04.png" />
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold text-gray-900">小雨</p>
+                        <p class="text-[11px] text-gray-400 truncate">空间设计沙龙发起人</p>
+                    </div>
+                    <span class="text-[10px] text-gray-400">排序</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="absolute bottom-0 left-0 right-0 border-t border-gray-100 bg-white p-4">
+        <div class="grid grid-cols-2 gap-2">
+            <button class="h-10 border border-pink-main text-pink-main text-xs font-bold" onclick="showToast('打开添加成员')">添加成员</button>
+            <button class="h-10 bg-pink-main text-white text-xs font-bold" onclick="showToast('进入分类编辑')">编辑分类</button>
+        </div>
+    </footer>
+
+    <div class="absolute left-1/2 top-20 -translate-x-1/2 bg-black/70 text-white text-xs px-4 py-2 opacity-0 transition-opacity" id="toast">提示</div>
+</div>
+
+<script>
+    function goBack() {
+        const params = new URLSearchParams(window.location.search);
+        const from = params.get('from');
+        const returnMap = {
+            group_chat: 'group_chat.html',
+            group_create: 'message_center.html',
+            message_center: 'message_center.html'
+        };
+
+        if (returnMap[from]) {
+            window.location.href = returnMap[from];
+            return;
+        }
+
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        window.location.href = 'group_chat.html';
+    }
+
+    function switchCategory(button) {
+        document.querySelectorAll('.category-tab').forEach((tab) => {
+            tab.classList.remove('category-active');
+            tab.classList.add('text-gray-600', 'border-gray-300');
+        });
+        button.classList.add('category-active');
+        button.classList.remove('text-gray-600', 'border-gray-300');
+
+        document.querySelectorAll('.member-group').forEach((group) => group.classList.remove('active'));
+        document.getElementById(button.dataset.target).classList.add('active');
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.opacity = '1';
+        setTimeout(() => { toast.style.opacity = '0'; }, 1500);
+    }
+</script>
+</body>
+</html>

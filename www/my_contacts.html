@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>我的通讯录 - 元宇宙社交</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100dvh;
+        }
+        .mobile-container {
+            width: min(100vw, 393px);
+            height: 100dvh;
+            background-color: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* 直角设计 */
+        * {
+            border-radius: 0 !important;
+        }
+        .group-content {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .group-content.expanded {
+            max-height: 2000px; /* Large enough to fit content */
+        }
+        .resume-clone-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border: 1px solid #000;
+            color: #000;
+            background: #fff;
+            font-family: SimSun, 'Songti SC', 'Noto Serif SC', serif;
+            font-size: 12px;
+        }
+        .resume-clone-table td {
+            border: 1px solid #000;
+            padding: 0 6px;
+            height: 52px;
+            vertical-align: middle;
+        }
+        .resume-clone-table .resume-top-row td {
+            height: 62px;
+        }
+        .resume-clone-table .resume-unit-row td {
+            height: 30px;
+        }
+        .resume-label {
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.75;
+            font-weight: 400;
+            white-space: normal;
+        }
+        .resume-label-multiline {
+            display: inline-block;
+            line-height: 1.8;
+        }
+        .resume-value {
+            text-align: left;
+            font-size: 11px;
+            line-height: 1.35;
+            word-break: break-word;
+        }
+        .resume-photo-cell {
+            padding: 8px !important;
+            text-align: center;
+        }
+        .resume-photo-box {
+            width: 78px;
+            height: 78px;
+            margin: 0 auto;
+            object-fit: cover;
+            border: 1px solid #000;
+        }
+        .toast {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 16px;
+            font-size: 14px;
+            z-index: 100;
+            display: none;
+        }
+    </style>
+<style data-id="immersive-translate-input-injected-css"></style>
+</head>
+<body class="">
+<div class="mobile-container">
+<!-- Header -->
+<header class="px-4 py-3 flex justify-between items-center bg-[#ec4899] text-white flex-none" style="background-color: rgb(255, 255, 255);">
+<a class="text-white" href="profile.html">
+<svg class="" fill="none" height="24" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" style="color: rgb(0, 0, 0);" viewbox="0 0 24 24" width="24">
+<path d="M19 12H5M12 19l-7-7 7-7"></path>
+</svg>
+</a>
+<h1 class="text-lg font-bold tracking-tight" style="color: rgb(0, 0, 0);">我的通讯录</h1>
+<button class="w-8 h-8 flex items-center justify-center bg-white/20 hover:bg-white/30" onclick="openAddGroupModal()">
+<svg class="" fill="none" height="20" stroke="currentColor" stroke-width="2" style="color: rgb(0, 0, 0);" viewbox="0 0 24 24" width="20">
+<path d="M12 5v14M5 12h14"></path>
+</svg>
+</button>
+</header>
+<!-- 通讯录切换 -->
+<div class="px-4 pt-3 bg-white flex-none">
+<div class="flex border border-[#ec4899]">
+<button class="flex-1 py-2 text-sm font-bold bg-[#ec4899] text-white" onclick="window.location.href='my_contacts.html'">我的通讯录</button>
+<button class="flex-1 py-2 text-sm font-bold text-[#ec4899]" onclick="window.location.href='friend_contacts.html'">好友通讯录</button>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="px-4 py-3 bg-white flex-none border-b border-gray-100">
+<div class="flex space-x-0">
+<div class="relative flex-1">
+<span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+<circle cx="11" cy="11" r="8"></circle>
+<path d="M21 21l-4.35-4.35"></path>
+</svg>
+</span>
+<input class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 focus:outline-none focus:border-pink-500 text-sm font-light" placeholder="搜索通讯录好友" type="text"/>
+</div>
+<button class="bg-[#ec4899] text-white px-5 py-2 text-sm font-bold hover:bg-[#db2777] transition-colors">搜索</button>
+</div>
+</div>
+<!-- Group List -->
+<main class="flex-1 overflow-y-auto bg-white hide-scrollbar" id="groupList">
+<!-- Group 1: 家庭通讯录 -->
+<div class="group-item border-b border-gray-100">
+<div class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" onclick="toggleGroup(this)">
+<div class="flex items-center space-x-2">
+<span class="arrow transition-transform duration-200">▼</span>
+<span class="font-bold text-sm">家庭通讯录（3）</span>
+</div>
+</div>
+<div class="group-content expanded">
+<div class="friend-cards">
+<!-- Card 1 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="1">
+<div class="flex items-start space-x-3">
+<img alt="Dad Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-07-26/c97a687cc231462cbf2a99babec71892.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">爸爸</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1001</p>
+<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(1, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(1)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-1">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">林建国</div>
+<div class="text-gray-500">出生:</div><div class="font-medium">1970年6月</div>
+<div class="text-gray-500">性别:</div><div class="font-medium">男</div>
+<div class="text-gray-500">民族:</div><div class="font-medium">汉族</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">工程师</div>
+<div class="text-gray-500">职业现状:</div><div class="font-medium">在职</div>
+<div class="text-gray-500">技能:</div><div class="font-medium">机械设计、项目管理</div>
+<div class="text-gray-500">特长:</div><div class="font-medium">技术攻关、团队管理</div>
+<div class="text-gray-500">爱好:</div><div class="font-medium">钓鱼、下棋</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="2">
+<div class="flex items-start space-x-3">
+<img alt="Mom Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-06-26/8a10396a0c69442684e2576251aff199.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">妈妈</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1002</p>
+<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(2, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(2)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-2">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">周美华</div>
+<div class="text-gray-500">出生:</div><div class="font-medium">1972年9月</div>
+<div class="text-gray-500">性别:</div><div class="font-medium">女</div>
+<div class="text-gray-500">民族:</div><div class="font-medium">汉族</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">教师</div>
+<div class="text-gray-500">职业现状:</div><div class="font-medium">在职</div>
+<div class="text-gray-500">技能:</div><div class="font-medium">语文教学、班级管理</div>
+<div class="text-gray-500">特长:</div><div class="font-medium">沟通、耐心细致</div>
+<div class="text-gray-500">爱好:</div><div class="font-medium">养花、烹饪</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="3">
+<div class="flex items-start space-x-3">
+<img alt="Sister Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-07-26/19c90c009d3d4916b4f11beb43c81138.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">妹妹</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1003</p>
+<p class="text-[10px] text-gray-400 mt-0.5">1小时前活跃</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(3, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(3)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-3">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">林小雨</div>
+<div class="text-gray-500">出生:</div><div class="font-medium">2003年11月</div>
+<div class="text-gray-500">性别:</div><div class="font-medium">女</div>
+<div class="text-gray-500">民族:</div><div class="font-medium">汉族</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">学生</div>
+<div class="text-gray-500">职业现状:</div><div class="font-medium">学生</div>
+<div class="text-gray-500">技能:</div><div class="font-medium">绘画、舞蹈</div>
+<div class="text-gray-500">特长:</div><div class="font-medium">创意表达、舞台表演</div>
+<div class="text-gray-500">爱好:</div><div class="font-medium">追星、动漫、音乐</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Group 2: 朋友通讯录 -->
+<div class="group-item border-b border-gray-100">
+<div class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" onclick="toggleGroup(this)">
+<div class="flex items-center space-x-2">
+<span class="arrow transition-transform duration-200">▼</span>
+<span class="font-bold text-sm">朋友通讯录（3）</span>
+</div>
+</div>
+<div class="group-content expanded">
+<div class="friend-cards">
+<!-- Card 4 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="4">
+<div class="flex items-start space-x-3">
+<img alt="Lin Xiao Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-07-26/30e168552fa64431bb1957acf54f930c.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">林晓</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V2031</p>
+<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(4, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(4)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-4">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">林晓</div>
+<div class="text-gray-500">出生:</div><div class="font-medium">1995年8月</div>
+<div class="text-gray-500">性别:</div><div class="font-medium">女</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">UI设计师</div>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="5">
+<div class="flex items-start space-x-3">
+<img alt="Zhang Ming Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-07-01/7b7db9d4b6994752ab5a67c9f05a2321.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">张明</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1588</p>
+<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(5, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(5)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-5">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">张明</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">软件开发</div>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="6">
+<div class="flex items-start space-x-3">
+<img alt="Wang Fang Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-07-26/6bdeef7e6e6049b6bb1369326734db9e.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">王芳</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V3096</p>
+<p class="text-[10px] text-gray-400 mt-0.5">5分钟前活跃</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(6, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(6)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-6">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">王芳</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">教师</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Group 3: 公司通讯录 -->
+<div class="group-item border-b border-gray-100">
+<div class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" onclick="toggleGroup(this)">
+<div class="flex items-center space-x-2">
+<span class="arrow transition-transform duration-200">▼</span>
+<span class="font-bold text-sm">公司通讯录（2）</span>
+</div>
+</div>
+<div class="group-content expanded">
+<div class="friend-cards">
+<!-- Card 7 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="7">
+<div class="flex items-start space-x-3">
+<img alt="Zhao Qiang Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-07-26/6197b5c5c68846c19e5be7c7a19e0a1e.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">赵强</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V4096</p>
+<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(7, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(7)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-7">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">赵强</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">项目经理</div>
+</div>
+</div>
+</div>
+<!-- Card 8 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="8">
+<div class="flex items-start space-x-3">
+<img alt="Chen Jing Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-07-21/466f3eb048f6419aa6a77c3cf53030b1.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">陈静</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1024</p>
+<p class="text-[10px] text-gray-400 mt-0.5">12分钟前活跃</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(8, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(8)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-8">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">陈静</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">会计</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Group 4: 校园通讯录 -->
+<div class="group-item border-b border-gray-100">
+<div class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" onclick="toggleGroup(this)">
+<div class="flex items-center space-x-2">
+<span class="arrow transition-transform duration-200">▶</span>
+<span class="font-bold text-sm">校园通讯录（1）</span>
+</div>
+</div>
+<div class="group-content">
+<div class="friend-cards">
+<!-- Card 9 -->
+<div class="p-4 border-b border-gray-50 friend-card" data-id="9">
+<div class="flex items-start space-x-3">
+<img alt="Liu Yang Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="https://modao.cc/agent-py/media/generated_images/2026-07-26/f70ea17ad04741a7a9ba9a7612567113.jpg"/>
+<div class="flex-1">
+<h3 class="font-bold text-sm text-black">刘洋</h3>
+<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V6618</p>
+<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+</div>
+<div class="flex space-x-2 flex-none">
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(9, this)">虚拟身份证</button>
+<a class="px-2 py-1 text-[9px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]" href="room_list.html">进入房间</a>
+<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(9)">个人简历</button>
+</div>
+</div>
+<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-9">
+<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
+<div class="text-gray-500">姓名:</div><div class="font-medium">刘洋</div>
+<div class="text-gray-500">职业:</div><div class="font-medium">研究生</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Modals -->
+<!-- Add Group Modal -->
+<div class="fixed inset-0 z-50 flex items-center justify-center hidden" id="addGroupModal">
+<div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeAddGroupModal()"></div>
+<div class="relative w-80 bg-white p-6 shadow-2xl">
+<h2 class="text-lg font-bold mb-4">添加分组</h2>
+<input class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-pink-500 text-sm mb-6" id="groupNameInput" placeholder="请输入分组名称，如：同学通讯录" type="text"/>
+<div class="flex space-x-3">
+<button class="flex-1 py-2 bg-gray-200 text-gray-700 text-sm font-bold hover:bg-gray-300" onclick="closeAddGroupModal()">取消</button>
+<button class="flex-1 py-2 bg-[#ec4899] text-white text-sm font-bold hover:bg-[#db2777]" onclick="confirmAddGroup()">确认添加</button>
+</div>
+</div>
+</div>
+<!-- Resume Modal -->
+<div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" id="resumeModal">
+<div class="bg-white w-full max-w-[360px] p-4 relative border border-black">
+<button class="absolute top-2 right-2 text-gray-500 hover:text-black" onclick="closeResumeModal()">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<h2 class="text-center text-lg font-bold mb-4">个人简历</h2>
+<div id="resumeContent">
+<!-- Table inserted here -->
+</div>
+<div class="mt-4 flex justify-center">
+<button class="px-6 py-2 border border-black text-sm font-bold hover:bg-gray-100" onclick="closeResumeModal()">关闭</button>
+</div>
+</div>
+</div>
+<!-- Toast -->
+<div class="toast" id="toast">分组添加成功</div>
+</div>
+<script>
+        // Collapsible logic
+        function toggleGroup(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('.arrow');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                arrow.style.transform = 'rotate(0deg)';
+                arrow.textContent = '▶';
+            } else {
+                content.classList.add('expanded');
+                arrow.style.transform = 'rotate(0deg)';
+                arrow.textContent = '▼';
+            }
+        }
+
+        // Inline ID Card toggle
+        function toggleIDCard(id, btn) {
+            const expandDiv = document.getElementById(`id-expand-${id}`);
+            const isHidden = expandDiv.classList.contains('hidden');
+            
+            // Close all others
+            document.querySelectorAll('[id^="id-expand-"]').forEach(div => {
+                div.classList.add('hidden');
+            });
+            document.querySelectorAll('button[onclick^="toggleIDCard"]').forEach(b => {
+                b.textContent = '虚拟身份证';
+            });
+
+            if (isHidden) {
+                expandDiv.classList.remove('hidden');
+                btn.textContent = '收起身份证';
+            }
+        }
+
+        // Resume Logic
+        const resumes = {
+            1: {
+                "姓名": "林建国", "出生": "1970年6月", "性别": "男", "民族": "汉族", "职业": "工程师", "职业现状": "在职",
+                "上任单位": "大通重工", "教育经历": "哈尔滨工业大学 机械制造", "技能": "机械设计、项目管理",
+                "特长": "技术攻关、团队管理", "爱好": "钓鱼、下棋", "自我评价": "严谨务实，热爱技术钻研",
+                "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-07-26/c97a687cc231462cbf2a99babec71892.jpg"
+            },
+            2: {
+                "姓名": "周美华", "出生": "1972年9月", "性别": "女", "民族": "汉族", "职业": "教师", "职业现状": "在职",
+                "上任单位": "市第三中学", "教育经历": "师范大学 中文系", "技能": "语文教学、班级管理",
+                "特长": "沟通、耐心细致", "爱好": "养花、烹饪", "自我评价": "热爱教育事业，关心学生成长",
+                "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-06-26/8a10396a0c69442684e2576251aff199.jpg"
+            },
+            3: {
+                "姓名": "林小雨", "出生": "2003年11月", "性别": "女", "民族": "汉族", "职业": "学生", "职业现状": "学生",
+                "上任单位": "无", "教育经历": "艺术学院 在读", "技能": "绘画、舞蹈",
+                "特长": "创意表达、舞台表演", "爱好": "追星、动漫、音乐", "自我评价": "热爱艺术，正在探索多元发展",
+                "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-07-26/19c90c009d3d4916b4f11beb43c81138.jpg"
+            },
+            4: { "姓名": "林晓", "出生": "1995年8月", "性别": "女", "民族": "汉族", "职业": "UI设计师", "职业现状": "在职", "上任单位": "创意互联", "教育经历": "美术学院 视觉传达", "技能": "Figma, PS", "特长": "手绘", "爱好": "旅行", "自我评价": "追求美感", "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-07-26/30e168552fa64431bb1957acf54f930c.jpg" },
+            5: { "姓名": "张明", "出生": "1992年3月", "性别": "男", "民族": "汉族", "职业": "软件开发", "职业现状": "在职", "上任单位": "极速科技", "教育经历": "大学 计算机", "技能": "Python, JS", "特长": "算法", "爱好": "健身", "自我评价": "逻辑性强", "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-07-01/7b7db9d4b6994752ab5a67c9f05a2321.jpg" },
+            6: { "姓名": "王芳", "出生": "1990年12月", "性别": "女", "民族": "汉族", "职业": "教师", "职业现状": "在职", "上任单位": "实验小学", "教育经历": "师范大学", "技能": "数学教育", "特长": "书法", "爱好": "看书", "自我评价": "勤奋踏实", "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-07-26/6bdeef7e6e6049b6bb1369326734db9e.jpg" },
+            7: { "姓名": "赵强", "出生": "1988年5月", "性别": "男", "民族": "汉族", "职业": "项目经理", "职业现状": "在职", "上任单位": "环球工程", "教育经历": "建筑大学", "技能": "进度控制", "特长": "演讲", "爱好": "篮球", "自我评价": "抗压能力强", "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-07-26/6197b5c5c68846c19e5be7c7a19e0a1e.jpg" },
+            8: { "姓名": "陈静", "出生": "1996年7月", "性别": "女", "民族": "汉族", "职业": "会计", "职业现状": "在职", "上任单位": "金算盘事务", "教育经历": "财经大学", "技能": "审计、报表", "特长": "整理", "爱好": "拼图", "自我评价": "细心负责", "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-07-21/466f3eb048f6419aa6a77c3cf53030b1.jpg" },
+            9: { "姓名": "刘洋", "出生": "1999年10月", "性别": "男", "民族": "汉族", "职业": "研究生", "职业现状": "在读", "上任单位": "无", "教育经历": "科技大学", "技能": "科研调研", "特长": "辩论", "爱好": "桌游", "自我评价": "求知欲强", "联系人": "暂无", "电话": "暂无", "头像": "https://modao.cc/agent-py/media/generated_images/2026-07-26/f70ea17ad04741a7a9ba9a7612567113.jpg" }
+        };
+
+        function showResume(id) {
+            const data = resumes[id];
+            const content = document.getElementById('resumeContent');
+
+            content.innerHTML = `
+                <table class="resume-clone-table">
+                    <colgroup>
+                        <col class="resume-col-label" style="width: 16.66%;">
+                        <col class="resume-col-value" style="width: 16.66%;">
+                        <col class="resume-col-label" style="width: 16.66%;">
+                        <col class="resume-col-value" style="width: 16.66%;">
+                        <col class="resume-col-photo" style="width: 33.36%;">
+                    </colgroup>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">姓名</td>
+                        <td class="resume-value">${data["姓名"]}</td>
+                        <td class="resume-label">性别</td>
+                        <td class="resume-value">${data["性别"]}</td>
+                        <td class="resume-photo-cell" rowspan="3">
+                            <img src="${data["头像"]}" alt="${data["姓名"]}" class="resume-photo-box">
+                        </td>
+                    </tr>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">出生</td>
+                        <td class="resume-value">${data["出生"]}</td>
+                        <td class="resume-label">民族</td>
+                        <td class="resume-value">${data["民族"]}</td>
+                    </tr>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">职业</td>
+                        <td class="resume-value">${data["职业"]}</td>
+                        <td class="resume-label"><span class="resume-label-multiline">职业<br>现状</span></td>
+                        <td class="resume-value">${data["职业现状"]}</td>
+                    </tr>
+                    <tr class="resume-unit-row">
+                        <td class="resume-label" rowspan="2"><span class="resume-label-multiline">上任单<br>位名称</span></td>
+                        <td class="resume-value" colspan="2" rowspan="2">${data["上任单位"]}</td>
+                        <td class="resume-label">联系人</td>
+                        <td class="resume-value">${data["联系人"]}</td>
+                    </tr>
+                    <tr class="resume-unit-row">
+                        <td class="resume-label">电话</td>
+                        <td class="resume-value">${data["电话"]}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label"><span class="resume-label-multiline">教育<br>经历</span></td>
+                        <td class="resume-value" colspan="4">${data["教育经历"]}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">技能</td>
+                        <td class="resume-value" colspan="4">${data["技能"]}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">特长</td>
+                        <td class="resume-value" colspan="4">${data["特长"]}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">爱好</td>
+                        <td class="resume-value" colspan="4">${data["爱好"]}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label"><span class="resume-label-multiline">自我<br>评价</span></td>
+                        <td class="resume-value" colspan="4">${data["自我评价"]}</td>
+                    </tr>
+                </table>
+            `;
+            document.getElementById('resumeModal').classList.remove('hidden');
+        }
+
+        function closeResumeModal() {
+            document.getElementById('resumeModal').classList.add('hidden');
+        }
+
+        // Add Group Logic
+        function openAddGroupModal() {
+            document.getElementById('addGroupModal').classList.remove('hidden');
+        }
+
+        function closeAddGroupModal() {
+            document.getElementById('addGroupModal').classList.add('hidden');
+            document.getElementById('groupNameInput').value = '';
+        }
+
+        function confirmAddGroup() {
+            const name = document.getElementById('groupNameInput').value.trim();
+            if (!name) return;
+
+            const groupList = document.getElementById('groupList');
+            const newGroup = document.createElement('div');
+            newGroup.className = 'group-item border-b border-gray-100';
+            newGroup.innerHTML = `
+                <div onclick="toggleGroup(this)" class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center space-x-2">
+                        <span class="arrow transition-transform duration-200">▶</span>
+                        <span class="font-bold text-sm">${name}（0）</span>
+                    </div>
+                </div>
+                <div class="group-content">
+                    <div class="p-8 text-center text-gray-400 text-xs">该分组暂无好友</div>
+                </div>
+            `;
+            groupList.appendChild(newGroup);
+            
+            closeAddGroupModal();
+            showToast();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body></html>

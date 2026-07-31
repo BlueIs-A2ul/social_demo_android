@@ -1,0 +1,608 @@
+﻿<!doctype html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>分享动态 - 元社交</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      body {
+        background-color: white;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        width: min(100vw, 393px);
+        height: 100dvh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        position: relative;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      .v-badge {
+        background-color: #ffb800;
+        color: white;
+        font-size: 8px;
+        font-weight: bold;
+        width: 14px;
+        height: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-left: 6px;
+      }
+      .user-vip-badge {
+        display: inline-block;
+        width: 20px;
+        height: auto;
+        margin-left: 4px;
+        vertical-align: -4px;
+      }
+      .user-vip-badge-sm {
+        width: 15px;
+        margin-left: 3px;
+        vertical-align: -3px;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .modal-open {
+        overflow: hidden;
+      }
+      .publish-top-nav {
+        width: 100%;
+        height: 52px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 0 14px;
+        border-bottom: 1px solid #f3f4f6;
+        background: #fff;
+        color: #888;
+        position: sticky;
+        top: 0;
+        z-index: 60;
+      }
+      .publish-menu-btn,
+      .publish-search-btn {
+        width: 28px;
+        height: 28px;
+        flex: none;
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: #555;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .publish-menu-badge {
+        position: absolute;
+        top: -4px;
+        right: -7px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        border: 2px solid #fff;
+        border-radius: 999px;
+        background: #ff3f74;
+        color: #fff;
+        font-size: 11px;
+        line-height: 14px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .publish-nav-tabs {
+        min-width: 0;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        white-space: nowrap;
+      }
+      .publish-nav-tab {
+        color: #8a8a8a;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 52px;
+        text-decoration: none;
+        position: relative;
+      }
+      .publish-nav-tab.active {
+        color: #333;
+      }
+      .publish-nav-tab.active::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        right: 4px;
+        bottom: 7px;
+        height: 3px;
+        background: #333;
+      }
+      .publish-nav-caret {
+        font-size: 12px;
+        margin-left: 2px;
+        vertical-align: 2px;
+      }
+      .publish-view-hidden {
+        display: none !important;
+      }
+      body.publish-discover-mode #feed-grid {
+        padding-top: 16px;
+      }
+    </style>
+    <style data-id="immersive-translate-input-injected-css"></style>
+  </head>
+  <body class="bg-white">
+    <!-- 顶部导航栏 -->
+    <div class="publish-top-nav">
+      <button
+        aria-label="展开菜单"
+        class="publish-menu-btn"
+      >
+        <svg
+          fill="none"
+          height="26"
+          stroke="currentColor"
+          stroke-linecap="butt"
+          stroke-width="2"
+          viewbox="0 0 24 24"
+          width="26"
+        >
+          <path d="M3 6h18M3 12h18M3 18h18"></path>
+        </svg>
+      </button>
+      <nav aria-label="内容频道" class="publish-nav-tabs">
+        <a class="publish-nav-tab" href="square.html"
+          >关注<span class="publish-nav-caret">▼</span></a
+        >
+        <a class="publish-nav-tab" href="radar_nearby.html">同城</a>
+        <a
+          class="publish-nav-tab"
+          data-publish-tab="discover"
+          href="javascript:void(0)"
+          onclick="switchPublishView('discover', event)"
+          >发现</a
+        >
+        <a class="publish-nav-tab" href="square.html">附近人</a>
+        <a
+          class="publish-nav-tab active"
+          data-publish-tab="home"
+          href="javascript:void(0)"
+          onclick="switchPublishView('home', event)"
+          >主页</a
+        >
+      </nav>
+      <button
+        aria-label="搜索"
+        class="publish-search-btn"
+        onclick="showToast('搜索')"
+      >
+        <svg
+          fill="none"
+          height="27"
+          stroke="currentColor"
+          stroke-width="2.2"
+          viewbox="0 0 24 24"
+          width="27"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M20 20l-4.2-4.2"></path>
+        </svg>
+      </button>
+    </div>
+    <!-- 顶部封面区 -->
+    <div
+      class="publish-home-only relative w-full h-[150px] cursor-pointer shrink-0"
+      onclick="showToast('更换封面')"
+    >
+      <img
+        alt="Cover Image"
+        class="w-full h-full object-cover"
+        src="https://modao.cc/agent-py/media/user_assets/2026-07-16/2af44e70b7aa4347955a7f5fc0885652.jpg"
+      />
+    </div>
+    <!-- 用户信息区 -->
+    <div class="publish-home-only relative px-5 pt-2 pb-5 shrink-0">
+      <!-- 头像叠加 -->
+      <div
+        class="absolute -top-8 left-5 cursor-pointer"
+        onclick="location.href = 'profile.html'"
+      >
+        <img
+          alt="User Avatar"
+          class="w-[64px] h-[64px] rounded-none border-2 border-white object-cover bg-gray-100"
+          src="https://modao.cc/agent-py/media/user_assets/2026-07-16/785224fe3e8c4bd7974c43610ecf62e8.png"
+        />
+      </div>
+      <div class="mt-10">
+        <div class="flex items-center">
+          <span class="text-xl font-bold text-black"
+            >约翰逊<img
+              alt="个人VIP2"
+              class="user-vip-badge"
+              src="assets/vip/user-vip-star-6.png"
+          /></span>
+          <span class="v-badge">V</span>
+        </div>
+        <p class="text-sm text-gray-400 mt-1">记录空间、生活和有趣见闻。</p>
+        <div class="flex gap-4 mt-4">
+          <div>
+            <span class="text-sm font-bold text-[#ec4899]">28</span>
+            <span class="text-sm text-gray-400 ml-1">动态</span>
+          </div>
+          <div>
+            <span class="text-sm font-bold text-[#ec4899]">1151</span>
+            <span class="text-sm text-gray-400 ml-1">关注</span>
+          </div>
+          <div>
+            <span class="text-sm font-bold text-[#ec4899]">407</span>
+            <span class="text-sm text-gray-400 ml-1">粉丝</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="publish-home-only h-1 bg-gray-50 w-full shrink-0"></div>
+    <!-- 作品瀑布流标题 -->
+    <div class="publish-home-only px-5 py-4 flex justify-between items-center shrink-0">
+      <h2 class="text-base font-bold text-black">作品</h2>
+      <span class="text-sm text-gray-400">共 8 条</span>
+    </div>
+    <!-- 两列瀑布流网格 -->
+    <div
+      class="grid grid-cols-2 gap-x-[10px] gap-y-4 px-5 pb-10"
+      id="feed-grid"
+    >
+      <div class="cursor-pointer group" onclick="openDetail(0)">
+        <div class="aspect-square bg-gray-50 overflow-hidden">
+          <img
+            alt="周末咖啡小店"
+            class="w-full h-full object-cover transition-transform group-active:scale-95"
+            src="https://modao.cc/agent-py/media/user_assets/2026-07-16/c6efcfda16d44389b3fb71a42052a473.jpg"
+          />
+        </div>
+        <p class="text-[13px] text-black mt-2 font-medium">周末咖啡小店</p>
+      </div>
+      <div class="cursor-pointer group" onclick="openDetail(1)">
+        <div class="aspect-square bg-gray-50 overflow-hidden">
+          <img
+            alt="春日花园"
+            class="w-full h-full object-cover transition-transform group-active:scale-95"
+            src="https://modao.cc/agent-py/media/user_assets/2026-07-16/809843c666664c09bc5d43c26ae01178.jpg"
+          />
+        </div>
+        <p class="text-[13px] text-black mt-2 font-medium">春日花园</p>
+      </div>
+      <div class="cursor-pointer group" onclick="openDetail(2)">
+        <div class="aspect-square bg-gray-50 overflow-hidden">
+          <img
+            alt="夜市小摊"
+            class="w-full h-full object-cover transition-transform group-active:scale-95"
+            src="https://modao.cc/agent-py/media/user_assets/2026-07-16/ad0934641a444cbb94979d7ab1f8abf8.jpg"
+          />
+        </div>
+        <p class="text-[13px] text-black mt-2 font-medium">夜市小摊</p>
+      </div>
+      <div class="cursor-pointer group" onclick="openDetail(3)">
+        <div class="aspect-square bg-gray-50 overflow-hidden">
+          <img
+            alt="海边落日"
+            class="w-full h-full object-cover transition-transform group-active:scale-95"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-16/1a386460ba3d47c9a2d10d5e2f596cf1.jpg"
+          />
+        </div>
+        <p class="text-[13px] text-black mt-2 font-medium">海边落日</p>
+      </div>
+      <div class="cursor-pointer group" onclick="openDetail(4)">
+        <div class="aspect-square bg-gray-50 overflow-hidden">
+          <img
+            alt="山间徒步"
+            class="w-full h-full object-cover transition-transform group-active:scale-95"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-16/0736d7939f29473ea00ba1b954f104b2.jpg"
+          />
+        </div>
+        <p class="text-[13px] text-black mt-2 font-medium">山间徒步</p>
+      </div>
+      <div class="cursor-pointer group" onclick="openDetail(7)">
+        <div class="aspect-square bg-gray-50 overflow-hidden">
+          <img
+            alt="艺术展览"
+            class="w-full h-full object-cover transition-transform group-active:scale-95"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-16/2aea3f72105b49bea3c8dae618526220.jpg"
+          />
+        </div>
+        <p class="text-[13px] text-black mt-2 font-medium">艺术展览</p>
+      </div>
+    </div>
+    <!-- 详情模态框 -->
+    <div
+      class="fixed inset-0 bg-black/90 z-[100] hidden flex-col transition-all duration-300 opacity-0"
+      id="detail-modal"
+      style="display: none"
+    >
+      <div class="flex-1 flex items-center justify-center p-5 relative">
+        <div
+          class="w-full max-w-[360px] h-full bg-white relative flex flex-col overflow-hidden shadow-2xl"
+        >
+          <!-- 关闭按钮 -->
+          <button
+            class="absolute top-4 right-4 z-50 text-white bg-black/20 rounded-full p-1 hover:bg-black/40 transition-colors"
+            onclick="closeDetail()"
+          >
+            <svg
+              class=""
+              height="20"
+              viewbox="0 0 24 24"
+              width="20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                fill="currentColor"
+              ></path>
+            </svg>
+          </button>
+          <!-- 滚动区域 -->
+          <div class="flex-1 overflow-y-auto no-scrollbar pb-[72px]">
+            <!-- ① 大图 -->
+            <img
+              alt="动态图片"
+              class="w-full h-[280px] object-contain bg-gray-50 block"
+              id="detail-img"
+              src="assets/shops/shop-coffee-corner.png"
+            />
+            <!-- ② 标题/简介区 -->
+            <div class="p-4 border-b border-gray-100">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <img
+                    alt="头像"
+                    class="w-6 h-6 rounded-full object-cover"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/7324caaa7daa41839e6f4b764cde141f.jpg"
+                  />
+                  <span class="text-sm font-bold text-black"
+                    >约翰逊<img
+                      alt="个人VIP2"
+                      class="user-vip-badge user-vip-badge-sm"
+                      src="assets/vip/user-vip-star-6.png"
+                  /></span>
+                </div>
+                <span class="text-xs text-gray-400">2小时前</span>
+              </div>
+              <h2 class="text-base font-bold text-black mt-3" id="detail-title">
+                春日花园
+              </h2>
+              <p class="text-[13px] text-gray-400 mt-1">
+                一个藏在巷子里的温馨咖啡小店，午后阳光洒进来特别治愈。
+              </p>
+            </div>
+            <!-- ③ 正文区 -->
+            <div class="p-4">
+              <p class="text-sm text-black leading-[1.8]">
+                周末终于打卡了这家种草已久的咖啡店！店面不大但每个角落都很用心，老板是个很nice的人，推荐了他们家的手冲和提拉米苏。坐在窗边看着街景，喝着咖啡，感觉整个下午都慢下来了。下次还会再来～
+              </p>
+              <div class="flex gap-3 mt-4">
+                <span
+                  class="text-[12px] text-[#ec4899] cursor-pointer"
+                  >#咖啡探店</span
+                >
+                <span
+                  class="text-[12px] text-[#ec4899] cursor-pointer"
+                  >#周末日常</span
+                >
+                <span
+                  class="text-[12px] text-[#ec4899] cursor-pointer"
+                  >#治愈系</span
+                >
+              </div>
+            </div>
+            <!-- ④ 评论列表 -->
+            <div class="p-4 mt-2">
+              <h3 class="text-sm font-bold text-black mb-4">评论 12</h3>
+              <div class="space-y-4">
+                <div class="flex gap-2 border-b border-gray-50 pb-3">
+                  <img
+                    alt="头像"
+                    class="w-5 h-5 rounded-full"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                  />
+                  <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="text-[12px] font-bold text-black"
+                        >小云<img
+                          alt="个人VIP2"
+                          class="user-vip-badge user-vip-badge-sm"
+                          src="assets/vip/user-vip-star-2.png"
+                      /></span>
+                      <span class="text-[10px] text-gray-400">2</span>
+                    </div>
+                    <p class="text-[12px] text-gray-500 mt-0.5">
+                      这家店我也去过！提拉米苏真的绝了 👍
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-2 border-b border-gray-50 pb-3">
+                  <img
+                    alt="头像"
+                    class="w-5 h-5 rounded-full"
+                    src="https://modao.cc/agent-py/media/user_assets/2026-07-22/861da2ed40c44c45b74fe46ffe08460b.jpg"
+                  />
+                  <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="text-[12px] font-bold text-black"
+                        >七七<img
+                          alt="个人VIP2"
+                          class="user-vip-badge user-vip-badge-sm"
+                          src="assets/vip/user-vip-star-4.png"
+                      /></span>
+                      <span class="text-[10px] text-gray-400">1小时前</span>
+                    </div>
+                    <p class="text-[12px] text-gray-500 mt-0.5">
+                      求地址！看起来好棒
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-2 border-b border-gray-50 pb-3">
+                  <img
+                    alt="头像"
+                    class="w-5 h-5 rounded-full"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/7324caaa7daa41839e6f4b764cde141f.jpg"
+                  />
+                  <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="text-[12px] font-bold text-black"
+                        >小鹿<img
+                          alt="个人VIP2"
+                          class="user-vip-badge user-vip-badge-sm"
+                          src="assets/vip/user-vip-star-1.png"
+                      /></span>
+                      <span class="text-[10px] text-gray-400">2小时前</span>
+                    </div>
+                    <p class="text-[12px] text-gray-500 mt-0.5">
+                      咖啡控表示很心动
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-2 border-b border-gray-50 pb-3">
+                  <img
+                    alt="头像"
+                    class="w-5 h-5 rounded-full"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                  />
+                  <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="text-[12px] font-bold text-black"
+                        >星河<img
+                          alt="个人VIP2"
+                          class="user-vip-badge user-vip-badge-sm"
+                          src="assets/vip/user-vip-star-5.png"
+                      /></span>
+                      <span class="text-[10px] text-gray-400">3小时前</span>
+                    </div>
+                    <p class="text-[12px] text-gray-500 mt-0.5">周末去打卡</p>
+                  </div>
+                </div>
+                <div class="flex gap-2 pb-3">
+                  <img
+                    alt="头像"
+                    class="w-5 h-5 rounded-full"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-06-30/6a3b2cb986b949e497a31d8c340bfe69.jpg"
+                  />
+                  <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                      <span class="text-[12px] font-bold text-black"
+                        >阿森<img
+                          alt="个人VIP2"
+                          class="user-vip-badge user-vip-badge-sm"
+                          src="assets/vip/user-vip-star-3.png"
+                      /></span>
+                      <span class="text-[10px] text-gray-400">4小时前</span>
+                    </div>
+                    <p class="text-[12px] text-gray-500 mt-0.5">
+                      环境也太好了吧
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- ⑤ 评论输入框 -->
+          <div
+            class="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 flex gap-3 items-center"
+          >
+            <input
+              class="flex-1 bg-gray-100 rounded-none px-4 py-2 text-sm outline-none"
+              placeholder="说点什么..."
+              type="text"
+            />
+            <button
+              class="bg-[#ec4899] text-white px-4 py-2 text-sm font-medium"
+              onclick="showToast('评论已发布')"
+            >
+              发布
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Toast -->
+    <div
+      class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-4 py-2 rounded-full opacity-0 pointer-events-none transition-opacity duration-300 z-[200]"
+      id="toast"
+    ></div>
+    <script>
+      const feedData = [
+        { title: '周末咖啡小店', img: 'assets/shops/shop-coffee-corner.png' },
+        { title: '春日花园', img: 'assets/shops/shop-coffee-bar.png' },
+        { title: '夜市小摊', img: 'assets/shops/shop-fast-food.png' },
+        { title: '海边落日', img: 'assets/shops/shop-coffee-angle.png' },
+        { title: '山间徒步', img: 'assets/shops/shop-pizza-angle.png' },
+        { title: '城市夜景', img: 'assets/shops/shop-ice-cream-angle.png' },
+        { title: '美食打卡', img: 'assets/shops/shop-pizza-front.png' },
+        { title: '艺术展览', img: 'assets/shops/shop-ice-cream-front.png' },
+      ]
+
+      function openDetail(index) {
+        const data = feedData[index]
+        document.getElementById('detail-img').src = data.img
+        document.getElementById('detail-title').innerText = data.title
+        const modal = document.getElementById('detail-modal')
+        modal.style.display = 'flex'
+        setTimeout(() => {
+          modal.classList.add('opacity-100')
+          modal.classList.remove('opacity-0')
+        }, 10)
+        document.body.classList.add('modal-open')
+      }
+
+      function closeDetail() {
+        const modal = document.getElementById('detail-modal')
+        modal.classList.add('opacity-0')
+        modal.classList.remove('opacity-100')
+        setTimeout(() => {
+          modal.style.display = 'none'
+        }, 300)
+        document.body.classList.remove('modal-open')
+      }
+
+      function switchPublishView(view, event) {
+        if (event) event.preventDefault()
+        const isDiscover = view === 'discover'
+
+        document.body.classList.toggle('publish-discover-mode', isDiscover)
+        document.querySelectorAll('.publish-home-only').forEach(section => {
+          section.classList.toggle('publish-view-hidden', isDiscover)
+        })
+        document
+          .querySelectorAll('.publish-nav-tab[data-publish-tab]')
+          .forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.publishTab === view)
+          })
+        window.scrollTo(0, 0)
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById('toast')
+        toast.innerText = msg
+        toast.classList.add('opacity-100')
+        setTimeout(() => {
+          toast.classList.remove('opacity-100')
+        }, 2000)
+      }
+    </script>
+  </body>
+</html>

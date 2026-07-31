@@ -1,0 +1,914 @@
+<!doctype html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>好友通讯录 - 元宇宙社交</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          'Helvetica Neue',
+          Arial,
+          sans-serif;
+        background-color: #f3f4f6;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100dvh;
+      }
+      .mobile-container {
+        width: min(100vw, 393px);
+        height: 100dvh;
+        background-color: white;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .active-filter {
+        background-color: #ec4899;
+        color: white;
+        border-color: #ec4899;
+      }
+      .user-vip-badge {
+        display: inline-block;
+        width: 20px;
+        height: auto;
+        margin-left: 4px;
+        vertical-align: -4px;
+      }
+      .resume-clone-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        border: 1px solid #000;
+        color: #000;
+        background: #fff;
+        font-family: SimSun, 'Songti SC', 'Noto Serif SC', serif;
+        font-size: 12px;
+      }
+      .resume-clone-table td {
+        border: 1px solid #000;
+        padding: 0 6px;
+        height: 52px;
+        vertical-align: middle;
+      }
+      .resume-clone-table .resume-top-row td {
+        height: 62px;
+      }
+      .resume-clone-table .resume-unit-row td {
+        height: 30px;
+      }
+      .resume-label {
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.75;
+        font-weight: 400;
+        white-space: normal;
+      }
+      .resume-label-multiline {
+        display: inline-block;
+        line-height: 1.8;
+      }
+      .resume-value {
+        text-align: left;
+        font-size: 11px;
+        line-height: 1.35;
+        word-break: break-word;
+      }
+      .resume-photo-cell {
+        padding: 8px !important;
+        text-align: center;
+      }
+      .resume-photo-box {
+        width: 78px;
+        height: 78px;
+        margin: 0 auto;
+        object-fit: cover;
+        border: 1px solid #000;
+      }
+      /* 直角设计 */
+      * {
+        border-radius: 0 !important;
+      }
+    </style>
+    <style data-id="immersive-translate-input-injected-css"></style>
+  </head>
+  <body class="bg-gray-100 is-mb-ai-setting">
+    <div class="mobile-container">
+      <!-- 顶部状态栏 (模拟) -->
+      <!-- Header -->
+      <header
+        class="px-4 py-3 flex justify-between items-center flex-none bg-[#ec4899] text-white"
+        style="background-color: rgb(255, 255, 255)"
+      >
+        <a class="text-white" href="my_contacts.html">
+          <svg
+            class=""
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="butt"
+            stroke-linejoin="miter"
+            stroke-width="2"
+            style="color: rgb(0, 0, 0)"
+            viewbox="0 0 24 24"
+            width="24"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+          </svg>
+        </a>
+        <h1
+          class="text-lg font-bold tracking-tight"
+          style="color: rgb(0, 0, 0)"
+        >
+          好友通讯录
+        </h1>
+        <div class="w-6"></div>
+        <!-- Placeholder for symmetry -->
+      </header>
+      <!-- 通讯录切换 -->
+      <div class="px-4 pt-3 bg-white flex-none">
+        <div class="flex border border-[#ec4899]">
+          <button
+            class="flex-1 py-2 text-sm font-bold text-[#ec4899]"
+            onclick="window.location.href='my_contacts.html'"
+          >
+            我的通讯录
+          </button>
+          <button
+            class="flex-1 py-2 text-sm font-bold bg-[#ec4899] text-white"
+            onclick="window.location.href='friend_contacts.html'"
+          >
+            好友通讯录
+          </button>
+        </div>
+      </div>
+      <!-- 搜索栏 -->
+      <div class="px-4 py-3 bg-white flex-none">
+        <div class="flex space-x-0">
+          <div class="relative flex-1">
+            <span
+              class="absolute inset-y-0 left-3 flex items-center text-gray-400"
+            >
+              <svg
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="18"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+              </svg>
+            </span>
+            <input
+              class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 focus:outline-none focus:border-pink-500 text-sm font-light"
+              placeholder="搜索好友姓名或昵称"
+              type="text"
+            />
+          </div>
+          <button
+            class="bg-[#ec4899] text-white px-5 py-2 text-sm font-bold hover:bg-[#db2777] transition-colors"
+          >
+            搜索
+          </button>
+        </div>
+      </div>
+      <!-- 筛选栏 -->
+      <div
+        class="px-4 pb-3 flex space-x-2 overflow-x-auto hide-scrollbar flex-none bg-white border-b border-gray-100"
+      >
+        <button
+          class="whitespace-nowrap px-4 py-1.5 border border-[#ec4899] text-xs font-bold transition-all active-filter"
+        >
+          全部
+        </button>
+        <button
+          class="whitespace-nowrap px-4 py-1.5 border border-gray-300 text-xs font-bold transition-all bg-white text-gray-600"
+        >
+          在线
+        </button>
+        <button
+          class="whitespace-nowrap px-4 py-1.5 border border-gray-300 text-xs font-bold transition-all bg-white text-gray-600"
+        >
+          最近联系
+        </button>
+      </div>
+      <!-- 好友列表 -->
+      <div
+        class="flex-1 overflow-y-auto bg-gray-50 hide-scrollbar"
+        id="friendList"
+      >
+        <div
+          class="bg-white border-b border-gray-100 p-4 friend-card"
+          id="card-1"
+        >
+          <div class="flex items-start space-x-4">
+            <img
+              alt="assets/avatar-01.png"
+              class="w-16 h-16 border border-gray-200 object-cover flex-none"
+              src="assets/packaged/src/generated_avatars/avatar-01.png"
+            />
+            <div class="flex-1">
+              <h3 class="font-bold text-black">林晓<img alt="个人VIP2" class="user-vip-badge" src="assets/vip/user-vip-star-2.png"/></h3>
+              <p class="text-xs text-gray-500 mt-1">虚拟身份编号: V2031</p>
+              <p class="text-xs text-green-500 mt-0.5">在线</p>
+            </div>
+            <div class="flex flex-col space-y-2 flex-none w-24">
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="toggleIDCard(1, this)"
+              >
+                虚拟身份证
+              </button>
+              <a
+                class="w-full py-1 text-[10px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]"
+                href="room_list.html"
+                >进入房间</a
+              >
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="showResume(1)"
+              >
+                个人简历
+              </button>
+            </div>
+          </div>
+          <!-- 展开的身份证信息 -->
+          <div
+            class="hidden mt-4 bg-gray-50 border border-gray-200 p-3"
+            id="id-expand-1"
+          >
+            <div class="grid grid-cols-2 gap-y-2 text-xs">
+              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="font-medium">V2031</div>
+              <div class="text-gray-500">姓名:</div>
+              <div class="font-medium">林晓</div>
+              <div class="text-gray-500">出生:</div>
+              <div class="font-medium">1998年3月</div>
+              <div class="text-gray-500">性别:</div>
+              <div class="font-medium">女</div>
+              <div class="text-gray-500">民族:</div>
+              <div class="font-medium">汉族</div>
+              <div class="text-gray-500">职业:</div>
+              <div class="font-medium">空间设计师</div>
+              <div class="text-gray-500">职业现状:</div>
+              <div class="font-medium">在职</div>
+              <div class="text-gray-500">技能:</div>
+              <div class="font-medium">空间设计、摄影</div>
+              <div class="text-gray-500">特长:</div>
+              <div class="font-medium">视觉表达、沟通</div>
+              <div class="text-gray-500">爱好:</div>
+              <div class="font-medium">旅行、音乐、阅读</div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-white border-b border-gray-100 p-4 friend-card"
+          id="card-2"
+        >
+          <div class="flex items-start space-x-4">
+            <img
+              alt="assets/avatar-02.png"
+              class="w-16 h-16 border border-gray-200 object-cover flex-none"
+              src="assets/packaged/src/generated_avatars/avatar-02.png"
+            />
+            <div class="flex-1">
+              <h3 class="font-bold text-black">张明<img alt="个人VIP2" class="user-vip-badge" src="assets/vip/user-vip-star-5.png"/></h3>
+              <p class="text-xs text-gray-500 mt-1">虚拟身份编号: V1588</p>
+              <p class="text-xs text-gray-400 mt-0.5">12分钟前活跃</p>
+            </div>
+            <div class="flex flex-col space-y-2 flex-none w-24">
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="toggleIDCard(2, this)"
+              >
+                虚拟身份证
+              </button>
+              <a
+                class="w-full py-1 text-[10px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]"
+                href="room_list.html"
+                >进入房间</a
+              >
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="showResume(2)"
+              >
+                个人简历
+              </button>
+            </div>
+          </div>
+          <!-- 展开的身份证信息 -->
+          <div
+            class="hidden mt-4 bg-gray-50 border border-gray-200 p-3"
+            id="id-expand-2"
+          >
+            <div class="grid grid-cols-2 gap-y-2 text-xs">
+              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="font-medium">V1588</div>
+              <div class="text-gray-500">姓名:</div>
+              <div class="font-medium">张明</div>
+              <div class="text-gray-500">出生:</div>
+              <div class="font-medium">1997年8月</div>
+              <div class="text-gray-500">性别:</div>
+              <div class="font-medium">男</div>
+              <div class="text-gray-500">民族:</div>
+              <div class="font-medium">汉族</div>
+              <div class="text-gray-500">职业:</div>
+              <div class="font-medium">软件工程师</div>
+              <div class="text-gray-500">职业现状:</div>
+              <div class="font-medium">在职</div>
+              <div class="text-gray-500">技能:</div>
+              <div class="font-medium">Java、Python、前端开发</div>
+              <div class="text-gray-500">特长:</div>
+              <div class="font-medium">算法设计、团队协作</div>
+              <div class="text-gray-500">爱好:</div>
+              <div class="font-medium">篮球、游戏、电影</div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-white border-b border-gray-100 p-4 friend-card"
+          id="card-3"
+        >
+          <div class="flex items-start space-x-4">
+            <img
+              alt="assets/avatar-03.png"
+              class="w-16 h-16 border border-gray-200 object-cover flex-none"
+              src="assets/packaged/src/generated_avatars/avatar-03.png"
+            />
+            <div class="flex-1">
+              <h3 class="font-bold text-black">王芳<img alt="个人VIP2" class="user-vip-badge" src="assets/vip/user-vip-star-3.png"/></h3>
+              <p class="text-xs text-gray-500 mt-1">虚拟身份编号: V3096</p>
+              <p class="text-xs text-green-500 mt-0.5">在线</p>
+            </div>
+            <div class="flex flex-col space-y-2 flex-none w-24">
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="toggleIDCard(3, this)"
+              >
+                虚拟身份证
+              </button>
+              <a
+                class="w-full py-1 text-[10px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]"
+                href="room_list.html"
+                >进入房间</a
+              >
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="showResume(3)"
+              >
+                个人简历
+              </button>
+            </div>
+          </div>
+          <!-- 展开的身份证信息 -->
+          <div
+            class="hidden mt-4 bg-gray-50 border border-gray-200 p-3"
+            id="id-expand-3"
+          >
+            <div class="grid grid-cols-2 gap-y-2 text-xs">
+              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="font-medium">V3096</div>
+              <div class="text-gray-500">姓名:</div>
+              <div class="font-medium">王芳</div>
+              <div class="text-gray-500">出生:</div>
+              <div class="font-medium">1999年12月</div>
+              <div class="text-gray-500">性别:</div>
+              <div class="font-medium">女</div>
+              <div class="text-gray-500">民族:</div>
+              <div class="font-medium">回族</div>
+              <div class="text-gray-500">职业:</div>
+              <div class="font-medium">平面设计师</div>
+              <div class="text-gray-500">职业现状:</div>
+              <div class="font-medium">在职</div>
+              <div class="text-gray-500">技能:</div>
+              <div class="font-medium">插画、品牌设计</div>
+              <div class="text-gray-500">特长:</div>
+              <div class="font-medium">色彩搭配、创意构思</div>
+              <div class="text-gray-500">爱好:</div>
+              <div class="font-medium">绘画、摄影、旅行</div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-white border-b border-gray-100 p-4 friend-card"
+          id="card-4"
+        >
+          <div class="flex items-start space-x-4">
+            <img
+              alt="assets/avatar-04.png"
+              class="w-16 h-16 border border-gray-200 object-cover flex-none"
+              src="assets/packaged/src/generated_avatars/avatar-04.png"
+            />
+            <div class="flex-1">
+              <h3 class="font-bold text-black">赵强<img alt="个人VIP2" class="user-vip-badge" src="assets/vip/user-vip-star-6.png"/></h3>
+              <p class="text-xs text-gray-500 mt-1">虚拟身份编号: V4096</p>
+              <p class="text-xs text-gray-400 mt-0.5">5分钟前活跃</p>
+            </div>
+            <div class="flex flex-col space-y-2 flex-none w-24">
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="toggleIDCard(4, this)"
+              >
+                虚拟身份证
+              </button>
+              <a
+                class="w-full py-1 text-[10px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]"
+                href="room_list.html"
+                >进入房间</a
+              >
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="showResume(4)"
+              >
+                个人简历
+              </button>
+            </div>
+          </div>
+          <!-- 展开的身份证信息 -->
+          <div
+            class="hidden mt-4 bg-gray-50 border border-gray-200 p-3"
+            id="id-expand-4"
+          >
+            <div class="grid grid-cols-2 gap-y-2 text-xs">
+              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="font-medium">V4096</div>
+              <div class="text-gray-500">姓名:</div>
+              <div class="font-medium">赵强</div>
+              <div class="text-gray-500">出生:</div>
+              <div class="font-medium">1996年5月</div>
+              <div class="text-gray-500">性别:</div>
+              <div class="font-medium">男</div>
+              <div class="text-gray-500">民族:</div>
+              <div class="font-medium">汉族</div>
+              <div class="text-gray-500">职业:</div>
+              <div class="font-medium">产品经理</div>
+              <div class="text-gray-500">职业现状:</div>
+              <div class="font-medium">在职</div>
+              <div class="text-gray-500">技能:</div>
+              <div class="font-medium">需求分析、项目管理</div>
+              <div class="text-gray-500">特长:</div>
+              <div class="font-medium">沟通协调、数据分析</div>
+              <div class="text-gray-500">爱好:</div>
+              <div class="font-medium">阅读、跑步、桌游</div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-white border-b border-gray-100 p-4 friend-card"
+          id="card-5"
+        >
+          <div class="flex items-start space-x-4">
+            <img
+              alt="assets/avatar-05.png"
+              class="w-16 h-16 border border-gray-200 object-cover flex-none"
+              src="assets/packaged/src/generated_avatars/avatar-05.png"
+            />
+            <div class="flex-1">
+              <h3 class="font-bold text-black">陈静<img alt="个人VIP2" class="user-vip-badge" src="assets/vip/user-vip-star-4.png"/></h3>
+              <p class="text-xs text-gray-500 mt-1">虚拟身份编号: V1024</p>
+              <p class="text-xs text-green-500 mt-0.5">在线</p>
+            </div>
+            <div class="flex flex-col space-y-2 flex-none w-24">
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="toggleIDCard(5, this)"
+              >
+                虚拟身份证
+              </button>
+              <a
+                class="w-full py-1 text-[10px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]"
+                href="room_list.html"
+                >进入房间</a
+              >
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="showResume(5)"
+              >
+                个人简历
+              </button>
+            </div>
+          </div>
+          <!-- 展开的身份证信息 -->
+          <div
+            class="hidden mt-4 bg-gray-50 border border-gray-200 p-3"
+            id="id-expand-5"
+          >
+            <div class="grid grid-cols-2 gap-y-2 text-xs">
+              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="font-medium">V1024</div>
+              <div class="text-gray-500">姓名:</div>
+              <div class="font-medium">陈静</div>
+              <div class="text-gray-500">出生:</div>
+              <div class="font-medium">2000年2月</div>
+              <div class="text-gray-500">性别:</div>
+              <div class="font-medium">女</div>
+              <div class="text-gray-500">民族:</div>
+              <div class="font-medium">汉族</div>
+              <div class="text-gray-500">职业:</div>
+              <div class="font-medium">学生</div>
+              <div class="text-gray-500">职业现状:</div>
+              <div class="font-medium">学生</div>
+              <div class="text-gray-500">技能:</div>
+              <div class="font-medium">英语翻译、视频剪辑</div>
+              <div class="text-gray-500">特长:</div>
+              <div class="font-medium">语言表达、写作</div>
+              <div class="text-gray-500">爱好:</div>
+              <div class="font-medium">追剧、瑜伽、烘焙</div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-white border-b border-gray-100 p-4 friend-card"
+          id="card-6"
+        >
+          <div class="flex items-start space-x-4">
+            <img
+              alt="assets/avatar-06.png"
+              class="w-16 h-16 border border-gray-200 object-cover flex-none"
+              src="assets/packaged/src/generated_avatars/avatar-06.png"
+            />
+            <div class="flex-1">
+              <h3 class="font-bold text-black">刘洋<img alt="个人VIP2" class="user-vip-badge" src="assets/vip/user-vip-star-1.png"/></h3>
+              <p class="text-xs text-gray-500 mt-1">虚拟身份编号: V6618</p>
+              <p class="text-xs text-gray-400 mt-0.5">30分钟前活跃</p>
+            </div>
+            <div class="flex flex-col space-y-2 flex-none w-24">
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="toggleIDCard(6, this)"
+              >
+                虚拟身份证
+              </button>
+              <a
+                class="w-full py-1 text-[10px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]"
+                href="room_list.html"
+                >进入房间</a
+              >
+              <button
+                class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50"
+                onclick="showResume(6)"
+              >
+                个人简历
+              </button>
+            </div>
+          </div>
+          <!-- 展开的身份证信息 -->
+          <div
+            class="hidden mt-4 bg-gray-50 border border-gray-200 p-3"
+            id="id-expand-6"
+          >
+            <div class="grid grid-cols-2 gap-y-2 text-xs">
+              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="font-medium">V6618</div>
+              <div class="text-gray-500">姓名:</div>
+              <div class="font-medium">刘洋</div>
+              <div class="text-gray-500">出生:</div>
+              <div class="font-medium">1995年11月</div>
+              <div class="text-gray-500">性别:</div>
+              <div class="font-medium">男</div>
+              <div class="text-gray-500">民族:</div>
+              <div class="font-medium">满族</div>
+              <div class="text-gray-500">职业:</div>
+              <div class="font-medium">自由职业</div>
+              <div class="text-gray-500">职业现状:</div>
+              <div class="font-medium">自由职业</div>
+              <div class="text-gray-500">技能:</div>
+              <div class="font-medium">摄影、视频后期</div>
+              <div class="text-gray-500">特长:</div>
+              <div class="font-medium">航拍、调色</div>
+              <div class="text-gray-500">爱好:</div>
+              <div class="font-medium">登山、潜水、机车</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Resume Modal -->
+      <div
+        class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"
+        id="resumeModal"
+      >
+        <div
+          class="bg-white w-full max-w-[360px] p-4 relative border border-black"
+        >
+          <button
+            class="absolute top-2 right-2 text-gray-500 hover:text-black"
+            onclick="closeResume()"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewbox="0 0 24 24"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </button>
+          <h2 class="text-center text-lg font-bold mb-4">个人简历</h2>
+          <div id="resumeContent">
+            <!-- Table inserted here -->
+          </div>
+          <div class="mt-4 flex justify-center">
+            <button
+              class="px-6 py-2 border border-black text-sm font-bold hover:bg-gray-100"
+              onclick="closeResume()"
+            >
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const friendsData = [
+        {
+          id: 1,
+          name: '林晓',
+          vId: 'V2031',
+          status: '在线',
+          avatar: 'assets/packaged/sq/0d701411d275f9d164e246bd175c76644d3023fa.jpg',
+          originalAvatar: 'assets/avatar-01.png',
+          gender: '女',
+          birth: '1998年3月',
+          ethnic: '汉族',
+          job: '空间设计师',
+          jobStatus: '在职',
+          education: '南京艺术学院 环境设计 本科',
+          skills: '空间设计、摄影',
+          specialty: '视觉表达、沟通',
+          hobbies: '旅行、音乐、阅读',
+          evaluation: '热爱空间设计，善于用视觉语言表达创意，乐于沟通合作',
+          prevUnit: 'XX装饰设计有限公司',
+          contact: '张经理',
+          phone: '138****8888',
+        },
+        {
+          id: 2,
+          name: '张明',
+          vId: 'V1588',
+          status: '12分钟前活跃',
+          avatar: 'assets/packaged/sq/8ec66e69782ddb4c55f6563040c540e8f07b5058.webp',
+          originalAvatar: 'assets/avatar-02.png',
+          gender: '男',
+          birth: '1997年8月',
+          ethnic: '汉族',
+          job: '软件工程师',
+          jobStatus: '在职',
+          education: '浙江大学 计算机科学 硕士',
+          skills: 'Java、Python、前端开发',
+          specialty: '算法设计、团队协作',
+          hobbies: '篮球、游戏、电影',
+          evaluation: '技术驱动型开发者，注重代码质量和团队效率',
+          prevUnit: 'XX互联网技术有限公司',
+          contact: '李总',
+          phone: '139****7777',
+        },
+        {
+          id: 3,
+          name: '王芳',
+          vId: 'V3096',
+          status: '在线',
+          avatar: 'assets/packaged/sq/8401169b53134beca3685656529d68e7.jpg',
+          originalAvatar: 'assets/avatar-03.png',
+          gender: '女',
+          birth: '1999年12月',
+          ethnic: '回族',
+          job: '平面设计师',
+          jobStatus: '在职',
+          education: '中央美术学院 视觉传达 本科',
+          skills: '插画、品牌设计',
+          specialty: '色彩搭配、创意构思',
+          hobbies: '绘画、摄影、旅行',
+          evaluation: '用画笔记录世界，追求视觉美感与品牌理念的统一',
+          prevUnit: '创意方舟设计工作室',
+          contact: '王总监',
+          phone: '137****6666',
+        },
+        {
+          id: 4,
+          name: '赵强',
+          vId: 'V4096',
+          status: '5分钟前活跃',
+          avatar: 'assets/packaged/src/generated_avatars/avatar-04.png',
+          originalAvatar: 'assets/avatar-04.png',
+          gender: '男',
+          birth: '1996年5月',
+          ethnic: '汉族',
+          job: '产品经理',
+          jobStatus: '在职',
+          education: '复旦大学 工商管理 硕士',
+          skills: '需求分析、项目管理',
+          specialty: '沟通协调、数据分析',
+          hobbies: '阅读、跑步、桌游',
+          evaluation: '以用户为中心的产品经理，擅长在技术和商业之间找到平衡',
+          prevUnit: '极客动力科技有限公司',
+          contact: '陈经理',
+          phone: '136****5555',
+        },
+        {
+          id: 5,
+          name: '陈静',
+          vId: 'V1024',
+          status: '在线',
+          avatar: 'assets/packaged/src/generated_avatars/avatar-05.png',
+          originalAvatar: 'assets/avatar-05.png',
+          gender: '女',
+          birth: '2000年2月',
+          ethnic: '汉族',
+          job: '学生',
+          jobStatus: '学生',
+          education: '北京外国语大学 英语 本科在读',
+          skills: '英语翻译、视频剪辑',
+          specialty: '语言表达、写作',
+          hobbies: '追剧、瑜伽、烘焙',
+          evaluation: '热爱跨文化交流，正在探索内容创作的可能性',
+          prevUnit: '无 (校园经历)',
+          contact: '导师-周教授',
+          phone: '135****4444',
+        },
+        {
+          id: 6,
+          name: '刘洋',
+          vId: 'V6618',
+          status: '30分钟前活跃',
+          avatar: 'assets/packaged/src/generated_avatars/avatar-06.png',
+          originalAvatar: 'assets/avatar-06.png',
+          gender: '男',
+          birth: '1995年11月',
+          ethnic: '满族',
+          job: '自由职业',
+          jobStatus: '自由职业',
+          education: '中国传媒大学 摄影 本科',
+          skills: '摄影、视频后期',
+          specialty: '航拍、调色',
+          hobbies: '登山、潜水、机车',
+          evaluation: '用镜头捕捉瞬间，热爱冒险和视觉叙事',
+          prevUnit: '独立摄影工作室',
+          contact: '合作方-赵先生',
+          phone: '134****3333',
+        },
+      ]
+
+      function renderFriends() {
+        const list = document.getElementById('friendList')
+        list.innerHTML = friendsData
+          .map(
+            friend => `
+                <div class="bg-white border-b border-gray-100 p-4 friend-card" id="card-${friend.id}">
+                    <div class="flex items-start space-x-4">
+                        <img src="${friend.avatar}" alt="${friend.originalAvatar}" class="w-16 h-16 border border-gray-200 object-cover flex-none">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-black">${friend.name}<img alt="个人VIP2" class="user-vip-badge" src="assets/vip/user-vip-star-7.png"/></h3>
+                            <p class="text-xs text-gray-500 mt-1">虚拟身份编号: ${friend.vId}</p>
+                            <p class="text-xs ${friend.status === '在线' ? 'text-green-500' : 'text-gray-400'} mt-0.5">${friend.status}</p>
+                        </div>
+                        <div class="flex flex-col space-y-2 flex-none w-24">
+                            <button class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(${friend.id}, this)">虚拟身份证</button>
+                            <a href="room_list.html" class="w-full py-1 text-[10px] bg-[#ec4899] text-white font-bold text-center hover:bg-[#db2777]">进入房间</a>
+                            <button class="w-full py-1 text-[10px] border border-black font-bold hover:bg-gray-50" onclick="showResume(${friend.id})">个人简历</button>
+                        </div>
+                    </div>
+                    <!-- 展开的身份证信息 -->
+                    <div id="id-expand-${friend.id}" class="hidden mt-4 bg-gray-50 border border-gray-200 p-3">
+                        <div class="grid grid-cols-2 gap-y-2 text-xs">
+                            <div class="text-gray-500">虚拟身份证编号:</div> <div class="font-medium">${friend.vId}</div>
+                            <div class="text-gray-500">姓名:</div> <div class="font-medium">${friend.name}</div>
+                            <div class="text-gray-500">出生:</div> <div class="font-medium">${friend.birth}</div>
+                            <div class="text-gray-500">性别:</div> <div class="font-medium">${friend.gender}</div>
+                            <div class="text-gray-500">民族:</div> <div class="font-medium">${friend.ethnic}</div>
+                            <div class="text-gray-500">职业:</div> <div class="font-medium">${friend.job}</div>
+                            <div class="text-gray-500">职业现状:</div> <div class="font-medium">${friend.jobStatus}</div>
+                            <div class="text-gray-500">技能:</div> <div class="font-medium">${friend.skills}</div>
+                            <div class="text-gray-500">特长:</div> <div class="font-medium">${friend.specialty}</div>
+                            <div class="text-gray-500">爱好:</div> <div class="font-medium">${friend.hobbies}</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+          )
+          .join('')
+      }
+
+      let currentlyExpanded = null
+
+      function toggleIDCard(id, btn) {
+        const expandDiv = document.getElementById(`id-expand-${id}`)
+
+        if (currentlyExpanded && currentlyExpanded !== expandDiv) {
+          currentlyExpanded.classList.add('hidden')
+          // Reset other buttons text
+          const otherBtn =
+            currentlyExpanded.previousElementSibling.querySelector('button')
+          if (otherBtn) otherBtn.innerText = '虚拟身份证'
+        }
+
+        if (expandDiv.classList.contains('hidden')) {
+          expandDiv.classList.remove('hidden')
+          btn.innerText = '收起身份证'
+          currentlyExpanded = expandDiv
+        } else {
+          expandDiv.classList.add('hidden')
+          btn.innerText = '虚拟身份证'
+          currentlyExpanded = null
+        }
+      }
+
+      function showResume(id) {
+        const friend = friendsData.find(f => f.id === id)
+        const content = document.getElementById('resumeContent')
+
+        content.innerHTML = `
+                <table class="resume-clone-table">
+                    <colgroup>
+                        <col class="resume-col-label" style="width: 16.66%;">
+                        <col class="resume-col-value" style="width: 16.66%;">
+                        <col class="resume-col-label" style="width: 16.66%;">
+                        <col class="resume-col-value" style="width: 16.66%;">
+                        <col class="resume-col-photo" style="width: 33.36%;">
+                    </colgroup>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">姓名</td>
+                        <td class="resume-value">${friend.name}</td>
+                        <td class="resume-label">性别</td>
+                        <td class="resume-value">${friend.gender}</td>
+                        <td class="resume-photo-cell" rowspan="3">
+                            <img src="${friend.avatar}" alt="${friend.originalAvatar}" class="resume-photo-box">
+                        </td>
+                    </tr>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">出生</td>
+                        <td class="resume-value">${friend.birth}</td>
+                        <td class="resume-label">民族</td>
+                        <td class="resume-value">${friend.ethnic}</td>
+                    </tr>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">职业</td>
+                        <td class="resume-value">${friend.job}</td>
+                        <td class="resume-label"><span class="resume-label-multiline">职业<br>现状</span></td>
+                        <td class="resume-value">${friend.jobStatus}</td>
+                    </tr>
+                    <tr class="resume-unit-row">
+                        <td class="resume-label" rowspan="2"><span class="resume-label-multiline">上任单<br>位名称</span></td>
+                        <td class="resume-value" colspan="2" rowspan="2">${friend.prevUnit}</td>
+                        <td class="resume-label">联系人</td>
+                        <td class="resume-value">${friend.contact}</td>
+                    </tr>
+                    <tr class="resume-unit-row">
+                        <td class="resume-label">电话</td>
+                        <td class="resume-value">${friend.phone}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label"><span class="resume-label-multiline">教育<br>经历</span></td>
+                        <td class="resume-value" colspan="4">${friend.education}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">技能</td>
+                        <td class="resume-value" colspan="4">${friend.skills}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">特长</td>
+                        <td class="resume-value" colspan="4">${friend.specialty}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">爱好</td>
+                        <td class="resume-value" colspan="4">${friend.hobbies}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label"><span class="resume-label-multiline">自我<br>评价</span></td>
+                        <td class="resume-value" colspan="4">${friend.evaluation}</td>
+                    </tr>
+                </table>
+            `
+
+        document.getElementById('resumeModal').classList.remove('hidden')
+      }
+
+      function closeResume() {
+        document.getElementById('resumeModal').classList.add('hidden')
+      }
+
+      window.onload = renderFriends
+    </script>
+  </body>
+</html>

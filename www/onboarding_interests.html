@@ -1,0 +1,447 @@
+<!doctype html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>引导页 - 兴趣选择</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      body {
+        width: min(100vw, 393px);
+        height: 100dvh;
+        margin: 0 auto;
+        background-color: #ffffff;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        overflow: hidden;
+        position: relative;
+      }
+      .interest-card {
+        border: 1px solid #e5e7eb;
+        background-color: #ffffff;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 8px;
+        text-align: center;
+      }
+      .interest-card.selected {
+        border-color: #ec4899;
+        background-color: #fce7f3;
+        transform: scale(1.02);
+        font-weight: 500;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      .progress-line {
+        height: 2px;
+        background-color: #e5e7eb;
+        width: 20px;
+      }
+      .progress-dot {
+        width: 10px;
+        height: 10px;
+        border: 2px solid #e5e7eb;
+        border-radius: 999px;
+      }
+      .progress-dot.active {
+        background-color: #ec4899;
+        border-color: #ec4899;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col">
+    <!-- 状态栏 -->
+    <!-- 进度条 -->
+    <div class="flex items-center justify-center gap-1 mt-6">
+      <div class="progress-dot active" id="dot-1"></div>
+      <div class="progress-line"></div>
+      <div class="progress-dot" id="dot-2"></div>
+      <div class="progress-line"></div>
+      <div class="progress-dot" id="dot-3"></div>
+    </div>
+    <!-- 主内容区 -->
+    <div class="flex-1 px-8 pt-6 flex flex-col min-h-0">
+      <div class="flex justify-between items-start mb-2">
+        <h1
+          class="text-3xl font-bold text-[#ec4899] leading-tight tracking-wider"
+          id="step-title"
+        >
+          选择你的文化偏好
+        </h1>
+        <div class="text-[#ec4899] mt-1 shrink-0">
+          <svg
+            fill="none"
+            height="40"
+            viewbox="0 0 60 40"
+            width="60"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="30"
+              cy="20"
+              fill="#ec4899"
+              fill-opacity="0.2"
+              r="14"
+            ></circle>
+            <circle cx="30" cy="20" fill="#ec4899" r="10"></circle>
+            <ellipse
+              cx="30"
+              cy="20"
+              rx="28"
+              ry="6"
+              stroke="#333333"
+              stroke-width="1.5"
+              transform="rotate(-15, 30, 20)"
+            ></ellipse>
+          </svg>
+        </div>
+      </div>
+      <p class="text-gray-400 text-sm mb-6" id="step-subtitle">
+        文化类：艺术、历史、传统、教育等
+      </p>
+      <!-- 标签选择区 -->
+      <div class="flex-1 overflow-y-auto pb-10" id="tag-scroll-area">
+        <div class="space-y-6" id="tag-container">
+          <!-- 动态填充 -->
+        </div>
+      </div>
+    </div>
+    <!-- 底部操作栏 -->
+    <div
+      class="px-8 py-6 border-t border-gray-100 flex items-center justify-between shrink-0 bg-white"
+    >
+      <button
+        class="text-gray-400 font-medium text-lg"
+        onclick="skipOnboarding()"
+      >
+        跳过
+      </button>
+      <button
+        class="bg-gray-200 text-white font-bold text-lg px-12 py-3 rounded-none transition-colors"
+        disabled=""
+        id="next-btn"
+        onclick="handleNext()"
+      >
+        下一步
+      </button>
+    </div>
+    <script>
+      const stepData = [
+        {
+          title: '选择你的<br>文化偏好',
+          subtitle: '文化类：艺术、历史、传统、教育等',
+          groups: [
+            {
+              name: '教育与成长背景',
+              tags: [
+                '基础教育',
+                '高等教育',
+                '职业教育',
+                '函授教育',
+                '海外学习',
+                '自学成长',
+                '终身学习',
+              ],
+            },
+            {
+              name: '历史文化',
+              tags: [
+                '中国历史',
+                '世界历史',
+                '古代史',
+                '近现代史',
+                '地方历史',
+                '历史文献',
+                '美食历史文化',
+                '音乐历史文化',
+                '名族历史文化',
+                '非物质历史文化',
+                '宗教历史文化',
+                '游牧历史文革',
+                '古迹历史文化',
+              ],
+            },
+            {
+              name: '现代文化',
+              tags: [
+                '城市文化',
+                '流行文化',
+                '潮流艺术',
+                '街头文化',
+                '数字文化',
+                '独立创作',
+                '数字网络文化',
+                '短视频文化',
+                '游戏文化',
+                '社交网络文化',
+                '自媒体文化',
+                '都市休闲文化',
+                '茶饮咖啡文化',
+                '露营城市漫步文化',
+                '短途轻旅行文化',
+                '健身运动文化',
+                '美食探店文化',
+                '流行审美穿搭文化',
+                '文娱艺术流行文化',
+                '新国风文化',
+                '职场商务文化',
+              ],
+            },
+          ],
+        },
+        {
+          title: '选择你的<br>兴趣特长',
+          subtitle: '兴趣特长类：体育、游戏、音乐、旅游等',
+          groups: [
+            {
+              name: '体育与运动',
+              tags: [
+                '跑步',
+                '篮球',
+                '足球',
+                '游泳',
+                '瑜伽',
+                '健身',
+                '滑雪',
+                '骑行',
+                '摔跤特长',
+                '拳击特长',
+                '骑马特长',
+                '功夫特长',
+                '田径特长',
+                '散打特长',
+                '赛车特长',
+                '攀岩特长',
+                '健美特长',
+                '钓鱼特长',
+                '逛公园特长',
+                '台球特长',
+                '羽毛球特长',
+                '乒乓球特长',
+                '网球特长',
+                '高尔夫特长',
+                '保龄球特长',
+                '徒步特长',
+                '登山特长',
+              ],
+            },
+            {
+              name: '游戏与娱乐',
+              tags: [
+                '手机游戏',
+                '电脑游戏',
+                '主机游戏',
+                '桌游',
+                '剧本杀',
+                '密室逃脱',
+                '休闲KTV',
+                '商K',
+                '卡拉OK',
+                '酒吧',
+                '休闲酒吧',
+                '茶楼',
+                '咖啡店',
+                '逛街',
+                '看电影',
+                '演唱会',
+                '听相声',
+                '看曲艺',
+                '看舞蹈',
+              ],
+            },
+            {
+              name: '音乐与艺术',
+              tags: [
+                '流行音乐',
+                '古典音乐',
+                '摇滚',
+                '电子音乐',
+                '绘画',
+                '摄影',
+                '舞蹈',
+                '世界名族音乐',
+                'R&B',
+                '灵魂乐Soul',
+                '4. Neo-Soul 新灵魂乐',
+                '布鲁斯',
+                '爵士乐',
+                '乡村音乐',
+                '民谣',
+                '红色革命歌词',
+                '样板戏',
+                '戏曲',
+                '文学艺术',
+                '书法',
+                '影像艺术（电影、短片、实验影像、动画艺术）',
+                '摄影艺术',
+                '绘画艺术',
+              ],
+            },
+            {
+              name: '旅游与探索',
+              tags: [
+                '国内旅游',
+                '出境旅游',
+                '自驾游',
+                '露营',
+                '徒步',
+                '城市探索',
+              ],
+            },
+          ],
+        },
+        {
+          title: '选择更像你的<br>互动方式',
+          subtitle: '这里只用于优化推荐',
+          groups: [
+            {
+              name: '社交能量',
+              tags: [
+                '外向活跃',
+                '安静观察',
+                '熟人局更自在',
+                '喜欢认识新朋友',
+                '慢热型',
+                '主动发起话题',
+              ],
+            },
+            {
+              name: '表达方式',
+              tags: [
+                '理性表达',
+                '感性表达',
+                '幽默轻松',
+                '直接坦率',
+                '喜欢深聊',
+                '喜欢轻松闲聊',
+              ],
+            },
+            {
+              name: '探索偏好',
+              tags: [
+                '好奇心强',
+                '喜欢新鲜事物',
+                '偏爱稳定熟悉',
+                '愿意尝试挑战',
+                '喜欢规划',
+                '随性自由',
+              ],
+            },
+            {
+              name: '相处偏好',
+              tags: [
+                '重视边界感',
+                '重视陪伴感',
+                '喜欢团队活动',
+                '偏好一对一交流',
+                '愿意分享生活',
+                '喜欢共同完成任务',
+              ],
+            },
+          ],
+        },
+      ]
+
+      let currentStep = 0
+      let selectedTags = [new Set(), new Set(), new Set()]
+
+      function renderStep() {
+        const data = stepData[currentStep]
+        document.getElementById('step-title').innerHTML = data.title
+        document.getElementById('step-subtitle').innerText = data.subtitle
+
+        const container = document.getElementById('tag-container')
+        container.innerHTML = ''
+
+        data.groups.forEach(group => {
+          const groupDiv = document.createElement('div')
+          groupDiv.innerHTML = `<h3 class="text-gray-800 font-bold mb-3 text-sm">${group.name}</h3>`
+
+          const grid = document.createElement('div')
+          grid.className = 'grid grid-cols-2 gap-3'
+
+          group.tags.forEach(tag => {
+            const isSelected = selectedTags[currentStep].has(tag)
+            const card = document.createElement('div')
+            card.className = `interest-card rounded-none text-sm ${isSelected ? 'selected' : ''}`
+            card.innerText = tag
+            card.onclick = () => toggleTag(tag, card)
+            grid.appendChild(card)
+          })
+
+          groupDiv.appendChild(grid)
+          container.appendChild(groupDiv)
+        })
+
+        // 更新进度条
+        for (let i = 1; i <= 3; i++) {
+          const dot = document.getElementById(`dot-${i}`)
+          if (i <= currentStep + 1) {
+            dot.classList.add('active')
+          } else {
+            dot.classList.remove('active')
+          }
+        }
+
+        // 更新按钮
+        const nextBtn = document.getElementById('next-btn')
+        if (currentStep === 2) {
+          nextBtn.innerText = '完成'
+        } else {
+          nextBtn.innerText = '下一步'
+        }
+        updateButtonState()
+
+        // 滚动到顶部
+        document.getElementById('tag-scroll-area').scrollTop = 0
+      }
+
+      function toggleTag(tag, element) {
+        const currentSelected = selectedTags[currentStep]
+        if (currentSelected.has(tag)) {
+          currentSelected.delete(tag)
+          element.classList.remove('selected')
+        } else {
+          currentSelected.add(tag)
+          element.classList.add('selected')
+        }
+        updateButtonState()
+      }
+
+      function updateButtonState() {
+        const nextBtn = document.getElementById('next-btn')
+        if (selectedTags[currentStep].size > 0) {
+          nextBtn.disabled = false
+          nextBtn.classList.remove('bg-gray-200')
+          nextBtn.classList.add('bg-[#ec4899]')
+        } else {
+          nextBtn.disabled = true
+          nextBtn.classList.add('bg-gray-200')
+          nextBtn.classList.remove('bg-[#ec4899]')
+        }
+      }
+
+      function handleNext() {
+        if (currentStep < 2) {
+          currentStep++
+          renderStep()
+        } else {
+          window.location.href = 'index.html'
+        }
+      }
+
+      function skipOnboarding() {
+        window.location.href = 'index.html'
+      }
+
+      // 初始渲染
+      renderStep()
+    </script>
+  </body>
+</html>

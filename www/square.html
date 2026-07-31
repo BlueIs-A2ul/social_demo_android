@@ -1,0 +1,1592 @@
+<!doctype html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>广场 - 元宇宙社交</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      body {
+        background-color: #f3f4f6;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .tab-active {
+        color: #ec4899;
+        border-bottom: 2px solid #ec4899;
+      }
+      .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      /* Toast 动画 */
+      @keyframes fadeInOut {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        10% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        90% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+      }
+      .toast-animate {
+        animation: fadeInOut 2s ease forwards;
+      }
+      .vip-badge {
+        display: inline-block;
+        width: 18px;
+        height: auto;
+        margin-left: 3px;
+        vertical-align: -3px;
+      }
+    </style>
+    <style data-id="immersive-translate-input-injected-css"></style>
+  </head>
+  <body class="bg-gray-200 is-mb-ai-setting">
+    <!-- 移动端容器 -->
+    <div
+      class="relative max-w-[393px] h-[100dvh] mx-auto bg-white overflow-hidden flex flex-col shadow-2xl border-x border-gray-300"
+    >
+      <!-- 1. 顶部 Header -->
+      <header
+        class="flex-none bg-white border-b border-gray-100 flex items-center justify-between px-4 h-14 z-10"
+      >
+        <h1 class="text-xl font-bold text-black">社区空间</h1>
+        <button class="p-1" aria-label="搜索">
+          <svg
+            class="w-6 h-6 text-black"
+            fill="none"
+            stroke="currentColor"
+            viewbox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            ></path>
+          </svg>
+        </button>
+      </header>
+      <!-- 2. Tab 切换栏 -->
+      <nav
+        class="flex-none bg-white border-b border-gray-100 flex items-center justify-center space-x-8 h-10"
+      >
+        <button
+          class="h-full px-2 text-sm font-medium text-gray-500 flex items-center"
+          id="tab-follow"
+          onclick="switchTab('follow')"
+        >
+          关注
+        </button>
+        <button
+          class="h-full px-2 text-sm font-medium tab-active flex items-center"
+          id="tab-recommend"
+          onclick="switchTab('recommend')"
+        >
+          推荐
+        </button>
+        <button
+          class="h-full px-2 text-sm font-medium text-gray-500 flex items-center"
+          id="tab-latest"
+          onclick="switchTab('latest')"
+        >
+          最新
+        </button>
+      </nav>
+      <!-- 主内容区域 (可滚动) -->
+      <main
+        class="flex-1 overflow-y-auto bg-gray-50 hide-scrollbar"
+        id="post-list-container"
+      >
+        <!-- 3. 快捷发帖横幅 -->
+        <div
+          class="bg-gray-50 p-4 border-b border-gray-100 flex items-center space-x-3"
+        >
+          <img
+            alt="My Avatar"
+            class="w-10 h-10 rounded-full border border-gray-200"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-01/9dacfa4e70eb439ab689db878a04a415.jpg"
+          />
+          <div
+            class="flex-1 h-9 bg-white border border-gray-200 flex items-center px-3 text-gray-400 text-sm"
+          >
+            有什么新鲜事想分享？
+          </div>
+          <button
+            class="bg-[#ec4899] text-white px-3 py-1 text-sm font-medium"
+          >
+            发布
+          </button>
+        </div>
+        <!-- 下拉刷新模拟器 (默认隐藏) -->
+        <div
+          class="h-0 overflow-hidden flex items-center justify-center transition-all duration-300"
+          id="refresh-indicator"
+        >
+          <svg
+            class="animate-spin h-5 w-5 text-[#ec4899]"
+            fill="none"
+            viewbox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        </div>
+        <!-- 空状态 (默认隐藏) -->
+        <div
+          class="hidden flex-col items-center justify-center py-20 px-10 text-center"
+          id="empty-state"
+        >
+          <div
+            class="w-20 h-20 bg-gray-100 flex items-center justify-center mb-4"
+          >
+            <svg
+              class="w-10 h-10 text-gray-300"
+              fill="none"
+              stroke="currentColor"
+              viewbox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </div>
+          <p class="text-gray-500 text-sm mb-6">
+            你还没有关注任何人，去发现更多用户吧
+          </p>
+          <button
+            class="bg-[#ec4899] text-white px-8 py-2 font-medium"
+            onclick="switchTab('recommend')"
+          >
+            去发现
+          </button>
+        </div>
+        <!-- 4. 帖子列表 -->
+        <div id="posts-wrapper">
+          <div class="bg-white border-b border-gray-100 mb-2">
+            <!-- 作者行 -->
+            <div class="flex items-center justify-between p-4 pb-2">
+              <div
+                class="flex items-center space-x-3 cursor-pointer"
+                onclick="location.href = 'owner_profile.html'"
+              >
+                <img
+                  class="w-10 h-10 rounded-full border border-gray-100"
+                  src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                />
+                <div>
+                  <div class="text-sm font-bold text-black">
+                    小云<img
+                      alt="个人VIP2"
+                      class="vip-badge"
+                      src="assets/vip/user-vip-star-6.png"
+                    />
+                  </div>
+                  <div class="text-[10px] text-gray-400">
+                    10分钟前 · 来自果园小屋
+                  </div>
+                </div>
+              </div>
+              <button
+                class="text-xs px-3 py-1 text-gray-400 bg-gray-50"
+                onclick="toggleFollow(this, 1)"
+              >
+                已关注
+              </button>
+            </div>
+            <!-- 正文 -->
+            <div class="px-4 py-2">
+              <div
+                class="text-sm text-gray-800 leading-relaxed"
+                id="post-content-1"
+              >
+                今天给果园小屋加了新装饰，夏日主题太适合这个季节了！大家来看看效果如何～
+                #房间装饰 #夏日主题
+              </div>
+            </div>
+            <!-- 图片区 -->
+            <div class="px-4 py-2">
+              <div class="grid grid-cols-1">
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="
+                    viewImage(
+                      'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+                    )
+                  "
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- 互动栏 -->
+            <div
+              class="flex items-center justify-between px-4 py-3 border-t border-gray-50 mt-1"
+            >
+              <div
+                class="flex items-center space-x-1 cursor-pointer group"
+                onclick="toggleLike(this, 128)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400 group-active:scale-125 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">128</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openCommentDrawer()"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">35</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openSharePanel(1)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">12</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openSharePanel(1)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border-b border-gray-100 mb-2">
+            <!-- 作者行 -->
+            <div class="flex items-center justify-between p-4 pb-2">
+              <div
+                class="flex items-center space-x-3 cursor-pointer"
+                onclick="location.href = 'owner_profile.html'"
+              >
+                <img
+                  class="w-10 h-10 rounded-full border border-gray-100"
+                  src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                />
+                <div>
+                  <div class="text-sm font-bold text-black">
+                    七七<img
+                      alt="个人VIP2"
+                      class="vip-badge"
+                      src="assets/vip/user-vip-star-3.png"
+                    />
+                  </div>
+                  <div class="text-[10px] text-gray-400">
+                    25分钟前 · 来自家里
+                  </div>
+                </div>
+              </div>
+              <button
+                class="text-xs px-3 py-1 text-[#ec4899] border border-[#ec4899] font-medium"
+                onclick="toggleFollow(this, 2)"
+              >
+                + 关注
+              </button>
+            </div>
+            <!-- 正文 -->
+            <div class="px-4 py-2">
+              <div
+                class="text-sm text-gray-800 leading-relaxed"
+                id="post-content-2"
+              >
+                在家里复刻了优雅的古风经典场景，配合光影特效和粒子效果，沉浸感拉满！欢迎来探索🗺️
+                <span class="text-[#ec4899] cursor-pointer">#3D</span>空间
+                #游戏场景
+              </div>
+            </div>
+            <!-- 图片区 -->
+            <div class="px-4 py-2">
+              <div class="grid grid-cols-3 gap-1">
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="
+                    viewImage(
+                      'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+                    )
+                  "
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                  />
+                </div>
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="
+                    viewImage(
+                      'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+                    )
+                  "
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                  />
+                </div>
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="
+                    viewImage(
+                      'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+                    )
+                  "
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- 互动栏 -->
+            <div
+              class="flex items-center justify-between px-4 py-3 border-t border-gray-50 mt-1"
+            >
+              <div
+                class="flex items-center space-x-1 cursor-pointer group"
+                onclick="toggleLike(this, 256)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400 group-active:scale-125 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">256</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openCommentDrawer()"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">89</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openSharePanel(2)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">45</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openSharePanel(2)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border-b border-gray-100 mb-2">
+            <!-- 作者行 -->
+            <div class="flex items-center justify-between p-4 pb-2">
+              <div
+                class="flex items-center space-x-3 cursor-pointer"
+                onclick="location.href = 'owner_profile.html'"
+              >
+                <img
+                  class="w-10 h-10 rounded-full border border-gray-100"
+                  src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                />
+                <div>
+                  <div class="text-sm font-bold text-black">
+                    小鹿<img
+                      alt="个人VIP2"
+                      class="vip-badge"
+                      src="assets/vip/user-vip-star-4.png"
+                    />
+                  </div>
+                  <div class="text-[10px] text-gray-400">2小时前</div>
+                </div>
+              </div>
+              <button
+                class="text-xs px-3 py-1 text-[#ec4899] border border-[#ec4899] font-medium"
+                onclick="toggleFollow(this, 4)"
+              >
+                + 关注
+              </button>
+            </div>
+            <!-- 正文 -->
+            <div class="px-4 py-2">
+              <div
+                class="text-sm text-gray-800 leading-relaxed"
+                id="post-content-4"
+              >
+                新入手的两件数字藏品，挂在房间里太漂亮了！左边是极简古典风格画框，右边是第一次在附近的商家商店里刷到的极简雕塑。
+                #数字藏品
+              </div>
+            </div>
+            <!-- 图片区 -->
+            <div class="px-4 py-2">
+              <div class="grid grid-cols-2 gap-1">
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="
+                    viewImage(
+                      'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+                    )
+                  "
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                  />
+                </div>
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="
+                    viewImage(
+                      'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+                    )
+                  "
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- 互动栏 -->
+            <div
+              class="flex items-center justify-between px-4 py-3 border-t border-gray-50 mt-1"
+            >
+              <div
+                class="flex items-center space-x-1 cursor-pointer group"
+                onclick="toggleLike(this, 89)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400 group-active:scale-125 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">89</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openCommentDrawer()"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">23</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openSharePanel(4)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">7</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openSharePanel(4)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border-b border-gray-100 mb-2">
+            <!-- 作者行 -->
+            <div class="flex items-center justify-between p-4 pb-2">
+              <div
+                class="flex items-center space-x-3 cursor-pointer"
+                onclick="location.href = 'owner_profile.html'"
+              >
+                <img
+                  class="w-10 h-10 rounded-full border border-gray-100"
+                  src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+                />
+                <div>
+                  <div class="text-sm font-bold text-black">
+                    星河<img
+                      alt="个人VIP2"
+                      class="vip-badge"
+                      src="assets/vip/user-vip-star-2.png"
+                    />
+                  </div>
+                  <div class="text-[10px] text-gray-400">5小时前</div>
+                </div>
+              </div>
+              <button
+                class="text-xs px-3 py-1 text-gray-400 bg-gray-50"
+                onclick="toggleFollow(this, 6)"
+              >
+                已关注
+              </button>
+            </div>
+            <!-- 正文 -->
+            <div class="px-4 py-2">
+              <div
+                class="text-sm text-gray-800 leading-relaxed"
+                id="post-content-6"
+              >
+                整理了一份虚拟房间装饰指南，从灯光到家具到特效，手把手教你打造Dream
+                Room！建议收藏📝 #装饰指南 #教程
+              </div>
+            </div>
+            <!-- 图片区 -->
+            <div class="px-4 py-2">
+              <div class="grid grid-cols-3 gap-1">
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="
+                    viewImage('assets/packaged/sq/C85252AD3231BB23E56DF9E2C76DA9E7.jpg')
+                  "
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="assets/packaged/sq/C85252AD3231BB23E56DF9E2C76DA9E7.jpg"
+                  />
+                </div>
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="viewImage('assets/packaged/sq/OIP-C (1).webp')"
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="assets/packaged/sq/OIP-C (1).webp"
+                  />
+                </div>
+                <div
+                  class="aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+                  onclick="viewImage('assets/packaged/sq/OIP-C.webp')"
+                >
+                  <img
+                    alt="Post image"
+                    class="w-full h-full object-cover"
+                    src="assets/packaged/sq/OIP-C.webp"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- 互动栏 -->
+            <div
+              class="flex items-center justify-between px-4 py-3 border-t border-gray-50 mt-1"
+            >
+              <div
+                class="flex items-center space-x-1 cursor-pointer group"
+                onclick="toggleLike(this, 890)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400 group-active:scale-125 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">890</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openCommentDrawer()"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">234</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openSharePanel(6)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">178</span>
+              </div>
+              <div
+                class="flex items-center space-x-1 cursor-pointer"
+                onclick="openSharePanel(6)"
+              >
+                <svg
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-10"></div>
+        <!-- 底部间距 -->
+      </main>
+      <!-- 5. 分享面板 (抽屉) -->
+      <div
+        class="fixed inset-0 bg-black/50 z-50 opacity-0 transition-opacity duration-300 hidden"
+        id="share-overlay"
+        onclick="closeSharePanel()"
+      ></div>
+      <div
+        class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[393px] bg-white z-[60] transform transition-transform duration-300 translate-y-full"
+        id="share-panel"
+      >
+        <div class="pt-4 px-4 pb-8">
+          <div class="text-center text-xs text-gray-400 mb-6">分享到</div>
+          <div class="grid grid-cols-4 gap-4 mb-8">
+            <div
+              class="flex flex-col items-center space-y-2 cursor-pointer"
+              onclick="openForwardModal()"
+            >
+              <div
+                class="w-12 h-12 bg-[#ec4899] flex items-center justify-center text-white"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-xs text-gray-600">转发</span>
+            </div>
+            <div
+              class="flex flex-col items-center space-y-2 cursor-pointer"
+              onclick="location.href = 'room_chat.html?from=square'"
+            >
+              <div
+                class="w-12 h-12 bg-[#ec4899] flex items-center justify-center text-white"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-xs text-gray-600">私信好友</span>
+            </div>
+            <div
+              class="flex flex-col items-center space-y-2 cursor-pointer"
+              onclick="copyLink()"
+            >
+              <div
+                class="w-12 h-12 bg-[#ec4899] flex items-center justify-center text-white"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-xs text-gray-600">复制链接</span>
+            </div>
+            <div
+              class="flex flex-col items-center space-y-2 cursor-pointer"
+              onclick="toast('已举报')"
+            >
+              <div
+                class="w-12 h-12 bg-gray-200 flex items-center justify-center text-gray-500"
+              >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-xs text-gray-600">举报</span>
+            </div>
+          </div>
+          <button
+            class="w-full py-3 text-sm text-gray-500 border-t border-gray-100"
+            onclick="closeSharePanel()"
+          >
+            取消
+          </button>
+        </div>
+      </div>
+      <!-- 6. 转发编辑弹窗 -->
+      <div
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[70] items-center justify-center flex"
+        id="forward-modal"
+      >
+        <div class="bg-white w-[calc(100%-32px)] max-w-[340px] shadow-2xl animate-scale-in">
+          <div
+            class="flex items-center justify-between p-4 border-b border-gray-100"
+          >
+            <span class="font-bold">转发帖子</span>
+            <button onclick="closeForwardModal()">
+              <svg
+                class="w-5 h-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewbox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 18L18 6M6 6l12 12"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="p-4">
+            <!-- 原帖摘要 -->
+            <div
+              class="bg-gray-50 p-2 flex space-x-2 mb-4"
+              id="forward-origin-summary"
+            >
+              <img
+                class="w-12 h-12 object-cover"
+                src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+              />
+              <div class="flex-1 min-w-0">
+                <div class="text-xs font-bold text-gray-700 truncate">
+                  <span id="forward-origin-author">小云</span
+                  ><img
+                    alt="个人VIP2"
+                    class="vip-badge"
+                    src="assets/vip/user-vip-star-5.png"
+                  />
+                </div>
+                <div
+                  class="text-xs text-gray-500 line-clamp-2"
+                  id="forward-origin-text"
+                >
+                  今天给果园小屋加了新装饰，夏日主题太适合这个季节了！大家来看看效果如何～
+                  #房间装饰 #夏日主题
+                </div>
+              </div>
+            </div>
+            <!-- 输入区 -->
+            <textarea
+              class="w-full h-24 p-3 text-sm border border-gray-200 focus:outline-none focus:border-[#ec4899] resize-none mb-4"
+              placeholder="说说你的看法..."
+            ></textarea>
+            <!-- 选项 -->
+            <div class="flex space-x-2 mb-6">
+              <button
+                class="flex-1 py-2 text-xs border border-gray-200 text-gray-500"
+              >
+                转发
+              </button>
+              <button
+                class="flex-1 py-2 text-xs bg-[#fce7f3] text-[#ec4899] border border-[#f472b6]"
+              >
+                写评论并转发
+              </button>
+            </div>
+            <button
+              class="w-full bg-[#ec4899] text-white py-3 font-bold"
+              onclick="submitForward()"
+            >
+              转发
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 7. 评论抽屉 -->
+      <div
+        class="fixed inset-0 bg-black/50 z-50 hidden"
+        id="comment-overlay"
+        onclick="closeCommentDrawer()"
+      ></div>
+      <div
+        class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[393px] h-[60%] bg-white z-[60] transform transition-transform duration-300 flex flex-col translate-y-full"
+        id="comment-drawer"
+      >
+        <div
+          class="flex-none flex items-center justify-between px-4 h-12 border-b border-gray-100"
+        >
+          <span class="font-bold text-sm">评论</span>
+          <button onclick="closeCommentDrawer()">
+            <svg
+              class="w-5 h-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewbox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
+          <!-- 模拟评论 -->
+          <div class="flex space-x-3">
+            <img
+              class="w-8 h-8 rounded-full"
+              src="https://modao.cc/agent-py/media/user_assets/2026-07-22/c329e796241c42e08d72a66d0b42d331.jpg"
+            />
+            <div class="flex-1 border-b border-gray-50 pb-3">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold"
+                  >设计大师_K<img
+                    alt="个人VIP2"
+                    class="vip-badge"
+                    src="assets/vip/user-vip-star-1.png"
+                /></span>
+                <span class="text-[10px] text-gray-400">2分钟前</span>
+              </div>
+              <p class="text-sm text-gray-700">这个配色太棒了，我也想试试！</p>
+            </div>
+          </div>
+          <div class="flex space-x-3">
+            <img
+              class="w-8 h-8 rounded-full"
+              src="https://modao.cc/agent-py/media/user_assets/2026-07-22/443fbc8484734c63829275e48abb4c4c.png"
+            />
+            <div class="flex-1 border-b border-gray-50 pb-3">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold"
+                  >小红书逃难者<img
+                    alt="个人VIP2"
+                    class="vip-badge"
+                    src="assets/vip/user-vip-star-7.png"
+                /></span>
+                <span class="text-[10px] text-gray-400">15分钟前</span>
+              </div>
+              <p class="text-sm text-gray-700">求家具列表清单~</p>
+            </div>
+          </div>
+          <div class="flex space-x-3">
+            <img
+              class="w-8 h-8 rounded-full"
+              src="https://modao.cc/agent-py/media/user_assets/2026-07-22/a3801bc402044ec3b5340e2fd2279031.jpg"
+            />
+            <div class="flex-1 border-b border-gray-50 pb-3">
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-xs font-bold"
+                  >探险家<img
+                    alt="个人VIP2"
+                    class="vip-badge"
+                    src="assets/vip/user-vip-star-4.png"
+                /></span>
+                <span class="text-[10px] text-gray-400">1小时前</span>
+              </div>
+              <p class="text-sm text-gray-700">
+                场景复刻得太真实了，光影绝了。
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex-none p-3 border-t border-gray-100 flex items-center space-x-2 bg-gray-50"
+        >
+          <input
+            class="flex-1 h-9 px-3 text-sm bg-white border border-gray-200 focus:outline-none"
+            placeholder="留个脚印吧..."
+            type="text"
+          />
+          <button class="bg-[#ec4899] text-white px-4 h-9 text-sm font-bold">
+            发送
+          </button>
+        </div>
+      </div>
+      <!-- 8. 全屏图片预览 -->
+      <div
+        class="fixed inset-0 bg-black z-[100] items-center justify-center flex hidden"
+        id="image-viewer"
+        onclick="this.classList.add('hidden')"
+      >
+        <img
+          class="max-w-full max-h-full object-contain"
+          id="viewer-img"
+          src="https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg"
+        />
+        <div
+          class="absolute bottom-10 left-0 right-0 text-center text-white text-sm"
+        >
+          点击任意位置退出预览
+        </div>
+      </div>
+      <!-- Toast 提示 -->
+      <div
+        class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[200] pointer-events-none flex flex-col items-center"
+        id="toast-container"
+      ></div>
+    </div>
+    <script>
+      // 帖子数据
+      const allPosts = [
+        {
+          id: 1,
+          user: '小雨',
+          avatar: 'assets/packaged/sq/a77b22c0b5bc9f41da21ad3aaa910c86abae5fe8.webp',
+          time: '10分钟前',
+          source: '来自果园小屋',
+          content:
+            '今天给果园小屋加了新装饰，夏日主题太适合这个季节了！大家来看看效果如何～ #房间装饰 #夏日主题',
+          images: ['assets/packaged/sq/CC2B2EE9E701C9170398C319A758082A.jpg'],
+          likes: 128,
+          comments: 35,
+          forwards: 12,
+          followed: true,
+          vipLevel: 6,
+          tabs: ['follow', 'recommend', 'latest'],
+        },
+        {
+          id: 2,
+          user: '老罗',
+          avatar: 'assets/packaged/sq/图片1.png',
+          time: '25分钟前',
+          source: '来自青铜之门',
+          content:
+            '在家里复刻了极简复古风的家装，沉浸感拉满！欢迎来观赏 #3D空间',
+          images: [
+            'assets/packaged/sq/CC2B2EE9E701C9170398C319A758082A.jpg',
+            'assets/packaged/sq/CC2B2EE9E701C9170398C319A758082A.jpg',
+            'assets/packaged/sq/CC2B2EE9E701C9170398C319A758082A.jpg',
+          ],
+          likes: 256,
+          comments: 89,
+          forwards: 45,
+          followed: false,
+          vipLevel: 3,
+          tabs: ['recommend', 'latest'],
+        },
+        {
+          id: 3,
+          user: '阿树',
+          avatar: 'assets/avatars/member-08.jpg',
+          time: '40分钟前',
+          source: '来自旅行日记',
+          content:
+            '翻到上次旅行拍的湖边城堡，阳光落在水面上的时候真的很安静。没有赶行程，只是在木栈道坐了一会儿，感觉这一趟最值得的就是这个下午。 #旅行 #美好生活 #风景打卡',
+          images: ['assets/packaged/src/4700.jpg_wh860.jpg'],
+          likes: 428,
+          comments: 76,
+          forwards: 21,
+          followed: false,
+          vipLevel: 4,
+          tabs: ['recommend', 'latest'],
+        },
+        {
+          id: 4,
+          user: '令狐夏人',
+          avatar: 'assets/avatars/member-03.jpg',
+          time: '58分钟前',
+          source: '',
+          content:
+            '今天没有拍什么特别的照片。下班路上买了一杯热拿铁，慢慢走回家，路边的风很舒服。忽然觉得生活不是一定要很热闹才算被认真过，能把普通的一天过得松弛一点，也很好。',
+          images: [],
+          likes: 196,
+          comments: 42,
+          forwards: 8,
+          followed: true,
+          vipLevel: 2,
+          tabs: ['recommend', 'latest', 'follow'],
+        },
+        {
+          id: 5,
+          user: '阿森',
+          avatar: 'assets/packaged/sq/修改图片形状 (1).png',
+          time: '1小时前',
+          source: '来自像素花园',
+          content:
+            '分享我的像素风装饰合集！从复古游戏到现代像素艺术，每个角落都藏着彩蛋。找到所有彩蛋的朋友可以私信我领福利🎁 #像素艺术 #房间装饰 #彩蛋',
+          images: Array(9).fill(
+            'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+          ),
+          likes: 512,
+          comments: 167,
+          forwards: 98,
+          followed: false,
+          vipLevel: 1,
+          tabs: ['latest'],
+        },
+        {
+          id: 6,
+          user: '东林',
+          avatar: 'assets/packaged/sq/修改图片形状 (1).png',
+          time: '2小时前',
+          source: '',
+          content:
+            '新入手的两件数字藏品，挂在房间里太漂亮了！左边是极简古典风格画框，右边是第一次在附近的商家商店里刷到的极简雕塑。 #数字藏品',
+          images: ['assets/packaged/sq/be8cd452fa6a57cf.webp', 'assets/packaged/sq/OIP-C.webp'],
+          likes: 89,
+          comments: 23,
+          forwards: 7,
+          followed: false,
+          vipLevel: 5,
+          tabs: ['recommend', 'latest'],
+        },
+        // {
+        //   id: 5,
+        //   user: '娜美',
+        //   avatar:
+        //     'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+        //   time: '3小时前',
+        //   source: '',
+        //   content:
+        //     '周末逛了朋友的星穹工坊，他新做的星空穹顶真的太震撼了！躺在房间里看流星雨，强烈推荐大家去体验💫 #星穹工坊 #空间设计 #震撼视觉 #星空之旅 #元宇宙打卡',
+        //   images: [
+        //     'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+        //     'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+        //     'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+        //     'https://modao.cc/agent-py/media/generated_images/2026-07-01/8c34ed16529049609cc0396f36b40e41.jpg',
+        //   ],
+        //   likes: 345,
+        //   comments: 112,
+        //   forwards: 56,
+        //   followed: true,
+        //   tabs: ['follow', 'latest'],
+        // },
+        {
+          id: 7,
+          user: '西郊',
+          avatar: 'assets/packaged/sq/8401169b53134beca3685656529d68e7.jpg',
+          time: '5小时前',
+          source: '',
+          content:
+            '太有用了，先码住需要的时候看 //@整理大师：整理了一份房间装饰指南，从灯光到家具到特效，手把手教你打造Dream Room！建议收藏 #装饰指南 #教程',
+          images: [
+            'assets/packaged/sq/C85252AD3231BB23E56DF9E2C76DA9E7.jpg',
+            'assets/packaged/sq/OIP-C (1).webp',
+            'assets/packaged/sq/微信图片_20260727105226.jpg',
+          ],
+          likes: 890,
+          comments: 234,
+          forwards: 178,
+          followed: true,
+          vipLevel: 7,
+          tabs: ['recommend', 'latest'],
+        },
+      ]
+
+      let currentTab = 'recommend'
+
+      // 切换 Tab
+      function switchTab(tab) {
+        currentTab = tab
+        // UI 更新
+        document
+          .querySelectorAll('nav button')
+          .forEach(btn => btn.classList.remove('tab-active', 'text-gray-500'))
+        const activeBtn = document.getElementById(`tab-${tab}`)
+        activeBtn.classList.add('tab-active')
+
+        // 渲染列表
+        renderPosts()
+
+        // 下拉刷新效果模拟
+        const indicator = document.getElementById('refresh-indicator')
+        indicator.style.height = '40px'
+        setTimeout(() => {
+          indicator.style.height = '0'
+        }, 500)
+      }
+
+      // 渲染帖子
+      function renderPosts() {
+        const container = document.getElementById('posts-wrapper')
+        const emptyState = document.getElementById('empty-state')
+        const filteredPosts = allPosts.filter(post =>
+          post.tabs.includes(currentTab),
+        )
+
+        if (filteredPosts.length === 0) {
+          container.innerHTML = ''
+          emptyState.classList.remove('hidden')
+          return
+        }
+
+        emptyState.classList.add('hidden')
+        container.innerHTML = filteredPosts
+          .map(post => generatePostHTML(post))
+          .join('')
+      }
+
+      function renderVipBadge(level = 2) {
+        return `<img alt="个人VIP${level}" class="vip-badge" src="assets/vip/user-vip-star-${level}.png">`
+      }
+
+      // 生成单条帖子 HTML
+      function generatePostHTML(post) {
+        const postImages = Array.isArray(post.images) ? post.images : []
+        // 图片布局逻辑
+        let gridClass = 'grid-cols-1'
+        if (postImages.length === 2) gridClass = 'grid-cols-2 gap-1'
+        else if (postImages.length === 3) gridClass = 'grid-cols-3 gap-1'
+        else if (postImages.length === 4) gridClass = 'grid-cols-2 gap-1'
+        else if (postImages.length >= 5) gridClass = 'grid-cols-3 gap-1'
+
+        const imagesHTML = postImages
+          .map(
+            img => `
+                <div class="aspect-square bg-gray-100 overflow-hidden cursor-pointer" onclick="viewImage('${img}')">
+                    <img src="${img}" alt="Post image" class="w-full h-full object-cover">
+                </div>
+            `,
+          )
+          .join('')
+        const imagesSection = postImages.length
+          ? `
+                    <!-- 图片区 -->
+                    <div class="px-4 py-2">
+                        <div class="grid ${gridClass}">
+                            ${imagesHTML}
+                        </div>
+                    </div>
+          `
+          : ''
+
+        // 正文处理
+        let contentDisplay = post.content.replace(
+          /#(\w+)/g,
+          '<span class="text-[#ec4899] cursor-pointer">#$1</span>',
+        )
+        const isLong = post.content.length > 80
+
+        return `
+                <div class="bg-white border-b border-gray-100 mb-2">
+                    <!-- 作者行 -->
+                    <div class="flex items-center justify-between p-4 pb-2">
+                        <div class="flex items-center space-x-3 cursor-pointer" onclick="location.href='owner_profile.html'">
+                            <img src="${post.avatar}" class="w-10 h-10 rounded-full border border-gray-100">
+                            <div>
+                                <div class="text-sm font-bold text-black">${post.user}${renderVipBadge(post.vipLevel)}</div>
+                                <div class="text-[10px] text-gray-400">${post.time}${post.source ? ' · ' + post.source : ''}</div>
+                            </div>
+                        </div>
+                        <button onclick="toggleFollow(this, ${post.id})" class="text-xs px-3 py-1 ${post.followed ? 'text-gray-400 bg-gray-50' : 'text-[#ec4899] border border-[#ec4899] font-medium'}">
+                            ${post.followed ? '已关注' : '+ 关注'}
+                        </button>
+                    </div>
+
+                    <!-- 正文 -->
+                    <div class="px-4 py-2">
+                        <div class="text-sm text-gray-800 leading-relaxed ${isLong ? 'line-clamp-3' : ''}" id="post-content-${post.id}">
+                            ${contentDisplay}
+                        </div>
+                        ${isLong ? `<button class="text-xs text-[#ec4899] mt-1 font-medium" onclick="expandText(${post.id}, this)">展开全文</button>` : ''}
+                    </div>
+
+                    ${imagesSection}
+
+                    <!-- 互动栏 -->
+                    <div class="flex items-center justify-between px-4 py-3 border-t border-gray-50 mt-1">
+                        <div class="flex items-center space-x-1 cursor-pointer group" onclick="toggleLike(this, ${post.likes})">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 group-active:scale-125 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            <span class="text-xs text-gray-500">${post.likes}</span>
+                        </div>
+                        <div class="flex items-center space-x-1 cursor-pointer" onclick="openCommentDrawer()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            <span class="text-xs text-gray-500">${post.comments}</span>
+                        </div>
+                        <div class="flex items-center space-x-1 cursor-pointer" onclick="openSharePanel(${post.id})">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            <span class="text-xs text-gray-500">${post.forwards}</span>
+                        </div>
+                        <div class="flex items-center space-x-1 cursor-pointer" onclick="openSharePanel(${post.id})">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            `
+      }
+
+      // 交互逻辑函数
+      function toggleFollow(btn, id) {
+        const isFollowed = btn.innerText.includes('已关注')
+        if (isFollowed) {
+          btn.innerText = '+ 关注'
+          btn.className =
+            'text-xs px-3 py-1 text-[#ec4899] border border-[#ec4899] font-medium'
+          toast('已取消关注')
+        } else {
+          btn.innerText = '已关注'
+          btn.className = 'text-xs px-3 py-1 text-gray-400 bg-gray-50'
+          toast('关注成功')
+        }
+      }
+
+      function toggleLike(el, count) {
+        const svg = el.querySelector('svg')
+        const span = el.querySelector('span')
+        const isActive = svg.getAttribute('fill') === '#ec4899'
+
+        if (isActive) {
+          svg.setAttribute('fill', 'none')
+          svg.setAttribute('stroke', 'currentColor')
+          svg.classList.add('text-gray-400')
+          svg.classList.remove('text-[#ec4899]')
+          span.innerText = count
+        } else {
+          svg.setAttribute('fill', '#ec4899')
+          svg.setAttribute('stroke', '#ec4899')
+          svg.classList.remove('text-gray-400')
+          svg.classList.add('text-[#ec4899]')
+          span.innerText = count + 1
+        }
+      }
+
+      function expandText(id, btn) {
+        const content = document.getElementById(`post-content-${id}`)
+        content.classList.remove('line-clamp-3')
+        btn.remove()
+      }
+
+      function viewImage(src) {
+        const viewer = document.getElementById('image-viewer')
+        const img = document.getElementById('viewer-img')
+        img.src = src
+        viewer.classList.remove('hidden')
+        viewer.classList.add('flex')
+      }
+
+      // 分享面板逻辑
+      let activePostId = null
+      function openSharePanel(id) {
+        activePostId = id
+        document.getElementById('share-overlay').classList.remove('hidden')
+        setTimeout(() => {
+          document.getElementById('share-overlay').classList.add('opacity-100')
+          document
+            .getElementById('share-panel')
+            .classList.remove('translate-y-full')
+        }, 10)
+      }
+
+      function closeSharePanel() {
+        document.getElementById('share-overlay').classList.remove('opacity-100')
+        document.getElementById('share-panel').classList.add('translate-y-full')
+        setTimeout(() => {
+          document.getElementById('share-overlay').classList.add('hidden')
+        }, 300)
+      }
+
+      // 转发逻辑
+      function openForwardModal() {
+        const post = allPosts.find(p => p.id === activePostId)
+        if (post) {
+          document.getElementById('forward-origin-author').innerText = post.user
+          document.getElementById('forward-origin-text').innerText =
+            post.content
+        }
+        closeSharePanel()
+        document.getElementById('forward-modal').classList.remove('hidden')
+        document.getElementById('forward-modal').classList.add('flex')
+      }
+
+      function closeForwardModal() {
+        document.getElementById('forward-modal').classList.remove('flex')
+        document.getElementById('forward-modal').classList.add('hidden')
+      }
+
+      function submitForward() {
+        toast('已转发')
+        closeForwardModal()
+      }
+
+      // 评论抽屉逻辑
+      function openCommentDrawer() {
+        document.getElementById('comment-overlay').classList.remove('hidden')
+        setTimeout(() => {
+          document
+            .getElementById('comment-drawer')
+            .classList.remove('translate-y-full')
+        }, 10)
+      }
+
+      function closeCommentDrawer() {
+        document
+          .getElementById('comment-drawer')
+          .classList.add('translate-y-full')
+        setTimeout(() => {
+          document.getElementById('comment-overlay').classList.add('hidden')
+        }, 300)
+      }
+
+      function copyLink() {
+        toast('链接已复制')
+        closeSharePanel()
+      }
+
+      function toast(msg) {
+        const container = document.getElementById('toast-container')
+        const div = document.createElement('div')
+        div.className =
+          'bg-black/70 text-white text-xs px-6 py-2 mb-2 toast-animate'
+        div.innerText = msg
+        container.appendChild(div)
+        setTimeout(() => div.remove(), 2500)
+      }
+
+      // 初始化
+      window.onload = () => {
+        renderPosts()
+      }
+    </script>
+  </body>
+</html>

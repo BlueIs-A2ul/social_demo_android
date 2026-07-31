@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>编辑资料 - 元社交</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<style>
+        body { 
+            background-color: #FFFFFF; 
+            font-family: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .app-container { 
+            width: min(100vw, 393px); 
+            height: 100dvh; 
+            background: white; 
+            margin: 0 auto; 
+            position: relative; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .row-active:active {
+            background-color: #F3F4F6;
+        }
+        #toast {
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+    </style>
+<style data-id="immersive-translate-input-injected-css"></style>
+</head>
+<body class="">
+<div class="app-container">
+<!-- Header -->
+<header class="h-[52px] flex justify-between items-center px-4 shrink-0">
+<button class="w-8 h-8 flex items-center justify-center" onclick="goBack()">
+<iconify-icon class="text-2xl text-black" icon="solar:alt-arrow-left-linear"></iconify-icon>
+</button>
+<h1 class="text-[17px] font-semibold text-black">编辑资料</h1>
+<button class="text-[15px] font-medium text-[#ec4899] px-2" onclick="handleSave()">保存</button>
+</header>
+<div class="flex-1 overflow-y-auto">
+<!-- Information List -->
+<div class="mt-2 px-4">
+<!-- 头像 -->
+<div class="row-active flex items-center justify-between h-[64px] border-b border-gray-100 cursor-pointer" onclick="showToast('更换头像')">
+<span class="text-[15px] text-gray-500">头像</span>
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-gray-100 border border-gray-100">
+<img alt="Avatar Thumbnail" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-07-15/13235489b7d7430dbcca0a15ae2a2a6a.jpg"/>
+</div>
+<iconify-icon class="text-lg text-gray-300" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+<!-- 昵称 -->
+<div class="row-active flex items-center justify-between h-[52px] border-b border-gray-100 cursor-pointer" onclick="showToast('修改昵称')">
+<span class="text-[15px] text-gray-500">昵称</span>
+<div class="flex items-center gap-1">
+<span class="text-[15px] text-black">小云<br/></span>
+<iconify-icon class="text-lg text-gray-300" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+<!-- 性别 -->
+<div class="row-active flex items-center justify-between h-[52px] border-b border-gray-100 cursor-pointer" onclick="showToast('选择性别')">
+<span class="text-[15px] text-gray-500">性别</span>
+<div class="flex items-center gap-1">
+<span class="text-[15px] text-black">男</span>
+<iconify-icon class="text-sm text-gray-300" icon="solar:alt-arrow-down-linear"></iconify-icon>
+</div>
+</div>
+<!-- 出生日期 -->
+<div class="row-active flex items-center justify-between h-[52px] border-b border-gray-100 cursor-pointer" onclick="showToast('选择日期')">
+<span class="text-[15px] text-gray-500">出生日期</span>
+<div class="flex items-center gap-1">
+<span class="text-[15px] text-black">1990年01月01日</span>
+<iconify-icon class="text-lg text-gray-300" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+<!-- 账号名 -->
+<div class="flex items-center justify-between h-[52px] border-b border-gray-100">
+<span class="text-[15px] text-gray-500">账号名</span>
+<div class="flex items-center">
+<span class="text-[15px] text-black">kijsskl</span>
+<div class="w-6"></div> <!-- No arrow for static ID in some designs, or add it if editable -->
+</div>
+</div>
+<!-- 手机号 -->
+<div class="row-active flex items-center justify-between h-[52px] border-b border-gray-100 cursor-pointer" onclick="showToast('更换手机号')">
+<span class="text-[15px] text-gray-500">手机号</span>
+<div class="flex items-center gap-1">
+<span class="text-[15px] text-black">181****0692</span>
+<iconify-icon class="text-lg text-gray-300" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+<!-- 地区 -->
+<div class="row-active flex items-center justify-between h-[52px] border-b border-gray-100 cursor-pointer" onclick="showToast('选择地区')">
+<span class="text-[15px] text-gray-500">地区</span>
+<div class="flex items-center gap-1">
+<span class="text-[15px] text-black">北京市 朝阳区</span>
+<iconify-icon class="text-lg text-gray-300" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+<!-- 个人简介 -->
+<div class="row-active flex items-center justify-between h-[52px] border-b border-gray-100 cursor-pointer" onclick="showToast('编辑简介')">
+<span class="text-[15px] text-gray-500">个人简介</span>
+<div class="flex items-center gap-1">
+<span class="text-[15px] text-gray-400">未填写</span>
+<iconify-icon class="text-lg text-gray-300" icon="solar:alt-arrow-right-linear"></iconify-icon>
+</div>
+</div>
+</div>
+</div>
+<div class="h-10 shrink-0"></div>
+<!-- Toast -->
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[14px] px-4 py-2 opacity-0 z-[100]" id="toast" style="opacity: 0;">选择日期</div>
+</div>
+<script>
+    function getReturnUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const from = params.get('from');
+
+        if (from === 'room_list') {
+            return 'room_list.html';
+        }
+
+        return 'profile.html';
+    }
+
+    function goBack() {
+        window.location.href = getReturnUrl();
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.style.opacity = '1';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+        }, 2000);
+    }
+
+    function handleSave() {
+        showToast('保存成功');
+        setTimeout(() => {
+            window.location.href = getReturnUrl();
+        }, 1000);
+    }
+</script>
+</body></html>

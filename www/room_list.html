@@ -1,0 +1,728 @@
+<!doctype html>
+
+<html class="" data-immersive-translate-page-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>房间列表 - 元社交</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <script src="assets/vendor/iconify-icon.min.js"></script>
+    <style>
+      body {
+        background-color: white;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      .straight-edge {
+        border-radius: 0 !important;
+      }
+
+      /* Toast 样式 */
+      #toast {
+        visibility: hidden;
+        min-width: 200px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        text-align: center;
+        padding: 12px 24px;
+        position: fixed;
+        z-index: 1000;
+        left: 50%;
+        bottom: 50px;
+        transform: translateX(-50%);
+        font-size: 14px;
+      }
+      #toast.show {
+        visibility: visible;
+        animation:
+          fadein 0.5s,
+          fadeout 0.5s 2.5s;
+      }
+      @keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+        to {
+          bottom: 50px;
+          opacity: 1;
+        }
+      }
+      @keyframes fadeout {
+        from {
+          bottom: 50px;
+          opacity: 1;
+        }
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+      .vip-badge {
+        display: inline-block;
+        width: 20px;
+        height: auto;
+        margin-left: 4px;
+        vertical-align: -4px;
+      }
+    </style>
+    <style data-id="immersive-translate-input-injected-css"></style>
+  </head>
+  <body class="bg-gray-50 is-mb-ai-setting" style="opacity: 1">
+    <div
+      class="max-w-[393px] h-[100dvh] mx-auto bg-white overflow-hidden flex flex-col relative"
+    >
+      <!-- 顶部用户信息区 -->
+      <div
+        class="flex-none bg-white px-5 pt-10 pb-6 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-3">
+          <!-- 头像 -->
+          <div
+            class="w-14 h-14 bg-pink-100 p-0.5"
+            style="background-color: rgb(255, 255, 255)"
+          >
+            <img
+              alt="User Avatar"
+              class="w-full h-full object-cover"
+              src="https://modao.cc/agent-py/media/user_assets/2026-07-15/d51ada3793fa4999ba92c028ae4313f7.png"
+            />
+          </div>
+          <!-- 用户信息 -->
+          <div>
+            <div class="flex items-center gap-1">
+              <span class="font-bold text-lg"
+                >小云<img
+                  alt="个人VIP2"
+                  class="vip-badge"
+                  src="assets/vip/user-vip-star-6.png"
+              /></span>
+              <button
+                class="text-gray-400"
+                onclick="location.href = 'profile_edit.html?from=room_list'"
+              >
+                <iconify-icon
+                  class="text-lg"
+                  icon="solar:pen-bold"
+                ></iconify-icon>
+              </button>
+            </div>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span
+                class="bg-pink-100 text-pink-500 text-[10px] px-1.5 py-0.5 font-medium"
+                >10年老店</span
+              >
+              <div class="flex items-center gap-1">
+                <span class="text-gray-400 text-[10px]">诚信等级</span>
+                <div class="flex">
+                  <iconify-icon
+                    class="text-red-500 text-xs"
+                    icon="solar:heart-bold"
+                  ></iconify-icon>
+                  <iconify-icon
+                    class="text-red-500 text-xs"
+                    icon="solar:heart-bold"
+                  ></iconify-icon>
+                  <iconify-icon
+                    class="text-red-500 text-xs"
+                    icon="solar:heart-bold"
+                  ></iconify-icon>
+                  <iconify-icon
+                    class="text-gray-300 text-xs"
+                    icon="solar:heart-linear"
+                  ></iconify-icon>
+                  <iconify-icon
+                    class="text-gray-300 text-xs"
+                    icon="solar:heart-linear"
+                  ></iconify-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 购物车 -->
+      <div
+        class="relative cursor-pointer"
+        onclick="window.location.href='hot_products_virtual.html?from=room_list'"
+        style="position: absolute; right: 20px; top: 50px"
+      >
+        <div class="w-10 h-10 bg-orange-50 flex items-center justify-center">
+          <iconify-icon
+            class="text-orange-500 text-2xl"
+            icon="solar:cart-large-minimalistic-bold"
+          ></iconify-icon>
+        </div>
+        <div
+          class="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-white"
+        >
+          2
+        </div>
+      </div>
+      <!-- 「我的房间」大盒子 -->
+      <div
+        class="flex-1 flex flex-col border border-gray-200 bg-white mx-5 mt-2 mb-6"
+      >
+        <!-- 内部标题行 -->
+        <div
+          class="px-4 py-4 flex items-center justify-between border-b border-gray-100"
+          style=""
+        >
+          <h3 class="font-bold text-gray-900">我的房间</h3>
+          <span class="text-xs text-gray-400">4个空间</span>
+        </div>
+        <!-- Grid 网格 -->
+        <div
+          class="grid grid-cols-4 flex-1 content-start overflow-y-auto"
+          style="
+            border-width: 0px;
+            background-color: rgba(255, 255, 255, 0);
+            border-color: rgb(255, 255, 255);
+          "
+        >
+          <!-- 房间 1: 青铜之门 -->
+          <div
+            class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="window.location.href='panorama_room.html?from=room_list'"
+          >
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+              <img
+                alt="青铜之门"
+                class="w-full h-full object-cover"
+                src="assets/packaged/sq/微信图片_20260729140622.jpg"
+              />
+            </div>
+            <span
+              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
+              >我的房间<br
+            /></span>
+          </div>
+          <!-- 房间 2: 娜美的房间 -->
+          <div
+            class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="window.location.href='panorama_room.html?from=room_list'"
+          >
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+              <img
+                alt="娜美的房间"
+                class="w-full h-full object-cover"
+                src="assets/avatars/新娜美.jpg"
+              />
+            </div>
+            <span
+              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
+              >娜美的房间<br
+            /></span>
+          </div>
+          <!-- 房间 3: 虚空之境 -->
+          <div
+            class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="window.location.href='panorama_room.html?from=room_list'"
+          >
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+              <img
+                alt="虚空之境"
+                class="w-full h-full object-cover"
+                src="https://modao.cc/agent-py/media/user_assets/2026-07-16/eb79f5bc69d44dc3ad480cf5f0167e3b.jpg"
+              />
+            </div>
+            <span
+              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
+              >超市<br
+            /></span>
+          </div>
+          <!-- 房间 4: 我的播客 -->
+          <div
+            class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="window.location.href='panorama_room.html?from=room_list'"
+          >
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+              <img
+                alt="我的播客"
+                class="w-full h-full object-cover"
+                src="assets/packaged/sq/我的播客.png"
+              />
+            </div>
+            <span
+              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
+              >我的播客<br
+            /></span>
+          </div>
+          <!-- 房间 4: 无 (占位) -->
+          <div
+            class="border-r border-b border-gray-100 p-3 flex flex-col items-center justify-center border-dashed cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('新建房间')"
+          >
+            <div
+              class="w-full aspect-square mb-2 bg-gray-50 flex items-center justify-center border border-dashed border-gray-200"
+            >
+              <iconify-icon
+                class="text-gray-300 text-2xl"
+                icon="solar:add-circle-linear"
+              ></iconify-icon>
+            </div>
+            <span class="text-[10px] text-gray-300">新建</span>
+          </div>
+        </div>
+      </div>
+      <!-- 访客动态 -->
+      <div
+        class="flex-none bg-white border border-gray-200 mx-5 mb-6 flex flex-col"
+      >
+        <div
+          class="px-4 py-4 flex items-center justify-between border-b border-gray-100"
+        >
+          <h3 class="font-bold text-gray-900">访客动态</h3>
+          <span class="text-xs text-gray-400">今日3人</span>
+        </div>
+        <div class="flex flex-col">
+          <!-- 条目 1 -->
+          <div class="border-b border-gray-100">
+            <div
+              class="px-4 py-3 flex items-center justify-between cursor-pointer active:bg-gray-50"
+              onclick="toggleIdentityCard(0)"
+            >
+              <div class="flex-1 flex items-center gap-2">
+                <span class="text-xs text-gray-400">1.</span>
+                <span class="font-bold text-sm text-gray-900"
+                  >七七<img
+                    alt="个人VIP2"
+                    class="vip-badge"
+                    src="assets/vip/user-vip-star-2.png"
+                /></span>
+                <button
+                  class="identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1"
+                  onclick="
+                    event.stopPropagation()
+                    toggleIdentityCard(0)
+                  "
+                >
+                  虚拟身份证
+                </button>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-700">停留 12 分钟</span>
+                <span class="text-xs font-bold text-[#10b981]">停留</span>
+              </div>
+            </div>
+            <div
+              class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
+            >
+              <div class="text-[10px] text-gray-400 mb-2">
+                虚拟身份证编号: V3001
+              </div>
+              <div
+                class="bg-white border border-gray-200 straight-edge overflow-hidden"
+              >
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    姓名
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    张小强
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    出生
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    1996年5月
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    性别
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    男
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    民族
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    汉族
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    职业
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    后端工程师
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    职业现状
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    在职
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    技能
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    Java/Python/分布式
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    特长
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    系统架构、高并发
+                  </div>
+                </div>
+                <div class="flex border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    爱好
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    徒步、代码、阅读
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 条目 2 -->
+          <div class="border-b border-gray-100">
+            <div
+              class="px-4 py-3 flex items-center justify-between cursor-pointer active:bg-gray-50"
+              onclick="toggleIdentityCard(1)"
+            >
+              <div class="flex-1 flex items-center gap-2">
+                <span class="text-xs text-gray-400">2.</span>
+                <span class="font-bold text-sm text-gray-900"
+                  >小鹿<img
+                    alt="个人VIP2"
+                    class="vip-badge"
+                    src="assets/vip/user-vip-star-4.png"
+                /></span>
+                <button
+                  class="identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1"
+                  onclick="
+                    event.stopPropagation()
+                    toggleIdentityCard(1)
+                  "
+                >
+                  虚拟身份证
+                </button>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-700">停留 8 分钟</span>
+                <span class="text-xs font-bold text-[#9ca3af]">离开</span>
+              </div>
+            </div>
+            <div
+              class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
+            >
+              <div class="text-[10px] text-gray-400 mb-2">
+                虚拟身份证编号: V3002
+              </div>
+              <div
+                class="bg-white border border-gray-200 straight-edge overflow-hidden"
+              >
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    姓名
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    李诗韵
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    出生
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    1999年8月
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    性别
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    女
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    民族
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    汉族
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    职业
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    视觉设计师
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    职业现状
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    在职
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    技能
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    UI/UX设计、插画
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    特长
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    审美感知、品牌设计
+                  </div>
+                </div>
+                <div class="flex border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    爱好
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    摄影、油画、旅行
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 条目 3 -->
+          <div class="border-b border-gray-100">
+            <div
+              class="px-4 py-3 flex items-center justify-between cursor-pointer active:bg-gray-50"
+              onclick="toggleIdentityCard(2)"
+            >
+              <div class="flex-1 flex items-center gap-2">
+                <span class="text-xs text-gray-400">3.</span>
+                <span class="font-bold text-sm text-gray-900"
+                  >星河<img
+                    alt="个人VIP2"
+                    class="vip-badge"
+                    src="assets/vip/user-vip-star-3.png"
+                /></span>
+                <button
+                  class="identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1"
+                  onclick="
+                    event.stopPropagation()
+                    toggleIdentityCard(2)
+                  "
+                >
+                  虚拟身份证
+                </button>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-700">停留 5 分钟</span>
+                <span class="text-xs font-bold text-[#10b981]">停留</span>
+              </div>
+            </div>
+            <div
+              class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
+            >
+              <div class="text-[10px] text-gray-400 mb-2">
+                虚拟身份证编号: V3003
+              </div>
+              <div
+                class="bg-white border border-gray-200 straight-edge overflow-hidden"
+              >
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    姓名
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    王大龙
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    出生
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    1994年2月
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    性别
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    男
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    民族
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    汉族
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    职业
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    项目经理
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    职业现状
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    在职
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    技能
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    项目管理、敏捷开发
+                  </div>
+                </div>
+                <div class="flex border-b border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    特长
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    团队协调、进度把控
+                  </div>
+                </div>
+                <div class="flex border-gray-100">
+                  <div
+                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
+                  >
+                    爱好
+                  </div>
+                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
+                    篮球、电子竞技、健身
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Toast -->
+      <div class="" contenteditable="true" id="toast">进入青铜之门</div>
+    </div>
+    <script>
+      let currentOpenIndex = -1
+      function toggleIdentityCard(index) {
+        const allContents = document.querySelectorAll('.identity-content')
+        const allButtons = document.querySelectorAll('.identity-btn')
+
+        // 如果点击的是已展开的，收起
+        if (currentOpenIndex === index) {
+          allContents[index].classList.add('hidden')
+          allButtons[index].textContent = '虚拟身份证'
+          allButtons[index].className =
+            'identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1'
+          currentOpenIndex = -1
+          return
+        }
+
+        // 收起上一个
+        if (currentOpenIndex >= 0 && allContents[currentOpenIndex]) {
+          allContents[currentOpenIndex].classList.add('hidden')
+          allButtons[currentOpenIndex].textContent = '虚拟身份证'
+          allButtons[currentOpenIndex].className =
+            'identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1'
+        }
+
+        // 展开当前
+        if (allContents[index]) {
+          allContents[index].classList.remove('hidden')
+          allButtons[index].textContent = '收起身份证'
+          allButtons[index].className =
+            'identity-btn px-2 py-0.5 bg-blue-500 text-white text-[10px] straight-edge transition-all ml-1'
+          currentOpenIndex = index
+        }
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById('toast')
+        toast.innerText = msg
+        toast.className = 'show'
+        setTimeout(() => {
+          toast.className = toast.className.replace('show', '')
+        }, 3000)
+      }
+    </script>
+  </body>
+</html>

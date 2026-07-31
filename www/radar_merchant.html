@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>附近的商家 - 元宇宙社交</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<style>
+        /* 强制覆盖所有圆角为直角 */
+        * { border-radius: 0 !important; }
+        
+        /* 隐藏滚动条但保留滚动功能 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 动画过渡 */
+        .id-card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .id-card-content.open {
+            max-height: 500px;
+        }
+        .merchant-name {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            max-width: 100%;
+        }
+        .merchant-vip-badge {
+            width: 34px;
+            height: auto;
+            flex: none;
+            object-fit: contain;
+            transform: translateY(1px);
+        }
+    </style>
+<style data-id="immersive-translate-input-injected-css"></style>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen font-sans">
+<!-- 移动端容器 (393x852) -->
+<div class="w-full max-w-[393px] h-[100dvh] bg-white overflow-hidden flex flex-col shadow-2xl relative border border-gray-200">
+<!-- 顶部 Header -->
+<header class="flex-none h-14 border-b border-gray-100 flex items-center justify-between px-4 bg-white z-10">
+<button class="p-1" onclick="window.location.href='radar.html'">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" viewbox="0 0 24 24" width="24">
+<path d="M19 12H5M12 19l-7-7 7-7"></path>
+</svg>
+</button>
+<h1 class="text-lg font-bold text-black uppercase tracking-tight">附近的商家</h1>
+<button class="p-1">
+<svg fill="none" height="24" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="24">
+<circle cx="12" cy="5" fill="black" r="1.5"></circle>
+<circle cx="12" cy="12" fill="black" r="1.5"></circle>
+<circle cx="12" cy="19" fill="black" r="1.5"></circle>
+</svg>
+</button>
+</header>
+<!-- 内容区域 -->
+<main class="flex-1 overflow-y-auto no-scrollbar bg-white">
+<!-- 副标题说明 -->
+<div class="px-4 py-2 bg-gray-50 border-b border-gray-100">
+<p class="text-xs text-gray-400">发现周边优质虚拟装饰商家，装扮你的专属空间</p>
+</div>
+<!-- 商家通讯录入口 -->
+<div class="flex items-center justify-between px-4 py-2.5 bg-white border-b border-gray-100 cursor-pointer active:bg-gray-50" onclick="window.location.href='merchant_contacts.html'">
+<span class="text-sm font-bold text-gray-800">商家通讯录</span>
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M9 18l6-6-6-6"></path></svg>
+</div>
+<!-- 筛选栏 -->
+<div class="sticky top-0 bg-white z-10 px-4 py-3 flex gap-2 border-b border-gray-100">
+<button class="filter-tab px-5 py-1.5 text-sm bg-[#ec4899] text-white border border-[#ec4899]" onclick="toggleFilter(this)">全部</button>
+<button class="filter-tab px-5 py-1.5 text-sm bg-white text-gray-500 border border-gray-300 flex items-center gap-1" onclick="toggleFilter(this)">
+                    分类
+                    <svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+<button class="filter-tab px-5 py-1.5 text-sm bg-white text-gray-500 border border-gray-300 flex items-center gap-1" onclick="toggleFilter(this)">
+                    排序
+                    <svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+</div>
+<!-- 商家列表 -->
+<div class="p-4 space-y-6 pb-20">
+<!-- 商家 1: 星穹工坊 -->
+<div class="border border-gray-200 bg-white">
+<!-- 商家信息区 -->
+<div class="p-3 flex items-start gap-3">
+<img alt="Star Dome Workshop Avatar" class="w-12 h-12 border border-gray-100 object-cover" src="https://modao.cc/agent-py/media/user_assets/2026-07-22/f923da63b67d4eefad67b5dad0189d55.jpg"/>
+<div class="flex-1">
+<h3 class="merchant-name font-bold text-black text-base">星穹工坊<img alt="商家VIP20" class="merchant-vip-badge" src="assets/vip/vip-gold-20.png"/></h3>
+<div class="flex flex-wrap gap-1 mt-1">
+<span class="px-1.5 py-0.5 text-[10px] bg-pink-50 text-[#ec4899] border border-pink-100">空间装饰</span>
+<span class="px-1.5 py-0.5 text-[10px] bg-pink-50 text-[#ec4899] border border-pink-100">3D建模</span>
+<span class="px-1.5 py-0.5 text-[10px] bg-pink-50 text-[#ec4899] border border-pink-100">粒子特效</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-gray-400">距你 1.5km</p>
+<div class="flex items-center justify-end gap-1 mt-1">
+<div class="w-1.5 h-1.5 bg-green-500"></div>
+<span class="text-[10px] text-green-500 font-medium">在线</span>
+</div>
+</div>
+</div>
+<!-- 商品预览区 -->
+<div class="px-3 py-2 grid grid-cols-3 gap-2 border-t border-gray-50">
+<div class="cursor-pointer group" onclick="openModal('星空穹顶皮肤', '让你的房间笼罩在璀璨银河之下，支持实时星象变化。', '120 星币')">
+<div class="aspect-square bg-gray-50 border border-gray-100 overflow-hidden relative">
+<img alt="Star Dome Skin" class="w-full h-full object-cover grayscale-0 transition-all" src="https://modao.cc/agent-py/media/user_assets/2026-07-22/9ac0f04b2db641b9ba5353f4c0be7884.webp"/>
+</div>
+<p class="text-[10px] text-gray-500 mt-1 truncate" style="opacity: 1;">桌面简洁台灯</p>
+</div>
+<div class="cursor-pointer group" onclick="openModal('霓虹粒子特效', '赛博朋克风格的流动粒子，触碰时会产生波纹。', '85 星币')">
+<div class="aspect-square bg-gray-50 border border-gray-100 overflow-hidden relative">
+<img alt="Neon Particles" class="w-full h-full object-cover grayscale-0 transition-all" src="https://modao.cc/agent-py/media/user_assets/2026-07-22/9627bda0a4c04e9286a9506330d99711.webp"/>
+</div>
+<p class="text-[10px] text-gray-500 mt-1 truncate" style="opacity: 1;">简约花瓶</p>
+</div>
+<div class="cursor-pointer group" onclick="openModal('复古像素画框', '支持自定义上传图片的像素化展示，自带动态光效。', '45 星币')">
+<div class="aspect-square bg-gray-50 border border-gray-100 overflow-hidden relative">
+<img alt="Pixel Frame" class="w-full h-full object-cover grayscale-0 transition-all" src="https://modao.cc/agent-py/media/user_assets/2026-07-22/be3dc07d75894352becb27c448fc6f67.webp"/>
+</div>
+<p class="text-[10px] text-gray-500 mt-1 truncate" style="opacity: 1;">复古画框</p>
+</div>
+</div>
+<!-- 操作按钮区 -->
+<div class="p-3 grid grid-cols-2 gap-3 border-t border-gray-100">
+<button class="id-btn h-10 border border-blue-600 text-sm font-bold bg-white text-blue-600" onclick="toggleIDCard(this, 'id-1')">虚拟身份证</button>
+<a class="h-10 bg-[#ec4899] text-white text-sm font-bold flex items-center justify-center" href="merchant_shop.html">进店逛逛</a>
+</div>
+<!-- 虚拟身份证展开区域 -->
+<div class="id-card-content bg-gray-50" id="id-1">
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-center border-b border-gray-200 pb-2">
+<span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest">虚拟身份证编号: V5001</span>
+<div class="w-8 h-8 bg-blue-100 flex items-center justify-center text-blue-600">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-y-2 text-xs">
+<div><span class="text-gray-400">姓名：</span><span class="text-gray-700">陈星河</span></div>
+<div><span class="text-gray-400">出生：</span><span class="text-gray-700">1994-11-03</span></div>
+<div><span class="text-gray-400">性别：</span><span class="text-gray-700">男</span></div>
+<div><span class="text-gray-400">民族：</span><span class="text-gray-700">汉族</span></div>
+<div class="col-span-2"><span class="text-gray-400">职业：</span><span class="text-gray-700">3D空间设计师</span></div>
+<div class="col-span-2"><span class="text-gray-400">职业现状：</span><span class="text-gray-700">在职</span></div>
+<div class="col-span-2"><span class="text-gray-400">技能：</span><span class="text-gray-700">Blender / C4D / Unity</span></div>
+<div class="col-span-2"><span class="text-gray-400">特长：</span><span class="text-gray-700">灯光氛围设计</span></div>
+<div class="col-span-2 border-t border-gray-200 pt-2"><span class="text-gray-400">爱好：</span><span class="text-gray-700">天文观测、电子音乐、科幻电影</span></div>
+</div>
+</div>
+</div>
+</div>
+<!-- 商家 2: 梦境织造 -->
+<div class="border border-gray-200 bg-white">
+<div class="p-3 flex items-start gap-3">
+<img alt="Dream Weaver Avatar" class="w-12 h-12 border border-gray-100 object-cover" src="https://modao.cc/agent-py/media/user_assets/2026-07-22/17b9fcfacece4de49b90a58e4ab29c20.jpg"/>
+<div class="flex-1">
+<h3 class="merchant-name font-bold text-black text-base">梦境织造<img alt="商家VIP11" class="merchant-vip-badge" src="assets/vip/vip-silver-11.png"/></h3>
+<div class="flex flex-wrap gap-1 mt-1">
+<span class="px-1.5 py-0.5 text-[10px] bg-pink-50 text-[#ec4899] border border-pink-100">全景场景</span>
+<span class="px-1.5 py-0.5 text-[10px] bg-pink-50 text-[#ec4899] border border-pink-100">交互装置</span>
+<span class="px-1.5 py-0.5 text-[10px] bg-pink-50 text-[#ec4899] border border-pink-100">数字藏品</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-gray-400">距你 2.3km</p>
+<div class="flex items-center justify-end gap-1 mt-1">
+<div class="w-1.5 h-1.5 bg-green-500"></div>
+<span class="text-[10px] text-green-500 font-medium">在线</span>
+</div>
+</div>
+</div>
+<div class="px-3 py-2 grid grid-cols-3 gap-2 border-t border-gray-50">
+<div class="cursor-pointer group" onclick="openModal('樱花飘落特效', '为你的空间添加永不凋零的浪漫樱花雨，支持风向互动。', '90 星币')">
+<div class="aspect-square bg-gray-50 border border-gray-100 overflow-hidden relative">
+<img alt="Sakura Effect" class="w-full h-full object-cover grayscale-0 transition-all" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/97c6f674d92d4ad08c49502dd655988c.jpg"/>
+</div><p class="text-[10px] text-gray-500 mt-1 truncate" style="opacity: 1;">樱花盆栽</p>
+</div>
+<div class="cursor-pointer group" onclick="openModal('赛博灯光套装', '高度自定义的霓虹灯带，可随背景音乐节奏跳动。', '150 星币')">
+<div class="aspect-square bg-gray-50 border border-gray-100 overflow-hidden relative">
+<img alt="Cyber Lights" class="w-full h-full object-cover grayscale-0 transition-all" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/f1ca2432f5b34bdaa6bef759a1706411.jpg"/>
+</div>
+<p class="text-[10px] text-gray-500 mt-1 truncate" style="opacity: 1;">温馨灯光套装</p>
+</div>
+<div class="cursor-pointer group" onclick="openModal('极简家具包', '包豪斯风格虚拟家具，极低内存占用，极致视觉美感。', '60 星币')">
+<div class="aspect-square bg-gray-50 border border-gray-100 overflow-hidden relative">
+<img alt="Minimalist Furniture" class="w-full h-full object-cover grayscale-0 transition-all" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/ca36fb8dc0d8449488ecfa38deba8ecc.jpg"/>
+</div>
+<p class="text-[10px] text-gray-500 mt-1 truncate">极简家具包</p>
+</div>
+</div>
+<div class="p-3 grid grid-cols-2 gap-3 border-t border-gray-100">
+<button class="id-btn h-10 border border-blue-600 text-blue-600 text-sm font-bold bg-white" onclick="toggleIDCard(this, 'id-2')">虚拟身份证</button>
+<a class="h-10 bg-[#ec4899] text-white text-sm font-bold flex items-center justify-center" href="merchant_shop.html">进店逛逛</a>
+</div>
+<div class="id-card-content bg-gray-50" id="id-2">
+<div class="p-4 space-y-3">
+<div class="flex justify-between items-center border-b border-gray-200 pb-2">
+<span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest">虚拟身份证编号: V5002</span>
+<div class="w-8 h-8 bg-blue-100 flex items-center justify-center text-blue-600">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-y-2 text-xs">
+<div><span class="text-gray-400">姓名：</span><span class="text-gray-700">林梦</span></div>
+<div><span class="text-gray-400">出生：</span><span class="text-gray-700">1996-06-18</span></div>
+<div><span class="text-gray-400">性别：</span><span class="text-gray-700">女</span></div>
+<div><span class="text-gray-400">民族：</span><span class="text-gray-700">汉族</span></div>
+<div class="col-span-2"><span class="text-gray-400">职业：</span><span class="text-gray-700">交互设计师</span></div>
+<div class="col-span-2"><span class="text-gray-400">职业现状：</span><span class="text-gray-700">在职</span></div>
+<div class="col-span-2"><span class="text-gray-400">技能：</span><span class="text-gray-700">交互设计 / 动态设计 / Shader</span></div>
+<div class="col-span-2"><span class="text-gray-400">特长：</span><span class="text-gray-700">沉浸式场景叙事</span></div>
+<div class="col-span-2 border-t border-gray-200 pt-2"><span class="text-gray-400">爱好：</span><span class="text-gray-700">装置艺术、独立游戏、植物</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- 底部导航栏 (雷达Tab处于激活状态) -->
+<!-- 商品详情 Modal -->
+<div class="absolute inset-0 z-50 flex items-center justify-center p-8 hidden" id="productModal">
+<!-- 遮罩 -->
+<div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal()"></div>
+<!-- 内容 -->
+<div class="bg-white w-full border border-gray-200 relative z-10 animate-in fade-in zoom-in duration-200">
+<button class="absolute top-2 right-2 p-2 bg-white/80 border border-gray-100 z-20" onclick="closeModal()">
+<svg class="" fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+</button>
+<div class="aspect-square bg-gray-50 border-b border-gray-100">
+<img alt="Product Large" class="w-full h-full object-cover" id="modalImg" src="https://modao.cc/agent-py/media/generated_images/2026-07-08/15f5693b83f94800958fce40e0c27059.jpg"/>
+</div>
+<div class="p-5 space-y-4">
+<div class="flex justify-between items-start">
+<h2 class="text-xl font-bold text-black" id="modalTitle">复古像素画框</h2>
+<span class="px-2 py-1 bg-[#fce7f3] text-[#ec4899] text-sm font-bold border border-pink-200" id="modalPrice">45 星币</span>
+</div>
+<p class="text-sm text-gray-500 leading-relaxed" id="modalDesc">支持自定义上传图片的像素化展示，自带动态光效。</p>
+<div class="flex gap-3 pt-2">
+<button class="flex-1 h-12 bg-[#ec4899] text-white font-bold text-sm">立即获取</button>
+<button class="w-12 h-12 border border-gray-200 flex items-center justify-center">
+<svg fill="none" height="24" stroke="#ec4899" stroke-width="2" viewbox="0 0 24 24" width="24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // 筛选标签切换
+        function toggleFilter(btn) {
+            document.querySelectorAll('.filter-tab').forEach(el => {
+                el.classList.remove('bg-[#ec4899]', 'text-white', 'border-[#ec4899]');
+                el.classList.add('bg-white', 'text-gray-500', 'border-gray-300');
+            });
+            btn.classList.remove('bg-white', 'text-gray-500', 'border-gray-300');
+            btn.classList.add('bg-[#ec4899]', 'text-white', 'border-[#ec4899]');
+        }
+
+        // 切换虚拟身份证展开
+        function toggleIDCard(btn, id) {
+            const content = document.getElementById(id);
+            const isOpen = content.classList.contains('open');
+            
+            // 关闭所有其他的
+            document.querySelectorAll('.id-card-content').forEach(el => {
+                el.classList.remove('open');
+            });
+            document.querySelectorAll('.id-btn').forEach(el => {
+                el.innerText = '虚拟身份证';
+                el.classList.remove('bg-blue-600', 'text-white');
+                el.classList.add('bg-white', 'text-blue-600');
+            });
+
+            // 如果原来是关着的，现在打开
+            if (!isOpen) {
+                content.classList.add('open');
+                btn.innerText = '收起身份证';
+                btn.classList.remove('bg-white', 'text-blue-600');
+                btn.classList.add('bg-blue-600', 'text-white');
+            }
+        }
+
+        // 弹窗控制
+        function openModal(name, desc, price) {
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('modalPrice').innerText = price;
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+    </script>
+</body></html>

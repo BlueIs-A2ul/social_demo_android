@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>群聊 - 周末空间设计小组</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      body {
+        background-color: #f3f4f6;
+        margin: 0;
+        overflow: hidden;
+        font-family: -apple-system, sans-serif;
+      }
+      .app-container {
+        width: min(100vw, 393px);
+        height: 100dvh;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: white;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      * {
+        border-radius: 0 !important;
+        box-sizing: border-box;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        border: 0;
+        background: transparent;
+        padding: 0;
+        color: inherit;
+        cursor: pointer;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .avatar {
+        border-radius: 9999px !important;
+        display: block;
+        object-fit: cover;
+        flex: none;
+        border: 1px solid #fce7f3;
+        background: #fdf2f8;
+      }
+      .flex {
+        display: flex;
+      }
+      .block {
+        display: block;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .items-start {
+        align-items: flex-start;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .justify-between {
+        justify-content: space-between;
+      }
+      .min-h-screen {
+        min-height: 100dvh;
+      }
+      .shrink-0 {
+        flex-shrink: 0;
+      }
+      .flex-1 {
+        flex: 1 1 0%;
+      }
+      .min-w-0 {
+        min-width: 0;
+      }
+      .gap-1 {
+        gap: 0.25rem;
+      }
+      .gap-2 {
+        gap: 0.5rem;
+      }
+      .gap-3 {
+        gap: 0.75rem;
+      }
+      .space-y-1 > * + * {
+        margin-top: 0.25rem;
+      }
+      .space-y-4 > * + * {
+        margin-top: 1rem;
+      }
+      .space-y-6 > * + * {
+        margin-top: 1.5rem;
+      }
+      .p-3 {
+        padding: 0.75rem;
+      }
+      .p-4 {
+        padding: 1rem;
+      }
+      .px-2 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      .px-3 {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+      .px-4 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .py-0\.5 {
+        padding-top: 0.125rem;
+        padding-bottom: 0.125rem;
+      }
+      .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .mt-1 {
+        margin-top: 0.25rem;
+      }
+      .mb-2 {
+        margin-bottom: 0.5rem;
+      }
+      .w-8 {
+        width: 2rem;
+      }
+      .h-8 {
+        height: 2rem;
+      }
+      .w-10 {
+        width: 2.5rem;
+      }
+      .h-10 {
+        height: 2.5rem;
+      }
+      .w-12 {
+        width: 3rem;
+      }
+      .h-12 {
+        height: 3rem;
+      }
+      .h-10 {
+        height: 2.5rem;
+      }
+      .w-full {
+        width: 100%;
+      }
+      .max-w-\[85\%\] {
+        max-width: 85%;
+      }
+      .overflow-y-auto {
+        overflow-y: auto;
+      }
+      .border {
+        border-width: 1px;
+        border-style: solid;
+      }
+      .border-b {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+      }
+      .border-t {
+        border-top-width: 1px;
+        border-top-style: solid;
+      }
+      .border-gray-100 {
+        border-color: #f3f4f6;
+      }
+      .border-gray-200 {
+        border-color: #e5e7eb;
+      }
+      .border-gray-300 {
+        border-color: #d1d5db;
+      }
+      .bg-white {
+        background-color: #fff;
+      }
+      .bg-gray-50 {
+        background-color: #f9fafb;
+      }
+      .bg-gray-100 {
+        background-color: #f3f4f6;
+      }
+      .bg-pink-50 {
+        background-color: #fdf2f8;
+      }
+      .bg-pink-main {
+        background-color: #ec4899;
+      }
+      .text-white {
+        color: #fff;
+      }
+      .text-pink-main {
+        color: #ec4899;
+      }
+      .text-gray-400 {
+        color: #9ca3af;
+      }
+      .text-gray-500 {
+        color: #6b7280;
+      }
+      .text-gray-600 {
+        color: #4b5563;
+      }
+      .text-gray-800 {
+        color: #1f2937;
+      }
+      .text-gray-900 {
+        color: #111827;
+      }
+      .text-green-500 {
+        color: #22c55e;
+      }
+      .text-xs {
+        font-size: 0.75rem;
+        line-height: 1rem;
+      }
+      .text-sm {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+      .text-\[9px\] {
+        font-size: 9px;
+        line-height: 13px;
+      }
+      .text-\[10px\] {
+        font-size: 10px;
+        line-height: 14px;
+      }
+      .text-\[11px\] {
+        font-size: 11px;
+        line-height: 15px;
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+      .leading-tight {
+        line-height: 1.25;
+      }
+      .leading-relaxed {
+        line-height: 1.625;
+      }
+      .inline-block {
+        display: inline-block;
+      }
+      .truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .flex-row-reverse {
+        flex-direction: row-reverse;
+      }
+      .flex-col {
+        flex-direction: column;
+      }
+      .items-end {
+        align-items: flex-end;
+      }
+      .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+    </style>
+  </head>
+  <body class="flex items-center justify-center min-h-screen">
+    <div class="app-container shadow-2xl">
+      <header
+        class="p-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0"
+      >
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="text-gray-900 shrink-0" onclick="window.location.href='message_center.html'">
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path d="m15 18-6-6 6-6"></path>
+            </svg>
+          </button>
+          <div class="flex items-center gap-2 min-w-0">
+            <div
+              class="w-10 h-10 bg-pink-50 border border-gray-200 flex items-center justify-center text-pink-main shrink-0"
+            >
+              <svg
+                fill="none"
+                height="22"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="22"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <h1
+                class="font-bold text-sm text-gray-900 leading-tight truncate"
+              >
+                周末空间设计小组
+              </h1>
+              <p class="text-[10px] text-gray-400 leading-tight">
+                26 人 · 朋友群 · 2 位管理员
+              </p>
+            </div>
+          </div>
+        </div>
+        <a
+          class="w-8 h-8 flex items-center justify-center text-gray-600 shrink-0"
+          href="group_settings.html?from=group_chat"
+          aria-label="群设置"
+        >
+          <svg
+            fill="none"
+            height="20"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="20"
+          >
+            <circle cx="12" cy="12" r="1.5"></circle>
+            <circle cx="19" cy="12" r="1.5"></circle>
+            <circle cx="5" cy="12" r="1.5"></circle>
+          </svg>
+        </a>
+      </header>
+
+      <main class="flex-1 overflow-y-auto p-4 space-y-6 bg-white">
+        <div class="flex justify-center">
+          <span class="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5"
+            >今天 11:48</span
+          >
+        </div>
+
+        <div class="flex gap-3">
+          <img
+            class="avatar w-10 h-10"
+            alt="小雨"
+            src="assets/packaged/src/generated_avatars/avatar-04.png"
+          />
+          <div class="flex-1 space-y-1">
+            <div class="flex items-center gap-2">
+              <p class="text-[11px] text-gray-900 font-bold">小雨</p>
+              <span class="text-[9px] text-gray-400">朋友</span>
+            </div>
+            <div
+              class="bg-gray-100 p-3 text-sm leading-relaxed text-gray-800 inline-block max-w-[85%]"
+            >
+              周六有人想去吃火锅吗？我看新开那家店评价还不错。
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <img
+            class="avatar w-10 h-10"
+            alt="约翰逊"
+            src="assets/packaged/src/generated_avatars/avatar-07.png"
+          />
+          <div class="flex-1 space-y-1">
+            <div class="flex items-center gap-2">
+              <p class="text-[11px] text-gray-900 font-bold">约翰逊</p>
+              <span class="text-[9px] text-pink-main">管理员</span>
+            </div>
+            <div
+              class="bg-gray-100 p-3 text-sm leading-relaxed text-gray-800 inline-block max-w-[85%]"
+            >
+              可以啊，我下午有空。吃完要不要顺便去看电影？
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center">
+          <span class="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5"
+            >11:55</span
+          >
+        </div>
+
+        <div class="flex gap-3 flex-row-reverse">
+          <img
+            class="avatar w-10 h-10"
+            alt="小云"
+            src="assets/packaged/src/generated_avatars/avatar-01.png"
+          />
+          <div class="flex-1 space-y-1 flex flex-col items-end">
+            <div
+              class="bg-pink-main p-3 text-sm leading-relaxed text-white inline-block max-w-[85%]"
+            >
+              我可以，火锅加电影安排上。你们想吃辣锅还是鸳鸯锅？
+            </div>
+            <p class="text-[9px] text-gray-400 mt-1">已读 8 人</p>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <img
+            class="avatar w-10 h-10"
+            alt="七七"
+            src="assets/packaged/src/generated_avatars/avatar-09.png"
+          />
+          <div class="flex-1 space-y-1">
+            <div class="flex items-center gap-2">
+              <p class="text-[11px] text-gray-900 font-bold">七七</p>
+              <span class="text-[9px] text-gray-400">朋友</span>
+            </div>
+            <div
+              class="bg-gray-100 p-3 text-sm leading-relaxed text-gray-800 inline-block max-w-[85%]"
+            >
+              鸳鸯锅吧，我最近不能吃太辣。电影我想看喜剧，轻松一点。
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <img
+            class="avatar w-10 h-10"
+            alt="星河"
+            src="assets/packaged/src/generated_avatars/avatar-03.png"
+          />
+          <div class="flex-1 space-y-1">
+            <div class="flex items-center gap-2">
+              <p class="text-[11px] text-gray-900 font-bold">星河</p>
+              <span class="text-[9px] text-gray-400">同城好友</span>
+            </div>
+            <div
+              class="bg-gray-100 p-3 text-sm leading-relaxed text-gray-800 inline-block max-w-[85%]"
+            >
+              那我订六点半的位子，电影票等吃饭的时候大家一起选。
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="border-t border-gray-100 bg-white p-4 space-y-4 shrink-0">
+        <div class="flex gap-2">
+          <div
+            class="flex-1 h-10 border border-gray-300 flex items-center px-3 gap-2 bg-white"
+          >
+            <button class="text-gray-400">
+              <svg
+                fill="none"
+                height="20"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="20"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" x2="9.01" y1="9" y2="9"></line>
+                <line x1="15" x2="15.01" y1="9" y2="9"></line>
+              </svg>
+            </button>
+            <input
+              class="flex-1 text-xs"
+              style="border: 0; outline: 0"
+              placeholder="在群里说点什么"
+            />
+          </div>
+          <button class="px-4 bg-pink-main text-white text-xs font-bold">
+            发送
+          </button>
+        </div>
+        <div class="flex justify-between items-center px-2">
+          <button class="text-gray-600 flex flex-col items-center gap-1">
+            <svg
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+            >
+              <rect height="18" width="18" x="3" y="3"></rect>
+              <circle cx="9" cy="9" r="2"></circle>
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+            </svg>
+            <span class="text-[10px]">相册</span>
+          </button>
+          <button class="text-gray-600 flex flex-col items-center gap-1">
+            <svg
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+            >
+              <path d="m22 8-6 4 6 4V8Z"></path>
+              <rect height="12" width="14" x="2" y="6"></rect>
+            </svg>
+            <span class="text-[10px]">视频</span>
+          </button>
+          <a
+            class="text-gray-600 flex flex-col items-center gap-1"
+            href="group_settings.html?from=group_chat"
+          >
+            <svg
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            </svg>
+            <span class="text-[10px]">成员</span>
+          </a>
+          <button class="text-gray-600 flex flex-col items-center gap-1">
+            <svg
+              fill="none"
+              height="20"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="20"
+            >
+              <path
+                d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
+              ></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" x2="12" y1="19" y2="23"></line>
+              <line x1="8" x2="16" y1="23" y2="23"></line>
+            </svg>
+            <span class="text-[10px]">语音</span>
+          </button>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

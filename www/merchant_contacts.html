@@ -1,0 +1,513 @@
+<!doctype html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>商家通讯录 - 元宇宙社交</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          'Helvetica Neue',
+          Arial,
+          sans-serif;
+        background-color: #f3f4f6;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100dvh;
+      }
+      .mobile-container {
+        width: min(100vw, 393px);
+        height: 100dvh;
+        background-color: white;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .active-tab {
+        background-color: #ec4899;
+        color: white;
+        border-color: #ec4899;
+      }
+      .merchant-card:last-child {
+        border-bottom: none;
+      }
+      .merchant-name {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        max-width: 100%;
+      }
+      .merchant-vip-badge {
+        width: 34px;
+        height: auto;
+        flex: none;
+        object-fit: contain;
+        transform: translateY(1px);
+      }
+    </style>
+    <style data-id="immersive-translate-input-injected-css"></style>
+  </head>
+  <body class="is-mb-ai-setting">
+    <div class="mobile-container">
+      <!-- 顶部状态栏 -->
+      <!-- Header -->
+      <header
+        class="px-4 py-3 flex justify-between items-center border-b border-gray-100 flex-none bg-white"
+      >
+        <a class="text-black" href="radar_merchant.html">
+          <svg
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="butt"
+            stroke-linejoin="miter"
+            stroke-width="2"
+            viewbox="0 0 24 24"
+            width="24"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+          </svg>
+        </a>
+        <h1 class="text-lg font-bold tracking-tight">商家通讯录</h1>
+        <button class="text-black">
+          <svg
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="butt"
+            stroke-linejoin="miter"
+            stroke-width="2"
+            viewbox="0 0 24 24"
+            width="24"
+          >
+            <circle cx="12" cy="5" r="1"></circle>
+            <circle cx="12" cy="12" r="1"></circle>
+            <circle cx="12" cy="19" r="1"></circle>
+          </svg>
+        </button>
+      </header>
+      <!-- 搜索栏-->
+      <div class="px-4 py-3 bg-white flex-none">
+        <div class="flex space-x-0">
+          <div class="relative flex-1">
+            <span
+              class="absolute inset-y-0 left-3 flex items-center text-gray-400"
+            >
+              <svg
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-width="2"
+                viewbox="0 0 24 24"
+                width="18"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21l-4.35-4.35"></path>
+              </svg>
+            </span>
+            <input
+              class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 focus:outline-none focus:border-pink-500 text-sm font-light"
+              id="searchInput"
+              placeholder="搜索你关注的商家"
+              type="text"
+            />
+          </div>
+          <button
+            class="bg-[#ec4899] text-white px-5 py-2 text-sm font-bold hover:bg-[#db2777] transition-colors"
+            onclick="handleSearch()"
+          >
+            搜索
+          </button>
+        </div>
+      </div>
+      <!-- 筛选栏 -->
+      <div
+        class="px-4 pb-3 flex space-x-2 overflow-x-auto hide-scrollbar flex-none bg-white"
+      >
+        <button
+          class="filter-tab whitespace-nowrap px-4 py-1.5 border border-gray-300 text-xs font-bold transition-all active-tab"
+          id="tab-all"
+          onclick="filterType('all')"
+        >
+          全部
+        </button>
+        <button
+          class="filter-tab whitespace-nowrap px-4 py-1.5 border border-gray-300 text-xs font-bold transition-all bg-white text-gray-600"
+          id="tab-recent"
+          onclick="filterType('recent')"
+        >
+          最近访客</button>
+        <button
+          class="bg-white text-gray-600 whitespace-nowrap px-4 py-1.5 border border-gray-300 text-xs font-bold flex items-center"
+        >
+          分类
+          <svg
+            class="ml-1 w-3 h-3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewbox="0 0 24 24"
+          >
+            <path d="M6 9l6 6 6-6"></path>
+          </svg>
+        </button>
+        <button
+          class="bg-white text-gray-600 whitespace-nowrap px-4 py-1.5 border border-gray-300 text-xs font-bold flex items-center"
+        >
+          排序
+          <svg
+            class="ml-1 w-3 h-3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewbox="0 0 24 24"
+          >
+            <path d="M6 9l6 6 6-6"></path>
+          </svg>
+        </button>
+      </div>
+      <!-- 商家列表内容区-->
+      <main class="flex-1 overflow-y-auto bg-gray-50" id="merchantList">
+        <!-- 商家 1 -->
+        <div
+          class="merchant-card bg-white px-4 py-5 flex items-center border-b border-gray-100"
+          data-name="星穹工坊"
+        >
+          <img
+            alt="Xingqiong Workshop Logo"
+            class="w-14 h-14 bg-pink-50 p-1 flex-none border border-gray-100"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-22/02480ccc74224d7cb013fe18a175132d.jpg"
+          />
+          <div class="ml-4 flex-1">
+            <h3
+              class="merchant-name text-sm font-bold text-black leading-tight"
+            >
+              星穹工坊<img
+                alt="商家VIP20"
+                class="merchant-vip-badge"
+                src="assets/vip/vip-gold-20.png"
+              />
+            </h3>
+            <div class="flex mt-1 space-x-2">
+              <span class="text-[10px] bg-pink-50 text-[#ec4899] px-1.5 py-0.5"
+                >虚拟空间定制</span
+              >
+              <span class="text-[10px] bg-blue-50 text-blue-500 px-1.5 py-0.5"
+                >3D建模</span
+              >
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1.5">28 件商品</p>
+          </div>
+          <a
+            class="flex-none border border-[#ec4899] text-[#ec4899] px-4 py-1.5 text-xs font-bold hover:bg-pink-50 transition-colors"
+            href="merchant_shop.html"
+            >进店</a
+          >
+        </div>
+        <!-- 商家 2 -->
+        <div
+          class="merchant-card bg-white px-4 py-5 flex items-center border-b border-gray-100"
+          data-name="梦境织造"
+        >
+          <img
+            alt="Dream Weaver Logo"
+            class="w-14 h-14 bg-purple-50 p-1 flex-none border border-gray-100"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-22/8401169b53134beca3685656529d68e7.jpg"
+          />
+          <div class="ml-4 flex-1">
+            <h3
+              class="merchant-name text-sm font-bold text-black leading-tight"
+            >
+              梦境织造<img
+                alt="商家VIP11"
+                class="merchant-vip-badge"
+                src="assets/vip/vip-silver-11.png"
+              />
+            </h3>
+            <div class="flex mt-1 space-x-2">
+              <span
+                class="text-[10px] bg-purple-50 text-purple-500 px-1.5 py-0.5"
+                >全景场景设计</span
+              >
+              <span class="text-[10px] bg-green-50 text-green-500 px-1.5 py-0.5"
+                >交互装置</span
+              >
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1.5">15 件商品</p>
+          </div>
+          <a
+            class="flex-none border border-[#ec4899] text-[#ec4899] px-4 py-1.5 text-xs font-bold hover:bg-pink-50 transition-colors"
+            href="merchant_shop.html"
+            >进店</a
+          >
+        </div>
+        <!-- 商家 3 -->
+        <div
+          class="merchant-card bg-white px-4 py-5 flex items-center border-b border-gray-100"
+          data-name="像素花园"
+        >
+          <img
+            alt="Pixel Garden Logo"
+            class="w-14 h-14 bg-yellow-50 p-1 flex-none border border-gray-100"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-22/7bb0f9374108464f9d36916752bd00da.jpg"
+          />
+          <div class="ml-4 flex-1">
+            <h3
+              class="merchant-name text-sm font-bold text-black leading-tight"
+            >
+              像素花园<img
+                alt="商家VIP1"
+                class="merchant-vip-badge"
+                src="assets/vip/vip-copper-1.png"
+              />
+            </h3>
+            <div class="flex mt-1 space-x-2">
+              <span
+                class="text-[10px] bg-yellow-50 text-yellow-600 px-1.5 py-0.5"
+                >像素风装修</span>
+              >
+              <span
+                class="text-[10px] bg-orange-50 text-orange-600 px-1.5 py-0.5"
+                >复古道具</span
+              >
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1.5">42 件商品</p>
+          </div>
+          <a
+            class="flex-none border border-[#ec4899] text-[#ec4899] px-4 py-1.5 text-xs font-bold hover:bg-pink-50 transition-colors"
+            href="merchant_shop.html"
+            >进店</a
+          >
+        </div>
+        <!-- 商家 4 -->
+        <div
+          class="merchant-card bg-white px-4 py-5 flex items-center border-b border-gray-100"
+          data-name="光影实验室"
+        >
+          <img
+            alt="Light Lab Logo"
+            class="w-14 h-14 bg-cyan-50 p-1 flex-none border border-gray-100"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-22/7943223e916c4e74aa0d2e0ed968b42b.jpg"
+          />
+          <div class="ml-4 flex-1">
+            <h3
+              class="merchant-name text-sm font-bold text-black leading-tight"
+            >
+              光影实验室<img
+                alt="商家VIP20"
+                class="merchant-vip-badge"
+                src="assets/vip/vip-gold-20.png"
+              />
+            </h3>
+            <div class="flex mt-1 space-x-2">
+              <span class="text-[10px] bg-cyan-50 text-cyan-600 px-1.5 py-0.5"
+                >灯光氛围</span
+              >
+              <span
+                class="text-[10px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5"
+                >粒子特效</span
+              >
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1.5">19 件商品</p>
+          </div>
+          <a
+            class="flex-none border border-[#ec4899] text-[#ec4899] px-4 py-1.5 text-xs font-bold hover:bg-pink-50 transition-colors"
+            href="merchant_shop.html"
+            >进店</a
+          >
+        </div>
+        <!-- 商家 5 -->
+        <div
+          class="merchant-card bg-white px-4 py-5 flex items-center border-b border-gray-100"
+          data-name="潮物集"
+        >
+          <img
+            alt="Trendy Goods Logo"
+            class="w-14 h-14 bg-red-50 p-1 flex-none border border-gray-100"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-22/141b39fa5f834e30a0960281e4e6a906.jpg"
+          />
+          <div class="ml-4 flex-1">
+            <h3
+              class="merchant-name text-sm font-bold text-black leading-tight"
+            >
+              潮物集<img
+                alt="商家VIP11"
+                class="merchant-vip-badge"
+                src="assets/vip/vip-silver-11.png"
+              />
+            </h3>
+            <div class="flex mt-1 space-x-2">
+              <span class="text-[10px] bg-red-50 text-red-500 px-1.5 py-0.5"
+                >虚拟潮玩</span
+              >
+              <span class="text-[10px] bg-black text-white px-1.5 py-0.5"
+                >限量数字藏品</span
+              >
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1.5">36 件商品</p>
+          </div>
+          <a
+            class="flex-none border border-[#ec4899] text-[#ec4899] px-4 py-1.5 text-xs font-bold hover:bg-pink-50 transition-colors"
+            href="merchant_shop.html"
+            >进店</a
+          >
+        </div>
+        <!-- 商家 6 -->
+        <div
+          class="merchant-card bg-white px-4 py-5 flex items-center border-b border-gray-100"
+          data-name="云上画廊"
+        >
+          <img
+            alt="Cloud Gallery Logo"
+            class="w-14 h-14 bg-blue-50 p-1 flex-none border border-gray-100"
+            src="https://modao.cc/agent-py/media/generated_images/2026-07-22/5c6d8490590d437f9552bb6d1b8f596b.jpg"
+          />
+          <div class="ml-4 flex-1">
+            <h3
+              class="merchant-name text-sm font-bold text-black leading-tight"
+            >
+              云上画廊<img
+                alt="商家VIP1"
+                class="merchant-vip-badge"
+                src="assets/vip/vip-copper-1.png"
+              />
+            </h3>
+            <div class="flex mt-1 space-x-2">
+              <span class="text-[10px] bg-blue-50 text-blue-600 px-1.5 py-0.5"
+                >数字艺术家</span>
+              >
+              <span class="text-[10px] bg-rose-50 text-rose-500 px-1.5 py-0.5"
+                >AI 画作</span
+              >
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1.5">23 件商品</p>
+          </div>
+          <a
+            class="flex-none border border-[#ec4899] text-[#ec4899] px-4 py-1.5 text-xs font-bold hover:bg-pink-50 transition-colors"
+            href="merchant_shop.html"
+            >进店</a
+          >
+        </div>
+      </main>
+      <!-- 空状态提示 (默认隐藏) -->
+      <div
+        class="hidden flex-1 bg-white flex flex-col items-center justify-center px-10 text-center"
+        id="emptyState"
+      >
+        <div
+          class="w-24 h-24 bg-gray-50 flex items-center justify-center text-gray-300 mb-4"
+        >
+          <svg
+            fill="none"
+            height="48"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewbox="0 0 24 24"
+            width="48"
+          >
+            <path d="M21 8l-9-4-9 4v8l9 4 9-4V8z"></path>
+            <path d="M3 8l9 4 9-4"></path>
+            <path d="M12 12v9"></path>
+          </svg>
+        </div>
+        <p class="text-gray-400 text-sm mb-6">暂无关注的商家</p>
+        <button
+          class="w-full py-3 bg-[#ec4899] text-white font-bold text-sm tracking-widest hover:bg-[#db2777] transition-colors"
+          onclick="resetSearch()"
+        >
+          去发现商家</button>
+      </div>
+      <!-- 底部导航 (装饰) -->
+    </div>
+    <script>
+      function filterType(type) {
+        const tabs = document.querySelectorAll('.filter-tab')
+        tabs.forEach(tab => {
+          tab.classList.remove('active-tab')
+          tab.classList.add('bg-white', 'text-gray-600')
+        })
+
+        const activeTab = document.getElementById(`tab-${type}`)
+        activeTab.classList.add('active-tab')
+        activeTab.classList.remove('bg-white', 'text-gray-600')
+
+        // 模拟加载最近访客        if (type === 'recent') {
+          const cards = document.querySelectorAll('.merchant-card')
+          cards.forEach((card, index) => {
+            if (index > 2) card.classList.add('hidden')
+            else card.classList.remove('hidden')
+          })
+        } else {
+          const cards = document.querySelectorAll('.merchant-card')
+          cards.forEach(card => card.classList.remove('hidden'))
+        }
+        checkEmpty()
+      }
+
+      function handleSearch() {
+        const query = document.getElementById('searchInput').value.trim()
+        const cards = document.querySelectorAll('.merchant-card')
+        let found = 0
+
+        cards.forEach(card => {
+          const name = card.getAttribute('data-name')
+          if (name.includes(query)) {
+            card.classList.remove('hidden')
+            found++
+          } else {
+            card.classList.add('hidden')
+          }
+        })
+
+        checkEmpty()
+      }
+
+      function checkEmpty() {
+        const visibleCards = document.querySelectorAll(
+          '.merchant-card:not(.hidden)',
+        )
+        const list = document.getElementById('merchantList')
+        const empty = document.getElementById('emptyState')
+
+        if (visibleCards.length === 0) {
+          list.classList.add('hidden')
+          empty.classList.remove('hidden')
+        } else {
+          list.classList.remove('hidden')
+          empty.classList.add('hidden')
+        }
+      }
+
+      function resetSearch() {
+        document.getElementById('searchInput').value = ''
+        const cards = document.querySelectorAll('.merchant-card')
+        cards.forEach(card => card.classList.remove('hidden'))
+        filterType('all')
+        checkEmpty()
+      }
+
+      // 绑定搜索回车键      document
+        .getElementById('searchInput')
+        .addEventListener('keypress', function (e) {
+          if (e.key === 'Enter') {
+            handleSearch()
+          }
+        })
+    </script>
+  </body>
+</html>

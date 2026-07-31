@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>星穹工坊 - 商家主页</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<style>
+        body {
+            background-color: #f3f4f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .active-tab {
+            color: #ec4899;
+            border-bottom: 2px solid #ec4899;
+        }
+        .active-sort {
+            color: #ec4899;
+        }
+        .toast {
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+        }
+    </style>
+<style data-id="immersive-translate-input-injected-css"></style>
+</head>
+<body class="flex justify-center items-center min-h-screen is-mb-ai-setting">
+<!-- 移动端容器 -->
+<div class="w-full max-w-[393px] h-[100dvh] bg-white shadow-2xl relative flex flex-col overflow-hidden border border-gray-200">
+<!-- 顶部 Header -->
+<header class="flex items-center px-3 py-2 bg-white z-10 border-b border-gray-100">
+<button class="p-1" onclick="window.location.href='radar_merchant.html'">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" viewbox="0 0 24 24" width="24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+</button>
+<div class="flex-1 mx-2 flex items-center bg-gray-100 px-3 py-1.5 border border-gray-200">
+<svg class="mr-2" fill="none" height="16" stroke="#9ca3af" stroke-width="2" viewbox="0 0 24 24" width="16"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+<input class="bg-transparent text-sm w-full outline-none placeholder-gray-400" placeholder="搜索店铺商品" type="text"/>
+</div>
+<div class="flex space-x-2">
+<button class="p-1">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="square" stroke-width="2" viewbox="0 0 24 24" width="24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+</button>
+<button class="p-1">
+<svg fill="none" height="24" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="24"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+</button>
+</div>
+</header>
+<!-- 内容滚动区 -->
+<div class="flex-1 overflow-y-auto hide-scrollbar bg-gray-50 pb-20">
+<!-- 商家信息区 -->
+<section class="bg-white p-4 border-b border-gray-200">
+<div class="flex items-start justify-between">
+<div class="flex">
+<img alt="Starry Workshop Avatar" class="w-16 h-16 border border-gray-100 object-cover" src="https://modao.cc/agent-py/media/user_assets/2026-07-22/afd94392d11e42e4b7c910f9ad4634cb.jpg" style="opacity: 1;"/>
+<div class="ml-3">
+<h1 class="text-lg font-bold text-gray-900 leading-tight" style="opacity: 1;">梦境织造</h1>
+<div class="flex items-center mt-1 space-x-2">
+<span class="bg-[#ec4899] text-white text-[10px] px-1.5 py-0.5 font-medium leading-none">3年老店</span>
+<!-- 诚信等级心形 -->
+<div class="flex space-x-0.5">
+<svg class="w-3.5 h-3.5 text-[#ec4899]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<svg class="w-3.5 h-3.5 text-[#ec4899]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<svg class="w-3.5 h-3.5 text-[#ec4899]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<svg class="w-3.5 h-3.5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<svg class="w-3.5 h-3.5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col space-y-2 items-end">
+<button class="w-20 py-1 border border-[#ec4899] text-[#ec4899] text-xs font-bold leading-none hover:bg-pink-50 transition-colors" id="followBtn" onclick="toggleFollow()">+ 关注</button>
+<button class="w-20 py-1 border border-gray-300 text-gray-500 text-xs font-bold leading-none hover:bg-gray-50 transition-colors">客服</button>
+</div>
+</div>
+<div class="mt-4 text-[11px] text-gray-400">
+                    全店总售 12.8 万件 · 复购率 47%
+                </div>
+</section>
+<!-- 保障标签行 -->
+<div class="flex justify-between px-4 py-3 bg-white border-b border-gray-100 text-[10px] text-gray-500">
+<div class="flex items-center space-x-1 px-2 py-1 bg-gray-50 border border-gray-100">
+<svg class="text-green-600" fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+<span>正品保障</span>
+</div>
+<div class="flex items-center space-x-1 px-2 py-1 bg-gray-50 border border-gray-100">
+<svg class="text-gray-400" fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+<span class="">无理由退换</span>
+</div>
+<div class="flex items-center space-x-1 px-2 py-1 bg-gray-50 border border-gray-100">
+<svg class="text-blue-500" fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+<span>极速交付</span>
+</div>
+</div>
+<!-- Tab 导航栏 -->
+<div class="flex bg-white sticky top-0 z-10 border-b border-gray-100 shadow-sm">
+<button class="flex-1 py-3 text-sm transition-all active-tab font-bold" onclick="switchTab(this)">全部商品</button>
+<button class="flex-1 py-3 text-sm transition-all text-gray-500 font-medium" onclick="switchTab(this)">新品</button>
+<button class="flex-1 py-3 text-sm transition-all text-gray-500 font-medium" onclick="switchTab(this)">热销</button>
+</div>
+<!-- 排序栏 -->
+<div class="flex items-center px-4 py-2.5 bg-white border-b border-gray-100 text-xs text-gray-500">
+<button class="flex-1 text-left active-sort font-bold" onclick="switchSort(this)">综合</button>
+<button class="flex-1 text-center font-medium" onclick="switchSort(this)">销量</button>
+<button class="flex-1 text-center font-medium relative inline-block" onclick="switchSort(this)">
+                    上新
+                    <span class="absolute top-0 right-1/4 w-1.5 h-1.5 bg-red-500"></span>
+</button>
+<button class="flex-1 text-right flex items-center justify-end font-medium" onclick="switchSort(this)">
+<span>价格</span>
+<div class="flex flex-col ml-0.5 space-y-[-2px]">
+<svg fill="none" height="8" stroke="currentColor" stroke-width="4" viewbox="0 0 24 24" width="8"><path d="M18 15l-6-6-6 6"></path></svg>
+<svg fill="none" height="8" stroke="currentColor" stroke-width="4" viewbox="0 0 24 24" width="8"><path d="M6 9l6 6 6-6"></path></svg>
+</div>
+</button>
+</div>
+<!-- 商品网格 -->
+<div class="grid grid-cols-2 gap-2 p-2">
+<!-- 商品 1 -->
+<div class="bg-white border border-gray-100 p-0 overflow-hidden" onclick="showDetail(1)">
+<div class="aspect-square bg-gray-50">
+<img alt="Starry Dome Skin" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/3161dc503b5245328ffad51361d21c49.jpg"/>
+</div>
+<div class="p-2 flex flex-col justify-between h-[90px]">
+<h3 class="text-xs text-gray-900 line-clamp-2 leading-relaxed" style="opacity: 1;">个人房间穹顶 · 全景高保真皮肤 沉浸式动态素材</h3>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="text-[#ec4899] font-bold text-sm">¥128</span>
+<span class="text-[9px] text-gray-400 ml-1">已售 2.3万件</span>
+</div>
+<button class="bg-[#ec4899] text-white p-1 shadow-sm hover:bg-[#db2777]" onclick="addToCart(event)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- 商品 2 -->
+<div class="bg-white border border-gray-100 p-0 overflow-hidden" onclick="showDetail(2)">
+<div class="aspect-square bg-gray-50">
+<img alt="Neon Chandelier" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/8c900636db6b48a0af0874b0f85175bf.jpg"/>
+</div>
+<div class="p-2 flex flex-col justify-between h-[90px]">
+<h3 class="text-xs text-gray-900 line-clamp-2 leading-relaxed" style="opacity: 1;">粒子吊灯 华丽风格互动照明套件</h3>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="text-[#ec4899] font-bold text-sm">¥68</span>
+<span class="text-[9px] text-gray-400 ml-1">已售 1.8万件</span>
+</div>
+<button class="bg-[#ec4899] text-white p-1 shadow-sm hover:bg-[#db2777]" onclick="addToCart(event)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- 商品 3 -->
+<div class="bg-white border border-gray-100 p-0 overflow-hidden" onclick="showDetail(3)">
+<div class="aspect-square bg-gray-50">
+<img alt="Retro Pixel Frames" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/user_assets/2026-07-22/a5f95a21388f43c786cbac6091149536.webp"/>
+</div>
+<div class="p-2 flex flex-col justify-between h-[90px]">
+<h3 class="text-xs text-gray-900 line-clamp-2 leading-relaxed">复古像素画框套装 经典8-bit艺术墙面陈列</h3>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="text-[#ec4899] font-bold text-sm">¥45</span>
+<span class="text-[9px] text-gray-400 ml-1">已售 3.1万件</span>
+</div>
+<button class="bg-[#ec4899] text-white p-1 shadow-sm hover:bg-[#db2777]" onclick="addToCart(event)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- 商品 4 -->
+<div class="bg-white border border-gray-100 p-0 overflow-hidden" onclick="showDetail(4)">
+<div class="aspect-square bg-gray-50">
+<img alt="Walnut Desk" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/0d41f8dcaadf406da36426c7aff70849.jpg"/>
+</div>
+<div class="p-2 flex flex-col justify-between h-[90px]">
+<h3 class="text-xs text-gray-900 line-clamp-2 leading-relaxed">极简书桌 · 胡桃木 纹理写实北欧商务风</h3>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="text-[#ec4899] font-bold text-sm">¥158</span>
+<span class="text-[9px] text-gray-400 ml-1">已售 9,800件</span>
+</div>
+<button class="bg-[#ec4899] text-white p-1 shadow-sm hover:bg-[#db2777]" onclick="addToCart(event)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- 商品 5 -->
+<div class="bg-white border border-gray-100 p-0 overflow-hidden" onclick="showDetail(5)">
+<div class="aspect-square bg-gray-50">
+<img alt="Cyber Wall Light" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/f4e34f7fcaf249fcbe040dd72e1cc384.jpg"/>
+</div>
+<div class="p-2 flex flex-col justify-between h-[90px]">
+<h3 class="text-xs text-gray-900 line-clamp-2 leading-relaxed">赛博灯光壁挂套件 自定义十六进制色彩光圈</h3>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="text-[#ec4899] font-bold text-sm">¥98</span>
+<span class="text-[9px] text-gray-400 ml-1">已售 1.5万件</span>
+</div>
+<button class="bg-[#ec4899] text-white p-1 shadow-sm hover:bg-[#db2777]" onclick="addToCart(event)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- 商品 6 -->
+<div class="bg-white border border-gray-100 p-0 overflow-hidden" onclick="showDetail(6)">
+<div class="aspect-square bg-gray-50">
+<img alt="Monstera Plant" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/d1e8de7f5c444022ac75955c9f4038b3.jpg"/>
+</div>
+<div class="p-2 flex flex-col justify-between h-[90px]">
+<h3 class="text-xs text-gray-900 line-clamp-2 leading-relaxed">绿植盆栽 · 龟背竹 空间氛围感增益装饰</h3>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="text-[#ec4899] font-bold text-sm">¥32</span>
+<span class="text-[9px] text-gray-400 ml-1">已售 4.2万件</span>
+</div>
+<button class="bg-[#ec4899] text-white p-1 shadow-sm hover:bg-[#db2777]" onclick="addToCart(event)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- 商品 7 -->
+<div class="bg-white border border-gray-100 p-0 overflow-hidden" onclick="showDetail(7)">
+<div class="aspect-square bg-gray-50">
+<img alt="Geometric Carpet" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/b8fcaefdd9614934b4e9ceb26267055e.jpg"/>
+</div>
+<div class="p-2 flex flex-col justify-between h-[90px]">
+<h3 class="text-xs text-gray-900 line-clamp-2 leading-relaxed">北欧风地毯 · 几何空间地铺材质套件</h3>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="text-[#ec4899] font-bold text-sm">¥78</span>
+<span class="text-[9px] text-gray-400 ml-1">已售 2.7万件</span>
+</div>
+<button class="bg-[#ec4899] text-white p-1 shadow-sm hover:bg-[#db2777]" onclick="addToCart(event)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- 商品 8 -->
+<div class="bg-white border border-gray-100 p-0 overflow-hidden" onclick="showDetail(8)">
+<div class="aspect-square bg-gray-50">
+<img alt="Minimalist Lamp" class="w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-07-22/24d32f070ffd45738ae34eca6af6eb45.jpg"/>
+</div>
+<div class="p-2 flex flex-col justify-between h-[90px]">
+<h3 class="text-xs text-gray-900 line-clamp-2 leading-relaxed">极简台灯 · 暖光 柔和漫反射环境光源点位</h3>
+<div class="flex items-end justify-between mt-auto">
+<div>
+<span class="text-[#ec4899] font-bold text-sm">¥55</span>
+<span class="text-[9px] text-gray-400 ml-1">已售 1.1万件</span>
+</div>
+<button class="bg-[#ec4899] text-white p-1 shadow-sm hover:bg-[#db2777]" onclick="addToCart(event)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 商品详情弹窗 -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden" id="detailModal">
+<div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal()"></div>
+<div class="bg-white w-full max-w-[320px] relative z-10 border border-gray-200 shadow-2xl flex flex-col">
+<button class="absolute top-2 right-2 p-1 bg-white/80 hover:bg-white z-20" onclick="closeModal()">
+<svg class="" fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</button>
+<div class="aspect-square w-full">
+<img alt="Product Large View" class="w-full h-full object-cover" id="modalImg" src="https://modao.cc/agent-py/media/user_assets/2026-07-22/c7b54c777dce46119026227bad372517.webp"/>
+</div>
+<div class="p-4">
+<h2 class="text-base font-bold text-gray-900 leading-tight" id="modalTitle">复古像素画框套装 经典8-bit艺术墙面陈列</h2>
+<div class="flex items-baseline mt-2">
+<span class="text-xl font-bold text-[#ec4899]" id="modalPrice">¥45</span>
+<span class="text-[10px] text-gray-400 ml-2" id="modalSales">已售 3.1万件</span>
+</div>
+<p class="text-xs text-gray-500 mt-3 leading-relaxed border-t border-gray-50 pt-3">
+                        这款虚拟陈设采用了最新的动态纹理映射技术，能为您的全景房间提供极致的沉浸式视觉体验。支持360度互动与光效自定义调整。
+                    </p>
+<div class="grid grid-cols-2 gap-3 mt-6">
+<button class="py-2 border border-[#ec4899] text-[#ec4899] text-sm font-bold hover:bg-pink-50 transition-colors" onclick="modalAddToCart()">加入购物车</button>
+<button class="py-2 bg-[#ec4899] text-white text-sm font-bold hover:bg-[#db2777] transition-colors shadow-sm" onclick="modalBuyNow()">立即购买</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Toast 提示 -->
+<div class="absolute bottom-24 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-4 py-2 opacity-0 toast z-[60] font-medium whitespace-nowrap" id="toast">
+            已加入购物车
+        </div>
+</div>
+<script>
+        const products = [
+            {}, // index 0
+            { title: "星空穹顶 · 房间全景高保真皮肤 沉浸式动态素材", price: "¥128", sales: "已售 2.3万件" },
+            { title: "霓虹粒子吊灯 赛博风格互动照明套件", price: "¥68", sales: "已售 1.8万件" },
+            { title: "复古像素画框套装 经典8-bit艺术墙面陈列", price: "¥45", sales: "已售 3.1万件" },
+            { title: "极简书桌 · 胡桃木 纹理写实北欧商务风", price: "¥158", sales: "已售 9,800件" },
+            { title: "赛博灯光壁挂套件 自定义十六进制色彩光圈", price: "¥98", sales: "已售 1.5万件" },
+            { title: "绿植盆栽 · 龟背竹 空间氛围感增益装饰", price: "¥32", sales: "已售 4.2万件" },
+            { title: "北欧风地毯 · 几何空间地铺材质套件", price: "¥78", sales: "已售 2.7万件" },
+            { title: "极简台灯 · 暖光 柔和漫反射环境光源点位", price: "¥55", sales: "已售 1.1万件" }
+        ];
+
+        let isFollowed = false;
+
+        function toggleFollow() {
+            const btn = document.getElementById('followBtn');
+            isFollowed = !isFollowed;
+            if (isFollowed) {
+                btn.innerText = '已关注';
+                btn.classList.add('bg-[#ec4899]', 'text-white');
+                btn.classList.remove('text-[#ec4899]');
+                showToast('关注成功');
+            } else {
+                btn.innerText = '+ 关注';
+                btn.classList.remove('bg-[#ec4899]', 'text-white');
+                btn.classList.add('text-[#ec4899]');
+            }
+        }
+
+        function switchTab(el) {
+            const buttons = el.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active-tab', 'font-bold');
+                btn.classList.add('text-gray-500', 'font-medium');
+            });
+            el.classList.add('active-tab', 'font-bold');
+            el.classList.remove('text-gray-500', 'font-medium');
+        }
+
+        function switchSort(el) {
+            const buttons = el.parentElement.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active-sort', 'font-bold');
+                btn.classList.add('font-medium');
+            });
+            el.classList.add('active-sort', 'font-bold');
+            el.classList.remove('font-medium');
+        }
+
+        function showDetail(index) {
+            const product = products[index];
+            document.getElementById('modalTitle').innerText = product.title;
+            document.getElementById('modalPrice').innerText = product.price;
+            document.getElementById('modalSales').innerText = product.sales;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.innerText = text;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000);
+        }
+
+        function addToCart(event) {
+            event.stopPropagation();
+            showToast('已加入购物车');
+        }
+
+        function modalAddToCart() {
+            closeModal();
+            showToast('已加入购物车');
+        }
+
+        function modalBuyNow() {
+            closeModal();
+            showToast('订单已生成，请支付');
+        }
+    </script>
+</body></html>

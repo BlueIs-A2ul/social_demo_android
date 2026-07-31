@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>系统公告 - 元社交</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<style>
+    body { background-color: #f9fafb; font-family: -apple-system, sans-serif; margin: 0; padding: 0; }
+    ::-webkit-scrollbar { display: none; }
+    .tab-active { color: #ec4899; border-bottom: 2px solid #ec4899; }
+</style>
+</head>
+<body class="p-5 pb-10">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-bold text-gray-800">系统公告</h2>
+<div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='message_center.html'">
+<span class="text-sm font-bold text-[#ec4899]">消息中心</span>
+<span class="w-5 h-5 bg-[#ec4899] text-white text-[11px] rounded-full flex items-center justify-center font-bold">99+</span>
+</div>
+</div>
+<!-- Tabs -->
+<div class="flex justify-between border-b border-gray-100 mb-6 overflow-x-auto no-scrollbar">
+<button class="px-2 pb-2 text-sm font-bold tab-active whitespace-nowrap" onclick="switchAnnTab('system', this)">系统公告</button>
+<button class="px-2 pb-2 text-sm font-medium text-gray-400 whitespace-nowrap" onclick="switchAnnTab('activity', this)">活动通知</button>
+<button class="px-2 pb-2 text-sm font-medium text-gray-400 whitespace-nowrap" onclick="switchAnnTab('friend', this)">好友消息</button>
+<button class="px-2 pb-2 text-sm font-medium text-gray-400 whitespace-nowrap" onclick="switchAnnTab('member', this)">会员消息</button>
+</div>
+<!-- Content Sections -->
+<div id="ann-content">
+<!-- 系统公告 Tab -->
+<div class="space-y-4" id="tab-system">
+<!-- Item 1 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" onclick="window.location.href='announcement_detail.html'" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-red-50 text-red-500 text-[10px] rounded font-bold">重要</span>
+<span class="text-[10px] text-gray-400">2026-07-15</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">「3D 全景房间」功能正式上线</h3>
+<p class="text-xs text-gray-500 line-clamp-2">全新沉浸式虚拟空间体验已开放，快来打造你的专属房间吧</p>
+</div>
+<!-- Item 2 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-blue-50 text-blue-500 text-[10px] rounded font-bold">升级</span>
+<span class="text-[10px] text-gray-400">2026-07-12</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">雷达发现功能升级</h3>
+<p class="text-xs text-gray-500 line-clamp-2">精准搜索和附近的人功能已优化，发现更多有趣灵魂</p>
+</div>
+<!-- Item 3 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-gray-100 text-gray-500 text-[10px] rounded font-bold">系统</span>
+<span class="text-[10px] text-gray-400">2026-07-10</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">虚拟身份证系统上线</h3>
+<p class="text-xs text-gray-500 line-clamp-2">每位用户现在拥有专属虚拟身份，提升社交安全感</p>
+</div>
+</div>
+<!-- 活动通知 Tab -->
+<div class="space-y-4 hidden" id="tab-activity">
+<!-- Item 4 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-pink-50 text-pink-500 text-[10px] rounded font-bold">🎉 活动</span>
+<span class="text-[10px] text-gray-400">2026-07-14</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">🎉 夏日房间装饰大赛</h3>
+<p class="text-xs text-gray-500 line-clamp-2">用创意装点你的全景房间，赢取限定头像框和会员奖励</p>
+</div>
+<!-- Item 5 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-pink-50 text-pink-500 text-[10px] rounded font-bold">福利</span>
+<span class="text-[10px] text-gray-400">2026-07-08</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">好友邀请福利活动</h3>
+<p class="text-xs text-gray-500 line-clamp-2">邀请好友加入元宇宙，双方均可获得「星空」主题房间皮肤</p>
+</div>
+</div>
+<!-- 好友消息 Tab -->
+<div class="space-y-4 hidden" id="tab-friend">
+<!-- Item 6 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-green-50 text-green-500 text-[10px] rounded font-bold">社交</span>
+<span class="text-[10px] text-gray-400">2026-07-13</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">你与「小雨」已成为好友</h3>
+<p class="text-xs text-gray-500 line-clamp-2">现在可以互相访问全景房间，一起探索虚拟空间</p>
+</div>
+<!-- Item 7 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-green-50 text-green-500 text-[10px] rounded font-bold">好友</span>
+<span class="text-[10px] text-gray-400">2026-07-11</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">「星辰」申请添加你为好友</h3>
+<p class="text-xs text-gray-500 line-clamp-2">来自雷达发现，你们有 3 个共同兴趣标签</p>
+</div>
+</div>
+<!-- 会员消息 Tab -->
+<div class="space-y-4 hidden" id="tab-member">
+<!-- Item 8 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-yellow-50 text-yellow-600 text-[10px] rounded font-bold">会员</span>
+<span class="text-[10px] text-gray-400">2026-07-09</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">恭喜升级为「黄金会员」</h3>
+<p class="text-xs text-gray-500 line-clamp-2">解锁专属头像框、更大房间容量和优先推荐特权</p>
+</div>
+<!-- Item 9 -->
+<div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer active:scale-[0.98] transition-all" style="border-radius: 0px;">
+<div class="flex justify-between items-start mb-2">
+<span class="px-2 py-0.5 bg-yellow-50 text-yellow-600 text-[10px] rounded font-bold">成就</span>
+<span class="text-[10px] text-gray-400">2026-07-06</span>
+</div>
+<h3 class="font-bold text-gray-800 text-sm mb-2">会员头像框「星河」已解锁</h3>
+<p class="text-xs text-gray-500 line-clamp-2">前往个人资料页设置，让你的头像更闪耀</p>
+</div>
+</div>
+</div>
+<script>
+    function switchAnnTab(tabName, el) {
+        // Hide all tabs
+        document.querySelectorAll('#ann-content > div').forEach(div => div.classList.add('hidden'));
+        // Show target tab
+        document.getElementById('tab-' + tabName).classList.remove('hidden');
+        
+        // Reset all buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.classList.remove('tab-active', 'font-bold', 'text-gray-800');
+            btn.classList.add('font-medium', 'text-gray-400');
+        });
+        
+        // Set active button
+        el.classList.add('tab-active', 'font-bold', 'text-gray-800');
+        el.classList.remove('font-medium', 'text-gray-400');
+    }
+</script>
+</body></html>

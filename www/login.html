@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>登录 - 元宇宙社交</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<style>
+        body {
+            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100dvh;
+        }
+        .app-container {
+            width: min(100vw, 393px);
+            height: 100dvh;
+            background: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        /* 主按钮渐变 */
+        .bg-pink-gradient {
+            background: linear-gradient(to right, #ec4899, #db2777);
+        }
+        /* Toast 样式 */
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            text-align: center;
+            padding: 12px;
+            position: absolute;
+            z-index: 100;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+        }
+        #toast.show {
+            visibility: visible;
+        }
+        /* 协议复选框 */
+        .protocol-checkbox {
+            width: 14px;
+            height: 14px;
+            border: 1px solid #d1d5db;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .protocol-checkbox.checked {
+            border-color: #ec4899;
+            background-color: #ec4899;
+        }
+        .protocol-checkbox.checked::after {
+            content: "✓";
+            color: white;
+            font-size: 10px;
+        }
+        /* 首次使用弹窗 */
+        #welcome-modal {
+            position: absolute;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 28px;
+        }
+        #welcome-modal .modal-card {
+            background: #fff;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            padding: 36px 24px 24px;
+        }
+        #welcome-modal .modal-logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+<style data-id="immersive-translate-input-injected-css"></style>
+</head>
+<body class="">
+<div class="app-container">
+<!-- 顶部导航栏 -->
+<div class="h-11 flex items-center justify-between px-4">
+<button class="text-xl text-black font-light leading-none" onclick="handleClose()">✕</button>
+<button class="text-sm text-gray-500" onclick="showToast('设置')">设置</button>
+</div>
+<!-- 中央 Logo 区域 -->
+<div class="flex flex-col items-center mt-12">
+<div class="w-18 h-18 mb-8 flex items-center justify-center">
+<!-- 如果 app_logo.png 不存在，展示一个粉色圆形占位 -->
+<div class="w-16 h-16 rounded-full bg-pink-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+<img alt="App Logo" class="w-full h-full object-cover" src="assets/packaged/sq/app图标.png"/>
+</div>
+</div>
+<!-- 手机号展示 -->
+<div class="text-xl font-bold text-black tracking-wider mb-8">
+                181 **** 0692
+            </div>
+<!-- 协议勾选区域 -->
+<div class="flex items-start px-8 mb-6">
+<div class="protocol-checkbox mt-0.5 mr-2" id="protocolCheckbox" onclick="toggleCheckbox()"></div>
+<div class="text-[12px] text-gray-400 leading-tight">
+                    登录注册即表示同意<span class="text-pink-500 cursor-pointer" onclick="showToast('查看用户协议')">用户协议</span>、<span class="text-pink-500 cursor-pointer" onclick="showToast('查看隐私条款')">隐私条款</span>和<span class="text-pink-500 cursor-pointer" onclick="showToast('查看天翼账号认证服务协议')">天翼账号认证服务协议</span>
+</div>
+</div>
+<!-- 登录按钮区域 -->
+<div class="w-full px-8 flex flex-col gap-4">
+<button class="w-full h-12 bg-pink-gradient text-white font-bold text-base flex items-center justify-center" onclick="handleLogin()">
+                    本机号码一键登录
+                </button>
+<button class="w-full h-11 bg-white border border-pink-400 text-pink-500 text-base flex items-center justify-center" onclick="handleOtherLogin()">
+                    其他手机号码登录
+                </button>
+</div>
+<!-- 辅助信息行 -->
+<div class="w-full px-8 mt-4 flex justify-between items-center text-[12px]">
+<span class="text-gray-400">未注册手机号验证通过后将自动注册</span>
+<span class="text-pink-500 cursor-pointer" onclick="showToast('帮助')">帮助</span>
+</div>
+</div>
+<!-- 底部第三方登录 -->
+<div class="mt-auto mb-16 flex flex-col items-center">
+<div class="flex items-center w-4/5 mb-6">
+<div class="flex-1 h-[1px] bg-gray-100"></div>
+<span class="px-3 text-[12px] text-gray-300">其他登录方式</span>
+<div class="flex-1 h-[1px] bg-gray-100"></div>
+</div>
+<div class="flex justify-center gap-6">
+<div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center cursor-pointer" onclick="showToast('第三方登录')">
+<img alt="WeChat" class="w-6 h-6" src="https://modao.cc/agent-py/media/user_assets/2026-07-16/f630a2644a2843679b58b3fc556f38bb.webp"/>
+</div>
+<div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center cursor-pointer" onclick="showToast('第三方登录')">
+<img alt="QQ" class="w-6 h-6" src="https://modao.cc/agent-py/media/user_assets/2026-07-16/a4b7ba887f844b4abd6bff84dbb6a6a8.webp"/>
+</div>
+<div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center cursor-pointer" onclick="showToast('第三方登录')">
+<img alt="Weibo" class="w-6 h-6" src="https://modao.cc/agent-py/media/user_assets/2026-07-16/a72205fa4d954b838a341b1e9baa6a45.webp"/>
+</div>
+<div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center cursor-pointer" onclick="showToast('第三方登录')">
+<img alt="Apple" class="w-6 h-6" src="https://modao.cc/agent-py/media/user_assets/2026-07-16/60aa4accb4a2495a8758fc18f05b8ee6.jpg"/>
+</div>
+</div>
+</div>
+<!-- Toast 容器 -->
+<div class="" id="toast">第三方登录</div>
+<!-- 首次使用弹窗 -->
+<div id="welcome-modal">
+<div class="modal-card">
+<div class="modal-logo">
+<div class="w-16 h-16 rounded-full bg-pink-500 flex items-center justify-center overflow-hidden">
+<img alt="App Logo" class="w-full h-full object-cover" src="assets/packaged/sq/app图标.png"/>
+</div>
+</div>
+<h2 class="text-xl font-bold text-black mb-2">欢迎加入元社交</h2>
+<p class="text-sm text-gray-500 leading-relaxed mb-8">第一次使用？花一分钟完成新手指引，更快找到同好的朋友。</p>
+<button class="w-full h-12 bg-pink-gradient text-white font-bold text-base flex items-center justify-center mb-3" onclick="goOnboarding()">进入新手指引</button>
+<button class="w-full h-11 bg-white border border-pink-400 text-pink-500 text-base flex items-center justify-center" onclick="goHome()">跳过，直接进入</button>
+</div>
+</div>
+</div>
+<script>
+        let isProtocolAgreed = false;
+
+        function toggleCheckbox() {
+            const checkbox = document.getElementById('protocolCheckbox');
+            isProtocolAgreed = !isProtocolAgreed;
+            if (isProtocolAgreed) {
+                checkbox.classList.add('checked');
+            } else {
+                checkbox.classList.remove('checked');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        function handleClose() {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function handleLogin() {
+            if (!isProtocolAgreed) {
+                showToast('请先同意用户协议');
+                return;
+            }
+            showToast('一键登录中...');
+            setTimeout(() => {
+                document.getElementById('welcome-modal').style.display = 'flex';
+            }, 1200);
+        }
+
+        function goOnboarding() {
+            window.location.href = 'onboarding_gender.html';
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function handleOtherLogin() {
+            showToast('请使用本机号码登录');
+        }
+    </script>
+</body></html>

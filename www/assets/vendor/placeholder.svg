@@ -1,0 +1,27 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <defs>
+    <linearGradient id="skeleton-gradient">
+      <stop offset="0%" stop-color="#eeeeee">
+        <animate attributeName="offset" values="-2; 1" dur="2s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="50%" stop-color="#cccccc">
+        <animate attributeName="offset" values="-1; 2" dur="2s" repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#eeeeee">
+        <animate attributeName="offset" values="0; 3" dur="2s" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+  </defs>
+
+<g clip-path="url(#clip0_8335_13133)">
+<rect width="100" height="100" fill="white"/>
+<rect width="100" height="100" fill="url(#skeleton-gradient)"/>
+<path d="M58 53.4141L55.207 50.6211C55.0195 50.4337 54.7651 50.3281 54.5 50.3281C54.268 50.3281 54.0441 50.4089 53.8662 50.5547L53.793 50.6211L46.4141 58H57C57.5523 58 58 57.5523 58 57V53.4141ZM48 47C48 46.4477 47.5523 46 47 46C46.4477 46 46 46.4477 46 47C46 47.5523 46.4477 48 47 48C47.5523 48 48 47.5523 48 47ZM58 43C58 42.4477 57.5523 42 57 42H43C42.4477 42 42 42.4477 42 43V57C42 57.5523 42.4477 58 43 58H43.5859L52.3789 49.207L52.5986 49.0078C53.1325 48.5704 53.8038 48.3281 54.5 48.3281C55.2955 48.3281 56.0585 48.6446 56.6211 49.207L58 50.5859V43ZM50 47C50 48.6569 48.6569 50 47 50C45.3431 50 44 48.6569 44 47C44 45.3431 45.3431 44 47 44C48.6569 44 50 45.3431 50 47ZM60 57C60 58.6569 58.6569 60 57 60H43C41.3431 60 40 58.6569 40 57V43C40 41.3431 41.3431 40 43 40H57C58.6569 40 60 41.3431 60 43V57Z" fill="#717680"/>
+</g>
+<defs>
+<clipPath id="clip0_8335_13133">
+<rect width="100" height="100" fill="white"/>
+</clipPath>
+</defs>
+</svg>

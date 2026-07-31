@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+    <title>虚拟空间商品</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        border-radius: 0 !important;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e5e7eb;
+        color: #111827;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei',
+          sans-serif;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .phone {
+        width: min(100vw, 393px);
+        height: 100dvh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+      }
+
+      .app-header {
+        flex: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 56px;
+        padding: 9px 12px;
+        background: #ffffff;
+        border-bottom: 1px solid #f3f4f6;
+        z-index: 5;
+      }
+
+      .icon-button {
+        width: 34px;
+        height: 34px;
+        flex: none;
+        border: 0;
+        background: transparent;
+        color: #111827;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .search-field {
+        height: 36px;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0 10px;
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+      }
+
+      .search-field input {
+        width: 100%;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: #111827;
+        font-size: 14px;
+      }
+
+      .search-field input::placeholder {
+        color: #9ca3af;
+      }
+
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+        background: #f3f4f6;
+      }
+
+      .content::-webkit-scrollbar,
+      .drawer-main::-webkit-scrollbar,
+      .drawer-tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .top-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 0 0 8px;
+        padding: 10px 2px 8px;
+        color: #6b7280;
+        font-size: 12px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .top-strip strong {
+        color: #111827;
+        font-size: 15px;
+      }
+
+      .filter-pills {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 0 0 10px;
+      }
+
+      .filter-pills::-webkit-scrollbar {
+        display: none;
+      }
+
+      .pill {
+        flex: none;
+        padding: 7px 14px;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        color: #4b5563;
+        font-size: 12px;
+        line-height: 1;
+      }
+
+      .pill.active {
+        border-color: #ec4899;
+        background: #ec4899;
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      .masonry-grid {
+        column-count: 2;
+        column-gap: 9px;
+      }
+
+      .product-card {
+        break-inside: avoid;
+        display: inline-block;
+        width: 100%;
+        margin: 0 0 9px;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+      }
+
+      .product-media {
+        position: relative;
+        overflow: hidden;
+        background: #f9fafb;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      .product-media.tall {
+        height: 206px;
+      }
+
+      .product-media.medium {
+        height: 168px;
+      }
+
+      .product-media.short {
+        height: 132px;
+      }
+
+      .product-media img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+      }
+
+      .tag {
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        padding: 3px 6px;
+        background: #ec4899;
+        color: #ffffff;
+        font-size: 10px;
+        line-height: 1;
+      }
+
+      .product-info {
+        padding: 8px 9px 9px;
+      }
+
+      .product-title {
+        min-height: 36px;
+        margin: 0;
+        color: #111827;
+        font-size: 13px;
+        line-height: 1.38;
+      }
+
+      .product-desc {
+        margin: 5px 0 7px;
+        color: #9ca3af;
+        font-size: 11px;
+        line-height: 1.3;
+      }
+
+      .product-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .price {
+        color: #ec4899;
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: 0;
+      }
+
+      .sales {
+        color: #9ca3af;
+        font-size: 10px;
+        white-space: nowrap;
+      }
+
+      .drawer-mask {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        display: none;
+        background: rgba(17, 24, 39, 0.18);
+      }
+
+      .drawer-mask.open {
+        display: block;
+      }
+
+      .category-drawer {
+        width: min(100vw, 338px);
+        height: 100%;
+        display: flex;
+        background: #ffffff;
+        transform: translateX(-100%);
+        transition: transform 0.24s ease;
+        box-shadow: 12px 0 28px rgba(15, 23, 42, 0.18);
+      }
+
+      .drawer-mask.open .category-drawer {
+        transform: translateX(0);
+      }
+
+      .drawer-tabs {
+        width: 92px;
+        flex: none;
+        overflow-y: auto;
+        background: #f3f4f6;
+        border-right: 1px solid #e5e7eb;
+        padding-top: 0;
+      }
+
+      .drawer-tab {
+        width: 100%;
+        min-height: 54px;
+        border: 0;
+        border-bottom: 1px solid #e5e7eb;
+        border-left: 3px solid transparent;
+        background: transparent;
+        color: #4b5563;
+        padding: 8px 8px;
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.25;
+        cursor: pointer;
+      }
+
+      .drawer-tab.active {
+        border-left-color: #ec4899;
+        background: #ffffff;
+        color: #111827;
+        font-weight: 800;
+      }
+
+      .drawer-main {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 14px;
+      }
+
+      .drawer-title {
+        margin: 0 0 5px;
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      .drawer-note {
+        margin: 0 0 10px;
+        color: #9ca3af;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .sub-category-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .sub-category {
+        min-height: 0;
+        height: 36px;
+        border: 0;
+        border-bottom: 1px solid #e5e7eb;
+        background: #ffffff;
+        color: #374151;
+        padding: 0 8px;
+        text-align: left;
+        font-size: 12px;
+        line-height: 36px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+      }
+
+      .sub-category:active {
+        border-color: #ec4899;
+        background: #fdf2f8;
+        color: #ec4899;
+      }
+
+      .drawer-close {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        width: 30px;
+        height: 30px;
+        border: 0;
+        background: #f3f4f6;
+        color: #4b5563;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone">
+      <header class="app-header">
+        <button class="icon-button" aria-label="返回" onclick="goBack()">
+          <svg
+            width="25"
+            height="25"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M19 12H5"></path>
+            <path d="M12 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <button class="icon-button" id="menuToggle" aria-label="展开分类">
+          <svg
+            width="25"
+            height="25"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+          >
+            <path d="M4 7h16"></path>
+            <path d="M4 12h16"></path>
+            <path d="M4 17h16"></path>
+          </svg>
+        </button>
+        <label class="search-field" aria-label="搜索虚拟商品">
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#6b7280"
+            stroke-width="2.3"
+            stroke-linecap="round"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3.8-3.8"></path>
+          </svg>
+          <input type="search" placeholder="搜索房型、家具、灯具" />
+        </label>
+        <button class="icon-button" aria-label="搜索">
+          <svg
+            width="25"
+            height="25"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-3.8-3.8"></path>
+          </svg>
+        </button>
+      </header>
+
+      <main class="content">
+        <div class="top-strip">
+          <strong>商品空间</strong>
+          <span>房间 / 店铺 / 家居素材</span>
+        </div>
+        <div class="filter-pills" aria-label="商品筛选">
+          <button class="pill active">推荐</button>
+          <button class="pill">房型</button>
+          <button class="pill">软装</button>
+          <button class="pill">灯具</button>
+          <button class="pill">文案</button>
+        </div>
+
+        <section class="masonry-grid" aria-label="商品瀑布流">
+          <article class="product-card">
+            <div class="product-media tall">
+              <img
+                src="assets/products/space-living-room.jpg"
+                alt="现代客厅房型参考"
+              />
+              <span class="tag">房型类</span>
+            </div>
+            <div class="product-info">
+              <h2 class="product-title">云上会客厅全景房型模板</h2>
+              <p class="product-desc">适合个人主页、线上接待、兴趣社群展示</p>
+              <div class="product-row">
+                <span class="price">¥39</span>
+                <span class="sales">已用 1280 次</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-media medium">
+              <img
+                src="assets/products/space-cafe-decor.jpg"
+                alt="咖啡店氛围装饰参考"
+              />
+              <span class="tag">装饰类</span>
+            </div>
+            <div class="product-info">
+              <h2 class="product-title">咖啡角氛围装饰组合</h2>
+              <p class="product-desc">墙面招牌、桌面摆件、光影氛围一组配齐</p>
+              <div class="product-row">
+                <span class="price">¥18</span>
+                <span class="sales">已售 968</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-media short">
+              <img
+                src="assets/products/space-shopfront.jpg"
+                alt="虚拟店铺空间参考"
+              />
+              <span class="tag">房型类</span>
+            </div>
+            <div class="product-info">
+              <h2 class="product-title">街角店铺门头空间</h2>
+              <p class="product-desc">适合商家主页、活动入口、虚拟门店</p>
+              <div class="product-row">
+                <span class="price">¥58</span>
+                <span class="sales">已售 741</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-media tall">
+              <img
+                src="assets/products/space-renovation.jpg"
+                alt="沉浸式休闲房装修参考"
+              />
+              <span class="tag">装修类</span>
+            </div>
+            <div class="product-info">
+              <h2 class="product-title">沉浸式休闲房装修方案</h2>
+              <p class="product-desc">墙面、灯光、软装风格统一的整套配置</p>
+              <div class="product-row">
+                <span class="price">¥86</span>
+                <span class="sales">已用 2310 次</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-media medium">
+              <img
+                src="assets/products/space-furniture.jpg"
+                alt="吧台家具套件参考"
+              />
+              <span class="tag">家具类</span>
+            </div>
+            <div class="product-info">
+              <h2 class="product-title">小型吧台家具套件</h2>
+              <p class="product-desc">吧台、靠椅、陈列架，适合轻社交空间</p>
+              <div class="product-row">
+                <span class="price">¥26</span>
+                <span class="sales">已售 620</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card">
+            <div class="product-media short">
+              <img
+                src="assets/products/space-lighting.jpg"
+                alt="灯具氛围与活动文案参考"
+              />
+              <span class="tag">文案类</span>
+            </div>
+            <div class="product-info">
+              <h2 class="product-title">开业活动空间文案包</h2>
+              <p class="product-desc">标题、公告、引导语、优惠提示四件套</p>
+              <div class="product-row">
+                <span class="price">¥9.9</span>
+                <span class="sales">已售 1547</span>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+
+      <div class="drawer-mask" id="categoryDrawer" aria-hidden="true">
+        <aside class="category-drawer" aria-label="商品分类">
+          <nav class="drawer-tabs" id="categoryTabs"></nav>
+          <section class="drawer-main">
+            <button class="drawer-close" id="drawerClose" aria-label="关闭分类">
+              ×
+            </button>
+            <h2 class="drawer-title" id="drawerTitle">房型类</h2>
+            <div class="sub-category-grid" id="subCategoryGrid"></div>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+    <script>
+      function goBack() {
+        const params = new URLSearchParams(window.location.search)
+        const from = params.get('from')
+
+        if (from === 'room_list') {
+          window.location.href = 'room_list.html'
+          return
+        }
+
+        if (from === 'merchant_shop') {
+          window.location.href = 'merchant_shop.html'
+          return
+        }
+
+        if (window.history.length > 1) {
+          window.history.back()
+          return
+        }
+
+        window.location.href = 'room_list.html'
+      }
+
+      const categoryGroups = [
+        {
+          category: '房型类',
+          children: [
+            '住宅公寓',
+            '复式 Loft',
+            '庭院别墅',
+            '商务写字楼',
+            '店铺空间',
+            '展厅空间',
+            '直播间',
+            '主题房间',
+          ],
+        },
+        {
+          category: '装修类',
+          children: [
+            '现代简约',
+            '国风雅居',
+            '赛博空间',
+            '温馨软装',
+            '商务精装',
+            '复古怀旧',
+            '露营风',
+            '轻奢风',
+          ],
+        },
+        {
+          category: '家具类',
+          children: [
+            '沙发组合',
+            '床与床头柜',
+            '书桌椅',
+            '收纳柜架',
+            '吧台套件',
+            '茶几边桌',
+            '餐桌椅',
+            '展示货架',
+          ],
+        },
+        {
+          category: '文具',
+          children: [
+            '书桌套件',
+            '文件架',
+            '笔记本',
+            '展示牌',
+            '办公小物',
+            '便签贴纸',
+            '画板支架',
+            '资料盒',
+          ],
+        },
+        {
+          category: '装饰类',
+          children: [
+            '墙画海报',
+            '地毯',
+            '窗帘',
+            '绿植',
+            '桌面摆件',
+            '墙面挂件',
+            '屏风隔断',
+            '背景装饰',
+          ],
+        },
+        {
+          category: '饰品类',
+          children: [
+            '挂饰',
+            '收藏摆件',
+            '空间徽章',
+            '节日饰品',
+            '角色周边',
+            '钥匙扣',
+            '纪念牌',
+            '氛围小物',
+          ],
+        },
+        {
+          category: '灯具类',
+          children: [
+            '吊灯',
+            '台灯',
+            '壁灯',
+            '落地灯',
+            '氛围灯带',
+            '招牌灯箱',
+            '舞台射灯',
+            '智能灯组',
+          ],
+        },
+        {
+          category: '文案类',
+          children: [
+            '店铺介绍',
+            '房间说明',
+            '活动文案',
+            '个性签名',
+            '空间公告',
+            '商品标题',
+            '欢迎语',
+            '互动引导',
+          ],
+        },
+      ]
+
+      const drawer = document.getElementById('categoryDrawer')
+      const categoryTabs = document.getElementById('categoryTabs')
+      const drawerTitle = document.getElementById('drawerTitle')
+      const subCategoryGrid = document.getElementById('subCategoryGrid')
+
+      function renderCategory(index) {
+        const current = categoryGroups[index]
+        drawerTitle.textContent = current.category
+        subCategoryGrid.innerHTML = current.children
+          .map(item => `<button class="sub-category">${item}</button>`)
+          .join('')
+
+        Array.from(categoryTabs.children).forEach((tab, tabIndex) => {
+          tab.classList.toggle('active', tabIndex === index)
+        })
+      }
+
+      function renderTabs() {
+        categoryTabs.innerHTML = categoryGroups
+          .map(
+            (group, index) =>
+              `<button class="drawer-tab${index === 0 ? ' active' : ''}" data-index="${index}">${group.category}</button>`,
+          )
+          .join('')
+
+        categoryTabs.addEventListener('click', event => {
+          const tab = event.target.closest('.drawer-tab')
+          if (!tab) return
+          renderCategory(Number(tab.dataset.index))
+        })
+      }
+
+      document.getElementById('menuToggle').addEventListener('click', () => {
+        drawer.classList.add('open')
+        drawer.setAttribute('aria-hidden', 'false')
+      })
+
+      document.getElementById('drawerClose').addEventListener('click', () => {
+        drawer.classList.remove('open')
+        drawer.setAttribute('aria-hidden', 'true')
+      })
+
+      drawer.addEventListener('click', event => {
+        if (event.target === drawer) {
+          drawer.classList.remove('open')
+          drawer.setAttribute('aria-hidden', 'true')
+        }
+      })
+
+      renderTabs()
+      renderCategory(0)
+    </script>
+  </body>
+</html>

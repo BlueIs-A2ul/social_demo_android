@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html data-immersive-translate-page-theme="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>3D 全景房间 - 赛博客厅</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<style>
+        @keyframes slowRotate {
+            0% { transform: scale(1.04) translateX(0); }
+            50% { transform: scale(1.04) translateX(-2%); }
+            100% { transform: scale(1.04) translateX(0); }
+        }
+        .panorama-bg {
+            animation: slowRotate 80s linear infinite;
+            width: 100%;
+            height: 100%;
+            min-width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            object-position: center;
+            filter: brightness(0.96);
+        }
+        
+        .safe-top { padding-top: env(safe-area-inset-top); }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
+        ::-webkit-scrollbar { display: none; }
+        
+        .glass {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #toast {
+            transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            pointer-events: none;
+        }
+
+        .nav-active {
+            color: #ec4899 !important;
+        }
+        .nav-active iconify-icon {
+            color: #ec4899 !important;
+        }
+
+        /* 统一容器约束 */
+        .app-container {
+            width: 100vw;
+            height: 100dvh;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: #0F0F1A;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 100vw), (max-height: 100dvh) {
+            .app-container {
+                width: 100vw;
+                height: 100dvh;
+                margin: 0;
+            }
+        }
+    </style>
+<style data-id="immersive-translate-input-injected-css"></style></head>
+<body class="bg-black text-white min-h-screen font-sans flex items-center justify-center is-mb-ai-setting">
+<div class="app-container">
+<!-- 1. 加载动画层 -->
+<div class="absolute inset-0 z-50 bg-[#0F0F1A] flex flex-col items-center justify-center transition-opacity duration-1000" id="loading-screen" style="opacity: 0; display: none;">
+<div class="mb-8">
+<iconify-icon class="text-6xl text-[#ec4899] animate-pulse" icon="solar:planet-bold-duotone"></iconify-icon>
+</div>
+<div class="w-48 h-1 bg-white/10 rounded-full overflow-hidden mb-4">
+<div class="w-0 h-full bg-gradient-to-r from-[#ec4899] via-pink-500 to-pink-500 transition-all duration-300" id="loading-bar" style="width: 100%;"></div>
+</div>
+<p class="text-xs text-gray-500 tracking-widest uppercase">Initializing Space <span id="loading-text">100%</span></p>
+</div>
+<!-- 2. 全景内容区 -->
+<div class="absolute inset-0 z-10 bg-gradient-to-br from-[#0F0F1A] to-[#1A1A2E]" id="panorama-container">
+<!-- 全景背景图 -->
+<img alt="横屏房间建模背景" class="panorama-bg" id="panorama-img" src="assets/packaged/sq/房间建模图片1.png"/>
+<!-- 叠加渐变遮罩 -->
+<div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40 pointer-events-none"></div>
+</div>
+<!-- 3. 顶部悬浮栏 -->
+<div class="absolute top-0 left-0 right-0 z-30 safe-top">
+<div class="mx-4 mt-4 px-4 py-3 glass rounded-2xl flex items-center justify-between" style="background-color: rgba(218, 218, 218, 0.35);">
+<button class="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors" onclick="goBack()">
+<iconify-icon class="text-2xl" icon="solar:alt-arrow-left-linear"></iconify-icon>
+</button>
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">我的房间</span>
+</div>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-[#ec4899] text-white shadow-lg shadow-pink-500/20">
+<iconify-icon class="text-xl" icon="solar:videocamera-record-bold"></iconify-icon>
+</button>
+</div>
+</div>
+<!-- 4. 底部交互层 -->
+<!-- 5. Toast -->
+<div class="absolute top-24 left-1/2 -translate-x-1/2 z-50 glass px-6 py-2.5 rounded-full text-xs font-medium opacity-0" id="toast">
+        </div>
+</div>
+<script>
+        function goBack() {
+            const params = new URLSearchParams(window.location.search);
+            const from = params.get('from');
+            const returnMap = {
+                announcement_detail: 'announcement_detail.html',
+                owner_profile: 'owner_profile.html',
+                radar_friend: 'radar_friend.html',
+                room_list: 'room_list.html'
+            };
+
+            if (returnMap[from]) {
+                window.location.href = returnMap[from];
+                return;
+            }
+
+            if (window.history.length > 1) {
+                window.history.back();
+                return;
+            }
+
+            window.location.href = 'room_list.html';
+        }
+
+        // 模拟加载进度
+        let progress = 0;
+        const bar = document.getElementById('loading-bar');
+        const text = document.getElementById('loading-text');
+        const screen = document.getElementById('loading-screen');
+
+        const interval = setInterval(() => {
+            progress += Math.floor(Math.random() * 10) + 5;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    screen.style.opacity = '0';
+                    setTimeout(() => screen.style.display = 'none', 1000);
+                }, 500);
+            }
+            bar.style.width = `${progress}%`;
+            text.textContent = `${progress}%`;
+        }, 100);
+
+        // Toast 功能
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, 10px)';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 0)';
+            }, 2000);
+        }
+    </script>
+</body></html>
