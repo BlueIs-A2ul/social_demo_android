@@ -1,10 +1,10 @@
-<!doctype html>
+﻿<!doctype html>
 
 <html data-immersive-translate-page-theme="light" lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-    <title>个人空间 - 元社交</title>
+    <title>个人空间 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
     <script src="assets/vendor/iconify-icon.min.js"></script>
     <style>
@@ -166,6 +166,110 @@
       .room-action-menu button:active {
         background: rgba(253, 242, 248, 0.95);
         color: #ec4899;
+      }
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.5);
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+      }
+      .modal-overlay.hidden {
+        display: none;
+      }
+      .modal-card {
+        width: 100%;
+        max-width: 360px;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+      }
+      .modal-close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        color: #6b7280;
+        padding: 4px;
+      }
+      .modal-close:active {
+        color: #000;
+      }
+      .idcard-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+      }
+      .idcard-field {
+        padding: 9px 0;
+        border-bottom: 1px solid #f3f4f6;
+        display: flex;
+        gap: 12px;
+      }
+      .idcard-field-label {
+        width: 72px;
+        flex: none;
+        color: #9ca3af;
+        font-size: 11px;
+      }
+      .idcard-field-value {
+        color: #374151;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .resume-clone-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        border: 1px solid #000;
+        color: #000;
+        background: #fff;
+        font-family: SimSun, 'Songti SC', 'Noto Serif SC', serif;
+        font-size: 12px;
+      }
+      .resume-clone-table td {
+        border: 1px solid #000;
+        padding: 0 6px;
+        height: 52px;
+        vertical-align: middle;
+      }
+      .resume-clone-table .resume-top-row td {
+        height: 62px;
+      }
+      .resume-clone-table .resume-unit-row td {
+        height: 30px;
+      }
+      .resume-label {
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.75;
+        font-weight: 400;
+        white-space: normal;
+      }
+      .resume-label-multiline {
+        display: inline-block;
+        line-height: 1.8;
+      }
+      .resume-value {
+        text-align: left;
+        font-size: 11px;
+        line-height: 1.35;
+        word-break: break-word;
+      }
+      .resume-photo-cell {
+        padding: 8px !important;
+        text-align: center;
+      }
+      .resume-photo-box {
+        width: 78px;
+        height: 78px;
+        margin: 0 auto;
+        object-fit: cover;
+        border: 1px solid #000;
       }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
@@ -393,6 +497,42 @@
           查看个人简历
         </button>
       </div>
+      <!-- 虚拟身份证弹窗 -->
+      <div aria-hidden="true" class="modal-overlay hidden" id="idCardModal">
+        <div class="modal-card border border-gray-200 p-5">
+          <button aria-label="关闭" class="modal-close" onclick="closeIDCardModal()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+          </button>
+          <h3 class="text-center font-bold text-gray-900 text-base mb-4">
+            虚拟身份证
+          </h3>
+          <div id="idCardContent"></div>
+          <div class="mt-4 flex justify-center">
+            <button class="px-6 py-2 border border-black text-sm font-bold hover:bg-gray-100" onclick="closeIDCardModal()">
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 个人简历弹窗 -->
+      <div aria-hidden="true" class="modal-overlay hidden" id="resumeModal">
+        <div class="modal-card border border-black p-4">
+          <button aria-label="关闭" class="modal-close" onclick="closeResumeModal()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+              <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+          </button>
+          <h2 class="text-center text-lg font-bold mb-4">个人简历</h2>
+          <div id="resumeContent"></div>
+          <div class="mt-4 flex justify-center">
+            <button class="px-6 py-2 border border-black text-sm font-bold hover:bg-gray-100" onclick="closeResumeModal()">
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
       <!-- Toast -->
       <div class="" id="toast">进入星河的房间</div>
     </div>
@@ -429,15 +569,249 @@
         menu.setAttribute('aria-hidden', 'true')
       }
 
+      const userProfile = {
+        name: '小云',
+        vId: 'V8001',
+        gender: '女',
+        birth: '1998年3月',
+        ethnic: '汉族',
+        job: '空间设计师',
+        jobStatus: '在职',
+        skills: '空间设计、室内陈设',
+        specialty: '软装搭配、摄影',
+        hobbies: '旅行、音乐、烘焙',
+        prevUnit: '云上设计工作室',
+        education: '广州美术学院 环境设计 本科',
+        contact: '陈经理',
+        phone: '138****0000',
+        evaluation: '热爱空间设计，擅长用光影与材质营造沉浸式社交空间',
+        avatar:
+          'https://modao.cc/agent-py/media/user_assets/2026-07-15/45c974594ffb45d480a2d4bd1533e917.png',
+      }
+
+      const roomOwners = [
+        {
+          name: '王爷符',
+          vId: 'V1122',
+          gender: '男',
+          birth: '1993年6月',
+          ethnic: '汉族',
+          job: '游戏策划',
+          jobStatus: '在职',
+          skills: '游戏策划、关卡设计',
+          specialty: '场景叙事',
+          hobbies: '桌游、主机游戏',
+          prevUnit: '星海互娱',
+          education: '电子科技大学 数字媒体 本科',
+          contact: 'HR-王姐',
+          phone: '137****0000',
+          evaluation: '喜欢在虚拟空间里构建有故事的场景',
+          avatar: 'assets/packaged/sq/微信图片_20260727180857.jpg',
+        },
+        {
+          name: '小美',
+          vId: 'V2211',
+          gender: '女',
+          birth: '1999年10月',
+          ethnic: '汉族',
+          job: '插画师',
+          jobStatus: '自由职业',
+          skills: '插画、手绘',
+          specialty: '萌系风格',
+          hobbies: '动漫、手工',
+          prevUnit: '拾光插画工作室',
+          education: '四川美术学院 插画 本科',
+          contact: '合作方-刘先生',
+          phone: '136****1111',
+          evaluation: '用画笔记录每个房间的温度',
+          avatar:
+            'https://modao.cc/agent-py/media/user_assets/2026-07-16/a360e987b470405b93134ddbf8e0e7c2.png',
+        },
+        {
+          name: '蓝叔',
+          vId: 'V3300',
+          gender: '男',
+          birth: '1987年4月',
+          ethnic: '汉族',
+          job: '咖啡馆主理人',
+          jobStatus: '经营中',
+          skills: '咖啡烘焙、特调',
+          specialty: '手冲咖啡',
+          hobbies: '园艺、黑胶唱片',
+          prevUnit: '蓝鹊咖啡（自营）',
+          education: '云南大学 食品科学 本科',
+          contact: '店员-阿岚',
+          phone: '135****2222',
+          evaluation: '每一杯咖啡都是一次交流',
+          avatar: './assets/shops/shop-coffee-bar.png',
+        },
+        {
+          name: '布朗',
+          vId: 'V4455',
+          gender: '男',
+          birth: '1990年9月',
+          ethnic: '汉族',
+          job: '餐饮店主理人',
+          jobStatus: '经营中',
+          skills: '意式料理、面团发酵',
+          specialty: '窑炉披萨',
+          hobbies: '骑行、美食探店',
+          prevUnit: '布朗披萨（自营）',
+          education: '新东方烹饪学校',
+          contact: '店员-小可',
+          phone: '134****3333',
+          evaluation: '坚持手作窑炉披萨，欢迎来我的小店坐坐',
+          avatar: './assets/shops/shop-pizza-front.png',
+        },
+        {
+          name: '妮妮',
+          vId: 'V5566',
+          gender: '女',
+          birth: '1996年12月',
+          ethnic: '汉族',
+          job: '电台主播',
+          jobStatus: '在职',
+          skills: '播音、内容策划',
+          specialty: '声音表达',
+          hobbies: '播客、养猫',
+          prevUnit: '云上FM',
+          education: '浙江传媒学院 播音主持 本科',
+          contact: '经纪人-钱姐',
+          phone: '133****4444',
+          evaluation: '用声音陪伴每个深夜',
+          avatar: 'assets/packaged/sq/妮妮的播客.png',
+        },
+      ]
+
+      let currentRoomIndex = 0
+
+      function showIDCard(data) {
+        const content = document.getElementById('idCardContent')
+        content.innerHTML = `
+          <div class="flex items-center gap-3 pb-4 border-b border-gray-100">
+            <img class="w-16 h-16 object-cover border border-gray-200 flex-none" src="${data.avatar}" alt="${data.name}">
+            <div class="min-w-0">
+              <div class="idcard-name">${data.name}</div>
+              <div class="text-xs text-gray-400 mt-1">虚拟身份证编号：${data.vId}</div>
+            </div>
+          </div>
+          <div class="pt-1">
+            <div class="idcard-field"><span class="idcard-field-label">出生</span><span class="idcard-field-value">${data.birth}</span></div>
+            <div class="idcard-field"><span class="idcard-field-label">性别</span><span class="idcard-field-value">${data.gender}</span></div>
+            <div class="idcard-field"><span class="idcard-field-label">民族</span><span class="idcard-field-value">${data.ethnic}</span></div>
+            <div class="idcard-field"><span class="idcard-field-label">职业</span><span class="idcard-field-value">${data.job}</span></div>
+            <div class="idcard-field"><span class="idcard-field-label">职业现状</span><span class="idcard-field-value">${data.jobStatus}</span></div>
+            <div class="idcard-field"><span class="idcard-field-label">技能</span><span class="idcard-field-value">${data.skills}</span></div>
+            <div class="idcard-field"><span class="idcard-field-label">特长</span><span class="idcard-field-value">${data.specialty}</span></div>
+            <div class="idcard-field"><span class="idcard-field-label">爱好</span><span class="idcard-field-value">${data.hobbies}</span></div>
+          </div>
+        `
+        const modal = document.getElementById('idCardModal')
+        modal.classList.remove('hidden')
+        modal.setAttribute('aria-hidden', 'false')
+      }
+
+      function closeIDCardModal() {
+        const modal = document.getElementById('idCardModal')
+        modal.classList.add('hidden')
+        modal.setAttribute('aria-hidden', 'true')
+      }
+
+      function showResume(data) {
+        const content = document.getElementById('resumeContent')
+        content.innerHTML = `
+                <table class="resume-clone-table">
+                    <colgroup>
+                        <col class="resume-col-label" style="width: 16.66%;">
+                        <col class="resume-col-value" style="width: 16.66%;">
+                        <col class="resume-col-label" style="width: 16.66%;">
+                        <col class="resume-col-value" style="width: 16.66%;">
+                        <col class="resume-col-photo" style="width: 33.36%;">
+                    </colgroup>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">姓名</td>
+                        <td class="resume-value">${data.name}</td>
+                        <td class="resume-label">性别</td>
+                        <td class="resume-value">${data.gender}</td>
+                        <td class="resume-photo-cell" rowspan="3">
+                            <img src="${data.avatar}" alt="${data.name}" class="resume-photo-box">
+                        </td>
+                    </tr>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">出生</td>
+                        <td class="resume-value">${data.birth}</td>
+                        <td class="resume-label">民族</td>
+                        <td class="resume-value">${data.ethnic}</td>
+                    </tr>
+                    <tr class="resume-top-row">
+                        <td class="resume-label">职业</td>
+                        <td class="resume-value">${data.job}</td>
+                        <td class="resume-label"><span class="resume-label-multiline">职业<br>现状</span></td>
+                        <td class="resume-value">${data.jobStatus}</td>
+                    </tr>
+                    <tr class="resume-unit-row">
+                        <td class="resume-label" rowspan="2"><span class="resume-label-multiline">上任单<br>位名称</span></td>
+                        <td class="resume-value" colspan="2" rowspan="2">${data.prevUnit}</td>
+                        <td class="resume-label">联系人</td>
+                        <td class="resume-value">${data.contact}</td>
+                    </tr>
+                    <tr class="resume-unit-row">
+                        <td class="resume-label">电话</td>
+                        <td class="resume-value">${data.phone}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label"><span class="resume-label-multiline">教育<br>经历</span></td>
+                        <td class="resume-value" colspan="4">${data.education}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">技能</td>
+                        <td class="resume-value" colspan="4">${data.skills}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">特长</td>
+                        <td class="resume-value" colspan="4">${data.specialty}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label">爱好</td>
+                        <td class="resume-value" colspan="4">${data.hobbies}</td>
+                    </tr>
+                    <tr>
+                        <td class="resume-label"><span class="resume-label-multiline">自我<br>评价</span></td>
+                        <td class="resume-value" colspan="4">${data.evaluation}</td>
+                    </tr>
+                </table>
+        `
+        const modal = document.getElementById('resumeModal')
+        modal.classList.remove('hidden')
+        modal.setAttribute('aria-hidden', 'false')
+      }
+
+      function closeResumeModal() {
+        const modal = document.getElementById('resumeModal')
+        modal.classList.add('hidden')
+        modal.setAttribute('aria-hidden', 'true')
+      }
+
       function handleAvatarAction(event, label) {
         event.stopPropagation()
         closeAvatarMenu()
-        showToast(label)
+        if (label === '分享主页') {
+          location.href = 'publish.html'
+        } else if (label === '查看虚拟身份证') {
+          showIDCard(userProfile)
+        } else if (label === '查看个人简历') {
+          showResume(userProfile)
+        }
       }
 
       function showRoomProfileMenu(event) {
         event.stopPropagation()
         closeAvatarMenu()
+        const grid = event.currentTarget.parentElement
+        currentRoomIndex = Array.prototype.indexOf.call(
+          grid.children,
+          event.currentTarget,
+        )
         const menu = document.getElementById('roomActionMenu')
         const container = document.querySelector('.max-w-\\[393px\\]')
         const containerRect = container.getBoundingClientRect()
@@ -456,7 +830,14 @@
       function handleRoomProfileAction(event, label) {
         event.stopPropagation()
         closeRoomProfileMenu()
-        showToast(label)
+        const owner = roomOwners[currentRoomIndex] || roomOwners[0]
+        if (label === '分享主页') {
+          location.href = 'owner_profile.html'
+        } else if (label === '查看虚拟身份证') {
+          showIDCard(owner)
+        } else if (label === '查看个人简历') {
+          showResume(owner)
+        }
       }
 
       document.addEventListener('click', () => {

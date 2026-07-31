@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node scripts/check-responsive-layout.js"
+    "test": "node scripts/check-responsive-layout.js",
+    "dev": "node scripts/dev-server.js"
   },
   "keywords": [],
   "author": "",
