@@ -66,6 +66,7 @@
     <!-- 移动端容器 -->
     <div
       class="relative max-w-[393px] h-[100dvh] mx-auto bg-white overflow-hidden flex flex-col shadow-2xl border-x border-gray-300"
+      style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
       <!-- 1. 顶部 Header -->
       <header
@@ -851,6 +852,7 @@
       <div
         class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[393px] bg-white z-[60] transform transition-transform duration-300 translate-y-full"
         id="share-panel"
+        style="padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
       >
         <div class="pt-4 px-4 pb-8">
           <div class="text-center text-xs text-gray-400 mb-6">分享到</div>
@@ -1051,6 +1053,7 @@
       <div
         class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[393px] h-[60%] bg-white z-[60] transform transition-transform duration-300 flex flex-col translate-y-full"
         id="comment-drawer"
+        style="padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
       >
         <div
           class="flex-none flex items-center justify-between px-4 h-12 border-b border-gray-100"

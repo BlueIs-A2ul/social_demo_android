@@ -25,6 +25,8 @@
             flex-direction: column;
             overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+            padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;

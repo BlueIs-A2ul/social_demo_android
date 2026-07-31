@@ -7,7 +7,10 @@
 <script src="assets/vendor/tailwindcss.js"></script>
 <style>
     body { background-color: #f3f4f6; margin: 0; overflow: hidden; font-family: -apple-system, sans-serif; }
-    .app-container { width: min(100vw, 393px); height: 100dvh; margin: 0 auto; position: relative; overflow: hidden; display: flex; flex-direction: column; background: white; }
+    .app-container { width: min(100vw, 393px); height: 100dvh; margin: 0 auto; position: relative; overflow: hidden; display: flex; flex-direction: column; background: white;
+        padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+        padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+    }
     ::-webkit-scrollbar { display: none; }
     * { border-radius: 0 !important; }
     .avatar { border-radius: 9999px !important; display: block; border: 1px solid #fce7f3; background: #fdf2f8; object-fit: cover; flex: none; }

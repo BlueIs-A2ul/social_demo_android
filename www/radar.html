@@ -28,6 +28,8 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+        padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
       }
       .map-container {
         position: relative;

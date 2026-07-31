@@ -23,6 +23,8 @@
       position: relative;
       border: 1px solid #e5e7eb;
       box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+      padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+      padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
     }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

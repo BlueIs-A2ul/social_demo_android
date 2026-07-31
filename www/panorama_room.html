@@ -25,8 +25,8 @@
             filter: brightness(0.96);
         }
         
-        .safe-top { padding-top: env(safe-area-inset-top); }
-        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        .safe-top { padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); }
+        .safe-bottom { padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)); }
 
         ::-webkit-scrollbar { display: none; }
         

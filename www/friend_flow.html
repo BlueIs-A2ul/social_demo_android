@@ -8,7 +8,10 @@
 <script src="assets/vendor/iconify-icon.min.js"></script>
 <style>
         body { background-color: #F8F9FA; font-family: -apple-system, sans-serif; }
-        .app-container { width: min(100vw, 393px); height: 100dvh; background: white; margin: 0 auto; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+        .app-container { width: min(100vw, 393px); height: 100dvh; background: white; margin: 0 auto; position: relative; overflow: hidden; display: flex; flex-direction: column;
+            padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+            padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+        }
         .tab-active { color: #ec4899; font-weight: bold; }
         .tab-active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 20px; height: 3px; background: #ec4899; border-radius: 2px; }
         .straight-edge { border-radius: 0 !important; }

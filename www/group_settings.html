@@ -7,7 +7,9 @@
 <script src="assets/vendor/tailwindcss.js"></script>
 <style>
     body { background-color: #f3f4f6; margin: 0; overflow: hidden; font-family: -apple-system, sans-serif; }
-    .app-container { width: min(100vw, 393px); height: 100dvh; margin: 0 auto; position: relative; overflow: hidden; display: flex; flex-direction: column; background: white; }
+    .app-container { width: min(100vw, 393px); height: 100dvh; margin: 0 auto; position: relative; overflow: hidden; display: flex; flex-direction: column; background: white;
+        padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+    }
     ::-webkit-scrollbar { display: none; }
     * { border-radius: 0 !important; }
     .avatar { border-radius: 9999px !important; display: block; border: 1px solid #fce7f3; background: #fdf2f8; object-fit: cover; flex: none; }
@@ -296,7 +298,7 @@
         </section>
     </main>
 
-    <footer class="absolute bottom-0 left-0 right-0 border-t border-gray-100 bg-white p-4">
+    <footer class="absolute bottom-0 left-0 right-0 border-t border-gray-100 bg-white p-4" style="padding-bottom: calc(1rem + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));">
         <div class="grid grid-cols-2 gap-2">
             <button class="h-10 border border-pink-main text-pink-main text-xs font-bold" onclick="showToast('打开添加成员')">添加成员</button>
             <button class="h-10 bg-pink-main text-white text-xs font-bold" onclick="showToast('进入分类编辑')">编辑分类</button>
