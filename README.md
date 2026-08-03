@@ -1,7 +1,8 @@
 # 元社交 Demo 安卓打包构建说明
 
-> 把 `原型设计图` 的 HTML 原型打包成可安装的 Android APK（Capacitor 套壳，不接 Godot、无后端）。
-> 本文件记录**本机**（Windows）的完整构建流程，方便新会话直接照着操作。
+> Capacitor 套壳的 Android 原生应用（不接 Godot、无后端），UI 全部在 `www/`（纯 HTML/Tailwind）。
+> 本目录已**完全独立**：自带页面源码、git 版本管理、原生 Android 工程，不依赖任何外部原型目录。
+> 本文件记录**本机**（Windows）的构建流程，方便新会话直接照着操作。
 
 ---
 
@@ -9,18 +10,19 @@
 
 | 路径 | 作用 |
 |---|---|
-| `D:\desktop\元宇宙项目\原型设计图\` | 源原型（存档，不要直接改） |
-| `D:\desktop\元宇宙项目\元社交-demo.apk` | 最终交付的 APK |
-| `D:\android-demo\www\` | **要改的页面代码**（原型的可编辑副本） |
-| `D:\android-demo\capacitor.config.json` | 应用配置（应用名 / 启动页 / scheme） |
-| `D:\android-demo\android\` | 原生 Android 工程（Capacitor 生成） |
-| `D:\android-demo\android\app\build\outputs\apk\debug\app-debug.apk` | 构建产物 |
+| `www\` | **页面源码（唯一真源）**，改这里就行 |
+| `capacitor.config.json` | 应用配置（应用名 / 启动页 / scheme） |
+| `android\` | 原生 Android 工程（Capacitor 生成） |
+| `android\app\src\main\res\values-v23\styles.xml` | 状态栏 / 导航栏配色（白底 + 深色图标） |
+| `android\app\src\main\res\values-v27\styles.xml` | 刘海 / 挖孔屏适配、手势条深色图标 |
+| `android\app\build\outputs\apk\debug\app-debug.apk` | 构建产物 / 交付 APK |
+| `.git`（git 仓库） | 版本管理，见第七节 |
 
-**编辑代码改 `D:\android-demo\www\`，改完必须 `cap sync` 再打包，否则不生效。**
+**编辑代码改 `www\`，改完必须 `cap sync` 再打包，否则不生效。**
 
-### 为什么工程在 `D:\android-demo` 而不是桌面项目里？
-Android 构建工具（AGP）**不允许在含中文的路径下编译**（`D:\desktop\元宇宙项目` 有中文）。
-工程已整体移到纯英文路径 `D:\android-demo`，不要移回中文目录。
+### 路径要求：必须是纯英文
+Android 构建工具（AGP）**不允许在含中文的路径下编译**。
+本工程已完全独立，复制到任何地方都可以直接构建，但**路径中不能有中文 / 空格**。
 
 ---
 
@@ -49,7 +51,7 @@ Android 构建工具（AGP）**不允许在含中文的路径下编译**（`D:\d
 
 ```powershell
 # 1. 改页面
-#   编辑 D:\android-demo\www\ 下的 html / assets
+#   编辑 www\ 下的 html / assets（www 是源码真源，无需从别处同步）
 
 # 2. 同步到 Android 工程（改完必做）
 cd D:\android-demo
@@ -62,9 +64,8 @@ $env:ANDROID_SDK_ROOT = "C:\Android\Sdk"
 cd D:\android-demo\android
 .\gradlew.bat assembleDebug
 
-# 4. 拷出交付物
-Copy-Item app\build\outputs\apk\debug\app-debug.apk `
-    -Destination "D:\desktop\元宇宙项目\元社交-demo.apk" -Force
+# 4. 交付物就在本目录内，直接取用即可
+#   android\app\build\outputs\apk\debug\app-debug.apk（约 28.6MB）
 ```
 
 成功后提示 `BUILD SUCCESSFUL`，APK 约 28.6MB。
@@ -74,7 +75,7 @@ Copy-Item app\build\outputs\apk\debug\app-debug.apk `
 - **USB 调试**：手机开「开发者选项→USB 调试」，连电脑后：
   ```powershell
   & "C:\Android\Sdk\platform-tools\adb.exe" devices   # 确认手机在线
-  & "C:\Android\Sdk\platform-tools\adb.exe" install -r "D:\desktop\元宇宙项目\元社交-demo.apk"
+  & "C:\Android\Sdk\platform-tools\adb.exe" install -r "D:\android-demo\android\app\build\outputs\apk\debug\app-debug.apk"
   ```
 
 ---
@@ -84,9 +85,11 @@ Copy-Item app\build\outputs\apk\debug\app-debug.apk `
 | 想改什么 | 改哪里 |
 |---|---|
 | 页面内容 / 跳转 | `www\*.html`（改后 `cap sync`） |
-| 应用名 / 包名 / 启动页 | `D:\android-demo\capacitor.config.json` |
+| 应用名 / 包名 / 启动页 | `capacitor.config.json` |
 | 桌面图标 / 闪屏 | `android\app\src\main\res\mipmap-*\ic_launcher*.png`、`drawable\splash.png` |
 | 横竖屏 / 权限 | `android\app\src\main\AndroidManifest.xml`（当前锁竖屏） |
+| 状态栏 / 全面屏 | 原生：`res\values-v23`（白底深色图标）、`res\values-v27`（挖孔屏适配）；页面：`www\*.html` 根容器已带 safe-area padding，真机验证即可 |
+| 版本号 / 版本名 | `android\app\build.gradle` 的 `versionCode` / `versionName` |
 
 **启动页配置键是 `server.appStartPath`（不是 startPath），否则不生效：**
 ```json
@@ -98,7 +101,7 @@ Copy-Item app\build\outputs\apk\debug\app-debug.apk `
 ## 五、常见坑
 
 1. **启动没进 login 页** → 检查 `capacitor.config.json` 是 `appStartPath` 而不是 `startPath`。
-2. **构建报非 ASCII 路径错误** → 工程必须留在 `D:\android-demo`，别移回中文目录。
+2. **构建报非 ASCII 路径错误** → 工程路径不能含中文 / 空格，保持纯英文路径。
 3. **构建卡在 `dl.google.com`/TLS 握手** → 说明全局镜像脚本失效了，重建 `C:\Users\17383\.gradle\init.d\mirror.gradle`：
    ```groovy
    allprojects {
@@ -121,7 +124,27 @@ Copy-Item app\build\outputs\apk\debug\app-debug.apk `
 ## 六、每次构建的固定步骤速查
 
 ```
-cd D:\android-demo  →  改 www  →  npx cap sync android
+改 www  →  npx cap sync android
 → 设 JAVA_HOME/ANDROID_HOME  →  cd android → .\gradlew.bat assembleDebug
-→ 拷贝 app-debug.apk 到 D:\desktop\元宇宙项目\元社交-demo.apk
+→ 交付物 = android\app\build\outputs\apk\debug\app-debug.apk
 ```
+
+---
+
+## 七、Git 版本管理
+
+本工程已纳入 git 管理（带 `origin` 远程），改动前先看状态、提交留痕，方便回溯。
+
+```powershell
+git status                # 查看改动
+git add -A                # 暂存全部
+git commit -m "feat: ..." # 提交（见下方规范）
+git log --oneline         # 查看历史
+```
+
+**提交信息规范**（conventional commits）：
+- `feat: ...` 新功能，如 `feat: add fullscreen (edge-to-edge) adaptation`
+- `fix: ...` 修 bug，如 `fix: correct Capacitor start path`
+- `chore: ...` 构建 / 杂项，如 `chore: baseline snapshot before ...`
+
+**约定**：大改动前先提交一次当前状态作为基线，再单独提交改动，便于随时回滚。
