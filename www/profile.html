@@ -298,7 +298,7 @@
               <img
                 alt="头像"
                 class="w-full h-full object-cover"
-                src="https://modao.cc/agent-py/media/user_assets/2026-07-15/45c974594ffb45d480a2d4bd1533e917.png"
+                src="assets/packaged/45c974594ffb45d480a2d4bd1533e917.png"
               />
             </button>
             <div
@@ -403,7 +403,7 @@
           <!-- 房间 1 -->
           <div
             class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showRoomProfileMenu(event)"
+            onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -420,13 +420,13 @@
           <!-- 房间 2 -->
           <div
             class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showRoomProfileMenu(event)"
+            onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
                 alt="房间缩略图"
                 class="w-full h-full object-cover"
-                src="https://modao.cc/agent-py/media/user_assets/2026-07-16/a360e987b470405b93134ddbf8e0e7c2.png"
+                src="assets/packaged/a360e987b470405b93134ddbf8e0e7c2.png"
               />
             </div>
             <span
@@ -437,7 +437,7 @@
           <!-- 房间 3 -->
           <div
             class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showRoomProfileMenu(event)"
+            onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -454,7 +454,7 @@
           <!-- 房间 4 -->
           <div
             class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showRoomProfileMenu(event)"
+            onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -471,7 +471,7 @@
           <!-- 房间 5 -->
           <div
             class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showRoomProfileMenu(event)"
+            onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -587,7 +587,7 @@
         phone: '138****0000',
         evaluation: '热爱空间设计，擅长用光影与材质营造沉浸式社交空间',
         avatar:
-          'https://modao.cc/agent-py/media/user_assets/2026-07-15/45c974594ffb45d480a2d4bd1533e917.png',
+          'assets/packaged/45c974594ffb45d480a2d4bd1533e917.png',
       }
 
       const roomOwners = [
@@ -626,7 +626,7 @@
           phone: '136****1111',
           evaluation: '用画笔记录每个房间的温度',
           avatar:
-            'https://modao.cc/agent-py/media/user_assets/2026-07-16/a360e987b470405b93134ddbf8e0e7c2.png',
+            'assets/packaged/a360e987b470405b93134ddbf8e0e7c2.png',
         },
         {
           name: '蓝叔',
@@ -833,7 +833,7 @@
         closeRoomProfileMenu()
         const owner = roomOwners[currentRoomIndex] || roomOwners[0]
         if (label === '分享主页') {
-          location.href = 'owner_profile.html'
+          showToast('建设中')
         } else if (label === '查看虚拟身份证') {
           showIDCard(owner)
         } else if (label === '查看个人简历') {

@@ -77,7 +77,7 @@
   </head>
   <body class="bg-gray-50 is-mb-ai-setting" style="opacity: 1">
     <div
-      class="max-w-[393px] h-[100dvh] mx-auto bg-white overflow-hidden flex flex-col relative"
+      class="max-w-[393px] min-h-[100dvh] mx-auto bg-white flex flex-col relative"
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
       <!-- 顶部用户信息区 -->
@@ -93,7 +93,7 @@
             <img
               alt="User Avatar"
               class="w-full h-full object-cover"
-              src="https://modao.cc/agent-py/media/user_assets/2026-07-15/d51ada3793fa4999ba92c028ae4313f7.png"
+              src="assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png"
             />
           </div>
           <!-- 用户信息 -->
@@ -169,7 +169,7 @@
       </div>
       <!-- 「我的房间」大盒子 -->
       <div
-        class="flex-1 flex flex-col border border-gray-200 bg-white mx-5 mt-2 mb-6"
+        class="grow shrink-0 flex flex-col border border-gray-200 bg-white mx-5 mt-2 mb-6"
       >
         <!-- 内部标题行 -->
         <div
@@ -181,7 +181,7 @@
         </div>
         <!-- Grid 网格 -->
         <div
-          class="grid grid-cols-4 flex-1 content-start overflow-y-auto"
+          class="grid grid-cols-4 content-start"
           style="
             border-width: 0px;
             background-color: rgba(255, 255, 255, 0);
@@ -191,7 +191,7 @@
           <!-- 房间 1: 青铜之门 -->
           <div
             class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="window.location.href='panorama_room.html?from=room_list'"
+            onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
               <img
@@ -225,7 +225,7 @@
           <!-- 房间 3: 直播间 -->
           <div
             class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="window.location.href='panorama_room.html?from=room_list'"
+            onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
               <img
@@ -242,7 +242,7 @@
           <!-- 房间 4: 我的播客 -->
           <div
             class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="window.location.href='panorama_room.html?from=room_list'"
+            onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
               <img
@@ -680,7 +680,7 @@
         </div>
       </div>
       <!-- Toast -->
-      <div class="" contenteditable="true" id="toast">进入青铜之门</div>
+      <div class="" id="toast"></div>
     </div>
     <script>
       let currentOpenIndex = -1

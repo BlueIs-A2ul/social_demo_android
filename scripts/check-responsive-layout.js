@@ -91,4 +91,58 @@ if (fs.existsSync(capacitorConfigPath)) {
   }
 }
 
+const behaviorChecks = [
+  {
+    file: 'www/profile.html',
+    forbidden: /location\.href = 'owner_profile\.html'/,
+    message: 'profile room actions should show an in-place construction toast',
+  },
+]
+
+behaviorChecks.forEach(check => {
+  const filePath = path.join(root, check.file)
+  const text = fs.readFileSync(filePath, 'utf8')
+  if (check.forbidden.test(text)) {
+    console.error(`${check.file}: ${check.message}`)
+    process.exit(1)
+  }
+})
+
+const roomListText = fs.readFileSync(path.join(root, 'www/room_list.html'), 'utf8')
+const selectedRoomCards = [
+  {
+    name: '我的房间',
+    start: '<!-- 房间 1: 青铜之门 -->',
+    end: '<!-- 房间 2: 娜美的房间 -->',
+  },
+  {
+    name: '直播间',
+    start: '<!-- 房间 3: 直播间 -->',
+    end: '<!-- 房间 4: 我的播客 -->',
+  },
+  {
+    name: '我的播客',
+    start: '<!-- 房间 4: 我的播客 -->',
+    end: '<!-- 房间 4: 无 (占位) -->',
+  },
+]
+
+selectedRoomCards.forEach(card => {
+  const start = roomListText.indexOf(card.start)
+  const end = roomListText.indexOf(card.end)
+  const block = roomListText.slice(start, end)
+  if (
+    start === -1 ||
+    end === -1 ||
+    block.includes(
+      `onclick="window.location.href='panorama_room.html?from=room_list'"`,
+    )
+  ) {
+    console.error(
+      `www/room_list.html: ${card.name} should show an in-place construction toast`,
+    )
+    process.exit(1)
+  }
+})
+
 console.log('Responsive layout scan passed.')
