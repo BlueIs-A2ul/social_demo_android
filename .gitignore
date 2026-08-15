@@ -12,3 +12,6 @@ Thumbs.db
 dist/
 build/
 *.log
+
+.reasonix/
+reasonix.toml
