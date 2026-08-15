@@ -69,7 +69,7 @@
 </button>
 <!-- 雷达 (居中凸起) -->
 <div class="flex-1 flex justify-center -mt-8 h-full items-start">
-<button class="nav-item w-14 h-14 bg-gradient-to-tr from-[#ec4899] to-[#a29bfe] rounded-full border-4 border-white shadow-lg flex items-center justify-center transition-transform active:scale-90 overflow-hidden nav-active ring-4 ring-pink-200" onclick="switchTab('radar.html', this)">
+<button class="nav-item w-14 h-14 rounded-full border-4 border-white shadow-lg flex items-center justify-center transition-transform active:scale-90 overflow-hidden nav-active" onclick="switchTab('radar.html', this)">
 <img alt="Radar" class="w-full h-full object-cover" src="assets/packaged/sq/新雷达图.png"/>
 </button>
 </div>
@@ -100,7 +100,7 @@
                 item.classList.remove('text-[#ec4899]', 'font-bold', 'nav-active');
                 item.classList.add('text-gray-400');
             } else {
-                item.classList.remove('nav-active', 'ring-4', 'ring-pink-200');
+                item.classList.remove('nav-active');
             }
         });
         
@@ -109,7 +109,7 @@
             el.classList.remove('text-gray-400');
             el.classList.add('text-[#ec4899]', 'font-bold', 'nav-active');
         } else {
-            el.classList.add('nav-active', 'ring-4', 'ring-pink-200');
+            el.classList.add('nav-active');
         }
     }
 
