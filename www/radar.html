@@ -98,14 +98,61 @@
         >
           <!-- 状态栏 & 操作 -->
           <div class="flex justify-between items-center pointer-events-auto">
-            <div
-              class="bg-white/90 backdrop-blur-md px-3 py-1.5 straight-edge shadow-sm flex items-center gap-1 cursor-pointer"
-            >
-              <span class="text-sm font-bold text-gray-800">新疆</span>
-              <iconify-icon
-                class="text-gray-400 text-xs"
-                icon="solar:alt-arrow-down-bold"
-              ></iconify-icon>
+            <div class="flex items-center gap-2">
+              <div
+                class="bg-white/90 backdrop-blur-md px-3 py-1.5 straight-edge shadow-sm flex items-center gap-1 cursor-pointer"
+              >
+                <span class="text-sm font-bold text-gray-800">新疆</span>
+                <iconify-icon
+                  class="text-gray-400 text-xs"
+                  icon="solar:alt-arrow-down-bold"
+                ></iconify-icon>
+              </div>
+              <!-- 半径选择器 -->
+              <div class="relative">
+                <div
+                  class="bg-white/90 backdrop-blur-md px-3 py-1.5 straight-edge shadow-sm flex items-center gap-1 cursor-pointer select-none"
+                  onclick="toggleRadiusMenu(event)"
+                >
+                  <span class="text-sm font-bold text-gray-800" id="radius-value"
+                    >5km</span
+                  >
+                  <iconify-icon
+                    class="text-gray-400 text-xs"
+                    icon="solar:alt-arrow-down-bold"
+                  ></iconify-icon>
+                </div>
+                <!-- 下拉菜单 -->
+                <div
+                  id="radius-menu"
+                  class="hidden absolute left-0 top-full mt-1 bg-white shadow-lg straight-edge z-50 min-w-[96px]"
+                >
+                  <div
+                    class="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
+                    onclick="selectRadius('2km', event)"
+                  >
+                    2km
+                  </div>
+                  <div
+                    class="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
+                    onclick="selectRadius('3km', event)"
+                  >
+                    3km
+                  </div>
+                  <div
+                    class="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
+                    onclick="selectRadius('5km', event)"
+                  >
+                    5km
+                  </div>
+                  <div
+                    class="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
+                    onclick="selectRadius('10km', event)"
+                  >
+                    10km
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="flex gap-2">
               <div
@@ -207,6 +254,12 @@
                       alt="个人VIP2"
                       class="user-vip-badge"
                       src="assets/vip/user-vip-star-2.png"
+                    />
+                    <img
+                      alt="房间已点亮"
+                      class="user-vip-badge cursor-pointer"
+                      src="assets/new_src/雷达点亮房间图.jpg"
+                      onclick="event.stopPropagation(); showToast('进入小雨房间 建设中')"
                     />
                   </div>
                   <div class="text-[12px] mt-0.5">
@@ -356,6 +409,12 @@
                       alt="个人VIP2"
                       class="user-vip-badge"
                       src="assets/vip/user-vip-star-5.png"
+                    />
+                    <img
+                      alt="房间未点亮"
+                      class="user-vip-badge grayscale cursor-pointer"
+                      src="assets/new_src/雷达点亮房间图.jpg"
+                      onclick="event.stopPropagation(); showToast('进入星辰房间 建设中')"
                     />
                   </div>
                   <div class="text-[12px] mt-0.5">
@@ -528,6 +587,26 @@
       <script>
         let currentOpenIndex = -1
         let targetUserIndex = -1
+
+        function toggleRadiusMenu(e) {
+          e.stopPropagation()
+          const menu = document.getElementById('radius-menu')
+          menu.classList.toggle('hidden')
+        }
+
+        function selectRadius(value, e) {
+          e.stopPropagation()
+          document.getElementById('radius-value').textContent = value
+          document.getElementById('radius-menu').classList.add('hidden')
+          showToast('已选择半径 ' + value)
+        }
+
+        document.addEventListener('click', function () {
+          const menu = document.getElementById('radius-menu')
+          if (menu && !menu.classList.contains('hidden')) {
+            menu.classList.add('hidden')
+          }
+        })
 
         function showToast(msg) {
           const toast = document.getElementById('toast')
