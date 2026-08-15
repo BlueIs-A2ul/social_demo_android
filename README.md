@@ -43,7 +43,7 @@ Android 构建工具（AGP）**不允许在含中文的路径下编译**。
 - Gradle 发行版 → 腾讯镜像（已在 `gradle-wrapper.properties` 里配好）
 
 `cap sync` 每次会重新生成 `android\capacitor-cordova-android-plugins\build.gradle`（会把镜像配置覆盖回 google()）。
-因为有全局 init 脚本兜底，所以不影响构建；**不要删除 `mirror.gradle`**。
+全局 init 脚本（settings 级 + 项目级双重注入）会自动兜底，所以不影响构建；**不要删除 `mirror.gradle`**（内容见第五节坑 3）。
 
 ---
 
@@ -65,10 +65,10 @@ cd D:\android-demo\android
 .\gradlew.bat assembleDebug
 
 # 4. 交付物就在本目录内，直接取用即可
-#   android\app\build\outputs\apk\debug\app-debug.apk（约 28.6MB）
+#   android\app\build\outputs\apk\debug\app-debug.apk（约 93.6MB，随 www\assets 素材量变化）
 ```
 
-成功后提示 `BUILD SUCCESSFUL`，APK 约 28.6MB。
+成功后提示 `BUILD SUCCESSFUL`。APK 体积随打包素材变化：早期约 28.6MB，加入 `www\assets\new_src` 素材后约 93.6MB。
 
 ### 装机测试（两种方式）
 - **直接传文件**：把 APK 通过微信/数据线发给手机，点开允许"未知来源应用"后安装。
@@ -102,19 +102,42 @@ cd D:\android-demo\android
 
 1. **启动没进 login 页** → 检查 `capacitor.config.json` 是 `appStartPath` 而不是 `startPath`。
 2. **构建报非 ASCII 路径错误** → 工程路径不能含中文 / 空格，保持纯英文路径。
-3. **构建卡在 `dl.google.com`/TLS 握手** → 说明全局镜像脚本失效了，重建 `C:\Users\17383\.gradle\init.d\mirror.gradle`：
+3. **构建卡在 `dl.google.com`/TLS 握手** → 说明全局镜像脚本失效或被覆盖。`cap sync` 每次会重新生成 `android\capacitor-cordova-android-plugins\build.gradle`，其 `buildscript{}` 块会写回 `google()/mavenCentral()`（settings 级注入管不到这里）。重建 `C:\Users\17383\.gradle\init.d\mirror.gradle`（必须同时含 settings 级 + 项目级注入）：
    ```groovy
-   allprojects {
-       buildscript { repositories {
-           maven { url 'https://maven.aliyun.com/repository/google' }
-           maven { url 'https://maven.aliyun.com/repository/public' }
-           maven { url 'https://maven.aliyun.com/repository/gradle-plugin' } } }
-       repositories {
-           maven { url 'https://maven.aliyun.com/repository/google' }
-           maven { url 'https://maven.aliyun.com/repository/public' }
-           maven { url 'https://maven.aliyun.com/repository/gradle-plugin' } }
+   // settings 级：pluginManagement + dependencyResolutionManagement
+   gradle.beforeSettings { settings ->
+       settings.pluginManagement {
+           repositories {
+               maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
+               maven { url = uri('https://maven.aliyun.com/repository/google') }
+               maven { url = uri('https://maven.aliyun.com/repository/public') }
+           }
+       }
+   }
+   gradle.settingsEvaluated { settings ->
+       settings.dependencyResolutionManagement {
+           repositories {
+               maven { url = uri('https://maven.aliyun.com/repository/google') }
+               maven { url = uri('https://maven.aliyun.com/repository/public') }
+               maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
+           }
+       }
+   }
+   // 项目级：覆盖每个子项目 buildscript 块里的 google()（cap sync 会重新生成）
+   gradle.beforeProject { project ->
+       project.buildscript.repositories {
+           maven { url = uri('https://maven.aliyun.com/repository/google') }
+           maven { url = uri('https://maven.aliyun.com/repository/public') }
+           maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
+       }
+       project.repositories {
+           maven { url = uri('https://maven.aliyun.com/repository/google') }
+           maven { url = uri('https://maven.aliyun.com/repository/public') }
+           maven { url = uri('https://maven.aliyun.com/repository/gradle-plugin') }
+       }
    }
    ```
+   **写入时必须是无 BOM 的 UTF-8**：用 PowerShell `[System.IO.File]::WriteAllText(path, $content, (New-Object System.Text.UTF8Encoding($false)))` 写，否则 Gradle 报 `Unexpected character: '' @ line 1` 编译失败。
 4. **编译 SDK 版本**：本机只有 android-35，工程已把 `compileSdk/targetSdk` 降到 35，Capacitor 8 代码向下兼容可用，**不要改回 36**（环境里没有该平台）。
 5. **演示机需要联网**：页面图片走 modao.cc 外网 CDN，未全量本地化。
 6. **Capacitor 版本**：装了 @capacitor/* 8.4.2，需要 JDK 21（机器上另一套 JDK 17 不够用）。
