@@ -105,6 +105,13 @@
             z-index: 100;
             display: none;
         }
+        .user-vip-badge {
+            display: inline-block;
+            width: 18px;
+            height: auto;
+            margin-left: 4px;
+            vertical-align: -4px;
+        }
     </style>
 <style data-id="immersive-translate-input-injected-css"></style>
 </head>
@@ -161,11 +168,11 @@
 <!-- Card 1 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="1">
 <div class="flex items-start space-x-3">
-<img alt="Dad Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/c97a687cc231462cbf2a99babec71892.jpg"/>
+<img alt="Dad Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/c97a687cc231462cbf2a99babec71892.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">爸爸</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1001</p>
-<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+<h3 class="text-[14px] font-bold text-black">爸爸<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-3.png"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入爸爸房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V1001</p>
+<p class="text-[12px] text-green-500 mt-0.5">在线</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(1, this)">虚拟身份证</button>
@@ -190,11 +197,11 @@
 <!-- Card 2 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="2">
 <div class="flex items-start space-x-3">
-<img alt="Mom Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/8a10396a0c69442684e2576251aff199.jpg"/>
+<img alt="Mom Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/8a10396a0c69442684e2576251aff199.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">妈妈</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1002</p>
-<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+<h3 class="text-[14px] font-bold text-black">妈妈<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-2.png"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入妈妈房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V1002</p>
+<p class="text-[12px] text-green-500 mt-0.5">在线</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(2, this)">虚拟身份证</button>
@@ -219,11 +226,11 @@
 <!-- Card 3 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="3">
 <div class="flex items-start space-x-3">
-<img alt="Sister Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/19c90c009d3d4916b4f11beb43c81138.jpg"/>
+<img alt="Sister Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/19c90c009d3d4916b4f11beb43c81138.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">妹妹</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1003</p>
-<p class="text-[10px] text-gray-400 mt-0.5">1小时前活跃</p>
+<h3 class="text-[14px] font-bold text-black">妹妹<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-1.png"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入妹妹房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V1003</p>
+<p class="text-[12px] text-gray-400 mt-0.5">1小时前活跃</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(3, this)">虚拟身份证</button>
@@ -261,11 +268,11 @@
 <!-- Card 4 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="4">
 <div class="flex items-start space-x-3">
-<img alt="Lin Xiao Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/30e168552fa64431bb1957acf54f930c.jpg"/>
+<img alt="Lin Xiao Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/30e168552fa64431bb1957acf54f930c.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">林晓</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V2031</p>
-<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+<h3 class="text-[14px] font-bold text-black">林晓<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-2.png"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入林晓房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V2031</p>
+<p class="text-[12px] text-green-500 mt-0.5">在线</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(4, this)">虚拟身份证</button>
@@ -285,11 +292,11 @@
 <!-- Card 5 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="5">
 <div class="flex items-start space-x-3">
-<img alt="Zhang Ming Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/7b7db9d4b6994752ab5a67c9f05a2321.jpg"/>
+<img alt="Zhang Ming Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/7b7db9d4b6994752ab5a67c9f05a2321.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">张明</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1588</p>
-<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+<h3 class="text-[14px] font-bold text-black">张明<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-5.png"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入张明房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V1588</p>
+<p class="text-[12px] text-green-500 mt-0.5">在线</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(5, this)">虚拟身份证</button>
@@ -307,11 +314,11 @@
 <!-- Card 6 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="6">
 <div class="flex items-start space-x-3">
-<img alt="Wang Fang Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/6bdeef7e6e6049b6bb1369326734db9e.jpg"/>
+<img alt="Wang Fang Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/6bdeef7e6e6049b6bb1369326734db9e.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">王芳</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V3096</p>
-<p class="text-[10px] text-gray-400 mt-0.5">5分钟前活跃</p>
+<h3 class="text-[14px] font-bold text-black">王芳<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-3.png"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入王芳房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V3096</p>
+<p class="text-[12px] text-gray-400 mt-0.5">5分钟前活跃</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(6, this)">虚拟身份证</button>
@@ -342,11 +349,11 @@
 <!-- Card 7 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="7">
 <div class="flex items-start space-x-3">
-<img alt="Zhao Qiang Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/6197b5c5c68846c19e5be7c7a19e0a1e.jpg"/>
+<img alt="Zhao Qiang Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/6197b5c5c68846c19e5be7c7a19e0a1e.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">赵强</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V4096</p>
-<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+<h3 class="text-[14px] font-bold text-black">赵强<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-6.png"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入赵强房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V4096</p>
+<p class="text-[12px] text-green-500 mt-0.5">在线</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(7, this)">虚拟身份证</button>
@@ -364,11 +371,11 @@
 <!-- Card 8 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="8">
 <div class="flex items-start space-x-3">
-<img alt="Chen Jing Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/466f3eb048f6419aa6a77c3cf53030b1.jpg"/>
+<img alt="Chen Jing Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/466f3eb048f6419aa6a77c3cf53030b1.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">陈静</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V1024</p>
-<p class="text-[10px] text-gray-400 mt-0.5">12分钟前活跃</p>
+<h3 class="text-[14px] font-bold text-black">陈静<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-4.png"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入陈静房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V1024</p>
+<p class="text-[12px] text-gray-400 mt-0.5">12分钟前活跃</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(8, this)">虚拟身份证</button>
@@ -399,11 +406,11 @@
 <!-- Card 9 -->
 <div class="p-4 border-b border-gray-50 friend-card" data-id="9">
 <div class="flex items-start space-x-3">
-<img alt="Liu Yang Avatar" class="w-12 h-12 border border-gray-200 object-cover flex-none" src="assets/packaged/f70ea17ad04741a7a9ba9a7612567113.jpg"/>
+<img alt="Liu Yang Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/f70ea17ad04741a7a9ba9a7612567113.jpg"/>
 <div class="flex-1">
-<h3 class="font-bold text-sm text-black">刘洋</h3>
-<p class="text-[10px] text-gray-500 mt-0.5">虚拟身份编号: V6618</p>
-<p class="text-[10px] text-green-500 mt-0.5">在线</p>
+<h3 class="text-[14px] font-bold text-black">刘洋<img alt="个人VIP" class="user-vip-badge" src="assets/vip/user-vip-star-1.png"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入刘洋房间 建设中')"/></h3>
+<p class="text-[12px] text-gray-500 mt-0.5">虚拟身份编号: V6618</p>
+<p class="text-[12px] text-green-500 mt-0.5">在线</p>
 </div>
 <div class="flex space-x-2 flex-none">
 <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(9, this)">虚拟身份证</button>
@@ -626,8 +633,9 @@
             showToast();
         }
 
-        function showToast() {
+        function showToast(msg) {
             const toast = document.getElementById('toast');
+            if (msg) toast.textContent = msg;
             toast.style.display = 'block';
             setTimeout(() => {
                 toast.style.display = 'none';
