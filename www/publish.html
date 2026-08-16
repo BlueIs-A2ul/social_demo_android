@@ -146,6 +146,12 @@
       body.publish-discover-mode #feed-grid {
         padding-top: 16px;
       }
+      .publish-discover-only {
+        display: none;
+      }
+      body.publish-discover-mode .publish-discover-only {
+        display: block;
+      }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
@@ -275,6 +281,40 @@
       class="grid grid-cols-2 gap-x-[10px] gap-y-4 px-5 pb-10"
       id="feed-grid"
     >
+      <div
+        class="cursor-pointer group publish-discover-only"
+        onclick="openDetail(8)"
+      >
+        <div class="aspect-square bg-gray-50 overflow-hidden relative">
+          <img
+            alt="力量美学"
+            class="w-full h-full object-cover transition-transform group-active:scale-95"
+            src="assets/new_src/分享图片内容/微信图片_20260815164441.jpg"
+          />
+          <span
+            class="absolute top-2 right-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5"
+            >6图</span
+          >
+        </div>
+        <p class="text-[13px] text-black mt-2 font-medium">
+          力量美学｜健美×摄影专题
+        </p>
+      </div>
+      <div
+        class="cursor-pointer group publish-discover-only"
+        onclick="openDetail(9)"
+      >
+        <div class="aspect-square bg-gray-50 overflow-hidden">
+          <img
+            alt="训练日常"
+            class="w-full h-full object-cover transition-transform group-active:scale-95"
+            src="assets/new_src/分享图片内容/微信图片_20260815164438.jpg"
+          />
+        </div>
+        <p class="text-[13px] text-black mt-2 font-medium">
+          训练日常｜镜头不会说谎
+        </p>
+      </div>
       <div class="cursor-pointer group" onclick="openDetail(0)">
         <div class="aspect-square bg-gray-50 overflow-hidden">
           <img
@@ -342,7 +382,7 @@
       id="detail-modal"
       style="display: none"
     >
-      <div class="flex-1 flex items-center justify-center p-5 relative">
+      <div class="flex-1 min-h-0 flex items-center justify-center p-5 relative">
         <div
           class="w-full max-w-[360px] h-full bg-white relative flex flex-col overflow-hidden shadow-2xl"
         >
@@ -365,14 +405,15 @@
             </svg>
           </button>
           <!-- 滚动区域 -->
-          <div class="flex-1 overflow-y-auto no-scrollbar pb-[72px]">
+          <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar pb-[72px]">
             <!-- ① 大图 -->
-            <img
-              alt="动态图片"
-              class="w-full h-[280px] object-contain bg-gray-50 block"
-              id="detail-img"
-              src="assets/shops/shop-coffee-corner.png"
-            />
+            <div id="detail-images">
+              <img
+                alt="动态图片"
+                class="w-full h-[280px] object-contain bg-gray-50 block"
+                src="assets/shops/shop-coffee-corner.png"
+              />
+            </div>
             <!-- ② 标题/简介区 -->
             <div class="p-4 border-b border-gray-100">
               <div class="flex items-center justify-between">
@@ -380,30 +421,33 @@
                   <img
                     alt="头像"
                     class="w-6 h-6 rounded-full object-cover"
+                    id="detail-author-avatar"
                     src="assets/packaged/7324caaa7daa41839e6f4b764cde141f.jpg"
                   />
-                  <span class="text-sm font-bold text-black"
+                  <span class="text-sm font-bold text-black" id="detail-author"
                     >约翰逊<img
                       alt="个人VIP2"
                       class="user-vip-badge user-vip-badge-sm"
                       src="assets/vip/user-vip-star-6.png"
                   /></span>
                 </div>
-                <span class="text-xs text-gray-400">2小时前</span>
+                <span class="text-xs text-gray-400" id="detail-time"
+                  >2小时前</span
+                >
               </div>
               <h2 class="text-base font-bold text-black mt-3" id="detail-title">
                 春日花园
               </h2>
-              <p class="text-[13px] text-gray-400 mt-1">
+              <p class="text-[13px] text-gray-400 mt-1" id="detail-desc">
                 一个藏在巷子里的温馨咖啡小店，午后阳光洒进来特别治愈。
               </p>
             </div>
             <!-- ③ 正文区 -->
             <div class="p-4">
-              <p class="text-sm text-black leading-[1.8]">
+              <p class="text-sm text-black leading-[1.8]" id="detail-body">
                 周末终于打卡了这家种草已久的咖啡店！店面不大但每个角落都很用心，老板是个很nice的人，推荐了他们家的手冲和提拉米苏。坐在窗边看着街景，喝着咖啡，感觉整个下午都慢下来了。下次还会再来～
               </p>
-              <div class="flex gap-3 mt-4">
+              <div class="flex gap-3 mt-4" id="detail-tags">
                 <span
                   class="text-[12px] text-[#ec4899] cursor-pointer"
                   >#咖啡探店</span
@@ -603,13 +647,89 @@
         { title: '城市夜景', img: 'assets/shops/shop-ice-cream-angle.png' },
         { title: '美食打卡', img: 'assets/shops/shop-pizza-front.png' },
         { title: '艺术展览', img: 'assets/shops/shop-ice-cream-front.png' },
+        {
+          title: '力量美学｜健美×摄影专题',
+          img: 'assets/new_src/分享图片内容/微信图片_20260815164441.jpg',
+          author:
+            '大POWER摄影<img alt="个人VIP2" class="user-vip-badge user-vip-badge-sm" src="assets/vip/user-vip-star-6.png" />',
+          authorAvatar:
+            'assets/new_src/分享图片内容/微信图片_20260815164431.jpg',
+          time: '1小时前',
+          desc: '健美与摄影的相互成就——身体是最好的雕塑，光影是最好的刻刀。',
+          body: '一组白底棚拍，用极简的高键光突出形体张力。健美赋予镜头力量，摄影赋予肌肉永恒，每一次快门定格，都是身体与镜头的相互成就。POWER 系列 Vol.1，六张大片一次看够。',
+          tags: ['健美摄影', '力量美学', '形体艺术'],
+          images: [
+            'assets/new_src/分享图片内容/微信图片_20260815164441.jpg',
+            'assets/new_src/分享图片内容/微信图片_20260815164402.jpg',
+            'assets/new_src/分享图片内容/微信图片_20260815164434.jpg',
+            'assets/new_src/分享图片内容/微信图片_20260815164445.jpg',
+            'assets/new_src/分享图片内容/微信图片_20260815164449.jpg',
+            'assets/new_src/分享图片内容/微信图片_20260815164431.jpg',
+          ],
+        },
+        {
+          title: '训练日常｜镜头不会说谎',
+          img: 'assets/new_src/分享图片内容/微信图片_20260815164438.jpg',
+          author:
+            '阿Power<img alt="个人VIP2" class="user-vip-badge user-vip-badge-sm" src="assets/vip/user-vip-star-3.png" />',
+          authorAvatar:
+            'assets/new_src/分享图片内容/微信图片_20260815164438.jpg',
+          time: '3小时前',
+          desc: '镜头记录下的训练痕迹。',
+          body: '训练打卡。镜子不会说谎，镜头也不会。健身改变的不只是体型，还有面对镜头的底气——所有大片背后，都是日复一日的台下功。',
+          tags: ['健身打卡', '训练日常'],
+          images: ['assets/new_src/分享图片内容/微信图片_20260815164438.jpg'],
+        },
       ]
+
+      // 详情弹窗默认文案（条目未带自定义字段时回退展示，保证老内容不变）
+      const detailDefaults = {
+        authorAvatar: document.getElementById('detail-author-avatar').src,
+        author: document.getElementById('detail-author').innerHTML,
+        time: document.getElementById('detail-time').innerHTML,
+        desc: document.getElementById('detail-desc').innerHTML,
+        body: document.getElementById('detail-body').innerHTML,
+        tags: document.getElementById('detail-tags').innerHTML,
+      }
 
       function openDetail(index) {
         const data = feedData[index]
-        document.getElementById('detail-img').src = data.img
+
+        // 图片区：单图保持原样式，多图竖向堆叠
+        const isSeries = Array.isArray(data.images) && data.images.length > 0
+        const images = isSeries ? data.images : [data.img]
+        document.getElementById('detail-images').innerHTML = images
+          .map(src =>
+            isSeries
+              ? `<img alt="动态图片" class="w-full block bg-gray-50" src="${src}" />`
+              : `<img alt="动态图片" class="w-full h-[280px] object-contain bg-gray-50 block" src="${src}" />`,
+          )
+          .join('')
+
         document.getElementById('detail-title').innerText = data.title
+
+        // 文案区：有自定义内容则渲染，否则恢复默认
+        document.getElementById('detail-author-avatar').src =
+          data.authorAvatar || detailDefaults.authorAvatar
+        document.getElementById('detail-author').innerHTML =
+          data.author || detailDefaults.author
+        document.getElementById('detail-time').innerHTML =
+          data.time || detailDefaults.time
+        document.getElementById('detail-desc').innerHTML =
+          data.desc || detailDefaults.desc
+        document.getElementById('detail-body').innerHTML =
+          data.body || detailDefaults.body
+        document.getElementById('detail-tags').innerHTML = data.tags
+          ? data.tags
+              .map(
+                t =>
+                  `<span class="text-[12px] text-[#ec4899] cursor-pointer">#${t}</span>`,
+              )
+              .join('')
+          : detailDefaults.tags
+
         const modal = document.getElementById('detail-modal')
+        modal.querySelector('.overflow-y-auto').scrollTop = 0
         modal.style.display = 'flex'
         setTimeout(() => {
           modal.classList.add('opacity-100')

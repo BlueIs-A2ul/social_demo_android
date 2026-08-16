@@ -276,7 +276,8 @@
   </head>
   <body class="bg-gray-50">
     <div
-      class="max-w-[393px] h-[100dvh] mx-auto bg-white overflow-hidden flex flex-col relative"
+      id="app-root"
+      class="w-full h-[100dvh] bg-white overflow-hidden flex flex-col relative"
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
       <!-- 顶部用户信息区 -->
@@ -814,7 +815,7 @@
           event.currentTarget,
         )
         const menu = document.getElementById('roomActionMenu')
-        const container = document.querySelector('.max-w-\\[393px\\]')
+        const container = document.getElementById('app-root')
         const containerRect = container.getBoundingClientRect()
         const targetRect = event.currentTarget.getBoundingClientRect()
         const left = Math.min(
