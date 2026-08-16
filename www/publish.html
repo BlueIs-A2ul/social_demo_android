@@ -16,7 +16,7 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        width: min(100vw, 393px);
+        width: 100%;
         height: 100dvh;
         overflow-x: hidden;
         overflow-y: auto;
@@ -172,7 +172,6 @@
         <a class="publish-nav-tab" href="square.html"
           >关注<span class="publish-nav-caret">▼</span></a
         >
-        <a class="publish-nav-tab" href="radar_nearby.html">同城</a>
         <a
           class="publish-nav-tab"
           data-publish-tab="discover"
@@ -180,13 +179,20 @@
           onclick="switchPublishView('discover', event)"
           >发现</a
         >
-        <a class="publish-nav-tab" href="square.html">附近人</a>
+        <a class="publish-nav-tab" href="radar_nearby.html">同城</a>
         <a
           class="publish-nav-tab active"
           data-publish-tab="home"
           href="javascript:void(0)"
           onclick="switchPublishView('home', event)"
-          >主页</a
+          >我</a
+        >
+        <a class="publish-nav-tab" href="message_center.html">消息</a>
+        <a
+          class="publish-nav-tab"
+          href="javascript:void(0)"
+          onclick="openPublishSheet()"
+          >发布</a
         >
       </nav>
       <button
@@ -542,6 +548,46 @@
         </div>
       </div>
     </div>
+    <!-- 发布选项弹窗 -->
+    <div
+      class="fixed inset-0 bg-black/50 z-[110] opacity-0 transition-opacity duration-300 hidden"
+      id="publish-overlay"
+      onclick="closePublishSheet()"
+    ></div>
+    <div
+      class="fixed bottom-0 left-0 w-full bg-white z-[120] transform transition-transform duration-300 translate-y-full"
+      id="publish-sheet"
+      style="padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
+    >
+      <div class="flex flex-col">
+        <button
+          class="w-full py-4 text-base font-bold text-black active:bg-gray-50"
+          onclick="selectPublishOption('album')"
+        >
+          从相册选择
+        </button>
+        <button
+          class="w-full py-3 border-t border-gray-100 active:bg-gray-50"
+          onclick="selectPublishOption('camera')"
+        >
+          <span class="block text-base font-bold text-black">相机</span>
+          <span class="block text-xs text-gray-400 mt-0.5">拍摄与直播</span>
+        </button>
+        <button
+          class="w-full py-4 text-base font-bold text-black border-t border-gray-100 active:bg-gray-50"
+          onclick="selectPublishOption('text')"
+        >
+          写文字
+        </button>
+      </div>
+      <div class="h-1.5 bg-gray-100"></div>
+      <button
+        class="w-full py-3 text-sm text-gray-500 active:bg-gray-50"
+        onclick="closePublishSheet()"
+      >
+        取消
+      </button>
+    </div>
     <!-- Toast -->
     <div
       class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-4 py-2 rounded-full opacity-0 pointer-events-none transition-opacity duration-300 z-[200]"
@@ -584,6 +630,7 @@
 
       function switchPublishView(view, event) {
         if (event) event.preventDefault()
+        // "发现"/"我"为内部视图切换：已处于发现模式时点击"发现"返回主页视图
         const isDiscover = view === 'discover'
 
         document.body.classList.toggle('publish-discover-mode', isDiscover)
@@ -593,7 +640,11 @@
         document
           .querySelectorAll('.publish-nav-tab[data-publish-tab]')
           .forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.publishTab === view)
+            tab.classList.toggle(
+              'active',
+              (tab.dataset.publishTab === 'discover' && isDiscover) ||
+                (tab.dataset.publishTab === 'home' && !isDiscover)
+            )
           })
         window.scrollTo(0, 0)
       }
@@ -605,6 +656,43 @@
         setTimeout(() => {
           toast.classList.remove('opacity-100')
         }, 2000)
+      }
+
+      // 发布选项弹窗
+      function openPublishSheet() {
+        document.getElementById('publish-overlay').classList.remove('hidden')
+        setTimeout(() => {
+          document
+            .getElementById('publish-overlay')
+            .classList.add('opacity-100')
+          document
+            .getElementById('publish-sheet')
+            .classList.remove('translate-y-full')
+        }, 10)
+        document.body.classList.add('modal-open')
+      }
+
+      function closePublishSheet() {
+        document
+          .getElementById('publish-overlay')
+          .classList.remove('opacity-100')
+        document
+          .getElementById('publish-sheet')
+          .classList.add('translate-y-full')
+        setTimeout(() => {
+          document.getElementById('publish-overlay').classList.add('hidden')
+        }, 300)
+        document.body.classList.remove('modal-open')
+      }
+
+      function selectPublishOption(type) {
+        closePublishSheet()
+        const toastMap = {
+          album: '从相册选择功能将在正式版开放',
+          camera: '相机拍摄功能将在正式版开放',
+          text: '写文字功能将在正式版开放',
+        }
+        showToast(toastMap[type])
       }
     </script>
   </body>
