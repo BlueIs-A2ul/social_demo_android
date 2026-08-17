@@ -15,3 +15,5 @@ build/
 
 .reasonix/
 reasonix.toml
+
+.worktrees/
