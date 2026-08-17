@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>搜索结果 - 智能空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<style>
+        body { background-color: #ffffff; font-family: -apple-system, "SF Pro SC", "SF Pro Text", "Helvetica Neue", Helvetica, "PingFang SC", "Segoe UI", Roboto, "Microsoft YaHei", arial, sans-serif; }
+        .app-container { width: 100%; height: 100dvh; background: white; position: relative; overflow: hidden; display: flex; flex-direction: column;
+            padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+            padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+        }
+        ::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .straight-edge { border-radius: 0 !important; }
+        .user-vip-badge {
+            display: inline-block;
+            width: 18px;
+            height: auto;
+            margin-left: 4px;
+            vertical-align: -4px;
+        }
+    </style>
+<style data-id="immersive-translate-input-injected-css"></style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<div class="app-container relative shadow-2xl">
+<!-- Header -->
+<header class="h-[44px] flex items-center px-4 border-b border-gray-200 sticky top-0 z-10 bg-white">
+<button class="text-[14px] text-black" onclick="window.location.href='radar.html'">←</button>
+<h1 class="flex-1 text-center text-[16px] font-bold text-black mr-[24px]">搜索结果</h1>
+</header>
+<!-- Stats Info Row -->
+<div class="h-[40px] flex items-center justify-between px-4 border-b border-gray-100 bg-white">
+<span class="text-[12px] text-gray-400" id="search-stat">共 6 位相关用户</span>
+<span class="text-[12px] text-gray-400">点击查看虚拟身份证</span>
+</div>
+<!-- User List -->
+<div class="flex-1 overflow-y-auto no-scrollbar bg-white">
+<!-- User 1 -->
+<div class="border-b border-gray-100">
+<div class="flex items-center px-4 py-4 cursor-pointer" onclick="showToast('查看用户详情')">
+<img alt="用户头像" class="w-10 h-10 rounded-full object-cover" src="assets/packaged/e5858016b8e14edf956e9b0c8469ec72.png"/>
+<div class="flex-1 ml-4">
+<div class="text-[14px] font-bold text-black">小云<img alt="个人VIP2" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入小云房间 建设中')"/></div>
+<div class="text-[12px] mt-0.5">
+<span class="text-[#10b981]">在线</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all" onclick="event.stopPropagation(); toggleIdentityCard(0)">虚拟身份证</button>
+<button class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all" id="add-friend-btn-0" onclick="event.stopPropagation(); showAddFriendModal(0)">添加好友</button>
+</div>
+</div>
+<div class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100">
+<div class="text-[12px] text-gray-400 mb-2">虚拟身份证编号: V2031</div>
+<div class="bg-white border border-gray-200 straight-edge overflow-hidden">
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">姓名</div><div class="flex-1 px-3 py-2 text-black text-[12px]">林晓</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">出生</div><div class="flex-1 px-3 py-2 text-black text-[12px]">1998年3月</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">性别</div><div class="flex-1 px-3 py-2 text-black text-[12px]">女</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">民族</div><div class="flex-1 px-3 py-2 text-black text-[12px]">汉族</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业</div><div class="flex-1 px-3 py-2 text-black text-[12px]">空间设计师</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业现状</div><div class="flex-1 px-3 py-2 text-black text-[12px]">在职</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">技能</div><div class="flex-1 px-3 py-2 text-black text-[12px]">空间设计、摄影</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">特长</div><div class="flex-1 px-3 py-2 text-black text-[12px]">视觉表达、沟通</div></div>
+<div class="flex border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">爱好</div><div class="flex-1 px-3 py-2 text-black text-[12px]">旅行、音乐、阅读</div></div>
+</div>
+</div>
+</div>
+<!-- User 2 -->
+<div class="border-b border-gray-100">
+<div class="flex items-center px-4 py-4 cursor-pointer" onclick="showToast('查看用户详情')">
+<img alt="用户头像" class="w-10 h-10 rounded-full object-cover" src="assets/packaged/63eb3aab25b5497099d699b14a5c1897.jpg"/>
+<div class="flex-1 ml-4">
+<div class="text-[14px] font-bold text-black">七七<img alt="个人VIP2" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入七七房间 建设中')"/></div>
+<div class="text-[12px] mt-0.5">
+<span class="text-gray-400">5分钟前活跃</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all" onclick="event.stopPropagation(); toggleIdentityCard(1)">虚拟身份证</button>
+<button class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all" id="add-friend-btn-1" onclick="event.stopPropagation(); showAddFriendModal(1)">添加好友</button>
+</div>
+</div>
+<div class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100">
+<div class="text-[12px] text-gray-400 mb-2">虚拟身份证编号: V1588</div>
+<div class="bg-white border border-gray-200 straight-edge overflow-hidden">
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">姓名</div><div class="flex-1 px-3 py-2 text-black text-[12px]">张明</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">出生</div><div class="flex-1 px-3 py-2 text-black text-[12px]">1995年7月</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">性别</div><div class="flex-1 px-3 py-2 text-black text-[12px]">男</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">民族</div><div class="flex-1 px-3 py-2 text-black text-[12px]">汉族</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业</div><div class="flex-1 px-3 py-2 text-black text-[12px]">软件工程师</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业现状</div><div class="flex-1 px-3 py-2 text-black text-[12px]">在职</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">技能</div><div class="flex-1 px-3 py-2 text-black text-[12px]">编程、数据分析</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">特长</div><div class="flex-1 px-3 py-2 text-black text-[12px]">逻辑思维、团队协作</div></div>
+<div class="flex border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">爱好</div><div class="flex-1 px-3 py-2 text-black text-[12px]">游戏、篮球、电影</div></div>
+</div>
+</div>
+</div>
+<!-- User 3 -->
+<div class="border-b border-gray-100">
+<div class="flex items-center px-4 py-4 cursor-pointer" onclick="showToast('查看用户详情')">
+<img alt="用户头像" class="w-10 h-10 rounded-full object-cover" src="assets/packaged/034807636a674832b6a5ba15fe223b26.webp"/>
+<div class="flex-1 ml-4">
+<div class="text-[14px] font-bold text-black">小鹿<img alt="个人VIP2" class="user-vip-badge" src="assets/src_01/颜色vip/文化娱乐类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入小鹿房间 建设中')"/></div>
+<div class="text-[12px] mt-0.5">
+<span class="text-[#10b981]">在线</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all" onclick="event.stopPropagation(); toggleIdentityCard(2)">虚拟身份证</button>
+<button class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all" id="add-friend-btn-2" onclick="event.stopPropagation(); showAddFriendModal(2)">添加好友</button>
+</div>
+</div>
+<div class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100">
+<div class="text-[12px] text-gray-400 mb-2">虚拟身份证编号: V3096</div>
+<div class="bg-white border border-gray-200 straight-edge overflow-hidden">
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">姓名</div><div class="flex-1 px-3 py-2 text-black text-[12px]">王芳</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">出生</div><div class="flex-1 px-3 py-2 text-black text-[12px]">2000年1月</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">性别</div><div class="flex-1 px-3 py-2 text-black text-[12px]">女</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">民族</div><div class="flex-1 px-3 py-2 text-black text-[12px]">回族</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业</div><div class="flex-1 px-3 py-2 text-black text-[12px]">自由插画师</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业现状</div><div class="flex-1 px-3 py-2 text-black text-[12px]">自由职业</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">技能</div><div class="flex-1 px-3 py-2 text-black text-[12px]">插画、平面设计</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">特长</div><div class="flex-1 px-3 py-2 text-black text-[12px]">创意、色彩感知</div></div>
+<div class="flex border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">爱好</div><div class="flex-1 px-3 py-2 text-black text-[12px]">绘画、手工、美食</div></div>
+</div>
+</div>
+</div>
+<!-- User 4 -->
+<div class="border-b border-gray-100">
+<div class="flex items-center px-4 py-4 cursor-pointer" onclick="showToast('查看用户详情')">
+<img alt="用户头像" class="w-10 h-10 rounded-full object-cover" src="assets/packaged/b9a9e1976f564e2181a78ce2893625c4.jpg"/>
+<div class="flex-1 ml-4">
+<div class="text-[14px] font-bold text-black">星河<img alt="个人VIP2" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入星河房间 建设中')"/></div>
+<div class="text-[12px] mt-0.5">
+<span class="text-gray-400">12分钟前活跃</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all" onclick="event.stopPropagation(); toggleIdentityCard(3)">虚拟身份证</button>
+<button class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all" id="add-friend-btn-3" onclick="event.stopPropagation(); showAddFriendModal(3)">添加好友</button>
+</div>
+</div>
+<div class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100">
+<div class="text-[12px] text-gray-400 mb-2">虚拟身份证编号: V4077</div>
+<div class="bg-white border border-gray-200 straight-edge overflow-hidden">
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">姓名</div><div class="flex-1 px-3 py-2 text-black text-[12px]">陈伟</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">出生</div><div class="flex-1 px-3 py-2 text-black text-[12px]">1993年11月</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">性别</div><div class="flex-1 px-3 py-2 text-black text-[12px]">男</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">民族</div><div class="flex-1 px-3 py-2 text-black text-[12px]">汉族</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业</div><div class="flex-1 px-3 py-2 text-black text-[12px]">市场营销经理</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业现状</div><div class="flex-1 px-3 py-2 text-black text-[12px]">在职</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">技能</div><div class="flex-1 px-3 py-2 text-black text-[12px]">营销策划、品牌管理</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">特长</div><div class="flex-1 px-3 py-2 text-black text-[12px]">沟通、领导力</div></div>
+<div class="flex border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">爱好</div><div class="flex-1 px-3 py-2 text-black text-[12px]">跑步、读书、旅行</div></div>
+</div>
+</div>
+</div>
+<!-- User 5 -->
+<div class="border-b border-gray-100">
+<div class="flex items-center px-4 py-4 cursor-pointer" onclick="showToast('查看用户详情')">
+<img alt="用户头像" class="w-10 h-10 rounded-full object-cover" src="assets/packaged/30ed4b633c9940e987376b5ee0a166c4.jpg"/>
+<div class="flex-1 ml-4">
+<div class="text-[14px] font-bold text-black">阿森<img alt="个人VIP2" class="user-vip-badge" src="assets/src_01/颜色vip/公益活动类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入阿森房间 建设中')"/></div>
+<div class="text-[12px] mt-0.5">
+<span class="text-[#10b981]">在线</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all" onclick="event.stopPropagation(); toggleIdentityCard(4)">虚拟身份证</button>
+<button class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all" id="add-friend-btn-4" onclick="event.stopPropagation(); showAddFriendModal(4)">添加好友</button>
+</div>
+</div>
+<div class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100">
+<div class="text-[12px] text-gray-400 mb-2">虚拟身份证编号: V5120</div>
+<div class="bg-white border border-gray-200 straight-edge overflow-hidden">
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">姓名</div><div class="flex-1 px-3 py-2 text-black text-[12px]">赵雪</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">出生</div><div class="flex-1 px-3 py-2 text-black text-[12px]">1997年6月</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">性别</div><div class="flex-1 px-3 py-2 text-black text-[12px]">女</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">民族</div><div class="flex-1 px-3 py-2 text-black text-[12px]">满族</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业</div><div class="flex-1 px-3 py-2 text-black text-[12px]">医生</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业现状</div><div class="flex-1 px-3 py-2 text-black text-[12px]">在职</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">技能</div><div class="flex-1 px-3 py-2 text-black text-[12px]">临床诊断、外科手术</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">特长</div><div class="flex-1 px-3 py-2 text-black text-[12px]">耐心、细致</div></div>
+<div class="flex border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">爱好</div><div class="flex-1 px-3 py-2 text-black text-[12px]">瑜伽、烘焙、园艺</div></div>
+</div>
+</div>
+</div>
+<!-- User 6 -->
+<div class="border-b border-gray-100">
+<div class="flex items-center px-4 py-4 cursor-pointer" onclick="showToast('查看用户详情')">
+<img alt="用户头像" class="w-10 h-10 rounded-full object-cover" src="assets/packaged/e26fdbf77b284de8a1662a6a9b526d6c.webp"/>
+<div class="flex-1 ml-4">
+<div class="text-[14px] font-bold text-black">小雨<img alt="个人VIP2" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入小雨房间 建设中')"/></div>
+<div class="text-[12px] mt-0.5">
+<span class="text-gray-400">32分钟前活跃</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all" onclick="event.stopPropagation(); toggleIdentityCard(5)">虚拟身份证</button>
+<button class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all" id="add-friend-btn-5" onclick="event.stopPropagation(); showAddFriendModal(5)">添加好友</button>
+</div>
+</div>
+<div class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100">
+<div class="text-[12px] text-gray-400 mb-2">虚拟身份证编号: V6248</div>
+<div class="bg-white border border-gray-200 straight-edge overflow-hidden">
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">姓名</div><div class="flex-1 px-3 py-2 text-black text-[12px]">刘洋</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">出生</div><div class="flex-1 px-3 py-2 text-black text-[12px]">1992年4月</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">性别</div><div class="flex-1 px-3 py-2 text-black text-[12px]">男</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">民族</div><div class="flex-1 px-3 py-2 text-black text-[12px]">汉族</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业</div><div class="flex-1 px-3 py-2 text-black text-[12px]">建筑设计师</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">职业现状</div><div class="flex-1 px-3 py-2 text-black text-[12px]">在职</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">技能</div><div class="flex-1 px-3 py-2 text-black text-[12px]">建筑设计、3D建模</div></div>
+<div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">特长</div><div class="flex-1 px-3 py-2 text-black text-[12px]">空间感、创新</div></div>
+<div class="flex border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">爱好</div><div class="flex-1 px-3 py-2 text-black text-[12px]">摄影、徒步、咖啡</div></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Toast -->
+<div class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-2 text-xs opacity-0 transition-opacity duration-300 pointer-events-none z-[100]" id="toast" style="opacity: 0;">查看用户详情</div>
+<!-- Add Friend Modal -->
+<div class="fixed inset-0 z-[200] hidden items-center justify-center p-6" id="add-friend-modal">
+<div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeAddFriendModal()"></div>
+<div class="bg-white w-full max-w-[320px] relative z-10 straight-edge shadow-xl p-6">
+<h3 class="text-[16px] font-bold text-black mb-4">发送好友申请</h3>
+<textarea class="w-full h-[100px] border border-gray-200 p-3 text-[14px] straight-edge focus:outline-none focus:border-[#ec4899] resize-none" id="request-message" placeholder="我是..."></textarea>
+<div class="flex gap-4 mt-6">
+<button class="flex-1 py-3 border border-gray-200 text-gray-500 text-[14px] straight-edge" onclick="closeAddFriendModal()">取消</button>
+<button class="flex-1 py-3 bg-[#ec4899] text-white text-[14px] straight-edge" onclick="sendFriendRequest()">发送</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+        (function () {
+            const params = new URLSearchParams(window.location.search)
+            const q = (params.get('q') || '').trim()
+            const stat = document.getElementById('search-stat')
+            if (q) {
+                stat.textContent = '与「' + q + '」相关的 6 位用户'
+            }
+        })();
+
+        let currentOpenIndex = -1;
+        let targetUserIndex = -1;
+
+        function toggleIdentityCard(index) {
+            const allContents = document.querySelectorAll('.identity-content');
+            const allButtons = document.querySelectorAll('.identity-btn');
+
+            // 如果点击的是已展开的，收起
+            if (currentOpenIndex === index) {
+                allContents[index].classList.add('hidden');
+                allButtons[index].textContent = '虚拟身份证';
+                allButtons[index].className = 'identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all';
+                currentOpenIndex = -1;
+                return;
+            }
+
+            // 收起上一个
+            if (currentOpenIndex >= 0) {
+                allContents[currentOpenIndex].classList.add('hidden');
+                allButtons[currentOpenIndex].textContent = '虚拟身份证';
+                allButtons[currentOpenIndex].className = 'identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all';
+            }
+
+            // 展开当前
+            allContents[index].classList.remove('hidden');
+            allButtons[index].textContent = '收起身份证';
+            allButtons[index].className = 'identity-btn px-2 py-1 bg-blue-500 text-white text-[12px] straight-edge transition-all';
+            currentOpenIndex = index;
+        }
+
+        function showAddFriendModal(index) {
+            targetUserIndex = index;
+            const modal = document.getElementById('add-friend-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.getElementById('request-message').value = '我是...';
+            document.getElementById('request-message').focus();
+        }
+
+        function closeAddFriendModal() {
+            const modal = document.getElementById('add-friend-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function sendFriendRequest() {
+            if (targetUserIndex === -1) return;
+
+            const btn = document.getElementById(`add-friend-btn-${targetUserIndex}`);
+            btn.textContent = '已申请';
+            btn.disabled = true;
+            btn.classList.remove('bg-[#ec4899]');
+            btn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+            btn.onclick = (e) => e.stopPropagation();
+
+            closeAddFriendModal();
+            showToast('申请已发送');
+            targetUserIndex = -1;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2000);
+        }
+    </script>
+</body></html>

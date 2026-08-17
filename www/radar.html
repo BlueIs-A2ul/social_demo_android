@@ -215,13 +215,24 @@
         <!-- 搜索框 -->
         <div class="pointer-events-auto">
           <div
-            class="flex items-center bg-white border border-gray-300 h-[48px] px-4 gap-3 cursor-pointer shadow-sm straight-edge"
+            class="flex items-center bg-white border border-gray-300 h-[48px] px-3 gap-2 shadow-sm straight-edge"
           >
             <iconify-icon
-              class="text-gray-400 text-xl"
+              class="text-gray-400 text-xl flex-none"
               icon="solar:magnifer-linear"
             ></iconify-icon>
-            <div class="text-sm text-gray-400">搜索关键字信息</div>
+            <input
+              class="flex-1 min-w-0 bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400"
+              id="radarSearchInput"
+              placeholder="搜索关键字信息"
+              type="text"
+            />
+            <button
+              class="flex-none h-[32px] px-4 bg-[#ec4899] text-white text-[13px] font-bold straight-edge"
+              onclick="handleRadarSearch()"
+            >
+              搜索
+            </button>
           </div>
         </div>
         <!-- 推荐用户区域 -->
@@ -615,6 +626,26 @@
             toast.style.display = 'none'
           }, 2000)
         }
+
+        function handleRadarSearch() {
+          const keyword = document
+            .getElementById('radarSearchInput')
+            .value.trim()
+          if (!keyword) {
+            showToast('请输入搜索关键字')
+            return
+          }
+          window.location.href =
+            'radar_search.html?q=' + encodeURIComponent(keyword)
+        }
+
+        document
+          .getElementById('radarSearchInput')
+          .addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+              handleRadarSearch()
+            }
+          })
 
         function toggleIdentityCard(index) {
           const allContents = document.querySelectorAll('.identity-content')
