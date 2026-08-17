@@ -249,7 +249,7 @@
             >哦是猪猪崽耶<img
               alt="个人VIP2"
               class="user-vip-badge"
-              src="assets/vip/user-vip-star-6.png"
+              src="assets/src_01/颜色vip/技术服务类vip.jpg"
           /></span>
           <span class="v-badge">V</span>
         </div>
@@ -428,7 +428,7 @@
                     >约翰逊<img
                       alt="个人VIP2"
                       class="user-vip-badge user-vip-badge-sm"
-                      src="assets/vip/user-vip-star-6.png"
+                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
                   /></span>
                 </div>
                 <span class="text-xs text-gray-400" id="detail-time"
@@ -478,7 +478,7 @@
                         >小云<img
                           alt="个人VIP2"
                           class="user-vip-badge user-vip-badge-sm"
-                          src="assets/vip/user-vip-star-2.png"
+                          src="assets/src_01/颜色vip/技术服务类vip.jpg"
                       /></span>
                       <span class="text-[10px] text-gray-400">2</span>
                     </div>
@@ -499,7 +499,7 @@
                         >七七<img
                           alt="个人VIP2"
                           class="user-vip-badge user-vip-badge-sm"
-                          src="assets/vip/user-vip-star-4.png"
+                          src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
                       /></span>
                       <span class="text-[10px] text-gray-400">1小时前</span>
                     </div>
@@ -520,7 +520,7 @@
                         >小鹿<img
                           alt="个人VIP2"
                           class="user-vip-badge user-vip-badge-sm"
-                          src="assets/vip/user-vip-star-1.png"
+                          src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
                       /></span>
                       <span class="text-[10px] text-gray-400">2小时前</span>
                     </div>
@@ -541,7 +541,7 @@
                         >星河<img
                           alt="个人VIP2"
                           class="user-vip-badge user-vip-badge-sm"
-                          src="assets/vip/user-vip-star-5.png"
+                          src="assets/src_01/颜色vip/技术服务类vip.jpg"
                       /></span>
                       <span class="text-[10px] text-gray-400">3小时前</span>
                     </div>
@@ -560,7 +560,7 @@
                         >阿森<img
                           alt="个人VIP2"
                           class="user-vip-badge user-vip-badge-sm"
-                          src="assets/vip/user-vip-star-3.png"
+                          src="assets/src_01/颜色vip/公益活动类vip.jpg"
                       /></span>
                       <span class="text-[10px] text-gray-400">4小时前</span>
                     </div>
@@ -632,6 +632,64 @@
         取消
       </button>
     </div>
+    <!-- 相册选择输入（隐藏） -->
+    <input
+      accept="image/*"
+      class="hidden"
+      id="album-input"
+      multiple=""
+      type="file"
+    />
+    <!-- 发布编辑弹窗 -->
+    <div
+      class="fixed inset-0 bg-black/50 z-[130] opacity-0 transition-opacity duration-300 hidden"
+      id="compose-overlay"
+      onclick="closeCompose()"
+    ></div>
+    <div
+      class="fixed bottom-0 left-0 w-full bg-white z-[140] transform transition-transform duration-300 translate-y-full flex flex-col"
+      id="compose-modal"
+      style="max-height: 92dvh; padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
+    >
+      <!-- 顶部栏 -->
+      <div
+        class="h-12 shrink-0 flex items-center justify-between px-4 border-b border-gray-100"
+      >
+        <button
+          class="text-sm text-gray-500 active:text-gray-800"
+          onclick="closeCompose()"
+        >
+          取消
+        </button>
+        <span class="text-base font-bold text-black">发布动态</span>
+        <button
+          class="text-sm font-bold text-white bg-[#ec4899] px-4 py-1.5 active:opacity-80"
+          onclick="publishCompose()"
+        >
+          发布
+        </button>
+      </div>
+      <!-- 滚动内容 -->
+      <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+        <!-- 图片九宫格 -->
+        <div
+          class="grid grid-cols-3 gap-2 p-4"
+          id="compose-grid"
+        ></div>
+        <!-- 文字输入 -->
+        <div class="px-4 pb-4">
+          <textarea
+            class="w-full h-28 bg-gray-50 p-3 text-sm outline-none resize-none"
+            id="compose-text"
+            maxlength="500"
+            placeholder="说点什么..."
+          ></textarea>
+          <div class="text-right text-xs text-gray-400 mt-1">
+            <span id="compose-count">0</span>/500
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Toast -->
     <div
       class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-4 py-2 rounded-full opacity-0 pointer-events-none transition-opacity duration-300 z-[200]"
@@ -651,7 +709,7 @@
           title: '力量美学｜健美×摄影专题',
           img: 'assets/new_src/分享图片内容/微信图片_20260815164441.jpg',
           author:
-            '大POWER摄影<img alt="个人VIP2" class="user-vip-badge user-vip-badge-sm" src="assets/vip/user-vip-star-6.png" />',
+            '大POWER摄影<img alt="个人VIP2" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
           authorAvatar:
             'assets/new_src/分享图片内容/微信图片_20260815164431.jpg',
           time: '1小时前',
@@ -671,7 +729,7 @@
           title: '训练日常｜镜头不会说谎',
           img: 'assets/new_src/分享图片内容/微信图片_20260815164438.jpg',
           author:
-            '阿Power<img alt="个人VIP2" class="user-vip-badge user-vip-badge-sm" src="assets/vip/user-vip-star-3.png" />',
+            '阿Power<img alt="个人VIP2" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
           authorAvatar:
             'assets/new_src/分享图片内容/微信图片_20260815164438.jpg',
           time: '3小时前',
@@ -807,13 +865,103 @@
 
       function selectPublishOption(type) {
         closePublishSheet()
+        if (type === 'album') {
+          document.getElementById('album-input').click()
+          return
+        }
         const toastMap = {
-          album: '从相册选择功能将在正式版开放',
           camera: '相机拍摄功能将在正式版开放',
           text: '写文字功能将在正式版开放',
         }
         showToast(toastMap[type])
       }
+
+      // ===== 相册选择与发布编辑 =====
+      const MAX_IMAGES = 9
+      let selectedImages = [] // { file, url }
+
+      const albumInput = document.getElementById('album-input')
+      albumInput.addEventListener('change', () => {
+        const files = Array.from(albumInput.files || []).filter(f =>
+          f.type.startsWith('image/')
+        )
+        if (files.length === 0) return
+        const remaining = MAX_IMAGES - selectedImages.length
+        if (files.length > remaining) {
+          showToast(`最多选择 ${MAX_IMAGES} 张图片`)
+          files.length = remaining
+        }
+        files.forEach(file => {
+          selectedImages.push({ file, url: URL.createObjectURL(file) })
+        })
+        albumInput.value = ''
+        renderComposeGrid()
+        openCompose()
+      })
+
+      function openCompose() {
+        document.getElementById('compose-overlay').classList.remove('hidden')
+        setTimeout(() => {
+          document.getElementById('compose-overlay').classList.add('opacity-100')
+          document.getElementById('compose-modal').classList.remove('translate-y-full')
+        }, 10)
+        document.body.classList.add('modal-open')
+      }
+
+      function closeCompose() {
+        document.getElementById('compose-overlay').classList.remove('opacity-100')
+        document.getElementById('compose-modal').classList.add('translate-y-full')
+        setTimeout(() => {
+          document.getElementById('compose-overlay').classList.add('hidden')
+        }, 300)
+        document.body.classList.remove('modal-open')
+      }
+
+      function renderComposeGrid() {
+        const grid = document.getElementById('compose-grid')
+        grid.innerHTML = selectedImages
+          .map(
+            (img, i) => `
+          <div class="relative aspect-square bg-gray-100 overflow-hidden">
+            <img alt="已选图片" class="w-full h-full object-cover" src="${img.url}" />
+            <button class="absolute top-1 right-1 w-5 h-5 bg-black/60 text-white text-xs flex items-center justify-center active:bg-black/80" onclick="removeSelectedImage(${i})">✕</button>
+          </div>`
+          )
+          .join('')
+        if (selectedImages.length < MAX_IMAGES) {
+          grid.insertAdjacentHTML(
+            'beforeend',
+            `<div class="aspect-square border border-dashed border-gray-300 flex items-center justify-center text-2xl text-gray-400 cursor-pointer active:bg-gray-50" onclick="document.getElementById('album-input').click()">+</div>`
+          )
+        }
+      }
+
+      function removeSelectedImage(index) {
+        URL.revokeObjectURL(selectedImages[index].url)
+        selectedImages.splice(index, 1)
+        renderComposeGrid()
+      }
+
+      function publishCompose() {
+        const text = document.getElementById('compose-text').value.trim()
+        if (selectedImages.length === 0 && !text) {
+          showToast('请添加图片或文字')
+          return
+        }
+        selectedImages.forEach(img => URL.revokeObjectURL(img.url))
+        selectedImages = []
+        document.getElementById('compose-text').value = ''
+        document.getElementById('compose-count').innerText = '0'
+        closeCompose()
+        showToast('发布成功')
+      }
+
+      document
+        .getElementById('compose-text')
+        .addEventListener('input', e => {
+          document.getElementById('compose-count').innerText =
+            e.target.value.length
+        })
     </script>
   </body>
 </html>

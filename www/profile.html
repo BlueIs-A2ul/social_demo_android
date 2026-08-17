@@ -282,111 +282,47 @@
     >
       <!-- 顶部用户信息区 -->
       <div
-        class="flex-none bg-white px-5 pt-10 pb-6 flex items-center justify-between"
+        class="flex-none bg-white px-5 pt-10 pb-6 flex items-center gap-3"
       >
         <div class="flex items-center gap-3">
-          <!-- 头像 -->
+          <!-- Logo -->
           <div
-            class="profile-avatar-wrap w-16 h-16 rounded-full overflow-visible bg-gray-100 border border-gray-100"
+            class="w-16 h-16 flex-none rounded-full overflow-hidden bg-gray-100 border border-gray-100"
           >
-            <button
-              aria-expanded="false"
-              aria-controls="avatarActionMenu"
-              class="profile-avatar-button"
-              id="avatarActionButton"
-              onclick="toggleAvatarMenu(event)"
-            >
-              <img
-                alt="头像"
-                class="w-full h-full object-cover"
-                src="assets/packaged/45c974594ffb45d480a2d4bd1533e917.png"
-              />
-            </button>
-            <div
-              aria-hidden="true"
-              class="avatar-action-menu"
-              id="avatarActionMenu"
-            >
-              <button onclick="handleAvatarAction(event, '分享主页')">
-                分享主页
-              </button>
-              <button onclick="handleAvatarAction(event, '查看虚拟身份证')">
-                查看虚拟身份证
-              </button>
-              <button onclick="handleAvatarAction(event, '查看个人简历')">
-                查看个人简历
-              </button>
-            </div>
+            <img
+              alt="标志"
+              class="w-full h-full object-cover"
+              src="assets/src_01/标志/标志02.jpg"
+            />
           </div>
-          <!-- 用户信息 -->
-          <div>
-            <div class="flex items-center gap-1">
-              <span class="font-bold text-xl text-gray-900"
-                >小云<img
-                  alt="个人VIP2"
-                  class="vip-badge"
-                  src="assets/vip/user-vip-star-6.png"
-              /></span>
+          <!-- 搜索框 -->
+          <div class="flex-1 min-w-0">
+            <div
+              class="flex items-center gap-2 bg-gray-100 rounded-full px-4 h-10"
+            >
+              <iconify-icon
+                class="text-gray-400 text-lg flex-none"
+                icon="solar:magnifer-linear"
+              ></iconify-icon>
+              <input
+                class="flex-1 min-w-0 bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400"
+                id="headerSearchInput"
+                placeholder="搜索"
+                type="text"
+              />
               <button
-                class="text-gray-400 p-1 hover:text-pink-500 transition-colors"
-                onclick="location.href = 'profile_edit.html?from=profile'"
+                aria-label="搜索"
+                class="text-gray-600 flex-none"
+                onclick="handleHeaderSearch()"
               >
                 <iconify-icon
                   class="text-lg"
-                  icon="solar:pen-bold"
+                  icon="solar:magnifer-bold"
                 ></iconify-icon>
               </button>
             </div>
-            <div class="mt-1">
-              <span
-                class="bg-pink-500 text-white text-[10px] px-2 py-0.5 font-bold uppercase tracking-tighter"
-                >10年老店</span
-              >
-            </div>
-            <div class="flex items-center gap-2 mt-1">
-              <span class="text-gray-400 text-[10px]">诚信等级</span>
-              <div class="flex items-center">
-                <iconify-icon
-                  class="text-red-500 text-xs"
-                  icon="solar:heart-bold"
-                ></iconify-icon>
-                <iconify-icon
-                  class="text-red-500 text-xs"
-                  icon="solar:heart-bold"
-                ></iconify-icon>
-                <iconify-icon
-                  class="text-red-500 text-xs"
-                  icon="solar:heart-bold"
-                ></iconify-icon>
-                <iconify-icon
-                  class="text-gray-200 text-xs"
-                  icon="solar:heart-linear"
-                ></iconify-icon>
-                <iconify-icon
-                  class="text-gray-200 text-xs"
-                  icon="solar:heart-linear"
-                ></iconify-icon>
-              </div>
-            </div>
           </div>
         </div>
-        <!-- 功能/设置 -->
-        <button class="text-gray-600 p-2" onclick="location.href = 'my_contacts.html'">
-          <svg
-            class="text-2xl"
-            height="24"
-            style=""
-            viewbox="0 0 32 32"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7.112 6.060c1.32-1.186 2.894-2.118 4.629-2.703l0.094-0.027c0.984 1.225 2.482 2.003 4.161 2.003 0.002 0 0.003 0 0.005 0h-0c0.001 0 0.003 0 0.004 0 1.679 0 3.177-0.778 4.153-1.992l0.008-0.010c1.828 0.612 3.403 1.545 4.735 2.741l-0.012-0.011c-0.232 0.575-0.366 1.242-0.366 1.94 0 0.982 0.266 1.901 0.729 2.691l-0.014-0.025c0.805 1.379 2.177 2.352 3.787 2.603l0.030 0.004c0.178 0.82 0.281 1.761 0.281 2.727s-0.102 1.907-0.296 2.815l0.016-0.088c-1.547 0.237-2.973 1.147-3.817 2.607-0.45 0.765-0.716 1.684-0.716 2.666 0 0.698 0.134 1.365 0.379 1.977l-0.013-0.036c-1.32 1.186-2.894 2.117-4.629 2.702l-0.094 0.027c-0.984-1.224-2.481-2.001-4.16-2.001-0.002 0-0.004 0-0.006 0h0c-0.001 0-0.003 0-0.004 0-1.679 0-3.177 0.778-4.153 1.992l-0.008 0.010c-1.828-0.612-3.403-1.544-4.735-2.74l0.012 0.011c0.232-0.575 0.366-1.242 0.366-1.941 0-0.982-0.266-1.901-0.729-2.691l0.014 0.025c-0.805-1.378-2.177-2.351-3.787-2.602l-0.030-0.004c-0.178-0.82-0.281-1.762-0.281-2.727s0.102-1.907 0.296-2.815l-0.016 0.088c1.641-0.255 3.012-1.228 3.804-2.581l0.014-0.025c0.45-0.764 0.715-1.684 0.715-2.665 0-0.698-0.134-1.365-0.379-1.976l0.013 0.036zM18 19.463c1.217-0.701 2.023-1.995 2.023-3.477 0-2.209-1.791-4-4-4-0.746 0-1.444 0.204-2.041 0.559l0.018-0.010c-1.191 0.707-1.977 1.987-1.977 3.451 0 2.209 1.791 4 4 4 0.727 0 1.409-0.194 1.996-0.533l-0.019 0.010z"
-              fill="currentColor"
-              stroke="none"
-            ></path>
-          </svg>
-        </button>
       </div>
       <!-- 「我的房间」大盒子 -->
       <div
@@ -396,7 +332,7 @@
         <div
           class="px-4 py-3 flex items-center justify-between border-b border-gray-100"
         >
-          <h3 class="font-bold text-gray-900">其他人的房间</h3>
+          <h3 class="font-bold text-gray-900">社区房间</h3>
           <span class="text-xs text-gray-400">5个空间 更多房间&gt;</span>
         </div>
         <!-- Grid 网格 -->
@@ -404,7 +340,7 @@
           <!-- 房间 1 -->
           <div
             class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
+            onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -415,13 +351,13 @@
             </div>
             <span
               class="text-[8px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >王爷符</span
+              >王爷府</span
             >
           </div>
           <!-- 房间 2 -->
           <div
             class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
+            onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -438,7 +374,7 @@
           <!-- 房间 3 -->
           <div
             class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
+            onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -455,7 +391,7 @@
           <!-- 房间 4 -->
           <div
             class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
+            onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -472,7 +408,7 @@
           <!-- 房间 5 -->
           <div
             class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
+            onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
@@ -488,6 +424,69 @@
           </div>
         </div>
       </div>
+      <!-- 「社区新闻」大盒子 -->
+      <div
+        class="flex-none border border-gray-200 bg-white mx-5 mt-2 overflow-hidden"
+      >
+        <!-- 内部标题行 -->
+        <div
+          class="px-4 py-3 flex items-center justify-between border-b border-gray-100"
+        >
+          <h3 class="font-bold text-gray-900">社区新闻</h3>
+          <span class="text-xs text-gray-400">更多新闻&gt;</span>
+        </div>
+        <!-- 新闻列表 -->
+        <div class="divide-y divide-gray-100">
+          <div
+            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
+              <img
+                alt="新闻缩略图"
+                class="w-full h-full object-cover"
+                src="assets/packaged/sq/微信图片_20260727180857.jpg"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-gray-900 truncate">社区新开放 3D 全景房间功能</p>
+              <p class="text-[10px] text-gray-400 truncate mt-0.5">快来打造你的专属空间</p>
+            </div>
+          </div>
+          <div
+            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
+              <img
+                alt="新闻缩略图"
+                class="w-full h-full object-cover"
+                src="./assets/shops/shop-coffee-bar.png"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-gray-900 truncate">蓝鹊咖啡本周推出社区主题装扮</p>
+              <p class="text-[10px] text-gray-400 truncate mt-0.5">会员限定，快来兑换</p>
+            </div>
+          </div>
+          <div
+            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
+              <img
+                alt="新闻缩略图"
+                class="w-full h-full object-cover"
+                src="./assets/shops/shop-pizza-front.png"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-gray-900 truncate">社区装饰大赛获奖名单公布</p>
+              <p class="text-[10px] text-gray-400 truncate mt-0.5">恭喜所有获奖的创作者</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div aria-hidden="true" class="room-action-menu" id="roomActionMenu">
         <button onclick="handleRoomProfileAction(event, '分享主页')">
           查看分享
@@ -497,6 +496,9 @@
         </button>
         <button onclick="handleRoomProfileAction(event, '查看个人简历')">
           查看个人简历
+        </button>
+        <button onclick="handleRoomProfileAction(event, '收藏')">
+          收藏
         </button>
       </div>
       <!-- 虚拟身份证弹窗 -->
@@ -548,22 +550,17 @@
         }, 3000)
       }
 
-      function toggleAvatarMenu(event) {
-        event.stopPropagation()
-        const menu = document.getElementById('avatarActionMenu')
-        const button = document.getElementById('avatarActionButton')
-        const isOpen = menu.classList.toggle('show')
-        menu.setAttribute('aria-hidden', String(!isOpen))
-        button.setAttribute('aria-expanded', String(isOpen))
+      function handleHeaderSearch() {
+        showToast('建设中')
       }
 
-      function closeAvatarMenu() {
-        const menu = document.getElementById('avatarActionMenu')
-        const button = document.getElementById('avatarActionButton')
-        menu.classList.remove('show')
-        menu.setAttribute('aria-hidden', 'true')
-        button.setAttribute('aria-expanded', 'false')
-      }
+      document
+        .getElementById('headerSearchInput')
+        .addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            handleHeaderSearch()
+          }
+        })
 
       function closeRoomProfileMenu() {
         const menu = document.getElementById('roomActionMenu')
@@ -593,7 +590,7 @@
 
       const roomOwners = [
         {
-          name: '王爷符',
+          name: '王爷府',
           vId: 'V1122',
           gender: '男',
           birth: '1993年6月',
@@ -794,21 +791,8 @@
         modal.setAttribute('aria-hidden', 'true')
       }
 
-      function handleAvatarAction(event, label) {
-        event.stopPropagation()
-        closeAvatarMenu()
-        if (label === '分享主页') {
-          location.href = 'publish.html'
-        } else if (label === '查看虚拟身份证') {
-          showIDCard(userProfile)
-        } else if (label === '查看个人简历') {
-          showResume(userProfile)
-        }
-      }
-
       function showRoomProfileMenu(event) {
         event.stopPropagation()
-        closeAvatarMenu()
         const grid = event.currentTarget.parentElement
         currentRoomIndex = Array.prototype.indexOf.call(
           grid.children,
@@ -839,11 +823,12 @@
           showIDCard(owner)
         } else if (label === '查看个人简历') {
           showResume(owner)
+        } else if (label === '收藏') {
+          showToast('收藏功能建设中')
         }
       }
 
       document.addEventListener('click', () => {
-        closeAvatarMenu()
         closeRoomProfileMenu()
       })
     </script>
