@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>VIP 中心 - 智能空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<style>
+        body { background-color: #F8F9FA; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        ::-webkit-scrollbar { display: none; }
+        .app-container {
+            width: 100%;
+            height: 100dvh;
+            background: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+            padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <!-- Header -->
+    <header class="h-14 flex items-center px-4 border-b sticky top-0 bg-white z-10 flex-none">
+        <button aria-label="返回" onclick="window.location.href='profile.html'"><iconify-icon class="text-2xl text-gray-800" icon="solar:alt-arrow-left-linear"></iconify-icon></button>
+        <h1 class="font-bold flex-1 text-center pr-8">VIP 中心</h1>
+    </header>
+    <!-- VIP 列表 -->
+    <div class="flex-1 overflow-y-auto p-5 space-y-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="w-full aspect-square overflow-hidden">
+                <img alt="公益活动类VIP" class="w-full h-full object-cover" src="assets/src_01/颜色vip/公益活动类vip.jpg"/>
+            </div>
+            <div class="px-4 py-3">
+                <p class="text-sm font-bold text-gray-900 text-center">公益活动类VIP</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="w-full aspect-square overflow-hidden">
+                <img alt="技术服务类VIP" class="w-full h-full object-cover" src="assets/src_01/颜色vip/技术服务类vip.jpg"/>
+            </div>
+            <div class="px-4 py-3">
+                <p class="text-sm font-bold text-gray-900 text-center">技术服务类VIP</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="w-full aspect-square overflow-hidden">
+                <img alt="教育培训类VIP" class="w-full h-full object-cover" src="assets/src_01/颜色vip/教育培训类vip.jpg"/>
+            </div>
+            <div class="px-4 py-3">
+                <p class="text-sm font-bold text-gray-900 text-center">教育培训类VIP</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="w-full aspect-square overflow-hidden">
+                <img alt="文化娱乐类VIP" class="w-full h-full object-cover" src="assets/src_01/颜色vip/文化娱乐类vip.jpg"/>
+            </div>
+            <div class="px-4 py-3">
+                <p class="text-sm font-bold text-gray-900 text-center">文化娱乐类VIP</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
