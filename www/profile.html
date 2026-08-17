@@ -488,6 +488,69 @@
           </div>
         </div>
       </div>
+      <!-- 「社区新闻」大盒子 -->
+      <div
+        class="flex-none border border-gray-200 bg-white mx-5 mt-2 overflow-hidden"
+      >
+        <!-- 内部标题行 -->
+        <div
+          class="px-4 py-3 flex items-center justify-between border-b border-gray-100"
+        >
+          <h3 class="font-bold text-gray-900">社区新闻</h3>
+          <span class="text-xs text-gray-400">更多新闻&gt;</span>
+        </div>
+        <!-- 新闻列表 -->
+        <div class="divide-y divide-gray-100">
+          <div
+            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
+              <img
+                alt="新闻缩略图"
+                class="w-full h-full object-cover"
+                src="assets/packaged/sq/微信图片_20260727180857.jpg"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-gray-900 truncate">社区新开放 3D 全景房间功能</p>
+              <p class="text-[10px] text-gray-400 truncate mt-0.5">快来打造你的专属空间</p>
+            </div>
+          </div>
+          <div
+            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
+              <img
+                alt="新闻缩略图"
+                class="w-full h-full object-cover"
+                src="./assets/shops/shop-coffee-bar.png"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-gray-900 truncate">蓝鹊咖啡本周推出社区主题装扮</p>
+              <p class="text-[10px] text-gray-400 truncate mt-0.5">会员限定，快来兑换</p>
+            </div>
+          </div>
+          <div
+            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
+              <img
+                alt="新闻缩略图"
+                class="w-full h-full object-cover"
+                src="./assets/shops/shop-pizza-front.png"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-gray-900 truncate">社区装饰大赛获奖名单公布</p>
+              <p class="text-[10px] text-gray-400 truncate mt-0.5">恭喜所有获奖的创作者</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div aria-hidden="true" class="room-action-menu" id="roomActionMenu">
         <button onclick="handleRoomProfileAction(event, '分享主页')">
           查看分享
