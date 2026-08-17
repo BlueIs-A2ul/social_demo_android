@@ -1,0 +1,477 @@
+<!doctype html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>完善个人简历 - 智能空间</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      body {
+        width: 100%;
+        height: 100dvh;
+        background-color: #ffffff;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        overflow: hidden;
+        position: relative;
+        padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+        padding-bottom: var(
+          --safe-area-inset-bottom,
+          env(safe-area-inset-bottom, 0px)
+        );
+      }
+      .input-field {
+        width: 100%;
+        height: 48px;
+        border: 0;
+        border-bottom: 1px solid #f3f4f6;
+        outline: 0;
+        font-size: 15px;
+        color: #111827;
+        background: transparent;
+      }
+      .input-field::placeholder {
+        color: #9ca3af;
+      }
+      .input-field:focus {
+        border-bottom-color: #ec4899;
+      }
+      .gender-btn {
+        border: 1px solid #d1d5db;
+        color: #6b7280;
+      }
+      .gender-btn.on {
+        border-color: #ec4899;
+        background: #ec4899;
+        color: #fff;
+      }
+      .avatar-option {
+        border: 2px solid transparent;
+      }
+      .avatar-option.on {
+        border-color: #ec4899;
+      }
+      .step-panel {
+        display: none;
+      }
+      .step-panel.active {
+        display: block;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border: 2px solid #ec4899;
+        transition: all 0.2s;
+      }
+      .dot.filled {
+        background-color: #ec4899;
+      }
+      #toast {
+        position: absolute;
+        left: 50%;
+        bottom: 110px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.75);
+        color: #fff;
+        font-size: 13px;
+        padding: 8px 16px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        z-index: 100;
+        white-space: nowrap;
+      }
+      #toast.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col">
+    <!-- 主内容区 -->
+    <div class="flex-1 overflow-y-auto px-6 pt-10 pb-4">
+      <div class="flex justify-between items-start mb-6">
+        <h1
+          class="text-2xl font-bold text-[#ec4899] leading-relaxed tracking-wider"
+        >
+          完善个人简历<br />
+          <span class="text-sm text-gray-400 tracking-normal" id="step-title"
+            >第 1 步 / 共 3 步 · 基本信息</span
+          >
+        </h1>
+      </div>
+      <!-- 进度点 -->
+      <div class="flex justify-center gap-8 mb-6">
+        <div class="dot filled" id="dot-0"></div>
+        <div class="dot" id="dot-1"></div>
+        <div class="dot" id="dot-2"></div>
+      </div>
+
+      <!-- 第 1 步：基本信息 -->
+      <div class="step-panel active" id="panel-0">
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-name"
+            placeholder="姓名"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="flex gap-3 mb-4">
+          <button
+            class="gender-btn flex-1 h-11 text-sm font-medium"
+            onclick="selectGender('男', this)"
+          >
+            男
+          </button>
+          <button
+            class="gender-btn flex-1 h-11 text-sm font-medium"
+            onclick="selectGender('女', this)"
+          >
+            女
+          </button>
+          <button
+            class="gender-btn flex-1 h-11 text-sm font-medium"
+            onclick="selectGender('其他', this)"
+          >
+            其他
+          </button>
+        </div>
+        <div class="flex gap-3 mb-4">
+          <select
+            class="input-field"
+            id="f-birthYear"
+            onchange="updateButtonState()"
+          ></select>
+          <select
+            class="input-field"
+            id="f-birthMonth"
+            onchange="updateButtonState()"
+          ></select>
+        </div>
+        <div>
+          <input
+            class="input-field"
+            id="f-ethnic"
+            placeholder="民族（如：汉族）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+      </div>
+
+      <!-- 第 2 步：职业履历 -->
+      <div class="step-panel" id="panel-1">
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-job"
+            placeholder="职业（如：空间设计师）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-jobStatus"
+            placeholder="职业现状（如：在职）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-prevUnit"
+            placeholder="上任单位名称"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-contact"
+            placeholder="联系人（如：陈经理）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-phone"
+            placeholder="电话"
+            type="tel"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div>
+          <input
+            class="input-field"
+            id="f-education"
+            placeholder="教育经历（如：广州美术学院 环境设计 本科）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+      </div>
+
+      <!-- 第 3 步：个人特色 -->
+      <div class="step-panel" id="panel-2">
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-skills"
+            placeholder="技能（如：空间设计、室内陈设）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-specialty"
+            placeholder="特长（如：软装搭配、摄影）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-hobbies"
+            placeholder="爱好（如：旅行、音乐、烘焙）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="mb-4">
+          <input
+            class="input-field"
+            id="f-evaluation"
+            placeholder="自我评价（一句话介绍自己）"
+            type="text"
+            oninput="updateButtonState()"
+          />
+        </div>
+        <div class="mb-2">
+          <p class="text-sm text-gray-500 mb-2">选择头像</p>
+          <div class="grid grid-cols-5 gap-2" id="avatarGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部操作栏 -->
+    <div
+      class="h-24 px-6 flex items-center justify-between shrink-0 border-t border-gray-100"
+    >
+      <a class="text-gray-400 font-medium" onclick="skipInit()">跳过</a>
+      <button
+        class="bg-gray-200 text-white px-12 py-3 text-lg font-bold transition-colors"
+        disabled=""
+        id="next-btn"
+        onclick="handleNext()"
+      >
+        下一步
+      </button>
+    </div>
+    <div id="toast"></div>
+
+    <script>
+      const AVATARS = [
+        'assets/packaged/src/generated_avatars/avatar-01.png',
+        'assets/packaged/src/generated_avatars/avatar-02.png',
+        'assets/packaged/src/generated_avatars/avatar-03.png',
+        'assets/packaged/src/generated_avatars/avatar-04.png',
+        'assets/packaged/src/generated_avatars/avatar-05.png',
+        'assets/packaged/src/generated_avatars/avatar-06.png',
+        'assets/packaged/src/generated_avatars/avatar-07.png',
+        'assets/packaged/src/generated_avatars/avatar-08.png',
+        'assets/packaged/src/generated_avatars/avatar-09.png',
+        'assets/packaged/src/generated_avatars/avatar-10.png',
+      ]
+
+      const data = {
+        name: '',
+        gender: '',
+        birthYear: '',
+        birthMonth: '',
+        ethnic: '',
+        job: '',
+        jobStatus: '',
+        prevUnit: '',
+        contact: '',
+        phone: '',
+        education: '',
+        skills: '',
+        specialty: '',
+        hobbies: '',
+        evaluation: '',
+        avatar: '',
+      }
+
+      const steps = [
+        ['name', 'gender', 'birthYear', 'birthMonth', 'ethnic'],
+        ['job', 'jobStatus', 'prevUnit', 'contact', 'phone', 'education'],
+        ['skills', 'specialty', 'hobbies', 'evaluation', 'avatar'],
+      ]
+      let currentStep = 0
+      let toastTimer
+
+      function initYearMonth() {
+        const yearSel = document.getElementById('f-birthYear')
+        const monthSel = document.getElementById('f-birthMonth')
+        for (let y = 1980; y <= 2010; y++) {
+          const opt = document.createElement('option')
+          opt.value = String(y)
+          opt.textContent = y + '年'
+          yearSel.appendChild(opt)
+        }
+        for (let m = 1; m <= 12; m++) {
+          const opt = document.createElement('option')
+          opt.value = String(m)
+          opt.textContent = m + '月'
+          monthSel.appendChild(opt)
+        }
+      }
+
+      function renderAvatars() {
+        const grid = document.getElementById('avatarGrid')
+        AVATARS.forEach((src) => {
+          const btn = document.createElement('div')
+          btn.className = 'avatar-option rounded-full overflow-hidden cursor-pointer'
+          btn.innerHTML =
+            '<img class="w-full h-full object-cover" src="' +
+            src +
+            '" alt="头像" />'
+          btn.addEventListener('click', () => {
+            data.avatar = src
+            document
+              .querySelectorAll('#avatarGrid .avatar-option')
+              .forEach((el) => el.classList.remove('on'))
+            btn.classList.add('on')
+            updateButtonState()
+          })
+          grid.appendChild(btn)
+        })
+      }
+
+      function selectGender(value, el) {
+        data.gender = value
+        document
+          .querySelectorAll('.gender-btn')
+          .forEach((b) => b.classList.remove('on'))
+        el.classList.add('on')
+        updateButtonState()
+      }
+
+      function getField(field) {
+        if (field === 'gender') return data.gender
+        if (field === 'avatar') return data.avatar
+        if (field === 'birthYear') return document.getElementById('f-birthYear').value
+        if (field === 'birthMonth') return document.getElementById('f-birthMonth').value
+        return document.getElementById('f-' + field).value.trim()
+      }
+
+      function updateButtonState() {
+        const allFilled = steps[currentStep].every((f) => getField(f) !== '')
+        const btn = document.getElementById('next-btn')
+        if (allFilled) {
+          btn.disabled = false
+          btn.classList.remove('bg-gray-200')
+          btn.classList.add('bg-[#ec4899]')
+        } else {
+          btn.disabled = true
+          btn.classList.add('bg-gray-200')
+          btn.classList.remove('bg-[#ec4899]')
+        }
+      }
+
+      function renderStep() {
+        document.querySelectorAll('.step-panel').forEach((el) =>
+          el.classList.remove('active')
+        )
+        document.getElementById('panel-' + currentStep).classList.add('active')
+        for (let i = 0; i < 3; i++) {
+          document
+            .getElementById('dot-' + i)
+            .classList.toggle('filled', i <= currentStep)
+        }
+        const titles = ['基本信息', '职业履历', '个人特色']
+        document.getElementById('step-title').textContent =
+          '第 ' + (currentStep + 1) + ' 步 / 共 3 步 · ' + titles[currentStep]
+        const btn = document.getElementById('next-btn')
+        btn.textContent = currentStep === 2 ? '提交' : '下一步'
+        updateButtonState()
+      }
+
+      function collectFields() {
+        const keys = ['name', 'gender', 'birthYear', 'birthMonth', 'ethnic',
+          'job', 'jobStatus', 'prevUnit', 'contact', 'phone', 'education',
+          'skills', 'specialty', 'hobbies', 'evaluation', 'avatar']
+        keys.forEach((k) => {
+          data[k] = getField(k)
+        })
+      }
+
+      function handleNext() {
+        if (!steps[currentStep].every((f) => getField(f) !== '')) {
+          showToast('请完整填写本步骤内容')
+          return
+        }
+        if (currentStep < 2) {
+          currentStep++
+          renderStep()
+        } else {
+          collectFields()
+          localStorage.setItem(
+            'appUserProfile',
+            JSON.stringify({
+              name: data.name,
+              vId: '',
+              gender: data.gender,
+              birth: data.birthYear + '年' + data.birthMonth + '月',
+              ethnic: data.ethnic,
+              job: data.job,
+              jobStatus: data.jobStatus,
+              skills: data.skills,
+              specialty: data.specialty,
+              hobbies: data.hobbies,
+              prevUnit: data.prevUnit,
+              education: data.education,
+              contact: data.contact,
+              phone: data.phone,
+              evaluation: data.evaluation,
+              avatar: data.avatar,
+            })
+          )
+          window.location.href = 'profile_init_idcard.html'
+        }
+      }
+
+      function skipInit() {
+        window.location.href = 'index.html'
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById('toast')
+        toast.textContent = msg
+        toast.classList.add('show')
+        clearTimeout(toastTimer)
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show')
+        }, 1500)
+      }
+
+      initYearMonth()
+      renderAvatars()
+      renderStep()
+    </script>
+  </body>
+</html>
