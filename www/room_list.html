@@ -173,11 +173,31 @@
       >
         <!-- 内部标题行 -->
         <div
-          class="px-4 py-4 flex items-center justify-between border-b border-gray-100"
+          class="px-4 py-3 flex items-center gap-3 border-b border-gray-100"
           style=""
         >
-          <h3 class="font-bold text-gray-900">我的房间</h3>
-          <span class="text-xs text-gray-400">4个空间</span>
+          <h3 class="font-bold text-gray-900 flex-none">我的房间</h3>
+          <div
+            class="flex-1 flex items-center gap-1.5 bg-gray-100 rounded-full px-3 h-8 min-w-0"
+          >
+            <iconify-icon
+              class="text-gray-400 text-base flex-none"
+              icon="solar:magnifer-bold"
+            ></iconify-icon>
+            <input
+              id="roomSearchInput"
+              class="flex-1 text-xs bg-transparent focus:outline-none min-w-0"
+              type="search"
+              placeholder="搜索房间"
+            />
+            <button
+              class="flex-none text-xs text-white bg-[#ec4899] rounded-full px-3 py-1 active:scale-95 transition-transform"
+              onclick="filterRooms(document.getElementById('roomSearchInput').value)"
+            >
+              搜索
+            </button>
+          </div>
+          <span class="text-xs text-gray-400 flex-none">4个空间</span>
         </div>
         <!-- Grid 网格 -->
         <div
@@ -190,7 +210,7 @@
         >
           <!-- 房间 1: 青铜之门 -->
           <div
-            class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
@@ -207,7 +227,7 @@
           </div>
           <!-- 房间 2: 娜美的房间 -->
           <div
-            class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="window.location.href='panorama_room.html?from=room_list'"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
@@ -224,7 +244,7 @@
           </div>
           <!-- 房间 3: 直播间 -->
           <div
-            class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
@@ -241,7 +261,7 @@
           </div>
           <!-- 房间 4: 我的播客 -->
           <div
-            class="border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
@@ -723,6 +743,14 @@
         setTimeout(() => {
           toast.className = toast.className.replace('show', '')
         }, 3000)
+      }
+
+      function filterRooms(keyword) {
+        const text = (keyword || '').trim().toLowerCase()
+        document.querySelectorAll('.room-item').forEach((item) => {
+          const name = (item.textContent || '').trim().toLowerCase()
+          item.classList.toggle('hidden', text !== '' && !name.includes(text))
+        })
       }
     </script>
   </body>
