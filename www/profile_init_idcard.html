@@ -1,0 +1,192 @@
+<!doctype html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>生成虚拟身份证 - 智能空间</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <style>
+      body {
+        width: 100%;
+        height: 100dvh;
+        background-color: #f9fafb;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        overflow: hidden;
+        position: relative;
+        padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+        padding-bottom: var(
+          --safe-area-inset-bottom,
+          env(safe-area-inset-bottom, 0px)
+        );
+      }
+      .idcard {
+        border: 1px solid #d1d5db;
+        background: #fff;
+      }
+      .idcard-row {
+        display: flex;
+        gap: 12px;
+        padding: 9px 0;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .idcard-row:last-child {
+        border-bottom: 0;
+      }
+      .idcard-label {
+        width: 72px;
+        flex: none;
+        color: #9ca3af;
+        font-size: 11px;
+      }
+      .idcard-value {
+        color: #374151;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      #toast {
+        position: absolute;
+        left: 50%;
+        bottom: 120px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.75);
+        color: #fff;
+        font-size: 13px;
+        padding: 8px 16px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        z-index: 100;
+        white-space: nowrap;
+      }
+      #toast.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col">
+    <!-- 主内容区 -->
+    <div class="flex-1 overflow-y-auto px-6 pt-10 pb-4">
+      <h1
+        class="text-2xl font-bold text-[#ec4899] leading-relaxed tracking-wider mb-2"
+      >
+        生成虚拟身份证
+      </h1>
+      <p class="text-sm text-gray-400 mb-6">
+        已为你自动生成，确认后即可进入智能空间
+      </p>
+
+      <!-- 身份证卡面 -->
+      <div class="idcard p-5 mb-6">
+        <div class="flex items-center gap-3 pb-4 border-b border-gray-100">
+          <img
+            class="w-14 h-14 object-cover border border-gray-200 flex-none rounded-full"
+            id="card-avatar"
+            src=""
+            alt="头像"
+          />
+          <div class="min-w-0">
+            <div class="text-base font-bold text-gray-900" id="card-name"></div>
+            <div class="text-xs text-gray-400 mt-1">
+              虚拟身份证编号：<span id="card-vid"></span>
+            </div>
+          </div>
+        </div>
+        <div id="card-fields"></div>
+      </div>
+    </div>
+
+    <!-- 底部操作栏 -->
+    <div
+      class="h-28 px-6 flex flex-col justify-center gap-3 shrink-0 border-t border-gray-100 bg-white"
+    >
+      <button
+        class="w-full h-11 bg-[#ec4899] text-white text-base font-bold"
+        onclick="confirmAndEnter()"
+      >
+        确认并进入
+      </button>
+      <a class="text-center text-sm text-gray-400 font-medium" onclick="skipInit()"
+        >跳过，直接进入</a
+      >
+    </div>
+    <div id="toast"></div>
+
+    <script>
+      let toastTimer
+
+      function generateVid() {
+        return 'V' + (1000 + Math.floor(Math.random() * 9000))
+      }
+
+      function renderCard() {
+        let profile = null
+        try {
+          profile = JSON.parse(localStorage.getItem('appUserProfile') || 'null')
+        } catch (e) {
+          profile = null
+        }
+        if (!profile) {
+          window.location.href = 'profile_init_resume.html'
+          return
+        }
+        if (!profile.vId) {
+          profile.vId = generateVid()
+          localStorage.setItem('appUserProfile', JSON.stringify(profile))
+        }
+
+        document.getElementById('card-avatar').src = profile.avatar || ''
+        document.getElementById('card-name').textContent = profile.name || ''
+        document.getElementById('card-vid').textContent = profile.vId
+
+        const fields = [
+          ['出生', profile.birth],
+          ['性别', profile.gender],
+          ['民族', profile.ethnic],
+          ['职业', profile.job],
+          ['职业现状', profile.jobStatus],
+          ['技能', profile.skills],
+          ['特长', profile.specialty],
+          ['爱好', profile.hobbies],
+        ]
+        document.getElementById('card-fields').innerHTML = fields
+          .map(
+            (f) =>
+              '<div class="idcard-row"><span class="idcard-label">' +
+              f[0] +
+              '</span><span class="idcard-value">' +
+              (f[1] || '-') +
+              '</span></div>'
+          )
+          .join('')
+      }
+
+      function confirmAndEnter() {
+        showToast('虚拟身份证生成成功')
+        setTimeout(() => {
+          window.location.href = 'index.html'
+        }, 800)
+      }
+
+      function skipInit() {
+        window.location.href = 'index.html'
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById('toast')
+        toast.textContent = msg
+        toast.classList.add('show')
+        clearTimeout(toastTimer)
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show')
+        }, 1500)
+      }
+
+      renderCard()
+    </script>
+  </body>
+</html>

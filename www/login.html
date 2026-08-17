@@ -71,34 +71,7 @@
             color: white;
             font-size: 10px;
         }
-        /* 首次使用弹窗 */
-        #welcome-modal {
-            position: absolute;
-            inset: 0;
-            z-index: 200;
-            background: rgba(0, 0, 0, 0.45);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 0 28px;
-        }
-        #welcome-modal .modal-card {
-            background: #fff;
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-            padding: 36px 24px 24px;
-        }
-        #welcome-modal .modal-logo {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-<style data-id="immersive-translate-input-injected-css"></style>
+    </style><style data-id="immersive-translate-input-injected-css"></style>
 </head>
 <body class="">
 <div class="app-container">
@@ -165,20 +138,6 @@
 </div>
 <!-- Toast 容器 -->
 <div class="" id="toast">第三方登录</div>
-<!-- 首次使用弹窗 -->
-<div id="welcome-modal">
-<div class="modal-card">
-<div class="modal-logo">
-<div class="w-16 h-16 rounded-full bg-pink-500 flex items-center justify-center overflow-hidden">
-<img alt="App Logo" class="w-full h-full object-cover" src="assets/packaged/sq/app图标.png"/>
-</div>
-</div>
-<h2 class="text-xl font-bold text-black mb-2">欢迎加入智能空间</h2>
-<p class="text-sm text-gray-500 leading-relaxed mb-8">第一次使用？花一分钟完成新手指引，更快找到同好的朋友。</p>
-<button class="w-full h-12 bg-pink-gradient text-white font-bold text-base flex items-center justify-center mb-3" onclick="goOnboarding()">进入新手指引</button>
-<button class="w-full h-11 bg-white border border-pink-400 text-pink-500 text-base flex items-center justify-center" onclick="goHome()">跳过，直接进入</button>
-</div>
-</div>
 </div>
 <script>
         let isProtocolAgreed = false;
@@ -217,16 +176,8 @@
             }
             showToast('一键登录中...');
             setTimeout(() => {
-                document.getElementById('welcome-modal').style.display = 'flex';
+                window.location.href = 'profile_init_resume.html';
             }, 1200);
-        }
-
-        function goOnboarding() {
-            window.location.href = 'onboarding_gender.html';
-        }
-
-        function goHome() {
-            window.location.href = 'index.html';
         }
 
         function handleOtherLogin() {

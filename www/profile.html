@@ -568,7 +568,7 @@
         menu.setAttribute('aria-hidden', 'true')
       }
 
-      const userProfile = {
+      const defaultUserProfile = {
         name: '小云',
         vId: 'V8001',
         gender: '女',
@@ -586,6 +586,18 @@
         evaluation: '热爱空间设计，擅长用光影与材质营造沉浸式社交空间',
         avatar:
           'assets/packaged/45c974594ffb45d480a2d4bd1533e917.png',
+      }
+
+      let userProfile = defaultUserProfile
+      try {
+        const stored = JSON.parse(
+          localStorage.getItem('appUserProfile') || 'null'
+        )
+        if (stored) {
+          userProfile = Object.assign({}, defaultUserProfile, stored)
+        }
+      } catch (e) {
+        userProfile = defaultUserProfile
       }
 
       const roomOwners = [
