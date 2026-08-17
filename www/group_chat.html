@@ -272,6 +272,78 @@
       .shadow-2xl {
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       }
+      .member-sheet-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 50;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: flex-end;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+      .member-sheet-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .member-sheet {
+        width: 100%;
+        background: #fff;
+        transform: translateY(100%);
+        transition: transform 0.25s ease;
+      }
+      .member-sheet-overlay.show .member-sheet {
+        transform: translateY(0);
+      }
+      .member-sheet-handle {
+        width: 36px;
+        height: 4px;
+        background: #e5e7eb;
+        margin: 8px auto 0;
+      }
+      .permission-toggle {
+        width: 44px;
+        height: 24px;
+        background: #d1d5db;
+        position: relative;
+        flex: none;
+        transition: background 0.2s ease;
+      }
+      .permission-toggle .permission-toggle-dot {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 18px;
+        height: 18px;
+        background: #fff;
+        transition: transform 0.2s ease;
+      }
+      .permission-toggle.on {
+        background: #ec4899;
+      }
+      .permission-toggle.on .permission-toggle-dot {
+        transform: translateX(20px);
+      }
+      .member-sheet-toast {
+        position: absolute;
+        left: 50%;
+        bottom: 120px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.75);
+        color: #fff;
+        font-size: 12px;
+        padding: 8px 16px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease;
+        z-index: 60;
+        white-space: nowrap;
+      }
+      .member-sheet-toast.show {
+        opacity: 1;
+        visibility: visible;
+      }
     </style>
   </head>
   <body class="flex items-center justify-center min-h-screen">
@@ -359,6 +431,7 @@
             class="avatar w-10 h-10"
             alt="小雨"
             src="assets/packaged/src/generated_avatars/avatar-04.png"
+            onclick="openMemberMenu('小雨', 'assets/packaged/src/generated_avatars/avatar-04.png', '朋友')"
           />
           <div class="flex-1 space-y-1">
             <div class="flex items-center gap-2">
@@ -378,6 +451,7 @@
             class="avatar w-10 h-10"
             alt="约翰逊"
             src="assets/packaged/src/generated_avatars/avatar-07.png"
+            onclick="openMemberMenu('约翰逊', 'assets/packaged/src/generated_avatars/avatar-07.png', '管理员')"
           />
           <div class="flex-1 space-y-1">
             <div class="flex items-center gap-2">
@@ -419,6 +493,7 @@
             class="avatar w-10 h-10"
             alt="七七"
             src="assets/packaged/src/generated_avatars/avatar-09.png"
+            onclick="openMemberMenu('七七', 'assets/packaged/src/generated_avatars/avatar-09.png', '朋友')"
           />
           <div class="flex-1 space-y-1">
             <div class="flex items-center gap-2">
@@ -438,6 +513,7 @@
             class="avatar w-10 h-10"
             alt="星河"
             src="assets/packaged/src/generated_avatars/avatar-03.png"
+            onclick="openMemberMenu('星河', 'assets/packaged/src/generated_avatars/avatar-03.png', '同城好友')"
           />
           <div class="flex-1 space-y-1">
             <div class="flex items-center gap-2">
@@ -561,6 +637,151 @@
           </button>
         </div>
       </footer>
+
+      <!-- 成员权限设置底部面板 -->
+      <div
+        class="member-sheet-overlay"
+        id="memberSheetOverlay"
+        onclick="closeMemberMenu()"
+      >
+        <div class="member-sheet" onclick="event.stopPropagation()">
+          <div class="member-sheet-handle"></div>
+          <div
+            class="flex items-center gap-3 p-4 border-b border-gray-100"
+          >
+            <img
+              class="avatar w-10 h-10"
+              alt="成员头像"
+              id="memberSheetAvatar"
+              src=""
+            />
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-bold text-gray-900" id="memberSheetName">
+                成员
+              </p>
+              <p class="text-[10px] text-gray-400" id="memberSheetTag"></p>
+            </div>
+            <button
+              class="w-8 h-8 flex items-center justify-center text-gray-400 shrink-0"
+              onclick="closeMemberMenu()"
+              aria-label="关闭"
+            >
+              <svg
+                fill="none"
+                height="18"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="18"
+              >
+                <path d="M18 6 6 18M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="p-4">
+            <div
+              class="flex items-center justify-between py-3 border-b border-gray-100"
+            >
+              <div>
+                <p class="text-sm text-gray-900">说话权限</p>
+                <p class="text-[10px] text-gray-400 mt-1" id="speakDesc">
+                  允许发言
+                </p>
+              </div>
+              <button
+                aria-label="说话权限"
+                class="permission-toggle on"
+                id="speakToggle"
+                onclick="togglePermission('speak')"
+              >
+                <span class="permission-toggle-dot"></span>
+              </button>
+            </div>
+            <div class="flex items-center justify-between py-3">
+              <div>
+                <p class="text-sm text-gray-900">接收权限</p>
+                <p class="text-[10px] text-gray-400 mt-1" id="receiveDesc">
+                  接收消息
+                </p>
+              </div>
+              <button
+                aria-label="接收权限"
+                class="permission-toggle on"
+                id="receiveToggle"
+                onclick="togglePermission('receive')"
+              >
+                <span class="permission-toggle-dot"></span>
+              </button>
+            </div>
+          </div>
+          <div
+            class="p-4 border-t border-gray-100"
+            style="padding-bottom: calc(1rem + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));"
+          >
+            <button
+              class="w-full h-10 bg-pink-main text-white text-xs font-bold"
+              onclick="closeMemberMenu()"
+            >
+              完成
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Toast -->
+      <div class="member-sheet-toast" id="memberSheetToast"></div>
     </div>
+    <script>
+      const memberPermissionState = { speak: true, receive: true }
+      let sheetToastTimer
+
+      function openMemberMenu(name, avatarSrc, tag) {
+        document.getElementById('memberSheetName').textContent = name
+        document.getElementById('memberSheetAvatar').src = avatarSrc
+        document.getElementById('memberSheetTag').textContent = tag
+        memberPermissionState.speak = true
+        memberPermissionState.receive = true
+        renderPermissionToggle('speak')
+        renderPermissionToggle('receive')
+        document.getElementById('memberSheetOverlay').classList.add('show')
+      }
+
+      function closeMemberMenu() {
+        document.getElementById('memberSheetOverlay').classList.remove('show')
+      }
+
+      function renderPermissionToggle(type) {
+        const on = memberPermissionState[type]
+        document
+          .getElementById(type + 'Toggle')
+          .classList.toggle('on', on)
+        const desc = document.getElementById(type + 'Desc')
+        if (type === 'speak') {
+          desc.textContent = on ? '允许发言' : '禁止发言'
+        } else {
+          desc.textContent = on ? '接收消息' : '屏蔽消息'
+        }
+      }
+
+      function togglePermission(type) {
+        memberPermissionState[type] = !memberPermissionState[type]
+        renderPermissionToggle(type)
+        const name = document.getElementById('memberSheetName').textContent
+        const label = type === 'speak' ? '发言' : '接收'
+        const action = memberPermissionState[type] ? '已允许' : '已禁止'
+        showSheetToast(name + ' ' + action + label)
+      }
+
+      function showSheetToast(msg) {
+        const toast = document.getElementById('memberSheetToast')
+        toast.textContent = msg
+        toast.classList.add('show')
+        clearTimeout(sheetToastTimer)
+        sheetToastTimer = setTimeout(() => {
+          toast.classList.remove('show')
+        }, 1500)
+      }
+    </script>
   </body>
 </html>
