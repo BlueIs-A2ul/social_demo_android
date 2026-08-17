@@ -218,7 +218,7 @@
                     小云<img
                       alt="个人VIP2"
                       class="vip-badge"
-                      src="assets/vip/user-vip-star-6.png"
+                      src="assets/src_01/颜色vip/技术服务类vip.jpg"
                     />
                   </div>
                   <div class="text-[10px] text-gray-400">
@@ -363,7 +363,7 @@
                     七七<img
                       alt="个人VIP2"
                       class="vip-badge"
-                      src="assets/vip/user-vip-star-3.png"
+                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
                     />
                   </div>
                   <div class="text-[10px] text-gray-400">
@@ -537,7 +537,7 @@
                     小鹿<img
                       alt="个人VIP2"
                       class="vip-badge"
-                      src="assets/vip/user-vip-star-4.png"
+                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
                     />
                   </div>
                   <div class="text-[10px] text-gray-400">2小时前</div>
@@ -694,7 +694,7 @@
                     星河<img
                       alt="个人VIP2"
                       class="vip-badge"
-                      src="assets/vip/user-vip-star-2.png"
+                      src="assets/src_01/颜色vip/技术服务类vip.jpg"
                     />
                   </div>
                   <div class="text-[10px] text-gray-400">5小时前</div>
@@ -1005,7 +1005,7 @@
                   ><img
                     alt="个人VIP2"
                     class="vip-badge"
-                    src="assets/vip/user-vip-star-5.png"
+                    src="assets/src_01/颜色vip/技术服务类vip.jpg"
                   />
                 </div>
                 <div
@@ -1089,7 +1089,7 @@
                   >设计大师_K<img
                     alt="个人VIP2"
                     class="vip-badge"
-                    src="assets/vip/user-vip-star-1.png"
+                    src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
                 /></span>
                 <span class="text-[10px] text-gray-400">2分钟前</span>
               </div>
@@ -1107,7 +1107,7 @@
                   >小红书逃难者<img
                     alt="个人VIP2"
                     class="vip-badge"
-                    src="assets/vip/user-vip-star-7.png"
+                    src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
                 /></span>
                 <span class="text-[10px] text-gray-400">15分钟前</span>
               </div>
@@ -1125,7 +1125,7 @@
                   >探险家<img
                     alt="个人VIP2"
                     class="vip-badge"
-                    src="assets/vip/user-vip-star-4.png"
+                    src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
                 /></span>
                 <span class="text-[10px] text-gray-400">1小时前</span>
               </div>
@@ -1362,8 +1362,17 @@
           .join('')
       }
 
-      function renderVipBadge(level = 2) {
-        return `<img alt="个人VIP${level}" class="vip-badge" src="assets/vip/user-vip-star-${level}.png">`
+      function renderVipBadge(user) {
+        const vipImageMap = {
+          小雨: 'assets/src_01/颜色vip/文化娱乐类vip.jpg',
+          阿森: 'assets/src_01/颜色vip/公益活动类vip.jpg',
+          小云: 'assets/src_01/颜色vip/技术服务类vip.jpg',
+          七七: 'assets/src_01/颜色vip/文化娱乐类vip.jpg',
+          小鹿: 'assets/src_01/颜色vip/文化娱乐类vip.jpg',
+          星河: 'assets/src_01/颜色vip/技术服务类vip.jpg',
+        }
+        const img = vipImageMap[user] || 'assets/src_01/颜色vip/文化娱乐类vip.jpg'
+        return `<img alt="个人VIP" class="vip-badge" src="${img}">`
       }
 
       // 生成单条帖子 HTML
@@ -1410,7 +1419,7 @@
                         <div class="flex items-center space-x-3 cursor-pointer" onclick="location.href='owner_profile.html'">
                             <img src="${post.avatar}" class="w-10 h-10 rounded-full border border-gray-100">
                             <div>
-                                <div class="text-sm font-bold text-black">${post.user}${renderVipBadge(post.vipLevel)}</div>
+                                <div class="text-sm font-bold text-black">${post.user}${renderVipBadge(post.user)}</div>
                                 <div class="text-[10px] text-gray-400">${post.time}${post.source ? ' · ' + post.source : ''}</div>
                             </div>
                         </div>
