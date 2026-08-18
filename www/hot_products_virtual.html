@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>虚拟空间商品</title>
-    <style>
+<title>虚拟空间商品</title>
+<script src="assets/vendor/nav.js"></script>
+<style>
       * {
         box-sizing: border-box;
         border-radius: 0 !important;
@@ -360,7 +361,7 @@
   <body>
     <div class="phone">
       <header class="app-header">
-        <button class="icon-button" aria-label="返回" onclick="goBack()">
+        <button class="icon-button" aria-label="返回" onclick="goBack('room_list.html', {room_list: 'room_list.html', merchant_shop: 'merchant_shop.html'})">
           <svg
             width="25"
             height="25"
@@ -560,27 +561,6 @@
     </div>
 
     <script>
-      function goBack() {
-        const params = new URLSearchParams(window.location.search)
-        const from = params.get('from')
-
-        if (from === 'room_list') {
-          window.location.href = 'room_list.html'
-          return
-        }
-
-        if (from === 'merchant_shop') {
-          window.location.href = 'merchant_shop.html'
-          return
-        }
-
-        if (window.history.length > 1) {
-          window.history.back()
-          return
-        }
-
-        window.location.href = 'room_list.html'
-      }
 
       const categoryGroups = [
         {

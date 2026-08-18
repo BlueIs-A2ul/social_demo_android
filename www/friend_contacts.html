@@ -5,8 +5,9 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>好友通讯录 - 元宇宙社交</title>
-    <script src="assets/vendor/tailwindcss.js"></script>
-    <style>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/nav.js"></script>
+<style>
       @import url('assets/vendor/inter.css');
       body {
         font-family:
@@ -908,30 +909,6 @@
 
       function closeResume() {
         document.getElementById('resumeModal').classList.add('hidden')
-      }
-
-      function goBack() {
-        const params = new URLSearchParams(window.location.search);
-        const from = params.get('from');
-        if (from === 'room_list') {
-          window.location.href = 'room_list.html';
-        } else if (from === 'radar') {
-          window.location.href = 'radar.html';
-        } else if (from === 'profile') {
-          window.location.href = 'profile.html';
-        } else {
-          window.location.href = 'my_contacts.html';
-        }
-      }
-
-      function switchTab(url) {
-        const params = new URLSearchParams(window.location.search);
-        const from = params.get('from');
-        if (from) {
-          window.location.href = url + '?from=' + from;
-        } else {
-          window.location.href = url;
-        }
       }
 
       window.onload = renderFriends

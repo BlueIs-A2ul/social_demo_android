@@ -6,6 +6,7 @@
 <title>编辑资料 - 智能空间</title>
 <script src="assets/vendor/tailwindcss.js"></script>
 <script src="assets/vendor/iconify-icon.min.js"></script>
+<script src="assets/vendor/nav.js"></script>
 <style>
         body { 
             background-color: #FFFFFF; 
@@ -37,7 +38,7 @@
 <div class="app-container">
 <!-- Header -->
 <header class="h-[52px] flex justify-between items-center px-4 shrink-0">
-<button class="w-8 h-8 flex items-center justify-center" onclick="goBack()">
+<button class="w-8 h-8 flex items-center justify-center" onclick="goBack('profile.html', {room_list: 'room_list.html'})">
 <iconify-icon class="text-2xl text-black" icon="solar:alt-arrow-left-linear"></iconify-icon>
 </button>
 <h1 class="text-[17px] font-semibold text-black">编辑资料</h1>
@@ -119,21 +120,6 @@
 <div class="absolute bottom-10 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[14px] px-4 py-2 opacity-0 z-[100]" id="toast" style="opacity: 0;">选择日期</div>
 </div>
 <script>
-    function getReturnUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const from = params.get('from');
-
-        if (from === 'room_list') {
-            return 'room_list.html';
-        }
-
-        return 'profile.html';
-    }
-
-    function goBack() {
-        window.location.href = getReturnUrl();
-    }
-
     function showToast(msg) {
         const toast = document.getElementById('toast');
         toast.innerText = msg;

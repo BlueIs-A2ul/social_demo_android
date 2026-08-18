@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>群设置</title>
 <script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/nav.js"></script>
 <style>
     body { background-color: #f3f4f6; margin: 0; overflow: hidden; font-family: -apple-system, sans-serif; }
     .app-container { width: 100%; height: 100dvh; position: relative; overflow: hidden; display: flex; flex-direction: column; background: white;
@@ -109,7 +110,7 @@
 <div class="app-container shadow-2xl">
     <header class="p-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
         <div class="flex items-center gap-3">
-            <button class="text-gray-900" onclick="goBack()">
+            <button class="text-gray-900" onclick="goBack('group_chat.html', {group_chat: 'group_chat.html', group_create: 'message_center.html', message_center: 'message_center.html'})">
                 <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"><path d="m15 18-6-6 6-6"></path></svg>
             </button>
             <div>
@@ -309,28 +310,6 @@
 </div>
 
 <script>
-    function goBack() {
-        const params = new URLSearchParams(window.location.search);
-        const from = params.get('from');
-        const returnMap = {
-            group_chat: 'group_chat.html',
-            group_create: 'message_center.html',
-            message_center: 'message_center.html'
-        };
-
-        if (returnMap[from]) {
-            window.location.href = returnMap[from];
-            return;
-        }
-
-        if (window.history.length > 1) {
-            window.history.back();
-            return;
-        }
-
-        window.location.href = 'group_chat.html';
-    }
-
     function switchCategory(button) {
         document.querySelectorAll('.category-tab').forEach((tab) => {
             tab.classList.remove('category-active');
