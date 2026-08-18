@@ -420,61 +420,55 @@
       >
         <!-- 内部标题行 -->
         <div
-          class="px-4 py-3 flex items-center justify-between border-b border-gray-100 cursor-pointer select-none"
+          class="px-4 py-3 flex items-center justify-center border-b border-gray-100 cursor-pointer select-none"
           onclick="toggleNews()"
         >
           <h3 class="font-bold text-gray-900">社区新闻</h3>
-          <span class="text-xs text-gray-400 flex items-center gap-1">更多新闻&gt; <span class="news-arrow text-gray-500">▼</span></span>
+          <span class="news-arrow text-gray-500 ml-2 text-xs">▼</span>
         </div>
-        <!-- 新闻列表 -->
-        <div class="divide-y divide-gray-100" id="newsList">
+        <!-- 新闻网格 -->
+        <div class="grid grid-cols-3 gap-3 p-4" id="newsList">
           <div
-            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
-            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
-              <img
-                alt="新闻缩略图"
-                class="w-full h-full object-cover"
-                src="assets/packaged/sq/微信图片_20260727180857.jpg"
-              />
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-xs text-gray-900 truncate">社区新开放 3D 全景房间功能</p>
-              <p class="text-[10px] text-gray-400 truncate mt-0.5">快来打造你的专属空间</p>
-            </div>
+            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
+            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
           </div>
           <div
-            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
-            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
-              <img
-                alt="新闻缩略图"
-                class="w-full h-full object-cover"
-                src="./assets/shops/shop-coffee-bar.png"
-              />
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-xs text-gray-900 truncate">蓝鹊咖啡本周推出社区主题装扮</p>
-              <p class="text-[10px] text-gray-400 truncate mt-0.5">会员限定，快来兑换</p>
-            </div>
+            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
+            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
           </div>
           <div
-            class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
+            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
-            <div class="w-14 h-10 flex-none overflow-hidden rounded-sm">
-              <img
-                alt="新闻缩略图"
-                class="w-full h-full object-cover"
-                src="./assets/shops/shop-pizza-front.png"
-              />
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-xs text-gray-900 truncate">社区装饰大赛获奖名单公布</p>
-              <p class="text-[10px] text-gray-400 truncate mt-0.5">恭喜所有获奖的创作者</p>
-            </div>
+            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
+            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
+          </div>
+          <div
+            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
+            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
+          </div>
+          <div
+            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
+            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
+          </div>
+          <div
+            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showToast('建设中')"
+          >
+            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
+            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
           </div>
         </div>
       </div>
