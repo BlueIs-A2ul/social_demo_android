@@ -311,16 +311,6 @@
                 placeholder="搜索"
                 type="text"
               />
-              <button
-                aria-label="搜索"
-                class="text-gray-600 flex-none"
-                onclick="handleHeaderSearch()"
-              >
-                <iconify-icon
-                  class="text-lg"
-                  icon="solar:magnifer-bold"
-                ></iconify-icon>
-              </button>
             </div>
           </div>
         </div>
@@ -431,13 +421,14 @@
       >
         <!-- 内部标题行 -->
         <div
-          class="px-4 py-3 flex items-center justify-between border-b border-gray-100"
+          class="px-4 py-3 flex items-center justify-between border-b border-gray-100 cursor-pointer select-none"
+          onclick="toggleNews()"
         >
           <h3 class="font-bold text-gray-900">社区新闻</h3>
-          <span class="text-xs text-gray-400">更多新闻&gt;</span>
+          <span class="text-xs text-gray-400 flex items-center gap-1">更多新闻&gt; <span class="news-arrow text-gray-500">▼</span></span>
         </div>
         <!-- 新闻列表 -->
-        <div class="divide-y divide-gray-100">
+        <div class="divide-y divide-gray-100" id="newsList">
           <div
             class="px-4 py-2.5 flex items-center gap-3 cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
@@ -549,6 +540,18 @@
         setTimeout(() => {
           toast.className = toast.className.replace('show', '')
         }, 3000)
+      }
+
+      function toggleNews() {
+        const list = document.getElementById('newsList')
+        const arrow = document.querySelector('.news-arrow')
+        if (list.classList.contains('hidden')) {
+          list.classList.remove('hidden')
+          arrow.textContent = '▼'
+        } else {
+          list.classList.add('hidden')
+          arrow.textContent = '▶'
+        }
       }
 
       function handleHeaderSearch() {
