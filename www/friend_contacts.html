@@ -128,7 +128,7 @@
         class="px-4 py-3 flex justify-between items-center flex-none bg-[#ec4899] text-white"
         style="background-color: rgb(255, 255, 255)"
       >
-        <a class="text-white" href="my_contacts.html">
+        <a class="text-white" href="javascript:goBack()">
           <svg
             class=""
             fill="none"
@@ -158,13 +158,13 @@
         <div class="flex border border-[#ec4899]">
           <button
             class="flex-1 py-2 text-sm font-bold text-[#ec4899]"
-            onclick="window.location.href='my_contacts.html'"
+            onclick="switchTab('my_contacts.html')"
           >
             我的通讯录
           </button>
           <button
             class="flex-1 py-2 text-sm font-bold bg-[#ec4899] text-white"
-            onclick="window.location.href='friend_contacts.html'"
+            onclick="switchTab('friend_contacts.html')"
           >
             好友通讯录
           </button>
@@ -908,6 +908,30 @@
 
       function closeResume() {
         document.getElementById('resumeModal').classList.add('hidden')
+      }
+
+      function goBack() {
+        const params = new URLSearchParams(window.location.search);
+        const from = params.get('from');
+        if (from === 'room_list') {
+          window.location.href = 'room_list.html';
+        } else if (from === 'radar') {
+          window.location.href = 'radar.html';
+        } else if (from === 'profile') {
+          window.location.href = 'profile.html';
+        } else {
+          window.location.href = 'my_contacts.html';
+        }
+      }
+
+      function switchTab(url) {
+        const params = new URLSearchParams(window.location.search);
+        const from = params.get('from');
+        if (from) {
+          window.location.href = url + '?from=' + from;
+        } else {
+          window.location.href = url;
+        }
       }
 
       window.onload = renderFriends
