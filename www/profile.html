@@ -271,6 +271,62 @@
         object-fit: cover;
         border: 1px solid #000;
       }
+
+      /* 下拉刷新指示器 */
+      .pull-to-refresh-indicator {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        z-index: 10;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        border-bottom: 1px solid #f3f4f6;
+      }
+
+      .pull-to-refresh-indicator.visible {
+        transform: translateY(0);
+      }
+
+      .refresh-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .refresh-icon.loading {
+        animation: spin 1s linear infinite;
+      }
+
+      .refresh-text {
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 4px;
+      }
+
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      /* 新闻网格动画 */
+      .news-item-enter {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.3s ease forwards;
+      }
+
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
@@ -416,8 +472,14 @@
       </div>
       <!-- 「社区新闻」大盒子 -->
       <div
-        class="flex-none border border-gray-200 bg-white mx-5 mt-2 overflow-hidden"
+        class="flex-none border border-gray-200 bg-white mx-5 mt-2 overflow-hidden relative"
+        id="newsContainer"
       >
+        <!-- 下拉刷新指示器 -->
+        <div class="pull-to-refresh-indicator hidden" id="pullToRefreshIndicator">
+          <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
+          <span class="refresh-text">下拉刷新...</span>
+        </div>
         <!-- 内部标题行 -->
         <div
           class="px-4 py-3 flex items-center justify-center border-b border-gray-100 cursor-pointer select-none"
