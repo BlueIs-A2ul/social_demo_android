@@ -323,7 +323,7 @@
           <div
             class="px-4 flex items-center justify-center border-b border-gray-100"
           >
-            <img alt="社区房间" class="h-8" src="assets/src_01/icon/社区房间.png" />
+            <img alt="社区房间" class="h-12" src="assets/src_01/icon/社区房间.png" />
           </div>
         <!-- Grid 网格 -->
         <div class="grid grid-cols-4">
@@ -424,7 +424,7 @@
           onclick="toggleNews()"
         >
           <h3 class="font-bold text-gray-900">社区新闻</h3>
-          <span class="news-arrow text-gray-500 ml-2 text-xs">▼</span>
+          <img class="news-arrow ml-2 h-4 w-auto" src="assets/src_01/icon/nav-icons/arrow-down-gold.jpg" alt="展开"/>
         </div>
         <!-- 新闻网格 -->
         <div class="grid grid-cols-3 gap-3 p-4" id="newsList">
@@ -540,10 +540,10 @@
         const arrow = document.querySelector('.news-arrow')
         if (list.classList.contains('hidden')) {
           list.classList.remove('hidden')
-          arrow.textContent = '▼'
+          arrow.src = 'assets/src_01/icon/nav-icons/arrow-down-gold.jpg'
         } else {
           list.classList.add('hidden')
-          arrow.textContent = '▶'
+          arrow.src = 'assets/src_01/icon/nav-icons/arrow-down-silver.jpg'
         }
       }
 
