@@ -69,64 +69,8 @@
         margin-left: 4px;
         vertical-align: -3px;
       }
-      .profile-avatar-wrap {
-        position: relative;
-      }
-      .profile-avatar-button {
-        width: 64px;
-        height: 64px;
-        display: block;
-        padding: 0;
-        border: 0;
-        background: transparent;
-        border-radius: 9999px;
-        overflow: hidden;
-        cursor: pointer;
-      }
-      .avatar-action-menu {
-        position: absolute;
-        left: 0;
-        top: 70px;
-        width: 132px;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(229, 231, 235, 0.95);
-        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        z-index: 20;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-4px);
-        transition:
-          opacity 0.18s ease,
-          transform 0.18s ease;
-      }
-      .avatar-action-menu.show {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-      }
-      .avatar-action-menu button {
-        width: 100%;
-        height: 34px;
-        display: flex;
-        align-items: center;
-        padding: 0 10px;
-        border: 0;
-        border-bottom: 1px solid rgba(243, 244, 246, 0.95);
-        background: transparent;
-        color: #374151;
-        font-size: 12px;
-        text-align: left;
-      }
-      .avatar-action-menu button:last-child {
-        border-bottom: 0;
-      }
-      .avatar-action-menu button:active {
-        background: rgba(253, 242, 248, 0.95);
-        color: #ec4899;
-      }
-      .room-action-menu {
+      /* 共享菜单样式 */
+      .action-menu {
         position: absolute;
         width: 132px;
         background: rgba(255, 255, 255, 0.92);
@@ -134,20 +78,20 @@
         box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        z-index: 40;
         opacity: 0;
         visibility: hidden;
         transform: translateY(-4px);
         transition:
           opacity 0.18s ease,
           transform 0.18s ease;
+        will-change: opacity, transform;
       }
-      .room-action-menu.show {
+      .action-menu.show {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
       }
-      .room-action-menu button {
+      .action-menu button {
         width: 100%;
         height: 34px;
         display: flex;
@@ -160,12 +104,16 @@
         font-size: 12px;
         text-align: left;
       }
-      .room-action-menu button:last-child {
+      .action-menu button:last-child {
         border-bottom: 0;
       }
-      .room-action-menu button:active {
+      .action-menu button:active {
         background: rgba(253, 242, 248, 0.95);
         color: #ec4899;
+      }
+
+      .room-action-menu {
+        z-index: 40;
       }
       .modal-overlay {
         position: fixed;
@@ -288,10 +236,7 @@
         transform: translateY(-100%);
         transition: transform 0.3s ease;
         border-bottom: 1px solid #f3f4f6;
-      }
-
-      .pull-to-refresh-indicator.visible {
-        transform: translateY(0);
+        will-change: transform;
       }
 
       .refresh-icon {
@@ -534,7 +479,7 @@
           </div>
         </div>
       </div>
-      <div aria-hidden="true" class="room-action-menu" id="roomActionMenu">
+      <div aria-hidden="true" class="action-menu room-action-menu" id="roomActionMenu">
         <button onclick="handleRoomProfileAction(event, '分享主页')">
           查看分享
         </button>
@@ -901,6 +846,112 @@
 
       document.addEventListener('click', () => {
         closeRoomProfileMenu()
+      })
+
+      // 下拉刷新相关变量
+      let startY = 0
+      let currentY = 0
+      let isPulling = false
+      let isRefreshing = false
+      const PULL_THRESHOLD = 80
+
+      // 初始化下拉刷新
+      function initPullToRefresh() {
+        const container = document.getElementById('app-root')
+        const indicator = document.getElementById('pullToRefreshIndicator')
+        const refreshText = indicator.querySelector('.refresh-text')
+        const refreshIcon = indicator.querySelector('.refresh-icon')
+
+        // 触摸开始
+        container.addEventListener('touchstart', (e) => {
+          if (isRefreshing) return
+          startY = e.touches[0].clientY
+          isPulling = true
+        }, { passive: true })
+
+        // 触摸移动
+        container.addEventListener('touchmove', (e) => {
+          if (!isPulling || isRefreshing) return
+
+          currentY = e.touches[0].clientY
+          const pullDistance = currentY - startY
+
+          // 只有在页面顶部且向下拉时才触发
+          if (window.scrollY <= 0 && pullDistance > 0) {
+            e.preventDefault()
+
+            indicator.classList.remove('hidden')
+            indicator.style.transform = `translateY(${Math.min(pullDistance * 0.5, 40)}px)`
+
+            if (pullDistance > PULL_THRESHOLD) {
+              refreshText.textContent = '释放刷新...'
+            } else {
+              refreshText.textContent = '下拉刷新...'
+            }
+            refreshIcon.classList.remove('loading')
+          }
+        }, { passive: false })
+
+        // 触摸结束
+        container.addEventListener('touchend', () => {
+          if (!isPulling || isRefreshing) return
+
+          const pullDistance = currentY - startY
+
+          if (pullDistance > PULL_THRESHOLD) {
+            isRefreshing = true
+            indicator.style.transform = 'translateY(40px)'
+            refreshText.textContent = '刷新中...'
+            refreshIcon.classList.add('loading')
+
+            setTimeout(() => {
+              refreshNews()
+              hideRefreshIndicator()
+              isRefreshing = false
+            }, 1500)
+          } else {
+            hideRefreshIndicator()
+          }
+
+          isPulling = false
+          startY = 0
+          currentY = 0
+        })
+
+        // 隐藏刷新指示器
+        function hideRefreshIndicator() {
+          indicator.style.transform = 'translateY(-100%)'
+          setTimeout(() => {
+            indicator.classList.add('hidden')
+          }, 300)
+        }
+      }
+
+      // 刷新新闻内容
+      function refreshNews() {
+        const newsList = document.getElementById('newsList')
+        const items = newsList.querySelectorAll('.relative')
+
+        // 添加刷新动画
+        items.forEach((item, index) => {
+          item.classList.add('news-item-enter')
+          item.style.animationDelay = `${index * 0.05}s`
+        })
+
+        // 显示刷新成功提示
+        showToast('新闻已刷新')
+
+        // 移除动画类
+        setTimeout(() => {
+          items.forEach(item => {
+            item.classList.remove('news-item-enter')
+          })
+        }, 500)
+      }
+
+      // 页面加载时初始化下拉刷新
+      document.addEventListener('DOMContentLoaded', () => {
+        initPullToRefresh()
       })
     </script>
   </body>
