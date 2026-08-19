@@ -178,7 +178,7 @@
         <a
           class="publish-nav-tab"
           href="javascript:void(0)"
-          onclick="switchPublishView('discover', event)"
+          onclick="switchPublishView('follow', event)"
           >关注<span class="publish-nav-caret">▼</span></a
         >
         <a
@@ -190,7 +190,7 @@
         <a
           class="publish-nav-tab"
           href="javascript:void(0)"
-          onclick="switchPublishView('discover', event)"
+          onclick="switchPublishView('nearby', event)"
           >同城</a
         >
         <a
@@ -289,6 +289,9 @@
     >
       <div
         class="cursor-pointer group publish-discover-only"
+        data-order-discover="1"
+        data-order-follow="5"
+        data-order-nearby="3"
         onclick="openDetail(8)"
       >
         <div class="aspect-[3/4] bg-gray-50 overflow-hidden relative">
@@ -308,6 +311,9 @@
       </div>
       <div
         class="cursor-pointer group publish-discover-only"
+        data-order-discover="2"
+        data-order-follow="6"
+        data-order-nearby="4"
         onclick="openDetail(9)"
       >
         <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
@@ -321,7 +327,7 @@
           训练日常｜镜头不会说谎
         </p>
       </div>
-      <div class="cursor-pointer group" onclick="openDetail(0)">
+      <div class="cursor-pointer group" data-order-discover="3" data-order-follow="1" data-order-nearby="5" onclick="openDetail(0)">
         <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
           <img
             alt="明星美女写真"
@@ -331,7 +337,7 @@
         </div>
         <p class="text-[13px] text-black mt-2 font-medium">明星美女写真</p>
       </div>
-      <div class="cursor-pointer group" onclick="openDetail(1)">
+      <div class="cursor-pointer group" data-order-discover="4" data-order-follow="2" data-order-nearby="6" onclick="openDetail(1)">
         <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
           <img
             alt="武当云溪户外人像"
@@ -341,7 +347,7 @@
         </div>
         <p class="text-[13px] text-black mt-2 font-medium">武当云溪户外人像</p>
       </div>
-      <div class="cursor-pointer group" onclick="openDetail(2)">
+      <div class="cursor-pointer group" data-order-discover="5" data-order-follow="3" data-order-nearby="1" onclick="openDetail(2)">
         <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
           <img
             alt="珠宝展示搭配美学"
@@ -351,7 +357,7 @@
         </div>
         <p class="text-[13px] text-black mt-2 font-medium">珠宝展示搭配美学</p>
       </div>
-      <div class="cursor-pointer group" onclick="openDetail(3)">
+      <div class="cursor-pointer group" data-order-discover="6" data-order-follow="4" data-order-nearby="2" onclick="openDetail(3)">
         <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
           <img
             alt="运动女孩夜景人像"
@@ -361,7 +367,7 @@
         </div>
         <p class="text-[13px] text-black mt-2 font-medium">运动女孩夜景人像</p>
       </div>
-      <div class="cursor-pointer group" onclick="openDetail(4)">
+      <div class="cursor-pointer group" data-order-discover="7" data-order-follow="8" data-order-nearby="7" onclick="openDetail(4)">
         <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
           <img
             alt="芭比风室内写真"
@@ -371,7 +377,7 @@
         </div>
         <p class="text-[13px] text-black mt-2 font-medium">芭比风室内写真</p>
       </div>
-      <div class="cursor-pointer group" onclick="openDetail(7)">
+      <div class="cursor-pointer group" data-order-discover="8" data-order-follow="7" data-order-nearby="8" onclick="openDetail(7)">
         <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
           <img
             alt="穿搭博主时尚人像"
@@ -815,7 +821,7 @@
       function switchPublishView(view, event) {
         if (event) event.preventDefault()
         // "发现"/"我"为内部视图切换：已处于发现模式时点击"发现"返回主页视图
-        const isDiscover = view === 'discover'
+        const isDiscover = view === 'discover' || view === 'follow' || view === 'nearby'
 
         document.body.classList.toggle('publish-discover-mode', isDiscover)
         document.querySelectorAll('.publish-home-only').forEach(section => {
@@ -834,6 +840,28 @@
             clickedTab.classList.add('active')
           }
         }
+        
+        // 根据不同页面重新排列图片
+        const feedGrid = document.getElementById('feed-grid')
+        const items = Array.from(feedGrid.children)
+        
+        // 根据view参数确定排序方式
+        let orderAttribute = 'data-order-discover'
+        if (view === 'follow') {
+          orderAttribute = 'data-order-follow'
+        } else if (view === 'nearby') {
+          orderAttribute = 'data-order-nearby'
+        }
+        
+        // 按照指定顺序重新排列
+        items.sort((a, b) => {
+          const orderA = parseInt(a.getAttribute(orderAttribute)) || 999
+          const orderB = parseInt(b.getAttribute(orderAttribute)) || 999
+          return orderA - orderB
+        })
+        
+        // 重新添加到DOM
+        items.forEach(item => feedGrid.appendChild(item))
         
         window.scrollTo(0, 0)
       }
