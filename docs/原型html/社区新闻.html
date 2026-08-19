@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社区新闻布局</title>
+    <style>
+        /* 基础重置与居中 */
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            font-family: sans-serif;
+        }
+
+        /* 1. 大盒子 */
+        .container {
+            width: 420px;           
+            border: 4px solid #e67e7e; 
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* 2. 内部标题行 */
+        .header {
+            text-align: center;
+            border-bottom: 4px solid #e67e7e; /* 仅保留底部分割线 */
+            padding: 10px 0 15px 0;          
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #e67e7e;
+            letter-spacing: 4px;
+        }
+
+        /* 3. 下部分内容栏 (3列) */
+        .grid-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 15px; 
+        }
+
+        /* 4. 每个 Item */
+        .item {
+            position: relative;     
+            border: 2px solid #e67e7e;
+            height: 85px;           
+        }
+
+        /* ---------- 修改部分：内部加号 ---------- */
+        /* 加号的横线 */
+        .item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 24px;          /* 加号横向长度 */
+            height: 4px;          /* 加号线条粗细 */
+            background-color: #e67e7e;
+            transform: translate(-50%, -50%); /* 居中定位 */
+        }
+
+        /* 加号的竖线 */
+        .item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;           /* 加号线条粗细 */
+            height: 24px;         /* 加号竖向长度 */
+            background-color: #e67e7e;
+            transform: translate(-50%, -50%); /* 居中定位 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 上方标题行 -->
+        <div class="header">社区新闻</div>
+        
+        <!-- 下部分内容栏 -->
+        <div class="grid-content">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+    </div>
+
+</body>
+</html>
