@@ -244,19 +244,10 @@
         height: 40px;
       }
 
-      .refresh-icon.loading {
-        animation: spin 1s linear infinite;
-      }
-
       .refresh-text {
         font-size: 12px;
         color: #6b7280;
         margin-top: 4px;
-      }
-
-      @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
       }
 
       /* 新闻网格动画 */
@@ -417,14 +408,9 @@
       </div>
       <!-- 「社区新闻」大盒子 -->
       <div
-        class="flex-none border border-gray-200 bg-white mx-5 mt-2 overflow-hidden relative"
+        class="flex-none border border-gray-200 bg-white mx-5 mt-2 overflow-hidden"
         id="newsContainer"
       >
-        <!-- 下拉刷新指示器 -->
-        <div class="pull-to-refresh-indicator hidden" id="pullToRefreshIndicator">
-          <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
-          <span class="refresh-text">下拉刷新...</span>
-        </div>
         <!-- 内部标题行 -->
         <div
           class="px-4 py-3 flex items-center justify-center border-b border-gray-100 cursor-pointer select-none"
@@ -434,7 +420,12 @@
           <img class="news-arrow ml-2 h-4 w-auto" src="assets/src_01/icon/nav-icons/arrow-down-gold.jpg" alt="展开"/>
         </div>
         <!-- 新闻网格 -->
-        <div class="grid grid-cols-3 gap-3 p-4" id="newsList">
+        <div class="grid grid-cols-3 gap-3 p-4 relative" id="newsList">
+          <!-- 下拉刷新指示器 -->
+          <div class="pull-to-refresh-indicator hidden" id="pullToRefreshIndicator">
+            <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
+            <span class="refresh-text">下拉刷新...</span>
+          </div>
           <div
             class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
@@ -859,14 +850,17 @@
       function initPullToRefresh() {
         const container = document.getElementById('app-root')
         const indicator = document.getElementById('pullToRefreshIndicator')
+        const newsList = document.getElementById('newsList')
         const refreshText = indicator.querySelector('.refresh-text')
-        const refreshIcon = indicator.querySelector('.refresh-icon')
 
         // 触摸开始
         container.addEventListener('touchstart', (e) => {
           if (isRefreshing) return
           startY = e.touches[0].clientY
           isPulling = true
+          // 移除过渡动画，让手指跟随更流畅
+          indicator.style.transition = 'none'
+          newsList.style.transition = 'none'
         }, { passive: true })
 
         // 触摸移动
@@ -880,15 +874,17 @@
           if (window.scrollY <= 0 && pullDistance > 0) {
             e.preventDefault()
 
+            const moveDistance = Math.min(pullDistance * 0.5, 40)
+
             indicator.classList.remove('hidden')
-            indicator.style.transform = `translateY(${Math.min(pullDistance * 0.5, 40)}px)`
+            // 新闻网格整体跟随移动
+            newsList.style.transform = `translateY(${moveDistance}px)`
 
             if (pullDistance > PULL_THRESHOLD) {
               refreshText.textContent = '释放刷新...'
             } else {
               refreshText.textContent = '下拉刷新...'
             }
-            refreshIcon.classList.remove('loading')
           }
         }, { passive: false })
 
@@ -898,11 +894,14 @@
 
           const pullDistance = currentY - startY
 
+          // 恢复过渡动画
+          indicator.style.transition = 'transform 0.3s ease'
+          newsList.style.transition = 'transform 0.3s ease'
+
           if (pullDistance > PULL_THRESHOLD) {
             isRefreshing = true
-            indicator.style.transform = 'translateY(40px)'
+            newsList.style.transform = 'translateY(40px)'
             refreshText.textContent = '刷新中...'
-            refreshIcon.classList.add('loading')
 
             setTimeout(() => {
               refreshNews()
@@ -921,6 +920,7 @@
         // 隐藏刷新指示器
         function hideRefreshIndicator() {
           indicator.style.transform = 'translateY(-100%)'
+          newsList.style.transform = 'translateY(0)'
           setTimeout(() => {
             indicator.classList.add('hidden')
           }, 300)
