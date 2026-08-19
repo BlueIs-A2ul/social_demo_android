@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>个人信息设置 - 智能空间</title>
+  <script src="assets/vendor/tailwindcss.js"></script>
+  <script src="assets/vendor/iconify-icon.min.js"></script>
+  <script src="assets/vendor/nav.js"></script>
+  <style>
+    body { 
+      background-color: #FFFFFF; 
+      font-family: -apple-system, "SF Pro Text", "Helvetica Neue", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .app-container { 
+      width: 100%; 
+      height: 100dvh; 
+      background: white; 
+      position: relative; 
+      overflow: hidden; 
+      display: flex; 
+      flex-direction: column; 
+      padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+      padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+    }
+    .tab-active {
+      color: #ec4899;
+      border-bottom: 2px solid #ec4899;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      font-size: 15px;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: #ec4899;
+    }
+    .form-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      font-size: 15px;
+      outline: none;
+      min-height: 100px;
+      resize: vertical;
+    }
+    .form-textarea:focus {
+      border-color: #ec4899;
+    }
+    .form-label {
+      display: block;
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .gender-btn {
+      padding: 8px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .gender-btn.active {
+      background-color: #ec4899;
+      color: white;
+      border-color: #ec4899;
+    }
+    .id-card-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .id-card-label {
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .id-card-value {
+      font-size: 14px;
+      color: #111827;
+    }
+    .upload-area {
+      width: 100%;
+      height: 120px;
+      border: 2px dashed #d1d5db;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #9ca3af;
+    }
+    .upload-area:hover {
+      border-color: #ec4899;
+      color: #ec4899;
+    }
+    #toast {
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="h-[52px] flex justify-between items-center px-4 shrink-0 border-b border-gray-100">
+      <button class="w-8 h-8 flex items-center justify-center" onclick="goBack()">
+        <iconify-icon class="text-2xl text-black" icon="solar:alt-arrow-left-linear"></iconify-icon>
+      </button>
+      <h1 class="text-[17px] font-semibold text-black">个人信息设置</h1>
+      <button class="text-[15px] font-medium text-[#ec4899] px-2" onclick="handleSave()">保存</button>
+    </header>
+
+    <!-- Avatar Section -->
+    <div class="flex-none py-6 flex flex-col items-center">
+      <div class="w-20 h-20 rounded-full overflow-hidden bg-gray-100 border-2 border-white shadow-md cursor-pointer" onclick="changeAvatar()">
+        <img id="avatarImg" alt="User Avatar" class="w-full h-full object-cover" src="assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png"/>
+      </div>
+      <span class="text-sm text-gray-500 mt-2">点击更换头像</span>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="flex-none border-b border-gray-100">
+      <div class="flex">
+        <button class="flex-1 py-3 text-sm font-medium text-center tab-active" onclick="switchTab('personal')" data-tab="personal">个人简历</button>
+        <button class="flex-1 py-3 text-sm font-medium text-center text-gray-500" onclick="switchTab('idcard')" data-tab="idcard">虚拟身份证</button>
+        <button class="flex-1 py-3 text-sm font-medium text-center text-gray-500" onclick="switchTab('company')" data-tab="company">公司简历</button>
+        <button class="flex-1 py-3 text-sm font-medium text-center text-gray-500" onclick="switchTab('companyIdCard')" data-tab="companyIdCard">公司虚拟身份证</button>
+      </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="flex-1 overflow-y-auto">
+      <!-- 个人简历 Tab -->
+      <div id="tab-personal" class="tab-content active p-4">
+        <div class="form-group">
+          <label class="form-label">姓名</label>
+          <input type="text" id="name" class="form-input" placeholder="请输入姓名"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">性别</label>
+          <div class="flex gap-2">
+            <button class="gender-btn" data-gender="男" onclick="selectGender('男')">男</button>
+            <button class="gender-btn" data-gender="女" onclick="selectGender('女')">女</button>
+            <button class="gender-btn" data-gender="其他" onclick="selectGender('其他')">其他</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">出生</label>
+          <input type="month" id="birth" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">民族</label>
+          <input type="text" id="ethnic" class="form-input" placeholder="如：汉族"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">职业</label>
+          <input type="text" id="job" class="form-input" placeholder="请输入职业"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">职业现状</label>
+          <input type="text" id="jobStatus" class="form-input" placeholder="如：在职、离职"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">上任单位</label>
+          <input type="text" id="prevUnit" class="form-input" placeholder="请输入上任单位"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">联系人</label>
+          <input type="text" id="contact" class="form-input" placeholder="请输入联系人"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">电话</label>
+          <input type="tel" id="phone" class="form-input" placeholder="请输入电话"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">教育经历</label>
+          <input type="text" id="education" class="form-input" placeholder="如：XX大学 XX专业 本科"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">技能</label>
+          <input type="text" id="skills" class="form-input" placeholder="多个用顿号分隔"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">特长</label>
+          <input type="text" id="specialty" class="form-input" placeholder="多个用顿号分隔"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">爱好</label>
+          <input type="text" id="hobbies" class="form-input" placeholder="多个用顿号分隔"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">自我评价</label>
+          <textarea id="evaluation" class="form-textarea" placeholder="请输入自我评价"></textarea>
+        </div>
+      </div>
+
+      <!-- 虚拟身份证 Tab -->
+      <div id="tab-idcard" class="tab-content p-4">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 rounded-full overflow-hidden bg-white border border-gray-200">
+              <img id="idcardAvatar" alt="Avatar" class="w-full h-full object-cover" src="assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png"/>
+            </div>
+            <div>
+              <div class="text-lg font-bold" id="idcardName">小云</div>
+              <div class="text-sm text-gray-500" id="idcardVId">V8001</div>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="id-card-field">
+              <span class="id-card-label">性别</span>
+              <span class="id-card-value" id="idcardGender">-</span>
+            </div>
+            <div class="id-card-field">
+              <span class="id-card-label">出生</span>
+              <span class="id-card-value" id="idcardBirth">-</span>
+            </div>
+            <div class="id-card-field">
+              <span class="id-card-label">民族</span>
+              <span class="id-card-value" id="idcardEthnic">-</span>
+            </div>
+            <div class="id-card-field">
+              <span class="id-card-label">职业</span>
+              <span class="id-card-value" id="idcardJob">-</span>
+            </div>
+            <div class="id-card-field">
+              <span class="id-card-label">职业现状</span>
+              <span class="id-card-value" id="idcardJobStatus">-</span>
+            </div>
+            <div class="id-card-field">
+              <span class="id-card-label">技能</span>
+              <span class="id-card-value" id="idcardSkills">-</span>
+            </div>
+            <div class="id-card-field">
+              <span class="id-card-label">特长</span>
+              <span class="id-card-value" id="idcardSpecialty">-</span>
+            </div>
+            <div class="id-card-field">
+              <span class="id-card-label">爱好</span>
+              <span class="id-card-value" id="idcardHobbies">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 公司简历 Tab -->
+      <div id="tab-company" class="tab-content p-4">
+        <div class="form-group">
+          <label class="form-label">营业执照</label>
+          <div class="upload-area" onclick="uploadImage('businessLicense')">
+            <iconify-icon class="text-3xl mb-2" icon="solar:upload-bold"></iconify-icon>
+            <span>点击上传营业执照</span>
+          </div>
+          <input type="file" id="businessLicenseInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'businessLicense')"/>
+          <img id="businessLicensePreview" class="mt-2 hidden max-h-40 object-contain"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">股东</label>
+          <input type="text" id="shareholders" class="form-input" placeholder="多个用顿号分隔"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">主要人员</label>
+          <input type="text" id="keyPersonnel" class="form-input" placeholder="多个用顿号分隔"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">公司简介</label>
+          <textarea id="companyIntro" class="form-textarea" placeholder="请输入公司简介"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">现状介绍</label>
+          <textarea id="currentStatus" class="form-textarea" placeholder="请输入现状介绍"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">经营内容</label>
+          <textarea id="businessContent" class="form-textarea" placeholder="请输入经营内容"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">短期需求计划</label>
+          <textarea id="shortTermPlan" class="form-textarea" placeholder="请输入短期需求计划"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">长期需求</label>
+          <textarea id="longTermPlan" class="form-textarea" placeholder="请输入长期需求"></textarea>
+        </div>
+      </div>
+
+      <!-- 公司虚拟身份证 Tab -->
+      <div id="tab-companyIdCard" class="tab-content p-4">
+        <div class="form-group">
+          <label class="form-label">公司图标</label>
+          <div class="upload-area" onclick="uploadImage('companyLogo')">
+            <iconify-icon class="text-3xl mb-2" icon="solar:upload-bold"></iconify-icon>
+            <span>点击上传公司图标</span>
+          </div>
+          <input type="file" id="companyLogoInput" accept="image/*" style="display:none" onchange="handleImageUpload(event, 'companyLogo')"/>
+          <img id="companyLogoPreview" class="mt-2 hidden max-h-40 object-contain"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">公司名称</label>
+          <input type="text" id="companyName" class="form-input" placeholder="请输入公司名称"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">成立时间</label>
+          <input type="date" id="establishTime" class="form-input"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">法人名称</label>
+          <input type="text" id="legalPerson" class="form-input" placeholder="请输入法人名称"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">主要成员</label>
+          <input type="text" id="mainMembers" class="form-input" placeholder="多个用顿号分隔"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">经营内容</label>
+          <textarea id="companyIdCardBusinessContent" class="form-textarea" placeholder="请输入经营内容"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[14px] px-4 py-2 opacity-0 z-[100]" id="toast" style="opacity: 0;"></div>
+  </div>
+
+  <script>
+    // 用户数据
+    let userData = {
+      name: '',
+      vId: '',
+      gender: '',
+      birth: '',
+      ethnic: '',
+      job: '',
+      jobStatus: '',
+      skills: '',
+      specialty: '',
+      hobbies: '',
+      prevUnit: '',
+      education: '',
+      contact: '',
+      phone: '',
+      evaluation: '',
+      avatar: '',
+      companyProfile: {
+        businessLicense: '',
+        shareholders: '',
+        keyPersonnel: '',
+        companyIntro: '',
+        currentStatus: '',
+        businessContent: '',
+        shortTermPlan: '',
+        longTermPlan: '',
+        companyIdCard: {
+          companyLogo: '',
+          companyName: '',
+          establishTime: '',
+          legalPerson: '',
+          mainMembers: '',
+          businessContent: ''
+        }
+      }
+    };
+
+    // 默认用户数据
+    const defaultUserData = {
+      name: '小云',
+      vId: 'V8001',
+      gender: '女',
+      birth: '1998-03',
+      ethnic: '汉族',
+      job: '空间设计师',
+      jobStatus: '在职',
+      skills: '空间设计、室内陈设',
+      specialty: '软装搭配、摄影',
+      hobbies: '旅行、音乐、烘焙',
+      prevUnit: '云上设计工作室',
+      education: '广州美术学院 环境设计 本科',
+      contact: '陈经理',
+      phone: '138****0000',
+      evaluation: '热爱空间设计，擅长用光影与材质营造沉浸式社交空间',
+      avatar: 'assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png'
+    };
+
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserData();
+      initForm();
+      updateIdCard();
+    });
+
+    // 加载用户数据
+    function loadUserData() {
+      const saved = localStorage.getItem('appUserProfile');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          userData = { ...userData, ...parsed };
+          if (!userData.companyProfile) {
+            userData.companyProfile = defaultUserData.companyProfile;
+          }
+          if (!userData.companyProfile.companyIdCard) {
+            userData.companyProfile.companyIdCard = defaultUserData.companyProfile.companyIdCard;
+          }
+        } catch (e) {
+          console.error('解析用户数据失败:', e);
+          userData = { ...defaultUserData };
+        }
+      } else {
+        userData = { ...defaultUserData };
+      }
+    }
+
+    // 初始化表单
+    function initForm() {
+      // 个人简历字段
+      document.getElementById('name').value = userData.name || '';
+      document.getElementById('ethnic').value = userData.ethnic || '';
+      document.getElementById('job').value = userData.job || '';
+      document.getElementById('jobStatus').value = userData.jobStatus || '';
+      document.getElementById('skills').value = userData.skills || '';
+      document.getElementById('specialty').value = userData.specialty || '';
+      document.getElementById('hobbies').value = userData.hobbies || '';
+      document.getElementById('prevUnit').value = userData.prevUnit || '';
+      document.getElementById('education').value = userData.education || '';
+      document.getElementById('contact').value = userData.contact || '';
+      document.getElementById('phone').value = userData.phone || '';
+      document.getElementById('evaluation').value = userData.evaluation || '';
+      
+      // 性别选择
+      if (userData.gender) {
+        selectGender(userData.gender);
+      }
+      
+      // 出生日期
+      if (userData.birth) {
+        document.getElementById('birth').value = userData.birth;
+      }
+      
+      // 头像
+      if (userData.avatar) {
+        document.getElementById('avatarImg').src = userData.avatar;
+      }
+      
+      // 公司简历字段
+      const company = userData.companyProfile || {};
+      document.getElementById('shareholders').value = company.shareholders || '';
+      document.getElementById('keyPersonnel').value = company.keyPersonnel || '';
+      document.getElementById('companyIntro').value = company.companyIntro || '';
+      document.getElementById('currentStatus').value = company.currentStatus || '';
+      document.getElementById('businessContent').value = company.businessContent || '';
+      document.getElementById('shortTermPlan').value = company.shortTermPlan || '';
+      document.getElementById('longTermPlan').value = company.longTermPlan || '';
+      
+      // 营业执照预览
+      if (company.businessLicense) {
+        document.getElementById('businessLicensePreview').src = company.businessLicense;
+        document.getElementById('businessLicensePreview').classList.remove('hidden');
+      }
+      
+      // 公司虚拟身份证字段
+      const companyIdCard = company.companyIdCard || {};
+      document.getElementById('companyName').value = companyIdCard.companyName || '';
+      document.getElementById('establishTime').value = companyIdCard.establishTime || '';
+      document.getElementById('legalPerson').value = companyIdCard.legalPerson || '';
+      document.getElementById('mainMembers').value = companyIdCard.mainMembers || '';
+      document.getElementById('companyIdCardBusinessContent').value = companyIdCard.businessContent || '';
+      
+      // 公司图标预览
+      if (companyIdCard.companyLogo) {
+        document.getElementById('companyLogoPreview').src = companyIdCard.companyLogo;
+        document.getElementById('companyLogoPreview').classList.remove('hidden');
+      }
+    }
+
+    // 选择性别
+    function selectGender(gender) {
+      userData.gender = gender;
+      document.querySelectorAll('.gender-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.gender === gender) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Tab切换
+    function switchTab(tabName) {
+      // 更新Tab按钮状态
+      document.querySelectorAll('[data-tab]').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('text-gray-500');
+        if (btn.dataset.tab === tabName) {
+          btn.classList.add('tab-active');
+          btn.classList.remove('text-gray-500');
+        }
+      });
+      
+      // 更新Tab内容显示
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById('tab-' + tabName).classList.add('active');
+    }
+
+    // 更新虚拟身份证显示
+    function updateIdCard() {
+      document.getElementById('idcardName').textContent = userData.name || '-';
+      document.getElementById('idcardVId').textContent = userData.vId || '-';
+      document.getElementById('idcardGender').textContent = userData.gender || '-';
+      document.getElementById('idcardBirth').textContent = userData.birth || '-';
+      document.getElementById('idcardEthnic').textContent = userData.ethnic || '-';
+      document.getElementById('idcardJob').textContent = userData.job || '-';
+      document.getElementById('idcardJobStatus').textContent = userData.jobStatus || '-';
+      document.getElementById('idcardSkills').textContent = userData.skills || '-';
+      document.getElementById('idcardSpecialty').textContent = userData.specialty || '-';
+      document.getElementById('idcardHobbies').textContent = userData.hobbies || '-';
+      
+      if (userData.avatar) {
+        document.getElementById('idcardAvatar').src = userData.avatar;
+      }
+    }
+
+    // 上传图片
+    function uploadImage(type) {
+      if (type === 'businessLicense') {
+        document.getElementById('businessLicenseInput').click();
+      } else if (type === 'companyLogo') {
+        document.getElementById('companyLogoInput').click();
+      }
+    }
+
+    // 处理图片上传
+    function handleImageUpload(event, type) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const base64 = e.target.result;
+          if (type === 'businessLicense') {
+            userData.companyProfile.businessLicense = base64;
+            document.getElementById('businessLicensePreview').src = base64;
+            document.getElementById('businessLicensePreview').classList.remove('hidden');
+          } else if (type === 'companyLogo') {
+            userData.companyProfile.companyIdCard.companyLogo = base64;
+            document.getElementById('companyLogoPreview').src = base64;
+            document.getElementById('companyLogoPreview').classList.remove('hidden');
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // 更换头像
+    function changeAvatar() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            userData.avatar = ev.target.result;
+            document.getElementById('avatarImg').src = ev.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+      input.click();
+    }
+
+    // 保存数据
+    function handleSave() {
+      // 收集个人简历数据
+      userData.name = document.getElementById('name').value;
+      userData.birth = document.getElementById('birth').value;
+      userData.ethnic = document.getElementById('ethnic').value;
+      userData.job = document.getElementById('job').value;
+      userData.jobStatus = document.getElementById('jobStatus').value;
+      userData.skills = document.getElementById('skills').value;
+      userData.specialty = document.getElementById('specialty').value;
+      userData.hobbies = document.getElementById('hobbies').value;
+      userData.prevUnit = document.getElementById('prevUnit').value;
+      userData.education = document.getElementById('education').value;
+      userData.contact = document.getElementById('contact').value;
+      userData.phone = document.getElementById('phone').value;
+      userData.evaluation = document.getElementById('evaluation').value;
+      
+      // 收集公司简历数据
+      userData.companyProfile.shareholders = document.getElementById('shareholders').value;
+      userData.companyProfile.keyPersonnel = document.getElementById('keyPersonnel').value;
+      userData.companyProfile.companyIntro = document.getElementById('companyIntro').value;
+      userData.companyProfile.currentStatus = document.getElementById('currentStatus').value;
+      userData.companyProfile.businessContent = document.getElementById('businessContent').value;
+      userData.companyProfile.shortTermPlan = document.getElementById('shortTermPlan').value;
+      userData.companyProfile.longTermPlan = document.getElementById('longTermPlan').value;
+      
+      // 收集公司虚拟身份证数据
+      userData.companyProfile.companyIdCard.companyName = document.getElementById('companyName').value;
+      userData.companyProfile.companyIdCard.establishTime = document.getElementById('establishTime').value;
+      userData.companyProfile.companyIdCard.legalPerson = document.getElementById('legalPerson').value;
+      userData.companyProfile.companyIdCard.mainMembers = document.getElementById('mainMembers').value;
+      userData.companyProfile.companyIdCard.businessContent = document.getElementById('companyIdCardBusinessContent').value;
+      
+      // 保存到localStorage
+      localStorage.setItem('appUserProfile', JSON.stringify(userData));
+      
+      showToast('保存成功');
+      setTimeout(() => {
+        goBack();
+      }, 1000);
+    }
+
+    // 返回上一页
+    function goBack() {
+      const from = getUrlParam('from') || 'room_list';
+      window.location.href = from + '.html';
+    }
+
+    // 获取URL参数
+    function getUrlParam(key) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(key);
+    }
+
+    // 显示提示
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
