@@ -60,12 +60,12 @@
 <!-- 底部导航栏 -->
 <nav class="h-[64px] bg-white/80 backdrop-blur-lg border-t border-gray-100 flex items-center justify-between px-2 relative z-50">
 <!-- 房间 -->
-<button class="nav-item flex items-center justify-center flex-1 h-full text-gray-400" onclick="switchTab('room_list.html', this)">
-<span class="text-[16px]">房间</span>
+<button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('room_list.html', this)">
+<img class="nav-icon h-[28px] object-contain" data-normal="assets/src_01/icon/nav-icons/normal_房间.png" data-active="assets/src_01/icon/nav-icons/active_房间.png" src="assets/src_01/icon/nav-icons/normal_房间.png" alt="房间"/>
 </button>
 <!-- 空间 -->
-<button class="nav-item flex items-center justify-center flex-1 text-gray-400 h-full" onclick="switchTab('profile.html', this)">
-<span class="text-[16px]">空间</span>
+<button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('profile.html', this)">
+<img class="nav-icon h-[28px] object-contain" data-normal="assets/src_01/icon/nav-icons/normal_空间.png" data-active="assets/src_01/icon/nav-icons/active_空间.png" src="assets/src_01/icon/nav-icons/normal_空间.png" alt="空间"/>
 </button>
 <!-- 雷达 (居中凸起) -->
 <div class="flex-1 flex justify-center -mt-8 h-full items-start">
@@ -74,15 +74,13 @@
 </button>
 </div>
 <!-- 分享 -->
-<button class="nav-item flex items-center justify-center flex-1 text-gray-400 h-full" onclick="switchTab('publish.html', this)">
-<span class="text-[16px] relative">
-                分享
-                <span class="absolute -top-1 -right-5 bg-red-500 text-white text-[10px] px-1 h-3.5 flex items-center justify-center min-w-[14px]">99+</span>
-</span>
+<button class="nav-item flex items-center justify-center flex-1 h-full relative" onclick="switchTab('publish.html', this)">
+<img class="nav-icon h-[28px] object-contain" data-normal="assets/src_01/icon/nav-icons/normal_分享.png" data-active="assets/src_01/icon/nav-icons/active_分享.png" src="assets/src_01/icon/nav-icons/normal_分享.png" alt="分享"/>
+<span class="absolute top-1 right-[calc(50%-40px)] bg-red-500 text-white text-[10px] px-1 h-3.5 flex items-center justify-center min-w-[14px] rounded-full">99+</span>
 </button>
-<!-- 公告 -->
-<button class="nav-item flex items-center justify-center flex-1 text-gray-400 h-full" onclick="switchTab('announcements.html', this)">
-<span class="text-[16px]">信息</span>
+<!-- 设置 -->
+<button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('announcements.html', this)">
+<img class="nav-icon h-[28px] object-contain" data-normal="assets/src_01/icon/nav-icons/normal_设置.png" data-active="assets/src_01/icon/nav-icons/active_设置.png" src="assets/src_01/icon/nav-icons/normal_设置.png" alt="设置"/>
 </button>
 </nav>
 <!-- Toast -->
@@ -90,24 +88,22 @@
 </div>
 <script>
     function switchTab(url, el) {
-        // Change iframe src
         document.getElementById('content-frame').src = url;
         
-        // Reset all nav items
         document.querySelectorAll('.nav-item').forEach(item => {
-            // Check if it's the protruding button or a standard button
             if (!item.classList.contains('rounded-full')) {
-                item.classList.remove('text-[#ec4899]', 'font-bold', 'nav-active');
-                item.classList.add('text-gray-400');
+                item.classList.remove('nav-active');
+                const img = item.querySelector('.nav-icon');
+                if (img) img.src = img.dataset.normal;
             } else {
                 item.classList.remove('nav-active');
             }
         });
         
-        // Set active item
         if (!el.classList.contains('rounded-full')) {
-            el.classList.remove('text-gray-400');
-            el.classList.add('text-[#ec4899]', 'font-bold', 'nav-active');
+            el.classList.add('nav-active');
+            const img = el.querySelector('.nav-icon');
+            if (img) img.src = img.dataset.active;
         } else {
             el.classList.add('nav-active');
         }
