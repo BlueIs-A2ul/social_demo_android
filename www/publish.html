@@ -175,7 +175,11 @@
         </svg>
       </button>
       <nav aria-label="内容频道" class="publish-nav-tabs">
-        <a class="publish-nav-tab" href="square.html"
+        <a
+          class="publish-nav-tab"
+          data-publish-tab="discover"
+          href="javascript:void(0)"
+          onclick="switchPublishView('discover', event)"
           >关注<span class="publish-nav-caret">▼</span></a
         >
         <a
@@ -185,7 +189,13 @@
           onclick="switchPublishView('discover', event)"
           >发现</a
         >
-        <a class="publish-nav-tab" href="radar_nearby.html">同城</a>
+        <a
+          class="publish-nav-tab"
+          data-publish-tab="discover"
+          href="javascript:void(0)"
+          onclick="switchPublishView('discover', event)"
+          >同城</a
+        >
         <a
           class="publish-nav-tab active"
           data-publish-tab="home"
