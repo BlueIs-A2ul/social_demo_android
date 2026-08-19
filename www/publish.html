@@ -177,28 +177,24 @@
       <nav aria-label="内容频道" class="publish-nav-tabs">
         <a
           class="publish-nav-tab"
-          data-publish-tab="discover"
           href="javascript:void(0)"
           onclick="switchPublishView('discover', event)"
           >关注<span class="publish-nav-caret">▼</span></a
         >
         <a
           class="publish-nav-tab"
-          data-publish-tab="discover"
           href="javascript:void(0)"
           onclick="switchPublishView('discover', event)"
           >发现</a
         >
         <a
           class="publish-nav-tab"
-          data-publish-tab="discover"
           href="javascript:void(0)"
           onclick="switchPublishView('discover', event)"
           >同城</a
         >
         <a
           class="publish-nav-tab active"
-          data-publish-tab="home"
           href="javascript:void(0)"
           onclick="switchPublishView('home', event)"
           >我</a
@@ -825,15 +821,20 @@
         document.querySelectorAll('.publish-home-only').forEach(section => {
           section.classList.toggle('publish-view-hidden', isDiscover)
         })
-        document
-          .querySelectorAll('.publish-nav-tab[data-publish-tab]')
-          .forEach(tab => {
-            tab.classList.toggle(
-              'active',
-              (tab.dataset.publishTab === 'discover' && isDiscover) ||
-                (tab.dataset.publishTab === 'home' && !isDiscover)
-            )
-          })
+        
+        // 先移除所有导航标签的active状态
+        document.querySelectorAll('.publish-nav-tab').forEach(tab => {
+          tab.classList.remove('active')
+        })
+        
+        // 如果有event.target，只在当前点击的按钮上添加active状态
+        if (event && event.target) {
+          const clickedTab = event.target.closest('.publish-nav-tab')
+          if (clickedTab) {
+            clickedTab.classList.add('active')
+          }
+        }
+        
         window.scrollTo(0, 0)
       }
 
