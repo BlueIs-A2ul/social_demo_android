@@ -102,7 +102,7 @@
         padding: 12px;
         cursor: pointer;
         transition: background-color 0.2s;
-        height: 80px;
+        aspect-ratio: 3/4;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -128,9 +128,30 @@
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         line-height: 1.4;
+      }
+      
+      /* 新闻详情弹窗样式 */
+      .news-detail-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      
+      .news-detail-indicator {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      
+      .news-detail-indicator.active {
+        background-color: white;
       }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
@@ -873,9 +894,45 @@
                   <span class="refresh-text">下拉刷新...</span>
                 </div>
                 <!-- 新闻网格 -->
-                <div class="grid grid-cols-1 gap-3" id="newsGrid">
+                <div class="grid grid-cols-2 gap-3" id="newsGrid">
                   <!-- 新闻内容将通过JavaScript动态生成 -->
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 新闻详情弹窗 -->
+      <div id="newsDetailModal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeNewsDetailModal()"></div>
+        <!-- 弹窗主体 -->
+        <div class="absolute inset-4 bg-white rounded-lg overflow-hidden flex flex-col">
+          <!-- 弹窗头部 -->
+          <div class="flex-none px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+            <h3 id="newsDetailTitle" class="font-bold text-gray-900 truncate">新闻详情</h3>
+            <button onclick="closeNewsDetailModal()" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <!-- 弹窗内容 -->
+          <div class="flex-1 overflow-hidden flex flex-col">
+            <!-- 图片轮播区域 -->
+            <div class="relative flex-none h-1/2 bg-gray-100 overflow-hidden">
+              <div id="newsDetailCarousel" class="flex h-full transition-transform duration-300 ease-out">
+                <!-- 图片内容将通过JavaScript动态生成 -->
+              </div>
+              <!-- 指示器 -->
+              <div id="newsDetailIndicators" class="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+                <!-- 指示器将通过JavaScript动态生成 -->
+              </div>
+            </div>
+            <!-- 信息内容区域 -->
+            <div class="flex-1 overflow-y-auto p-4">
+              <div id="newsDetailDesc" class="text-sm text-gray-600 leading-relaxed">
+                <!-- 内容将通过JavaScript动态生成 -->
               </div>
             </div>
           </div>
@@ -941,100 +998,100 @@
       // 新闻数据（固定内容）
       const newsData = {
         '招聘': [
-          { title: '程序员招聘', desc: 'Java/Python开发工程师，年薪30-50万' },
-          { title: '设计师招聘', desc: 'UI/UX设计师，有经验者优先' },
-          { title: '产品经理招聘', desc: '3年以上经验，熟悉互联网产品' },
-          { title: '运营专员招聘', desc: '负责社群运营，有相关经验' },
-          { title: '市场推广招聘', desc: '负责品牌推广，有资源者优先' },
-          { title: '客服专员招聘', desc: '负责客户咨询，有耐心' },
+          { title: '程序员招聘', desc: 'Java/Python开发工程师，年薪30-50万', images: ['assets/vendor/placeholder.svg'] },
+          { title: '设计师招聘', desc: 'UI/UX设计师，有经验者优先', images: ['assets/vendor/placeholder.svg'] },
+          { title: '产品经理招聘', desc: '3年以上经验，熟悉互联网产品', images: ['assets/vendor/placeholder.svg'] },
+          { title: '运营专员招聘', desc: '负责社群运营，有相关经验', images: ['assets/vendor/placeholder.svg'] },
+          { title: '市场推广招聘', desc: '负责品牌推广，有资源者优先', images: ['assets/vendor/placeholder.svg'] },
+          { title: '客服专员招聘', desc: '负责客户咨询，有耐心', images: ['assets/vendor/placeholder.svg'] },
         ],
         '兼职': [
-          { title: '周末兼职', desc: '周六周日，每天8小时' },
-          { title: '晚间兼职', desc: '晚上7点到10点' },
-          { title: '节假日兼职', desc: '法定节假日，工资翻倍' },
-          { title: '远程兼职', desc: '在家办公，时间灵活' },
-          { title: '短期兼职', desc: '1-3个月，可长期合作' },
-          { title: '项目兼职', desc: '按项目结算，有经验者优先' },
+          { title: '周末兼职', desc: '周六周日，每天8小时', images: ['assets/vendor/placeholder.svg'] },
+          { title: '晚间兼职', desc: '晚上7点到10点', images: ['assets/vendor/placeholder.svg'] },
+          { title: '节假日兼职', desc: '法定节假日，工资翻倍', images: ['assets/vendor/placeholder.svg'] },
+          { title: '远程兼职', desc: '在家办公，时间灵活', images: ['assets/vendor/placeholder.svg'] },
+          { title: '短期兼职', desc: '1-3个月，可长期合作', images: ['assets/vendor/placeholder.svg'] },
+          { title: '项目兼职', desc: '按项目结算，有经验者优先', images: ['assets/vendor/placeholder.svg'] },
         ],
         '零工': [
-          { title: '搬运工', desc: '日结，150-200元/天' },
-          { title: '快递分拣', desc: '夜班，200-250元/天' },
-          { title: '促销员', desc: '商场促销，120-150元/天' },
-          { title: '传单派发', desc: '80-100元/天' },
-          { title: '临时工', desc: '工厂临时工，180-220元/天' },
-          { title: '活动执行', desc: '活动现场执行，150-200元/天' },
+          { title: '搬运工', desc: '日结，150-200元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '快递分拣', desc: '夜班，200-250元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '促销员', desc: '商场促销，120-150元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '传单派发', desc: '80-100元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '临时工', desc: '工厂临时工，180-220元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '活动执行', desc: '活动现场执行，150-200元/天', images: ['assets/vendor/placeholder.svg'] },
         ],
         '小时工': [
-          { title: '餐厅服务员', desc: '20-25元/小时' },
-          { title: '家教', desc: '50-100元/小时' },
-          { title: '翻译', desc: '80-150元/小时' },
-          { title: '健身教练', desc: '100-200元/小时' },
-          { title: '按摩师', desc: '80-120元/小时' },
-          { title: '代驾', desc: '30-50元/小时' },
+          { title: '餐厅服务员', desc: '20-25元/小时', images: ['assets/vendor/placeholder.svg'] },
+          { title: '家教', desc: '50-100元/小时', images: ['assets/vendor/placeholder.svg'] },
+          { title: '翻译', desc: '80-150元/小时', images: ['assets/vendor/placeholder.svg'] },
+          { title: '健身教练', desc: '100-200元/小时', images: ['assets/vendor/placeholder.svg'] },
+          { title: '按摩师', desc: '80-120元/小时', images: ['assets/vendor/placeholder.svg'] },
+          { title: '代驾', desc: '30-50元/小时', images: ['assets/vendor/placeholder.svg'] },
         ],
         '短期工': [
-          { title: '暑假工', desc: '2-3个月，包吃住' },
-          { title: '寒假工', desc: '1-2个月，工资高' },
-          { title: '活动临时工', desc: '3-7天，日结' },
-          { title: '展会临时工', desc: '2-5天，150-200元/天' },
-          { title: '促销短期工', desc: '1-4周，有提成' },
-          { title: '建筑短期工', desc: '1-3个月，包吃住' },
+          { title: '暑假工', desc: '2-3个月，包吃住', images: ['assets/vendor/placeholder.svg'] },
+          { title: '寒假工', desc: '1-2个月，工资高', images: ['assets/vendor/placeholder.svg'] },
+          { title: '活动临时工', desc: '3-7天，日结', images: ['assets/vendor/placeholder.svg'] },
+          { title: '展会临时工', desc: '2-5天，150-200元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '促销短期工', desc: '1-4周，有提成', images: ['assets/vendor/placeholder.svg'] },
+          { title: '建筑短期工', desc: '1-3个月，包吃住', images: ['assets/vendor/placeholder.svg'] },
         ],
         '天工': [
-          { title: '日结工', desc: '当天结算，不拖欠' },
-          { title: '临时日结', desc: '急招，马上上岗' },
-          { title: '高薪日结', desc: '200-300元/天' },
-          { title: '轻松日结', desc: '工作简单，100-150元/天' },
-          { title: '体力日结', desc: '搬运、装卸，180-250元/天' },
-          { title: '技术日结', desc: '技术工种，250-350元/天' },
+          { title: '日结工', desc: '当天结算，不拖欠', images: ['assets/vendor/placeholder.svg'] },
+          { title: '临时日结', desc: '急招，马上上岗', images: ['assets/vendor/placeholder.svg'] },
+          { title: '高薪日结', desc: '200-300元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '轻松日结', desc: '工作简单，100-150元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '体力日结', desc: '搬运、装卸，180-250元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '技术日结', desc: '技术工种，250-350元/天', images: ['assets/vendor/placeholder.svg'] },
         ],
         '周结工': [
-          { title: '周结普工', desc: '每周结算，稳定收入' },
-          { title: '周结技工', desc: '有技术要求，工资高' },
-          { title: '周结服务员', desc: '餐饮服务，包吃' },
-          { title: '周结保安', desc: '负责安全，工作轻松' },
-          { title: '周结保洁', desc: '负责清洁，时间灵活' },
-          { title: '周结文员', desc: '办公室工作，环境好' },
+          { title: '周结普工', desc: '每周结算，稳定收入', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结技工', desc: '有技术要求，工资高', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结服务员', desc: '餐饮服务，包吃', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结保安', desc: '负责安全，工作轻松', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结保洁', desc: '负责清洁，时间灵活', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结文员', desc: '办公室工作，环境好', images: ['assets/vendor/placeholder.svg'] },
         ],
         '假期兼职': [
-          { title: '寒假兼职', desc: '学生优先，时间灵活' },
-          { title: '暑假兼职', desc: '2-3个月，包吃住' },
-          { title: '国庆兼职', desc: '7天，工资高' },
-          { title: '春节兼职', desc: '春节不回家，3倍工资' },
-          { title: '中秋兼职', desc: '3天，有红包' },
-          { title: '五一兼职', desc: '5天，有提成' },
+          { title: '寒假兼职', desc: '学生优先，时间灵活', images: ['assets/vendor/placeholder.svg'] },
+          { title: '暑假兼职', desc: '2-3个月，包吃住', images: ['assets/vendor/placeholder.svg'] },
+          { title: '国庆兼职', desc: '7天，工资高', images: ['assets/vendor/placeholder.svg'] },
+          { title: '春节兼职', desc: '春节不回家，3倍工资', images: ['assets/vendor/placeholder.svg'] },
+          { title: '中秋兼职', desc: '3天，有红包', images: ['assets/vendor/placeholder.svg'] },
+          { title: '五一兼职', desc: '5天，有提成', images: ['assets/vendor/placeholder.svg'] },
         ],
         '发布': [
-          { title: '发布招聘信息', desc: '免费发布，快速招人' },
-          { title: '发布求职信息', desc: '展示自己，找到好工作' },
-          { title: '发布兼职信息', desc: '找到合适的兼职' },
-          { title: '发布零工信息', desc: '快速找到零工' },
-          { title: '发布短期工信息', desc: '短期用工需求' },
-          { title: '发布小时工信息', desc: '灵活用工需求' },
+          { title: '发布招聘信息', desc: '免费发布，快速招人', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布求职信息', desc: '展示自己，找到好工作', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布兼职信息', desc: '找到合适的兼职', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布零工信息', desc: '快速找到零工', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布短期工信息', desc: '短期用工需求', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布小时工信息', desc: '灵活用工需求', images: ['assets/vendor/placeholder.svg'] },
         ],
         '消息': [
-          { title: '系统消息', desc: '查看系统通知' },
-          { title: '私信消息', desc: '查看私信' },
-          { title: '评论消息', desc: '查看评论回复' },
-          { title: '点赞消息', desc: '查看点赞通知' },
-          { title: '关注消息', desc: '查看关注动态' },
-          { title: '活动消息', desc: '查看活动通知' },
+          { title: '系统消息', desc: '查看系统通知', images: ['assets/vendor/placeholder.svg'] },
+          { title: '私信消息', desc: '查看私信', images: ['assets/vendor/placeholder.svg'] },
+          { title: '评论消息', desc: '查看评论回复', images: ['assets/vendor/placeholder.svg'] },
+          { title: '点赞消息', desc: '查看点赞通知', images: ['assets/vendor/placeholder.svg'] },
+          { title: '关注消息', desc: '查看关注动态', images: ['assets/vendor/placeholder.svg'] },
+          { title: '活动消息', desc: '查看活动通知', images: ['assets/vendor/placeholder.svg'] },
         ],
         '通知': [
-          { title: '职位通知', desc: '新职位推荐' },
-          { title: '面试通知', desc: '面试安排提醒' },
-          { title: '入职通知', desc: '入职流程提醒' },
-          { title: '薪资通知', desc: '薪资发放提醒' },
-          { title: '培训通知', desc: '培训安排提醒' },
-          { title: '活动通知', desc: '活动参与提醒' },
+          { title: '职位通知', desc: '新职位推荐', images: ['assets/vendor/placeholder.svg'] },
+          { title: '面试通知', desc: '面试安排提醒', images: ['assets/vendor/placeholder.svg'] },
+          { title: '入职通知', desc: '入职流程提醒', images: ['assets/vendor/placeholder.svg'] },
+          { title: '薪资通知', desc: '薪资发放提醒', images: ['assets/vendor/placeholder.svg'] },
+          { title: '培训通知', desc: '培训安排提醒', images: ['assets/vendor/placeholder.svg'] },
+          { title: '活动通知', desc: '活动参与提醒', images: ['assets/vendor/placeholder.svg'] },
         ],
         '简讯': [
-          { title: '行业资讯', desc: '最新行业动态' },
-          { title: '职场技巧', desc: '提升职场竞争力' },
-          { title: '面试技巧', desc: '面试准备指南' },
-          { title: '简历技巧', desc: '简历优化建议' },
-          { title: '薪资行情', desc: '各岗位薪资参考' },
-          { title: '政策法规', desc: '劳动法相关政策' },
+          { title: '行业资讯', desc: '最新行业动态', images: ['assets/vendor/placeholder.svg'] },
+          { title: '职场技巧', desc: '提升职场竞争力', images: ['assets/vendor/placeholder.svg'] },
+          { title: '面试技巧', desc: '面试准备指南', images: ['assets/vendor/placeholder.svg'] },
+          { title: '简历技巧', desc: '简历优化建议', images: ['assets/vendor/placeholder.svg'] },
+          { title: '薪资行情', desc: '各岗位薪资参考', images: ['assets/vendor/placeholder.svg'] },
+          { title: '政策法规', desc: '劳动法相关政策', images: ['assets/vendor/placeholder.svg'] },
         ]
       };
       
@@ -1077,11 +1134,107 @@
         const news = newsData[category] || [];
         
         newsGrid.innerHTML = news.map((item, index) => `
-          <div class="news-item" onclick="showToast('建设中')">
+          <div class="news-item" onclick="showNewsDetail(${JSON.stringify(item).replace(/"/g, '&quot;')})">
             <div class="news-item-title">${item.title}</div>
             <div class="news-item-desc">${item.desc}</div>
           </div>
         `).join('');
+      }
+      
+      // 显示新闻详情弹窗
+      let currentNewsImages = [];
+      let currentImageIndex = 0;
+      
+      function showNewsDetail(newsItem) {
+        const modal = document.getElementById('newsDetailModal');
+        const title = document.getElementById('newsDetailTitle');
+        const carousel = document.getElementById('newsDetailCarousel');
+        const indicators = document.getElementById('newsDetailIndicators');
+        const desc = document.getElementById('newsDetailDesc');
+        
+        // 设置标题和描述
+        title.textContent = newsItem.title;
+        desc.textContent = newsItem.desc;
+        
+        // 设置图片轮播
+        currentNewsImages = newsItem.images || [];
+        currentImageIndex = 0;
+        
+        // 渲染图片
+        carousel.innerHTML = currentNewsImages.map(img => `
+          <img src="${img}" alt="新闻图片" class="news-detail-image">
+        `).join('');
+        
+        // 渲染指示器
+        indicators.innerHTML = currentNewsImages.map((_, index) => `
+          <div class="news-detail-indicator ${index === 0 ? 'active' : ''}" onclick="goToImage(${index})"></div>
+        `).join('');
+        
+        // 初始化触摸事件
+        initCarouselTouchEvents();
+        
+        // 显示弹窗
+        modal.classList.remove('hidden');
+      }
+      
+      // 关闭新闻详情弹窗
+      function closeNewsDetailModal() {
+        const modal = document.getElementById('newsDetailModal');
+        modal.classList.add('hidden');
+      }
+      
+      // 跳转到指定图片
+      function goToImage(index) {
+        if (index < 0 || index >= currentNewsImages.length) return;
+        
+        currentImageIndex = index;
+        const carousel = document.getElementById('newsDetailCarousel');
+        const indicators = document.querySelectorAll('.news-detail-indicator');
+        
+        // 更新轮播位置
+        carousel.style.transform = `translateX(-${index * 100}%)`;
+        
+        // 更新指示器状态
+        indicators.forEach((indicator, i) => {
+          indicator.classList.toggle('active', i === index);
+        });
+      }
+      
+      // 初始化轮播触摸事件
+      function initCarouselTouchEvents() {
+        const carousel = document.getElementById('newsDetailCarousel');
+        let startX = 0;
+        let isDragging = false;
+        
+        carousel.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          isDragging = true;
+        });
+        
+        carousel.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+        });
+        
+        carousel.addEventListener('touchend', (e) => {
+          if (!isDragging) return;
+          
+          const endX = e.changedTouches[0].clientX;
+          const diffX = startX - endX;
+          
+          // 判断滑动方向
+          if (Math.abs(diffX) > 50) {
+            if (diffX > 0 && currentImageIndex < currentNewsImages.length - 1) {
+              // 向左滑动，显示下一张
+              goToImage(currentImageIndex + 1);
+            } else if (diffX < 0 && currentImageIndex > 0) {
+              // 向右滑动，显示上一张
+              goToImage(currentImageIndex - 1);
+            }
+          }
+          
+          isDragging = false;
+        });
       }
       
       // 下拉刷新功能
