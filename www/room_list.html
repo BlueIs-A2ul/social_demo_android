@@ -72,6 +72,61 @@
         margin-left: 4px;
         vertical-align: -4px;
       }
+
+      /* 信息栏弹窗样式 */
+      .category-item.active {
+        background-color: #fdf2f8;
+        color: #ec4899;
+      }
+      
+      .pull-to-refresh-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        color: #9ca3af;
+        font-size: 12px;
+      }
+      
+      .pull-to-refresh-indicator .refresh-icon {
+        width: 24px;
+        height: 24px;
+        margin-bottom: 5px;
+      }
+      
+      .news-item {
+        background-color: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      
+      .news-item:hover {
+        background-color: #f3f4f6;
+      }
+      
+      .news-item-title {
+        font-size: 12px;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      .news-item-desc {
+        font-size: 10px;
+        color: #6b7280;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
@@ -292,6 +347,23 @@
             <span
               class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
               >通讯录<br
+            /></span>
+          </div>
+          <!-- 房间 6: 信息栏 -->
+          <div
+            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            onclick="showInfoBarModal()"
+          >
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+              <img
+                alt="信息栏"
+                class="w-full h-full object-cover"
+                src="assets/src_01/icon/信息栏.png"
+              />
+            </div>
+            <span
+              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
+              >信息栏<br
             /></span>
           </div>
           <!-- 房间 4: 无 (占位) -->
@@ -717,6 +789,93 @@
           </div>
         </div>
       </div>
+      <!-- 信息栏弹窗 -->
+      <div id="infoBarModal" class="fixed inset-0 z-50 hidden">
+        <!-- 遮罩层 -->
+        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeInfoBarModal()"></div>
+        <!-- 弹窗主体 -->
+        <div class="absolute inset-4 bg-white rounded-lg overflow-hidden flex flex-col">
+          <!-- 弹窗头部 -->
+          <div class="flex-none px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="font-bold text-gray-900">信息栏</h3>
+            <button onclick="closeInfoBarModal()" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <!-- 弹窗内容 -->
+          <div class="flex-1 overflow-hidden flex">
+            <!-- 左边分类列表 -->
+            <div class="w-1/3 border-r border-gray-100 overflow-y-auto">
+              <div class="p-2">
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer bg-pink-50 text-pink-600" data-category="招聘" onclick="filterNews('招聘')">
+                  <img src="assets/src_01/信息栏/便签/便签_圆角_1.png" alt="招聘" class="w-8 h-4 object-cover">
+                  <span class="text-xs font-medium">招聘</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="兼职" onclick="filterNews('兼职')">
+                  <img src="assets/src_01/信息栏/便签/便签_圆角_2.png" alt="兼职" class="w-8 h-4 object-cover">
+                  <span class="text-xs">兼职</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="零工" onclick="filterNews('零工')">
+                  <img src="assets/src_01/信息栏/便签/便签_圆角_3.png" alt="零工" class="w-8 h-4 object-cover">
+                  <span class="text-xs">零工</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="小时工" onclick="filterNews('小时工')">
+                  <img src="assets/src_01/信息栏/便签/便签_圆角_4.png" alt="小时工" class="w-8 h-4 object-cover">
+                  <span class="text-xs">小时工</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="短期工" onclick="filterNews('短期工')">
+                  <img src="assets/src_01/信息栏/便签/便签_圆角_5.png" alt="短期工" class="w-8 h-4 object-cover">
+                  <span class="text-xs">短期工</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="天工" onclick="filterNews('天工')">
+                  <img src="assets/src_01/信息栏/便签/便签_圆角_6.png" alt="天工" class="w-8 h-4 object-cover">
+                  <span class="text-xs">天工</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="周结工" onclick="filterNews('周结工')">
+                  <img src="assets/src_01/信息栏/便签/便签_箭头_1.png" alt="周结工" class="w-8 h-4 object-cover">
+                  <span class="text-xs">周结工</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="假期兼职" onclick="filterNews('假期兼职')">
+                  <img src="assets/src_01/信息栏/便签/便签_箭头_2.png" alt="假期兼职" class="w-8 h-4 object-cover">
+                  <span class="text-xs">假期兼职</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="发布" onclick="filterNews('发布')">
+                  <img src="assets/src_01/信息栏/便签/便签_箭头_3.png" alt="发布" class="w-8 h-4 object-cover">
+                  <span class="text-xs">发布</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="消息" onclick="filterNews('消息')">
+                  <img src="assets/src_01/信息栏/便签/便签_箭头_4.png" alt="消息" class="w-8 h-4 object-cover">
+                  <span class="text-xs">消息</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="通知" onclick="filterNews('通知')">
+                  <img src="assets/src_01/信息栏/便签/便签_箭头_5.png" alt="通知" class="w-8 h-4 object-cover">
+                  <span class="text-xs">通知</span>
+                </div>
+                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="简讯" onclick="filterNews('简讯')">
+                  <img src="assets/src_01/信息栏/便签/便签_箭头_6.png" alt="简讯" class="w-8 h-4 object-cover">
+                  <span class="text-xs">简讯</span>
+                </div>
+              </div>
+            </div>
+            <!-- 右边新闻网格 -->
+            <div class="flex-1 overflow-y-auto">
+              <div class="p-4">
+                <!-- 下拉刷新指示器 -->
+                <div class="pull-to-refresh-indicator hidden" id="infoBarPullToRefresh">
+                  <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
+                  <span class="refresh-text">下拉刷新...</span>
+                </div>
+                <!-- 新闻网格 -->
+                <div class="grid grid-cols-2 gap-3" id="newsGrid">
+                  <!-- 新闻内容将通过JavaScript动态生成 -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- Toast -->
       <div class="" id="toast"></div>
     </div>
@@ -769,6 +928,195 @@
           const name = (item.textContent || '').trim().toLowerCase()
           item.classList.toggle('hidden', text !== '' && !name.includes(text))
         })
+      }
+
+      // 信息栏弹窗相关函数
+      let currentCategory = '招聘';
+      
+      // 新闻数据（固定内容）
+      const newsData = {
+        '招聘': [
+          { title: '程序员招聘', desc: 'Java/Python开发工程师，年薪30-50万' },
+          { title: '设计师招聘', desc: 'UI/UX设计师，有经验者优先' },
+          { title: '产品经理招聘', desc: '3年以上经验，熟悉互联网产品' },
+          { title: '运营专员招聘', desc: '负责社群运营，有相关经验' },
+          { title: '市场推广招聘', desc: '负责品牌推广，有资源者优先' },
+          { title: '客服专员招聘', desc: '负责客户咨询，有耐心' },
+        ],
+        '兼职': [
+          { title: '周末兼职', desc: '周六周日，每天8小时' },
+          { title: '晚间兼职', desc: '晚上7点到10点' },
+          { title: '节假日兼职', desc: '法定节假日，工资翻倍' },
+          { title: '远程兼职', desc: '在家办公，时间灵活' },
+          { title: '短期兼职', desc: '1-3个月，可长期合作' },
+          { title: '项目兼职', desc: '按项目结算，有经验者优先' },
+        ],
+        '零工': [
+          { title: '搬运工', desc: '日结，150-200元/天' },
+          { title: '快递分拣', desc: '夜班，200-250元/天' },
+          { title: '促销员', desc: '商场促销，120-150元/天' },
+          { title: '传单派发', desc: '80-100元/天' },
+          { title: '临时工', desc: '工厂临时工，180-220元/天' },
+          { title: '活动执行', desc: '活动现场执行，150-200元/天' },
+        ],
+        '小时工': [
+          { title: '餐厅服务员', desc: '20-25元/小时' },
+          { title: '家教', desc: '50-100元/小时' },
+          { title: '翻译', desc: '80-150元/小时' },
+          { title: '健身教练', desc: '100-200元/小时' },
+          { title: '按摩师', desc: '80-120元/小时' },
+          { title: '代驾', desc: '30-50元/小时' },
+        ],
+        '短期工': [
+          { title: '暑假工', desc: '2-3个月，包吃住' },
+          { title: '寒假工', desc: '1-2个月，工资高' },
+          { title: '活动临时工', desc: '3-7天，日结' },
+          { title: '展会临时工', desc: '2-5天，150-200元/天' },
+          { title: '促销短期工', desc: '1-4周，有提成' },
+          { title: '建筑短期工', desc: '1-3个月，包吃住' },
+        ],
+        '天工': [
+          { title: '日结工', desc: '当天结算，不拖欠' },
+          { title: '临时日结', desc: '急招，马上上岗' },
+          { title: '高薪日结', desc: '200-300元/天' },
+          { title: '轻松日结', desc: '工作简单，100-150元/天' },
+          { title: '体力日结', desc: '搬运、装卸，180-250元/天' },
+          { title: '技术日结', desc: '技术工种，250-350元/天' },
+        ],
+        '周结工': [
+          { title: '周结普工', desc: '每周结算，稳定收入' },
+          { title: '周结技工', desc: '有技术要求，工资高' },
+          { title: '周结服务员', desc: '餐饮服务，包吃' },
+          { title: '周结保安', desc: '负责安全，工作轻松' },
+          { title: '周结保洁', desc: '负责清洁，时间灵活' },
+          { title: '周结文员', desc: '办公室工作，环境好' },
+        ],
+        '假期兼职': [
+          { title: '寒假兼职', desc: '学生优先，时间灵活' },
+          { title: '暑假兼职', desc: '2-3个月，包吃住' },
+          { title: '国庆兼职', desc: '7天，工资高' },
+          { title: '春节兼职', desc: '春节不回家，3倍工资' },
+          { title: '中秋兼职', desc: '3天，有红包' },
+          { title: '五一兼职', desc: '5天，有提成' },
+        ],
+        '发布': [
+          { title: '发布招聘信息', desc: '免费发布，快速招人' },
+          { title: '发布求职信息', desc: '展示自己，找到好工作' },
+          { title: '发布兼职信息', desc: '找到合适的兼职' },
+          { title: '发布零工信息', desc: '快速找到零工' },
+          { title: '发布短期工信息', desc: '短期用工需求' },
+          { title: '发布小时工信息', desc: '灵活用工需求' },
+        ],
+        '消息': [
+          { title: '系统消息', desc: '查看系统通知' },
+          { title: '私信消息', desc: '查看私信' },
+          { title: '评论消息', desc: '查看评论回复' },
+          { title: '点赞消息', desc: '查看点赞通知' },
+          { title: '关注消息', desc: '查看关注动态' },
+          { title: '活动消息', desc: '查看活动通知' },
+        ],
+        '通知': [
+          { title: '职位通知', desc: '新职位推荐' },
+          { title: '面试通知', desc: '面试安排提醒' },
+          { title: '入职通知', desc: '入职流程提醒' },
+          { title: '薪资通知', desc: '薪资发放提醒' },
+          { title: '培训通知', desc: '培训安排提醒' },
+          { title: '活动通知', desc: '活动参与提醒' },
+        ],
+        '简讯': [
+          { title: '行业资讯', desc: '最新行业动态' },
+          { title: '职场技巧', desc: '提升职场竞争力' },
+          { title: '面试技巧', desc: '面试准备指南' },
+          { title: '简历技巧', desc: '简历优化建议' },
+          { title: '薪资行情', desc: '各岗位薪资参考' },
+          { title: '政策法规', desc: '劳动法相关政策' },
+        ]
+      };
+      
+      // 显示信息栏弹窗
+      function showInfoBarModal() {
+        const modal = document.getElementById('infoBarModal');
+        modal.classList.remove('hidden');
+        // 初始化显示第一个分类的新闻
+        filterNews('招聘');
+      }
+      
+      // 关闭信息栏弹窗
+      function closeInfoBarModal() {
+        const modal = document.getElementById('infoBarModal');
+        modal.classList.add('hidden');
+      }
+      
+      // 筛选新闻
+      function filterNews(category) {
+        currentCategory = category;
+        
+        // 更新左边分类的选中状态
+        document.querySelectorAll('.category-item').forEach(item => {
+          if (item.dataset.category === category) {
+            item.classList.add('active', 'bg-pink-50', 'text-pink-600');
+            item.classList.remove('hover:bg-gray-50');
+          } else {
+            item.classList.remove('active', 'bg-pink-50', 'text-pink-600');
+            item.classList.add('hover:bg-gray-50');
+          }
+        });
+        
+        // 渲染新闻网格
+        renderNewsGrid(category);
+      }
+      
+      // 渲染新闻网格
+      function renderNewsGrid(category) {
+        const newsGrid = document.getElementById('newsGrid');
+        const news = newsData[category] || [];
+        
+        newsGrid.innerHTML = news.map((item, index) => `
+          <div class="news-item" onclick="showToast('建设中')">
+            <div class="news-item-title">${item.title}</div>
+            <div class="news-item-desc">${item.desc}</div>
+          </div>
+        `).join('');
+      }
+      
+      // 下拉刷新功能
+      let startY = 0;
+      let isPulling = false;
+      
+      const newsContainer = document.querySelector('#infoBarModal .flex-1.overflow-y-auto');
+      if (newsContainer) {
+        newsContainer.addEventListener('touchstart', (e) => {
+          if (newsContainer.scrollTop === 0) {
+            startY = e.touches[0].clientY;
+            isPulling = true;
+          }
+        });
+        
+        newsContainer.addEventListener('touchmove', (e) => {
+          if (!isPulling) return;
+          
+          const currentY = e.touches[0].clientY;
+          const pullDistance = currentY - startY;
+          
+          if (pullDistance > 50) {
+            document.getElementById('infoBarPullToRefresh').classList.remove('hidden');
+          }
+        });
+        
+        newsContainer.addEventListener('touchend', () => {
+          if (isPulling) {
+            const pullIndicator = document.getElementById('infoBarPullToRefresh');
+            if (!pullIndicator.classList.contains('hidden')) {
+              // 模拟刷新
+              setTimeout(() => {
+                renderNewsGrid(currentCategory);
+                pullIndicator.classList.add('hidden');
+                showToast('新闻已刷新');
+              }, 1000);
+            }
+            isPulling = false;
+          }
+        });
       }
     </script>
   </body>
