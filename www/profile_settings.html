@@ -395,7 +395,25 @@
       contact: '陈经理',
       phone: '138****0000',
       evaluation: '热爱空间设计，擅长用光影与材质营造沉浸式社交空间',
-      avatar: 'assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png'
+      avatar: 'assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png',
+      companyProfile: {
+        businessLicense: '',
+        shareholders: '张三、李四',
+        keyPersonnel: '王五（CEO）、赵六（CTO）',
+        companyIntro: '专注于虚拟空间设计与社交体验创新',
+        currentStatus: '运营中',
+        businessContent: '虚拟空间设计、VR社交平台开发',
+        shortTermPlan: '完善核心功能，拓展用户群体',
+        longTermPlan: '成为领先的虚拟社交空间提供商',
+        companyIdCard: {
+          companyLogo: '',
+          companyName: '云境科技有限公司',
+          establishTime: '2023-06',
+          legalPerson: '小云',
+          mainMembers: '小云、张三、李四',
+          businessContent: '虚拟空间设计与开发'
+        }
+      }
     };
 
     // 页面加载时初始化
@@ -405,26 +423,9 @@
       updateIdCard();
     });
 
-    // 加载用户数据
+    // 加载用户数据（直接使用默认数据）
     function loadUserData() {
-      const saved = localStorage.getItem('appUserProfile');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          userData = { ...userData, ...parsed };
-          if (!userData.companyProfile) {
-            userData.companyProfile = defaultUserData.companyProfile;
-          }
-          if (!userData.companyProfile.companyIdCard) {
-            userData.companyProfile.companyIdCard = defaultUserData.companyProfile.companyIdCard;
-          }
-        } catch (e) {
-          console.error('解析用户数据失败:', e);
-          userData = { ...defaultUserData };
-        }
-      } else {
-        userData = { ...defaultUserData };
-      }
+      userData = JSON.parse(JSON.stringify(defaultUserData));
     }
 
     // 初始化表单
@@ -586,42 +587,8 @@
       input.click();
     }
 
-    // 保存数据
+    // 保存数据（仅显示提示，不实际保存）
     function handleSave() {
-      // 收集个人简历数据
-      userData.name = document.getElementById('name').value;
-      userData.birth = document.getElementById('birth').value;
-      userData.ethnic = document.getElementById('ethnic').value;
-      userData.job = document.getElementById('job').value;
-      userData.jobStatus = document.getElementById('jobStatus').value;
-      userData.skills = document.getElementById('skills').value;
-      userData.specialty = document.getElementById('specialty').value;
-      userData.hobbies = document.getElementById('hobbies').value;
-      userData.prevUnit = document.getElementById('prevUnit').value;
-      userData.education = document.getElementById('education').value;
-      userData.contact = document.getElementById('contact').value;
-      userData.phone = document.getElementById('phone').value;
-      userData.evaluation = document.getElementById('evaluation').value;
-      
-      // 收集公司简历数据
-      userData.companyProfile.shareholders = document.getElementById('shareholders').value;
-      userData.companyProfile.keyPersonnel = document.getElementById('keyPersonnel').value;
-      userData.companyProfile.companyIntro = document.getElementById('companyIntro').value;
-      userData.companyProfile.currentStatus = document.getElementById('currentStatus').value;
-      userData.companyProfile.businessContent = document.getElementById('businessContent').value;
-      userData.companyProfile.shortTermPlan = document.getElementById('shortTermPlan').value;
-      userData.companyProfile.longTermPlan = document.getElementById('longTermPlan').value;
-      
-      // 收集公司虚拟身份证数据
-      userData.companyProfile.companyIdCard.companyName = document.getElementById('companyName').value;
-      userData.companyProfile.companyIdCard.establishTime = document.getElementById('establishTime').value;
-      userData.companyProfile.companyIdCard.legalPerson = document.getElementById('legalPerson').value;
-      userData.companyProfile.companyIdCard.mainMembers = document.getElementById('mainMembers').value;
-      userData.companyProfile.companyIdCard.businessContent = document.getElementById('companyIdCardBusinessContent').value;
-      
-      // 保存到localStorage
-      localStorage.setItem('appUserProfile', JSON.stringify(userData));
-      
       showToast('保存成功');
       setTimeout(() => {
         goBack();
