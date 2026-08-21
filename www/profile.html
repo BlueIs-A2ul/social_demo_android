@@ -7,6 +7,7 @@
     <title>个人空间 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
     <script src="assets/vendor/iconify-icon.min.js"></script>
+    <script src="assets/vendor/history-favorites.js"></script>
     <style>
       body {
         background-color: white;
@@ -426,48 +427,7 @@
             <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
             <span class="refresh-text">下拉刷新...</span>
           </div>
-          <div
-            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
-          >
-            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
-            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
-          </div>
-          <div
-            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
-          >
-            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
-            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
-          </div>
-          <div
-            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
-          >
-            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
-            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
-          </div>
-          <div
-            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
-          >
-            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
-            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
-          </div>
-          <div
-            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
-          >
-            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
-            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
-          </div>
-          <div
-            class="relative border border-gray-200 h-20 flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="showToast('建设中')"
-          >
-            <div class="absolute w-6 h-0.5 bg-gray-300"></div>
-            <div class="absolute w-0.5 h-6 bg-gray-300"></div>
-          </div>
+          <!-- 新闻内容由 JavaScript 动态生成 -->
         </div>
       </div>
       <div aria-hidden="true" class="action-menu room-action-menu" id="roomActionMenu">
@@ -516,6 +476,32 @@
           <div class="mt-4 flex justify-center">
             <button class="px-6 py-2 border border-black text-sm font-bold hover:bg-gray-100" onclick="closeResumeModal()">
               关闭
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- 社区新闻详情弹窗 -->
+      <div aria-hidden="true" class="modal-overlay hidden" id="communityNewsModal">
+        <div class="modal-card border border-gray-200 overflow-hidden flex flex-col" style="max-height:88dvh;">
+          <button aria-label="关闭" class="modal-close" onclick="closeCommunityNewsModal()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+          </button>
+          <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+            <img id="communityNewsImage" class="w-full h-48 object-cover bg-gray-100" src="" alt="新闻图片" />
+            <div class="p-5">
+              <h3 id="communityNewsTitle" class="text-lg font-bold text-gray-900 mb-2"></h3>
+              <div id="communityNewsMeta" class="text-xs text-gray-400 mb-3"></div>
+              <p id="communityNewsBody" class="text-sm text-gray-700 leading-relaxed"></p>
+            </div>
+          </div>
+          <div class="shrink-0 px-5 py-3 border-t border-gray-100 flex items-center gap-3 bg-white">
+            <button id="communityNewsFavBtn" class="flex items-center gap-1.5 text-sm text-gray-500 active:scale-95 transition-transform" onclick="toggleCommunityNewsFavorite()">
+              <svg id="communityNewsFavIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+              </svg>
+              <span id="communityNewsFavText">收藏</span>
             </button>
           </div>
         </div>
@@ -831,9 +817,172 @@
         } else if (label === '查看个人简历') {
           showResume(owner)
         } else if (label === '收藏') {
-          showToast('收藏功能建设中')
+          const item = {
+            id: 'room_' + owner.vId,
+            source: 'communityNews',
+            data: {
+              kind: 'room',
+              title: owner.name + '的房间',
+              desc: owner.evaluation,
+              image: owner.avatar,
+              body: owner.job + ' · ' + owner.jobStatus + '\n' + owner.evaluation,
+            },
+          }
+          const fav = window.HistoryFavorites.toggleFavorite(item)
+          showToast(fav ? '已收藏' : '已取消收藏')
         }
       }
+
+      // ===== 社区新闻数据与详情 =====
+      const communityNewsData = [
+        {
+          id: 'cn_1',
+          title: '社区年度设计大赛开启',
+          image: 'assets/products/space-living-room.jpg',
+          source: '社区公告',
+          time: '2小时前',
+          body: '一年一度的社区空间设计大赛正式开启！本次大赛以"光影与材质"为主题，鼓励创作者用虚拟空间的灯光、材质、陈设讲述故事。参赛作品将由社区投票与评委共同评选，优胜者可获得专属徽章与空间装饰奖励。提交截止时间为本月底，欢迎所有空间爱好者踊跃投稿。',
+        },
+        {
+          id: 'cn_2',
+          title: '新晋商家入驻：蓝鹊咖啡',
+          image: 'assets/shops/shop-coffee-corner.png',
+          source: '商家动态',
+          time: '5小时前',
+          body: '蓝鹊咖啡正式入驻社区空间！主理人蓝叔带来手冲咖啡体验空间，店内陈列多款特调配方与黑胶唱片墙。即日起至本周末，到店打卡可领取限定咖啡杯装饰，数量有限先到先得。欢迎邻居们来蓝鹊坐坐，用一杯咖啡开启慢下来的下午。',
+        },
+        {
+          id: 'cn_3',
+          title: '装饰指南：打造你的 Dream Room',
+          image: 'assets/products/space-furniture.jpg',
+          source: '内容精选',
+          time: '昨天',
+          body: '从灯光到家具到特效，手把手教你打造理想房间。本篇涵盖三层布光法则、软装搭配比例、粒子特效的克制使用三个核心模块，并附有 12 个实战案例拆解。无论你是新手还是老玩家，都能找到适合自己的装饰思路。建议收藏备用，装修不迷路。',
+        },
+        {
+          id: 'cn_4',
+          title: '数字藏品上新：极简古典画框',
+          image: 'assets/packaged/sq/OIP-C.webp',
+          source: '藏品资讯',
+          time: '2天前',
+          body: '本期数字藏品上新以"极简古典"为线索，推出 6 款画框藏品，适配多种空间风格。每款藏品均支持自由悬挂与尺寸调节，并可与既有的雕塑、灯具藏品组合搭配。藏品将在今晚八点准时发售，社区会员可享早鸟价。',
+        },
+        {
+          id: 'cn_5',
+          title: '邻里夜话：聊聊你的治愈角落',
+          image: 'assets/products/space-lighting.jpg',
+          source: '社区话题',
+          time: '3天前',
+          body: '每个人心里都有一个治愈角落，可能是一盏暖灯下的阅读角，也可能是窗边发呆的小沙发。本周邻里夜话征集"你的治愈角落"，带图分享你的空间一隅与背后的故事。优质内容将被精选置顶，并有机会获得治愈系装饰礼包。',
+        },
+        {
+          id: 'cn_6',
+          title: '播客推荐：声音陪伴的深夜',
+          image: 'assets/packaged/sq/妮妮的播客.png',
+          source: '内容精选',
+          time: '4天前',
+          body: '电台主播妮妮带来新一期深夜播客，主题是"用声音陪伴每个深夜"。本期围绕独处时的情绪管理、睡前仪式感与白噪音助眠展开，温柔的声音与恰到好处的音乐穿插，让这个夜晚不再孤单。点击收听，把夜晚交给声音。',
+        },
+      ]
+
+      let currentCommunityNews = null
+
+      function renderCommunityNews() {
+        const newsList = document.getElementById('newsList')
+        // 保留刷新指示器
+        const indicator = document.getElementById('pullToRefreshIndicator')
+        newsList.innerHTML = ''
+        if (indicator) newsList.appendChild(indicator)
+        communityNewsData.forEach((item) => {
+          const card = document.createElement('div')
+          card.className =
+            'relative border border-gray-200 overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors news-card'
+          card.style.height = '80px'
+          card.innerHTML =
+            '<img class="w-full h-full object-cover" src="' +
+            item.image +
+            '" alt="' +
+            item.title +
+            '" /><div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1.5"><span class="text-[10px] text-white font-medium line-clamp-1">' +
+            item.title +
+            '</span></div>'
+          card.addEventListener('click', () => openCommunityNews(item))
+          newsList.appendChild(card)
+        })
+      }
+
+      function openCommunityNews(item) {
+        currentCommunityNews = item
+        document.getElementById('communityNewsImage').src = item.image
+        document.getElementById('communityNewsTitle').textContent = item.title
+        document.getElementById('communityNewsMeta').textContent =
+          item.source + ' · ' + item.time
+        document.getElementById('communityNewsBody').textContent = item.body
+
+        // 初始化收藏按钮状态
+        updateCommunityNewsFavBtn()
+
+        const modal = document.getElementById('communityNewsModal')
+        modal.classList.remove('hidden')
+        modal.setAttribute('aria-hidden', 'false')
+
+        // 写入浏览历史
+        window.HistoryFavorites.addHistory({
+          id: 'communityNews_' + item.id,
+          source: 'communityNews',
+          data: {
+            title: item.title,
+            desc: item.source + ' · ' + item.time,
+            image: item.image,
+            body: item.body,
+          },
+        })
+      }
+
+      function closeCommunityNewsModal() {
+        const modal = document.getElementById('communityNewsModal')
+        modal.classList.add('hidden')
+        modal.setAttribute('aria-hidden', 'true')
+      }
+
+      function updateCommunityNewsFavBtn() {
+        if (!currentCommunityNews) return
+        const id = 'communityNews_' + currentCommunityNews.id
+        const isFav = window.HistoryFavorites.isFavorited(id, 'communityNews')
+        const icon = document.getElementById('communityNewsFavIcon')
+        const text = document.getElementById('communityNewsFavText')
+        if (isFav) {
+          icon.setAttribute('fill', '#ec4899')
+          icon.style.color = '#ec4899'
+          text.textContent = '已收藏'
+          text.style.color = '#ec4899'
+        } else {
+          icon.setAttribute('fill', 'none')
+          icon.style.color = ''
+          text.textContent = '收藏'
+          text.style.color = ''
+        }
+      }
+
+      function toggleCommunityNewsFavorite() {
+        if (!currentCommunityNews) return
+        const item = {
+          id: 'communityNews_' + currentCommunityNews.id,
+          source: 'communityNews',
+          data: {
+            title: currentCommunityNews.title,
+            desc: currentCommunityNews.source + ' · ' + currentCommunityNews.time,
+            image: currentCommunityNews.image,
+            body: currentCommunityNews.body,
+          },
+        }
+        const fav = window.HistoryFavorites.toggleFavorite(item)
+        updateCommunityNewsFavBtn()
+        showToast(fav ? '已收藏' : '已取消收藏')
+      }
+
+      // 初始渲染社区新闻
+      renderCommunityNews()
 
       document.addEventListener('click', () => {
         closeRoomProfileMenu()
@@ -930,7 +1079,7 @@
       // 刷新新闻内容
       function refreshNews() {
         const newsList = document.getElementById('newsList')
-        const items = newsList.querySelectorAll('.relative')
+        const items = newsList.querySelectorAll('.news-card')
 
         // 添加刷新动画
         items.forEach((item, index) => {

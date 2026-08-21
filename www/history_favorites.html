@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>历史与收藏 - 智能空间</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <script src="assets/vendor/history-favorites.js"></script>
+    <style>
+      body {
+        background-color: #f9fafb;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      .level-tab {
+        position: relative;
+        font-size: 16px;
+        font-weight: 700;
+        color: #9ca3af;
+        padding: 8px 4px;
+      }
+      .level-tab.active {
+        color: #111827;
+      }
+      .level-tab.active::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+        width: 24px;
+        height: 3px;
+        background: #ec4899;
+      }
+      .source-tab {
+        font-size: 13px;
+        padding: 5px 14px;
+        border: 1px solid #e5e7eb;
+        color: #6b7280;
+        background: #fff;
+      }
+      .source-tab.active {
+        border-color: #ec4899;
+        color: #ec4899;
+        background: #fdf2f8;
+      }
+
+      /* 分享：2列瀑布流卡片 */
+      .share-card {
+        cursor: pointer;
+      }
+      .share-card .thumb {
+        aspect-ratio: 3/4;
+        background: #f3f4f6;
+        overflow: hidden;
+      }
+      .share-card .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* 信息栏：2列竖向长方形卡片 */
+      .info-item {
+        background-color: #f9fafb;
+        border: 1px solid #e5e7eb;
+        padding: 12px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        aspect-ratio: 3/4;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .info-item:active {
+        background-color: #f3f4f6;
+      }
+      .info-item-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .info-item-desc {
+        font-size: 12px;
+        color: #6b7280;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        line-height: 1.4;
+      }
+
+      /* 社区新闻：3列网格卡片 */
+      .news-card {
+        position: relative;
+        border: 1px solid #e5e7eb;
+        height: 80px;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      .news-card:active {
+        opacity: 0.85;
+      }
+      .news-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .news-card .mask {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+        display: flex;
+        align-items: flex-end;
+        padding: 6px;
+      }
+      .news-card .mask span {
+        font-size: 10px;
+        color: #fff;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .fav-btn-icon {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* 轮播图 */
+      .detail-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      .carousel-indicator {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+      .carousel-indicator.active {
+        background-color: white;
+      }
+
+      #toast {
+        visibility: hidden;
+        min-width: 160px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        text-align: center;
+        padding: 10px 20px;
+        position: fixed;
+        z-index: 2000;
+        left: 50%;
+        bottom: 90px;
+        transform: translateX(-50%);
+        font-size: 13px;
+      }
+      #toast.show {
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <div
+      class="w-full h-[100dvh] bg-gray-50 flex flex-col relative"
+      style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
+    >
+      <!-- 顶部标题栏 -->
+      <div
+        class="flex-none bg-white px-4 pt-10 pb-2 flex items-center justify-center border-b border-gray-100"
+      >
+        <h1 class="text-lg font-bold text-gray-900">历史与收藏</h1>
+      </div>
+
+      <!-- 一级 Tab：历史记录 | 收藏 -->
+      <div
+        class="flex-none bg-white flex items-center justify-center gap-8 px-4 border-b border-gray-100"
+      >
+        <button
+          class="level-tab active"
+          id="tab-history"
+          onclick="switchLevel('history')"
+        >
+          历史记录
+        </button>
+        <button
+          class="level-tab"
+          id="tab-favorites"
+          onclick="switchLevel('favorites')"
+        >
+          收藏
+        </button>
+      </div>
+
+      <!-- 二级 Tab：分享 | 信息栏 | 社区新闻 -->
+      <div
+        class="flex-none bg-white flex items-center gap-2 px-4 py-3 border-b border-gray-100"
+      >
+        <button
+          class="source-tab active"
+          id="source-share"
+          onclick="switchSource('share')"
+        >
+          分享
+        </button>
+        <button
+          class="source-tab"
+          id="source-infoBar"
+          onclick="switchSource('infoBar')"
+        >
+          信息栏
+        </button>
+        <button
+          class="source-tab"
+          id="source-communityNews"
+          onclick="switchSource('communityNews')"
+        >
+          社区新闻
+        </button>
+        <div class="flex-1"></div>
+        <button
+          class="text-xs text-gray-400 active:text-pink-500"
+          id="clear-btn"
+          onclick="handleClear()"
+        >
+          清空
+        </button>
+      </div>
+
+      <!-- 内容列表 -->
+      <div class="flex-1 overflow-y-auto p-4" id="list-container"></div>
+
+      <!-- 空状态 -->
+      <div
+        class="hidden flex-col items-center justify-center py-20 px-10 text-center"
+        id="empty-state"
+      >
+        <div
+          class="w-16 h-16 bg-gray-100 flex items-center justify-center mb-4 rounded-full"
+        >
+          <svg
+            class="w-8 h-8 text-gray-300"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+        </div>
+        <p class="text-gray-400 text-sm" id="empty-text">暂无浏览记录</p>
+      </div>
+
+      <!-- 分享详情弹窗 -->
+      <div
+        class="fixed inset-0 bg-black/90 z-[100] hidden flex-col"
+        id="share-detail-modal"
+        style="display: none"
+      >
+        <div class="flex-1 min-h-0 flex items-center justify-center p-5 relative">
+          <div
+            class="w-full max-w-[360px] h-full bg-white relative flex flex-col overflow-hidden shadow-2xl"
+          >
+            <button
+              class="absolute top-4 right-4 z-50 text-white bg-black/20 rounded-full p-1"
+              onclick="closeShareDetail()"
+            >
+              <svg height="20" viewBox="0 0 24 24" width="20">
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </button>
+            <button
+              class="absolute top-4 left-4 z-50 flex items-center gap-1.5 text-white bg-black/20 rounded-full px-2.5 py-1.5 text-xs"
+              id="share-detail-fav-btn"
+              onclick="toggleShareDetailFav()"
+            >
+              <svg
+                id="share-detail-fav-icon"
+                class="fav-btn-icon"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                ></path>
+              </svg>
+              <span id="share-detail-fav-text">收藏</span>
+            </button>
+            <div class="flex-1 min-h-0 overflow-y-auto pb-[72px]">
+              <div id="share-detail-images"></div>
+              <div class="p-4 border-b border-gray-100">
+                <div class="flex items-center gap-2">
+                  <img
+                    class="w-6 h-6 rounded-full object-cover"
+                    id="share-detail-avatar"
+                    src=""
+                  />
+                  <span
+                    class="text-sm font-bold text-black"
+                    id="share-detail-author"
+                  ></span>
+                </div>
+                <h2
+                  class="text-base font-bold text-black mt-3"
+                  id="share-detail-title"
+                ></h2>
+                <p
+                  class="text-[13px] text-gray-400 mt-1"
+                  id="share-detail-desc"
+                ></p>
+              </div>
+              <div class="p-4">
+                <p
+                  class="text-sm text-black leading-[1.8]"
+                  id="share-detail-body"
+                ></p>
+                <div class="flex gap-3 mt-4" id="share-detail-tags"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 信息栏详情弹窗 -->
+      <div id="infoBar-detail-modal" class="fixed inset-0 z-50 hidden">
+        <div
+          class="absolute inset-0 bg-black bg-opacity-50"
+          onclick="closeInfoBarDetail()"
+        ></div>
+        <div
+          class="absolute inset-4 bg-white rounded-lg overflow-hidden flex flex-col"
+        >
+          <div
+            class="flex-none px-4 py-3 border-b border-gray-100 flex items-center justify-between"
+          >
+            <h3
+              id="infoBar-detail-title"
+              class="font-bold text-gray-900 truncate"
+            ></h3>
+            <button
+              onclick="closeInfoBarDetail()"
+              class="text-gray-400 hover:text-gray-600"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="flex-1 overflow-hidden flex flex-col">
+            <div class="relative flex-none h-1/2 bg-gray-100 overflow-hidden">
+              <div
+                id="infoBar-detail-carousel"
+                class="flex h-full transition-transform duration-300 ease-out"
+              ></div>
+              <div
+                id="infoBar-detail-indicators"
+                class="absolute bottom-2 left-0 right-0 flex justify-center gap-1"
+              ></div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+              <div
+                id="infoBar-detail-desc"
+                class="text-sm text-gray-600 leading-relaxed"
+              ></div>
+            </div>
+            <div
+              class="flex-none px-4 py-3 border-t border-gray-100 flex items-center gap-3 bg-white"
+            >
+              <button
+                id="infoBar-detail-fav-btn"
+                class="flex items-center gap-1.5 text-sm text-gray-500 active:scale-95 transition-transform"
+                onclick="toggleInfoBarDetailFav()"
+              >
+                <svg
+                  id="infoBar-detail-fav-icon"
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                  ></path>
+                </svg>
+                <span id="infoBar-detail-fav-text">收藏</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 社区新闻详情弹窗 -->
+      <div
+        id="news-detail-modal"
+        class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/50"
+      >
+        <div
+          class="bg-white w-full max-w-[340px] max-h-[88dvh] flex flex-col overflow-hidden shadow-2xl relative"
+        >
+          <button
+            class="absolute top-3 right-3 z-50 text-gray-400 hover:text-gray-600"
+            onclick="closeNewsDetail()"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <div class="flex-1 min-h-0 overflow-y-auto">
+            <img
+              id="news-detail-image"
+              class="w-full h-48 object-cover bg-gray-100"
+              src=""
+            />
+            <div class="p-5">
+              <h3
+                id="news-detail-title"
+                class="text-lg font-bold text-gray-900 mb-2"
+              ></h3>
+              <div
+                id="news-detail-meta"
+                class="text-xs text-gray-400 mb-3"
+              ></div>
+              <p
+                id="news-detail-body"
+                class="text-sm text-gray-700 leading-relaxed whitespace-pre-line"
+              ></p>
+            </div>
+          </div>
+          <div
+            class="shrink-0 px-5 py-3 border-t border-gray-100 flex items-center gap-3 bg-white"
+          >
+            <button
+              id="news-detail-fav-btn"
+              class="flex items-center gap-1.5 text-sm text-gray-500 active:scale-95 transition-transform"
+              onclick="toggleNewsDetailFav()"
+            >
+              <svg
+                id="news-detail-fav-icon"
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                ></path>
+              </svg>
+              <span id="news-detail-fav-text">收藏</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast -->
+      <div id="toast"></div>
+    </div>
+
+    <script>
+      var HF = window.HistoryFavorites;
+      var currentLevel = 'history';
+      var currentSource = 'share';
+
+      var sourceLabels = {
+        share: '分享',
+        infoBar: '信息栏',
+        communityNews: '社区新闻',
+      };
+
+      function switchLevel(level) {
+        currentLevel = level;
+        document.getElementById('tab-history').classList.toggle('active', level === 'history');
+        document.getElementById('tab-favorites').classList.toggle('active', level === 'favorites');
+        renderList();
+      }
+
+      function switchSource(source) {
+        currentSource = source;
+        ['share', 'infoBar', 'communityNews'].forEach(function (s) {
+          document.getElementById('source-' + s).classList.toggle('active', s === source);
+        });
+        renderList();
+      }
+
+      function getList() {
+        return currentLevel === 'history'
+          ? HF.getHistory(currentSource)
+          : HF.getFavorites(currentSource);
+      }
+
+      function renderList() {
+        var list = getList();
+        var container = document.getElementById('list-container');
+        var empty = document.getElementById('empty-state');
+        var emptyText = document.getElementById('empty-text');
+
+        if (list.length === 0) {
+          container.classList.add('hidden');
+          empty.classList.remove('hidden');
+          empty.classList.add('flex');
+          emptyText.textContent =
+            currentLevel === 'history'
+              ? '暂无浏览记录'
+              : '暂无收藏内容';
+          return;
+        }
+        container.classList.remove('hidden');
+        empty.classList.add('hidden');
+        empty.classList.remove('flex');
+
+        if (currentSource === 'share') {
+          renderShareList(list, container);
+        } else if (currentSource === 'infoBar') {
+          renderInfoBarList(list, container);
+        } else {
+          renderCommunityNewsList(list, container);
+        }
+      }
+
+      // 分享：2列瀑布流
+      function renderShareList(list, container) {
+        var html = '<div class="grid grid-cols-2 gap-x-[10px] gap-y-4">';
+        list.forEach(function (entry) {
+          var d = entry.data || {};
+          var cover = d.img || (d.images && d.images[0]) || 'assets/vendor/placeholder.svg';
+          var time = HF.formatTime(currentLevel === 'history' ? entry.timestamp : entry.favoritedAt);
+          html +=
+            '<div class="share-card" onclick="openShareDetail(\'' + escapeId(entry.id) + '\')">' +
+            '<div class="thumb"><img src="' + cover + '" alt="' + escapeHtml(d.title || '') + '" /></div>' +
+            '<p class="text-[13px] text-black mt-2 font-medium line-clamp-1">' + escapeHtml(d.title || '') + '</p>' +
+            '<p class="text-[10px] text-gray-400 mt-0.5">' + time + '</p>' +
+            '</div>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
+      }
+
+      // 信息栏：2列竖向长方形
+      function renderInfoBarList(list, container) {
+        var html = '<div class="grid grid-cols-2 gap-3">';
+        list.forEach(function (entry) {
+          var d = entry.data || {};
+          var time = HF.formatTime(currentLevel === 'history' ? entry.timestamp : entry.favoritedAt);
+          html +=
+            '<div class="info-item" onclick="openInfoBarDetail(\'' + escapeId(entry.id) + '\')">' +
+            '<div><div class="info-item-title">' + escapeHtml(d.title || '') + '</div>' +
+            '<div class="info-item-desc">' + escapeHtml(d.desc || '') + '</div></div>' +
+            '<div class="text-[10px] text-gray-400 mt-1">' + time + '</div>' +
+            '</div>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
+      }
+
+      // 社区新闻：3列网格
+      function renderCommunityNewsList(list, container) {
+        var html = '<div class="grid grid-cols-3 gap-3">';
+        list.forEach(function (entry) {
+          var d = entry.data || {};
+          var time = HF.formatTime(currentLevel === 'history' ? entry.timestamp : entry.favoritedAt);
+          html +=
+            '<div class="news-card" onclick="openNewsDetail(\'' + escapeId(entry.id) + '\')">' +
+            '<img src="' + (d.image || 'assets/vendor/placeholder.svg') + '" alt="" />' +
+            '<div class="mask"><span>' + escapeHtml(d.title || '') + '</span></div>' +
+            '</div>';
+        });
+        html += '</div>';
+        container.innerHTML = html;
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+      function escapeId(id) {
+        return String(id).replace(/'/g, "\\'");
+      }
+
+      function findEntry(id, source) {
+        var all = currentLevel === 'history' ? HF.getHistory(source) : HF.getFavorites(source);
+        for (var i = 0; i < all.length; i++) {
+          if (String(all[i].id) === String(id)) return all[i];
+        }
+        return null;
+      }
+
+      // ===== 分享详情 =====
+      function openShareDetail(id) {
+        var entry = findEntry(id, 'share');
+        if (!entry) return;
+        var d = entry.data || {};
+        var images = (d.images && d.images.length) ? d.images : [d.img];
+        document.getElementById('share-detail-images').innerHTML = images
+          .map(function (src) {
+            return '<img alt="动态图片" class="w-full h-[280px] object-contain bg-gray-50 block" src="' + src + '" />';
+          })
+          .join('');
+        document.getElementById('share-detail-avatar').src = d.authorAvatar || 'assets/vendor/placeholder.svg';
+        document.getElementById('share-detail-author').innerHTML = d.author || '';
+        document.getElementById('share-detail-title').innerText = d.title || '';
+        document.getElementById('share-detail-desc').innerText = d.desc || '';
+        document.getElementById('share-detail-body').innerText = d.body || '';
+        document.getElementById('share-detail-tags').innerHTML = d.tags
+          ? d.tags.map(function (t) { return '<span class="text-[12px] text-[#ec4899]">#' + escapeHtml(t) + '</span>'; }).join('')
+          : '';
+
+        window._currentShareFav = { id: entry.id, source: 'share', data: d };
+        updateShareDetailFavBtn();
+
+        var modal = document.getElementById('share-detail-modal');
+        modal.style.display = 'flex';
+        modal.classList.remove('hidden');
+      }
+
+      function closeShareDetail() {
+        var modal = document.getElementById('share-detail-modal');
+        modal.style.display = 'none';
+        modal.classList.add('hidden');
+      }
+
+      function updateShareDetailFavBtn() {
+        if (!window._currentShareFav) return;
+        var isFav = HF.isFavorited(window._currentShareFav.id, 'share');
+        var icon = document.getElementById('share-detail-fav-icon');
+        var text = document.getElementById('share-detail-fav-text');
+        if (isFav) {
+          icon.setAttribute('fill', '#ec4899');
+          icon.style.color = '#ec4899';
+          text.textContent = '已收藏';
+        } else {
+          icon.setAttribute('fill', 'none');
+          icon.style.color = '';
+          text.textContent = '收藏';
+        }
+      }
+
+      function toggleShareDetailFav() {
+        if (!window._currentShareFav) return;
+        var fav = HF.toggleFavorite(window._currentShareFav);
+        updateShareDetailFavBtn();
+        showToast(fav ? '已收藏' : '已取消收藏');
+        if (currentLevel === 'favorites') renderList();
+      }
+
+      // ===== 信息栏详情 =====
+      var detailImages = [];
+      var detailImageIndex = 0;
+
+      function openInfoBarDetail(id) {
+        var entry = findEntry(id, 'infoBar');
+        if (!entry) return;
+        var d = entry.data || {};
+        document.getElementById('infoBar-detail-title').textContent = d.title || '';
+        document.getElementById('infoBar-detail-desc').textContent = d.desc || '';
+
+        detailImages = d.images || [];
+        detailImageIndex = 0;
+        document.getElementById('infoBar-detail-carousel').innerHTML = detailImages
+          .map(function (src) { return '<img src="' + src + '" alt="" class="detail-image">'; })
+          .join('');
+        document.getElementById('infoBar-detail-indicators').innerHTML = detailImages
+          .map(function (_, i) { return '<div class="carousel-indicator ' + (i === 0 ? 'active' : '') + '"></div>'; })
+          .join('');
+        initDetailCarouselTouch();
+
+        window._currentInfoBarFav = { id: entry.id, source: 'infoBar', data: d };
+        updateInfoBarDetailFavBtn();
+
+        document.getElementById('infoBar-detail-modal').classList.remove('hidden');
+      }
+
+      function closeInfoBarDetail() {
+        document.getElementById('infoBar-detail-modal').classList.add('hidden');
+      }
+
+      function goToDetailImage(index) {
+        if (index < 0 || index >= detailImages.length) return;
+        detailImageIndex = index;
+        document.getElementById('infoBar-detail-carousel').style.transform = 'translateX(-' + index * 100 + '%)';
+        var dots = document.querySelectorAll('#infoBar-detail-indicators .carousel-indicator');
+        dots.forEach(function (dot, i) { dot.classList.toggle('active', i === index); });
+      }
+
+      function initDetailCarouselTouch() {
+        var carousel = document.getElementById('infoBar-detail-carousel');
+        var startX = 0, dragging = false;
+        carousel.ontouchstart = function (e) { startX = e.touches[0].clientX; dragging = true; };
+        carousel.ontouchmove = function (e) { if (dragging) e.preventDefault(); };
+        carousel.ontouchend = function (e) {
+          if (!dragging) return;
+          var diff = startX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) {
+            if (diff > 0 && detailImageIndex < detailImages.length - 1) goToDetailImage(detailImageIndex + 1);
+            else if (diff < 0 && detailImageIndex > 0) goToDetailImage(detailImageIndex - 1);
+          }
+          dragging = false;
+        };
+      }
+
+      function updateInfoBarDetailFavBtn() {
+        if (!window._currentInfoBarFav) return;
+        var isFav = HF.isFavorited(window._currentInfoBarFav.id, 'infoBar');
+        var icon = document.getElementById('infoBar-detail-fav-icon');
+        var text = document.getElementById('infoBar-detail-fav-text');
+        if (isFav) {
+          icon.setAttribute('fill', '#ec4899');
+          icon.style.color = '#ec4899';
+          text.textContent = '已收藏';
+          text.style.color = '#ec4899';
+        } else {
+          icon.setAttribute('fill', 'none');
+          icon.style.color = '';
+          text.textContent = '收藏';
+          text.style.color = '';
+        }
+      }
+
+      function toggleInfoBarDetailFav() {
+        if (!window._currentInfoBarFav) return;
+        var fav = HF.toggleFavorite(window._currentInfoBarFav);
+        updateInfoBarDetailFavBtn();
+        showToast(fav ? '已收藏' : '已取消收藏');
+        if (currentLevel === 'favorites') renderList();
+      }
+
+      // ===== 社区新闻详情 =====
+      function openNewsDetail(id) {
+        var entry = findEntry(id, 'communityNews');
+        if (!entry) return;
+        var d = entry.data || {};
+        document.getElementById('news-detail-image').src = d.image || 'assets/vendor/placeholder.svg';
+        document.getElementById('news-detail-title').textContent = d.title || '';
+        document.getElementById('news-detail-meta').textContent = d.desc || '';
+        document.getElementById('news-detail-body').textContent = d.body || '';
+
+        window._currentNewsFav = { id: entry.id, source: 'communityNews', data: d };
+        updateNewsDetailFavBtn();
+
+        document.getElementById('news-detail-modal').classList.remove('hidden');
+      }
+
+      function closeNewsDetail() {
+        document.getElementById('news-detail-modal').classList.add('hidden');
+      }
+
+      function updateNewsDetailFavBtn() {
+        if (!window._currentNewsFav) return;
+        var isFav = HF.isFavorited(window._currentNewsFav.id, 'communityNews');
+        var icon = document.getElementById('news-detail-fav-icon');
+        var text = document.getElementById('news-detail-fav-text');
+        if (isFav) {
+          icon.setAttribute('fill', '#ec4899');
+          icon.style.color = '#ec4899';
+          text.textContent = '已收藏';
+          text.style.color = '#ec4899';
+        } else {
+          icon.setAttribute('fill', 'none');
+          icon.style.color = '';
+          text.textContent = '收藏';
+          text.style.color = '';
+        }
+      }
+
+      function toggleNewsDetailFav() {
+        if (!window._currentNewsFav) return;
+        var fav = HF.toggleFavorite(window._currentNewsFav);
+        updateNewsDetailFavBtn();
+        showToast(fav ? '已收藏' : '已取消收藏');
+        if (currentLevel === 'favorites') renderList();
+      }
+
+      // ===== 清空 =====
+      function handleClear() {
+        if (currentLevel === 'history') {
+          HF.clearHistory(currentSource);
+          showToast('已清空历史记录');
+        } else {
+          HF.clearFavorites(currentSource);
+          showToast('已清空收藏');
+        }
+        renderList();
+      }
+
+      function showToast(msg) {
+        var toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.className = 'show';
+        setTimeout(function () { toast.className = ''; }, 2000);
+      }
+
+      // 初始渲染
+      renderList();
+    </script>
+  </body>
+</html>

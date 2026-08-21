@@ -7,6 +7,7 @@
     <title>房间列表 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
     <script src="assets/vendor/iconify-icon.min.js"></script>
+    <script src="assets/vendor/history-favorites.js"></script>
     <style>
       body {
         background-color: white;
@@ -935,6 +936,15 @@
                 <!-- 内容将通过JavaScript动态生成 -->
               </div>
             </div>
+            <!-- 收藏操作栏 -->
+            <div class="flex-none px-4 py-3 border-t border-gray-100 flex items-center gap-3 bg-white">
+              <button id="newsDetailFavBtn" class="flex items-center gap-1.5 text-sm text-gray-500 active:scale-95 transition-transform" onclick="toggleNewsDetailFavorite()">
+                <svg id="newsDetailFavIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                </svg>
+                <span id="newsDetailFavText">收藏</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1144,6 +1154,7 @@
       // 显示新闻详情弹窗
       let currentNewsImages = [];
       let currentImageIndex = 0;
+      let currentNewsItem = null;
       
       function showNewsDetail(newsItem) {
         const modal = document.getElementById('newsDetailModal');
@@ -1151,6 +1162,10 @@
         const carousel = document.getElementById('newsDetailCarousel');
         const indicators = document.getElementById('newsDetailIndicators');
         const desc = document.getElementById('newsDetailDesc');
+        
+        currentNewsItem = newsItem;
+        const newsId = 'infoBar_' + currentCategory + '_' + newsItem.title;
+        newsItem._id = newsId;
         
         // 设置标题和描述
         title.textContent = newsItem.title;
@@ -1172,9 +1187,61 @@
         
         // 初始化触摸事件
         initCarouselTouchEvents();
+
+        // 初始化收藏按钮状态
+        updateNewsDetailFavBtn();
         
         // 显示弹窗
         modal.classList.remove('hidden');
+
+        // 写入浏览历史
+        if (window.HistoryFavorites) {
+          window.HistoryFavorites.addHistory({
+            id: newsId,
+            source: 'infoBar',
+            data: {
+              title: newsItem.title,
+              desc: newsItem.desc,
+              images: newsItem.images,
+              category: currentCategory,
+            },
+          });
+        }
+      }
+
+      function updateNewsDetailFavBtn() {
+        if (!currentNewsItem || !currentNewsItem._id) return;
+        const isFav = window.HistoryFavorites.isFavorited(currentNewsItem._id, 'infoBar');
+        const icon = document.getElementById('newsDetailFavIcon');
+        const text = document.getElementById('newsDetailFavText');
+        if (isFav) {
+          icon.setAttribute('fill', '#ec4899');
+          icon.style.color = '#ec4899';
+          text.textContent = '已收藏';
+          text.style.color = '#ec4899';
+        } else {
+          icon.setAttribute('fill', 'none');
+          icon.style.color = '';
+          text.textContent = '收藏';
+          text.style.color = '';
+        }
+      }
+
+      function toggleNewsDetailFavorite() {
+        if (!currentNewsItem || !currentNewsItem._id) return;
+        const item = {
+          id: currentNewsItem._id,
+          source: 'infoBar',
+          data: {
+            title: currentNewsItem.title,
+            desc: currentNewsItem.desc,
+            images: currentNewsItem.images,
+            category: currentCategory,
+          },
+        };
+        const fav = window.HistoryFavorites.toggleFavorite(item);
+        updateNewsDetailFavBtn();
+        showToast(fav ? '已收藏' : '已取消收藏');
       }
       
       // 关闭新闻详情弹窗

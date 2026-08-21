@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>分享动态 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+    <script src="assets/vendor/history-favorites.js"></script>
     <style>
       body {
         background-color: white;
@@ -416,6 +417,25 @@
               ></path>
             </svg>
           </button>
+          <!-- 收藏按钮 -->
+          <button
+            class="absolute top-4 left-4 z-50 flex items-center gap-1.5 text-white bg-black/20 rounded-full px-2.5 py-1.5 text-xs hover:bg-black/40 transition-colors"
+            id="detail-fav-btn"
+            onclick="toggleDetailFavorite()"
+          >
+            <svg
+              id="detail-fav-icon"
+              height="16"
+              width="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+            </svg>
+            <span id="detail-fav-text">收藏</span>
+          </button>
           <!-- 滚动区域 -->
           <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar pb-[72px]">
             <!-- ① 大图 -->
@@ -762,8 +782,11 @@
         tags: document.getElementById('detail-tags').innerHTML,
       }
 
+      let currentDetailIndex = -1
+
       function openDetail(index) {
         const data = feedData[index]
+        currentDetailIndex = index
 
         // 图片区：单图保持原样式，多图竖向堆叠
         const isSeries = Array.isArray(data.images) && data.images.length > 0
@@ -798,6 +821,9 @@
               .join('')
           : detailDefaults.tags
 
+        // 初始化收藏按钮状态
+        updateDetailFavBtn()
+
         const modal = document.getElementById('detail-modal')
         modal.querySelector('.overflow-y-auto').scrollTop = 0
         modal.style.display = 'flex'
@@ -806,6 +832,65 @@
           modal.classList.remove('opacity-0')
         }, 10)
         document.body.classList.add('modal-open')
+
+        // 写入浏览历史
+        if (window.HistoryFavorites) {
+          window.HistoryFavorites.addHistory({
+            id: 'share_' + index,
+            source: 'share',
+            data: {
+              title: data.title,
+              img: data.img,
+              images: data.images,
+              author: data.author,
+              authorAvatar: data.authorAvatar,
+              time: data.time,
+              desc: data.desc,
+              body: data.body,
+              tags: data.tags,
+            },
+          })
+        }
+      }
+
+      function updateDetailFavBtn() {
+        if (currentDetailIndex < 0) return
+        const id = 'share_' + currentDetailIndex
+        const isFav = window.HistoryFavorites.isFavorited(id, 'share')
+        const icon = document.getElementById('detail-fav-icon')
+        const text = document.getElementById('detail-fav-text')
+        if (isFav) {
+          icon.setAttribute('fill', '#ec4899')
+          icon.style.color = '#ec4899'
+          text.textContent = '已收藏'
+        } else {
+          icon.setAttribute('fill', 'none')
+          icon.style.color = ''
+          text.textContent = '收藏'
+        }
+      }
+
+      function toggleDetailFavorite() {
+        if (currentDetailIndex < 0) return
+        const data = feedData[currentDetailIndex]
+        const item = {
+          id: 'share_' + currentDetailIndex,
+          source: 'share',
+          data: {
+            title: data.title,
+            img: data.img,
+            images: data.images,
+            author: data.author,
+            authorAvatar: data.authorAvatar,
+            time: data.time,
+            desc: data.desc,
+            body: data.body,
+            tags: data.tags,
+          },
+        }
+        const fav = window.HistoryFavorites.toggleFavorite(item)
+        updateDetailFavBtn()
+        showToast(fav ? '已收藏' : '已取消收藏')
       }
 
       function closeDetail() {
