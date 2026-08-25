@@ -67,12 +67,10 @@
 <button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('profile.html', this)">
 <img class="nav-icon h-[28px] object-contain" data-normal="assets/src_01/icon/nav-icons/normal_空间.png" data-active="assets/src_01/icon/nav-icons/active_空间.png" src="assets/src_01/icon/nav-icons/normal_空间.png" alt="空间"/>
 </button>
-<!-- 雷达 (居中凸起) -->
-<div class="flex-1 flex justify-center -mt-8 h-full items-start">
-<button class="nav-item w-14 h-14 rounded-full border-4 border-white shadow-lg flex items-center justify-center transition-transform active:scale-90 overflow-hidden nav-active" onclick="switchTab('radar.html', this)">
-<img alt="Radar" class="w-full h-full object-cover" src="assets/packaged/sq/新雷达图.png"/>
+<!-- 雷达 -->
+<button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('radar.html', this)">
+  <img class="nav-icon h-[40px] object-contain" data-normal="assets/src_01/radar/雷达未激活-removebg-preview.png" data-active="assets/src_01/radar/雷达激活.png" src="assets/src_01/radar/雷达未激活-removebg-preview.png" alt="雷达"/>
 </button>
-</div>
 <!-- 分享 -->
 <button class="nav-item flex items-center justify-center flex-1 h-full relative" onclick="switchTab('publish.html', this)">
 <img class="nav-icon h-[28px] object-contain" data-normal="assets/src_01/icon/nav-icons/normal_分享.png" data-active="assets/src_01/icon/nav-icons/active_分享.png" src="assets/src_01/icon/nav-icons/normal_分享.png" alt="分享"/>
@@ -91,22 +89,12 @@
         document.getElementById('content-frame').src = url;
         
         document.querySelectorAll('.nav-item').forEach(item => {
-            if (!item.classList.contains('rounded-full')) {
-                item.classList.remove('nav-active');
-                const img = item.querySelector('.nav-icon');
-                if (img) img.src = img.dataset.normal;
-            } else {
-                item.classList.remove('nav-active');
-            }
+            const img = item.querySelector('.nav-icon');
+            if (img) img.src = img.dataset.normal;
         });
         
-        if (!el.classList.contains('rounded-full')) {
-            el.classList.add('nav-active');
-            const img = el.querySelector('.nav-icon');
-            if (img) img.src = img.dataset.active;
-        } else {
-            el.classList.add('nav-active');
-        }
+        const img = el.querySelector('.nav-icon');
+        if (img) img.src = img.dataset.active;
     }
 
     function showToast(msg) {
