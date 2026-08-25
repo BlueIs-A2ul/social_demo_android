@@ -76,8 +76,7 @@
 
       /* 信息栏弹窗样式 */
       .category-item.active {
-        background-color: #fdf2f8;
-        color: #ec4899;
+        opacity: 0.8;
       }
       
       .pull-to-refresh-indicator {
@@ -157,7 +156,7 @@
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
-  <body class="bg-gray-50 is-mb-ai-setting" style="opacity: 1">
+  <body class="bg-white is-mb-ai-setting" style="opacity: 1">
     <div
       class="w-full min-h-[100dvh] bg-white flex flex-col relative"
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
@@ -239,15 +238,22 @@
         style="position: absolute; right: 20px; top: 50px"
       >
         <div class="w-10 h-10 bg-orange-50 flex items-center justify-center">
-          <iconify-icon
-            class="text-orange-500 text-2xl"
-            icon="solar:cart-large-minimalistic-bold"
-          ></iconify-icon>
+          <img src="assets/src_01/icon/购物车-removebg-preview.png" alt="购物车" class="w-6 h-6 object-contain" />
         </div>
         <div
           class="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-white"
         >
           2
+        </div>
+      </div>
+      <!-- 通讯录 -->
+      <div
+        class="relative cursor-pointer"
+        onclick="window.location.href='my_contacts.html?from=room_list'"
+        style="position: absolute; right: 70px; top: 50px"
+      >
+        <div class="w-10 h-10 bg-orange-50 flex items-center justify-center">
+          <img src="assets/src_01/icon/通讯录.jpg" alt="通讯录" class="w-6 h-6 object-contain" />
         </div>
       </div>
       <!-- 「我的房间」大盒子 -->
@@ -293,10 +299,10 @@
         >
           <!-- 房间 1: 青铜之门 -->
           <div
-            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
-            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
               <img
                 alt="青铜之门"
                 class="w-full h-full object-cover"
@@ -310,10 +316,10 @@
           </div>
           <!-- 房间 2: 娜美的房间 -->
           <div
-            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="window.location.href='panorama_room.html?from=room_list'"
           >
-            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
               <img
                 alt="娜美的房间"
                 class="w-full h-full object-cover"
@@ -327,10 +333,10 @@
           </div>
           <!-- 房间 3: 直播间 -->
           <div
-            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
-            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
               <img
                 alt="直播间"
                 class="w-full h-full object-cover"
@@ -344,10 +350,10 @@
           </div>
           <!-- 房间 4: 我的播客 -->
           <div
-            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showToast('建设中')"
           >
-            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
               <img
                 alt="我的播客"
                 class="w-full h-full object-cover"
@@ -359,29 +365,12 @@
               >我的播客<br
             /></span>
           </div>
-          <!-- 房间 5: 通讯录 -->
+          <!-- 房间 5: 信息栏 -->
           <div
-            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
-            onclick="window.location.href='my_contacts.html?from=room_list'"
-          >
-            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
-              <img
-                alt="通讯录"
-                class="w-full h-full object-cover"
-                src="assets/src_01/icon/通讯录.jpg"
-              />
-            </div>
-            <span
-              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >通讯录<br
-            /></span>
-          </div>
-          <!-- 房间 6: 信息栏 -->
-          <div
-            class="room-item border-r border-b border-gray-100 p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showInfoBarModal()"
           >
-            <div class="w-full aspect-square mb-2 overflow-hidden bg-gray-100">
+            <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
               <img
                 alt="信息栏"
                 class="w-full h-full object-cover"
@@ -399,7 +388,7 @@
             onclick="showToast('新建房间')"
           >
             <div
-              class="w-full aspect-square mb-2 bg-gray-50 flex items-center justify-center border border-dashed border-gray-200"
+              class="w-full aspect-square mb-2 bg-white flex items-center justify-center border border-dashed border-gray-200"
             >
               <iconify-icon
                 class="text-gray-300 text-2xl"
@@ -836,53 +825,41 @@
             <!-- 左边分类列表 -->
             <div class="w-1/3 border-r border-gray-100 overflow-y-auto">
               <div class="p-2">
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer bg-pink-50 text-pink-600" data-category="招聘" onclick="filterNews('招聘')">
-                  <img src="assets/src_01/信息栏/便签/便签_圆角_1.png" alt="招聘" class="w-8 h-4 object-cover">
-                  <span class="text-xs font-medium">招聘</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_圆角_1.png'); background-size: cover; background-position: center;" data-category="招聘" onclick="filterNews('招聘')">
+                  <span class="text-xs font-medium text-black">招聘</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="兼职" onclick="filterNews('兼职')">
-                  <img src="assets/src_01/信息栏/便签/便签_圆角_2.png" alt="兼职" class="w-8 h-4 object-cover">
-                  <span class="text-xs">兼职</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_圆角_2.png'); background-size: cover; background-position: center;" data-category="兼职" onclick="filterNews('兼职')">
+                  <span class="text-xs font-medium text-black">兼职</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="零工" onclick="filterNews('零工')">
-                  <img src="assets/src_01/信息栏/便签/便签_圆角_3.png" alt="零工" class="w-8 h-4 object-cover">
-                  <span class="text-xs">零工</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_圆角_3.png'); background-size: cover; background-position: center;" data-category="零工" onclick="filterNews('零工')">
+                  <span class="text-xs font-medium text-black">零工</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="小时工" onclick="filterNews('小时工')">
-                  <img src="assets/src_01/信息栏/便签/便签_圆角_4.png" alt="小时工" class="w-8 h-4 object-cover">
-                  <span class="text-xs">小时工</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_圆角_4.png'); background-size: cover; background-position: center;" data-category="小时工" onclick="filterNews('小时工')">
+                  <span class="text-xs font-medium text-black">小时工</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="短期工" onclick="filterNews('短期工')">
-                  <img src="assets/src_01/信息栏/便签/便签_圆角_5.png" alt="短期工" class="w-8 h-4 object-cover">
-                  <span class="text-xs">短期工</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_圆角_5.png'); background-size: cover; background-position: center;" data-category="短期工" onclick="filterNews('短期工')">
+                  <span class="text-xs font-medium text-black">短期工</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="天工" onclick="filterNews('天工')">
-                  <img src="assets/src_01/信息栏/便签/便签_圆角_6.png" alt="天工" class="w-8 h-4 object-cover">
-                  <span class="text-xs">天工</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_圆角_6.png'); background-size: cover; background-position: center;" data-category="天工" onclick="filterNews('天工')">
+                  <span class="text-xs font-medium text-black">天工</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="周结工" onclick="filterNews('周结工')">
-                  <img src="assets/src_01/信息栏/便签/便签_箭头_1.png" alt="周结工" class="w-8 h-4 object-cover">
-                  <span class="text-xs">周结工</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_箭头_1.png'); background-size: cover; background-position: center;" data-category="周结工" onclick="filterNews('周结工')">
+                  <span class="text-xs font-medium text-black">周结工</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="假期兼职" onclick="filterNews('假期兼职')">
-                  <img src="assets/src_01/信息栏/便签/便签_箭头_2.png" alt="假期兼职" class="w-8 h-4 object-cover">
-                  <span class="text-xs">假期兼职</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_箭头_2.png'); background-size: cover; background-position: center;" data-category="假期兼职" onclick="filterNews('假期兼职')">
+                  <span class="text-xs font-medium text-black">假期兼职</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="发布" onclick="filterNews('发布')">
-                  <img src="assets/src_01/信息栏/便签/便签_箭头_3.png" alt="发布" class="w-8 h-4 object-cover">
-                  <span class="text-xs">发布</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_箭头_3.png'); background-size: cover; background-position: center;" data-category="发布" onclick="filterNews('发布')">
+                  <span class="text-xs font-medium text-black">发布</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="消息" onclick="filterNews('消息')">
-                  <img src="assets/src_01/信息栏/便签/便签_箭头_4.png" alt="消息" class="w-8 h-4 object-cover">
-                  <span class="text-xs">消息</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_箭头_4.png'); background-size: cover; background-position: center;" data-category="消息" onclick="filterNews('消息')">
+                  <span class="text-xs font-medium text-black">消息</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="通知" onclick="filterNews('通知')">
-                  <img src="assets/src_01/信息栏/便签/便签_箭头_5.png" alt="通知" class="w-8 h-4 object-cover">
-                  <span class="text-xs">通知</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_箭头_5.png'); background-size: cover; background-position: center;" data-category="通知" onclick="filterNews('通知')">
+                  <span class="text-xs font-medium text-black">通知</span>
                 </div>
-                <div class="category-item flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-gray-50" data-category="简讯" onclick="filterNews('简讯')">
-                  <img src="assets/src_01/信息栏/便签/便签_箭头_6.png" alt="简讯" class="w-8 h-4 object-cover">
-                  <span class="text-xs">简讯</span>
+                <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_箭头_6.png'); background-size: cover; background-position: center;" data-category="简讯" onclick="filterNews('简讯')">
+                  <span class="text-xs font-medium text-black">简讯</span>
                 </div>
               </div>
             </div>
@@ -1126,11 +1103,9 @@
         // 更新左边分类的选中状态
         document.querySelectorAll('.category-item').forEach(item => {
           if (item.dataset.category === category) {
-            item.classList.add('active', 'bg-pink-50', 'text-pink-600');
-            item.classList.remove('hover:bg-gray-50');
+            item.classList.add('active');
           } else {
-            item.classList.remove('active', 'bg-pink-50', 'text-pink-600');
-            item.classList.add('hover:bg-gray-50');
+            item.classList.remove('active');
           }
         });
         
