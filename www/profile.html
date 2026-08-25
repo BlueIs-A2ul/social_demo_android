@@ -267,7 +267,7 @@
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
-  <body class="bg-gray-50">
+  <body class="bg-white">
     <div
       id="app-root"
       class="w-full h-[100dvh] bg-white overflow-hidden flex flex-col relative"
@@ -322,7 +322,7 @@
         <div class="grid grid-cols-4">
           <!-- 房间 1 -->
           <div
-            class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
@@ -339,7 +339,7 @@
           </div>
           <!-- 房间 2 -->
           <div
-            class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
@@ -356,7 +356,7 @@
           </div>
           <!-- 房间 3 -->
           <div
-            class="border-r border-gray-100 p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
             onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
@@ -414,11 +414,13 @@
       >
         <!-- 内部标题行 -->
         <div
-          class="px-4 py-3 flex items-center justify-center border-b border-gray-100 cursor-pointer select-none"
+          class="px-4 py-3 flex items-center border-b border-gray-100 cursor-pointer select-none relative"
           onclick="toggleNews()"
         >
-          <h3 class="font-bold text-gray-900">社区新闻</h3>
-          <img class="news-arrow ml-2 h-4 w-auto" src="assets/src_01/icon/nav-icons/arrow-down-gold.jpg" alt="展开"/>
+          <div class="flex-1 flex justify-center">
+            <img src="assets/src_01/icon/社区新闻.png" alt="社区新闻" class="h-12 w-auto" />
+          </div>
+          <img class="news-arrow h-4 w-auto absolute right-4" src="assets/src_01/icon/收起状态箭头-removebg-preview.png" alt="展开"/>
         </div>
         <!-- 新闻网格 -->
         <div class="grid grid-cols-3 gap-3 p-4 relative" id="newsList">
@@ -524,10 +526,12 @@
         const arrow = document.querySelector('.news-arrow')
         if (list.classList.contains('hidden')) {
           list.classList.remove('hidden')
-          arrow.src = 'assets/src_01/icon/nav-icons/arrow-down-gold.jpg'
+          arrow.src = 'assets/src_01/icon/收起状态箭头-removebg-preview.png'
+          arrow.style.transform = 'rotate(0deg)'
         } else {
           list.classList.add('hidden')
-          arrow.src = 'assets/src_01/icon/nav-icons/arrow-down-silver.jpg'
+          arrow.src = 'assets/src_01/icon/展开状态箭头-removebg-preview.png'
+          arrow.style.transform = 'rotate(180deg)'
         }
       }
 

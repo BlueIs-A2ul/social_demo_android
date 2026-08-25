@@ -336,12 +336,12 @@
       </div>
       <!-- 彩色栏背景和箭头 -->
       <div class="color-bar-container">
-        <img class="arrow-icon" id="arrow-icon" src="assets/src_01/icon/收起状态箭头.jpg" alt="收起状态箭头" onclick="toggleAIChat()" />
+        <img class="arrow-icon" id="arrow-icon" src="assets/src_01/icon/收起状态箭头-removebg-preview.png" alt="收起状态箭头" onclick="toggleAIChat()" />
       </div>
       <!-- AI对话页面 -->
       <div class="ai-chat-container" id="ai-chat-container">
         <div class="ai-chat-header" onclick="toggleAIChat()">
-          <img class="arrow-icon" src="assets/src_01/icon/展开状态箭头.jpg" alt="展开状态箭头" />
+          <img class="arrow-icon" src="assets/src_01/icon/展开状态箭头-removebg-preview.png" alt="展开状态箭头" />
         </div>
         <div class="ai-chat-messages" id="ai-chat-messages">
           <div class="ai-message ai">
@@ -866,10 +866,12 @@
           isAIChatExpanded = !isAIChatExpanded
           
           if (isAIChatExpanded) {
-            arrowIcon.src = 'assets/src_01/icon/展开状态箭头.jpg'
+            arrowIcon.src = 'assets/src_01/icon/展开状态箭头-removebg-preview.png'
+            arrowIcon.style.transform = 'translateY(-50%) rotate(180deg)'
             aiChatContainer.style.display = 'flex'
           } else {
-            arrowIcon.src = 'assets/src_01/icon/收起状态箭头.jpg'
+            arrowIcon.src = 'assets/src_01/icon/收起状态箭头-removebg-preview.png'
+            arrowIcon.style.transform = 'translateY(-50%) rotate(0deg)'
             aiChatContainer.style.display = 'none'
           }
         }
