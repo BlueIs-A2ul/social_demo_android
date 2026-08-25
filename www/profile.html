@@ -420,7 +420,7 @@
           <div class="flex-1 flex justify-center">
             <img src="assets/src_01/icon/社区新闻.png" alt="社区新闻" class="h-12 w-auto" />
           </div>
-          <img class="news-arrow h-4 w-auto absolute right-4" src="assets/src_01/icon/收起状态箭头-removebg-preview.png" alt="展开"/>
+          <img class="news-arrow h-4 w-auto absolute right-4" src="assets/src_01/icon/展开状态箭头-removebg-preview.png" alt="展开"/>
         </div>
         <!-- 新闻网格 -->
         <div class="grid grid-cols-3 gap-3 p-4 relative" id="newsList">
@@ -526,11 +526,11 @@
         const arrow = document.querySelector('.news-arrow')
         if (list.classList.contains('hidden')) {
           list.classList.remove('hidden')
-          arrow.src = 'assets/src_01/icon/收起状态箭头-removebg-preview.png'
+          arrow.src = 'assets/src_01/icon/展开状态箭头-removebg-preview.png'
           arrow.style.transform = 'rotate(0deg)'
         } else {
           list.classList.add('hidden')
-          arrow.src = 'assets/src_01/icon/展开状态箭头-removebg-preview.png'
+          arrow.src = 'assets/src_01/icon/收起状态箭头-removebg-preview.png'
           arrow.style.transform = 'rotate(180deg)'
         }
       }
