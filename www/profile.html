@@ -116,7 +116,7 @@
       /* ====== 新闻网格 ====== */
       .news-card {
         position: relative;
-        height: 80px;
+        aspect-ratio: 3/4;
         border-radius: 14px;
         overflow: hidden;
         cursor: pointer;
@@ -592,7 +592,7 @@
           <img class="news-arrow h-4 w-auto absolute right-4" src="assets/src_01/icon/展开状态箭头-removebg-preview.png" alt="展开"/>
         </div>
         <!-- 新闻网格 -->
-        <div class="grid grid-cols-3 gap-3 p-3 relative" id="newsList">
+        <div class="grid grid-cols-2 gap-3 p-3 relative" id="newsList">
           <!-- 下拉刷新指示器 -->
           <div class="pull-to-refresh-indicator hidden" id="pullToRefreshIndicator">
             <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
