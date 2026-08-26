@@ -13,7 +13,7 @@
       body {
         width: 100%;
         height: 100dvh;
-        background-color: #ffffff;
+        background-color: #f7f7f8;
         font-family:
           -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
           Arial, sans-serif;
@@ -72,7 +72,7 @@
               cy="20"
               rx="28"
               ry="6"
-              stroke="#333333"
+              stroke="#cbbccf"
               stroke-width="1.5"
               transform="rotate(-15, 30, 20)"
             ></ellipse>
@@ -83,7 +83,7 @@
         <!-- 男 -->
         <div class="flex flex-col items-center gap-2">
           <button
-            class="w-24 h-24 border-2 border-[#ec4899] flex items-center justify-center transition-all active-gender rounded-full"
+            class="w-24 h-24 border border-[#ec4899] flex items-center justify-center transition-all active-gender rounded-full"
             id="btn-male"
             onclick="selectGender('male')"
           >
@@ -106,7 +106,7 @@
         <!-- 女 -->
         <div class="flex flex-col items-center gap-2">
           <button
-            class="w-24 h-24 border-2 border-[#ec4899] flex items-center justify-center transition-all rounded-full bg-white text-[#ec4899]"
+            class="w-24 h-24 border border-[#ec4899] flex items-center justify-center transition-all rounded-full bg-white text-[#ec4899]"
             id="btn-female"
             onclick="selectGender('female')"
           >
@@ -129,7 +129,7 @@
         <!-- 其他 -->
         <div class="flex flex-col items-center gap-2">
           <button
-            class="w-24 h-24 border-2 border-gray-300 flex items-center justify-center transition-all rounded-full bg-white text-gray-400"
+            class="w-24 h-24 border border-gray-300 flex items-center justify-center transition-all rounded-full bg-white text-gray-400"
             id="btn-other"
             onclick="selectGender('other')"
           >
@@ -154,6 +154,7 @@
     <div class="h-24 px-8 flex items-center justify-center shrink-0">
       <button
         class="bg-[#ec4899] text-white px-12 py-3 text-lg font-bold shadow-lg shadow-pink-100"
+        style="border-radius: 10px;"
         onclick="location.href = 'onboarding_birth.html'"
       >
         提交

@@ -13,7 +13,7 @@
       body {
         width: 100%;
         height: 100dvh;
-        background-color: #ffffff;
+        background-color: #f7f7f8;
         font-family:
           -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
           Arial, sans-serif;
@@ -26,8 +26,9 @@
         );
       }
       .interest-card {
-        border: 1px solid #e5e7eb;
+        border: 1px solid #f4edf1;
         background-color: #ffffff;
+        border-radius: 10px;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
         display: flex;
@@ -41,19 +42,20 @@
         background-color: #fce7f3;
         transform: scale(1.02);
         font-weight: 500;
+        box-shadow: 0 2px 8px rgba(236, 72, 153, .12);
       }
       ::-webkit-scrollbar {
         display: none;
       }
       .progress-line {
         height: 2px;
-        background-color: #e5e7eb;
+        background-color: #f4edf1;
         width: 20px;
       }
       .progress-dot {
         width: 10px;
         height: 10px;
-        border: 2px solid #e5e7eb;
+        border: 2px solid #f4edf1;
         border-radius: 999px;
       }
       .progress-dot.active {
@@ -107,7 +109,7 @@
               cy="20"
               rx="28"
               ry="6"
-              stroke="#333333"
+              stroke="#cbbccf"
               stroke-width="1.5"
               transform="rotate(-15, 30, 20)"
             ></ellipse>
@@ -126,10 +128,12 @@
     </div>
     <!-- 底部操作栏 -->
     <div
-      class="px-8 py-6 border-t border-gray-100 flex items-center justify-center shrink-0 bg-white"
+      class="px-8 py-6 flex items-center justify-center shrink-0"
+      style="border-top: 1px solid rgba(251,207,232,.55);"
     >
       <button
-        class="bg-gray-200 text-white font-bold text-lg px-12 py-3 rounded-none transition-colors"
+        class="bg-pink-100 text-pink-300 font-bold text-lg px-12 py-3 transition-colors"
+        style="border-radius: 10px;"
         disabled=""
         id="next-btn"
         onclick="handleNext()"
@@ -375,7 +379,7 @@
           group.tags.forEach(tag => {
             const isSelected = selectedTags[currentStep].has(tag)
             const card = document.createElement('div')
-            card.className = `interest-card rounded-none text-sm ${isSelected ? 'selected' : ''}`
+            card.className = `interest-card text-sm ${isSelected ? 'selected' : ''}`
             card.innerText = tag
             card.onclick = () => toggleTag(tag, card)
             grid.appendChild(card)
@@ -424,12 +428,12 @@
         const nextBtn = document.getElementById('next-btn')
         if (selectedTags[currentStep].size > 0) {
           nextBtn.disabled = false
-          nextBtn.classList.remove('bg-gray-200')
-          nextBtn.classList.add('bg-[#ec4899]')
+          nextBtn.classList.remove('bg-pink-100', 'text-pink-300')
+          nextBtn.classList.add('bg-[#ec4899]', 'text-white')
         } else {
           nextBtn.disabled = true
-          nextBtn.classList.add('bg-gray-200')
-          nextBtn.classList.remove('bg-[#ec4899]')
+          nextBtn.classList.add('bg-pink-100', 'text-pink-300')
+          nextBtn.classList.remove('bg-[#ec4899]', 'text-white')
         }
       }
 

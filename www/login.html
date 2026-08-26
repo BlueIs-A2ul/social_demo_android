@@ -7,7 +7,7 @@
 <script src="assets/vendor/tailwindcss.js"></script>
 <style>
         body {
-            background-color: #ffffff;
+            background-color: #f7f7f8;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -20,7 +20,7 @@
         .app-container {
             width: 100%;
             height: 100dvh;
-            background: white;
+            background: #f7f7f8;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -36,16 +36,20 @@
         #toast {
             visibility: hidden;
             min-width: 200px;
-            background-color: rgba(0, 0, 0, 0.7);
+            background: rgba(31, 23, 34, .78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             color: #fff;
             text-align: center;
-            padding: 12px;
+            padding: 12px 20px;
             position: absolute;
             z-index: 100;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 14px;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(31, 23, 34, .15);
         }
         #toast.show {
             visibility: visible;
@@ -61,6 +65,7 @@
             justify-content: center;
             cursor: pointer;
             flex-shrink: 0;
+            border-radius: 4px;
         }
         .protocol-checkbox.checked {
             border-color: #ec4899;
@@ -101,10 +106,10 @@
 </div>
 <!-- 登录按钮区域 -->
 <div class="w-full px-8 flex flex-col gap-4">
-<button class="w-full h-12 bg-pink-gradient text-white font-bold text-base flex items-center justify-center" onclick="handleLogin()">
+<button class="w-full h-12 bg-pink-gradient text-white font-bold text-base flex items-center justify-center" style="border-radius: 10px;" onclick="handleLogin()">
                     本机号码一键登录
                 </button>
-<button class="w-full h-11 bg-white border border-pink-400 text-pink-500 text-base flex items-center justify-center" onclick="handleOtherLogin()">
+<button class="w-full h-11 bg-white border border-pink-400 text-pink-500 text-base flex items-center justify-center" style="border-radius: 10px;" onclick="handleOtherLogin()">
                     其他手机号码登录
                 </button>
 </div>
@@ -122,16 +127,16 @@
 <div class="flex-1 h-[1px] bg-gray-100"></div>
 </div>
 <div class="flex justify-center gap-6">
-<div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center cursor-pointer" onclick="showToast('第三方登录')">
+<div class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer" style="background: rgba(244,237,241,.6);" onclick="showToast('第三方登录')">
 <img alt="WeChat" class="w-6 h-6" src="assets/packaged/f630a2644a2843679b58b3fc556f38bb.webp"/>
 </div>
-<div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center cursor-pointer" onclick="showToast('第三方登录')">
+<div class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer" style="background: rgba(244,237,241,.6);" onclick="showToast('第三方登录')">
 <img alt="QQ" class="w-6 h-6" src="assets/packaged/a4b7ba887f844b4abd6bff84dbb6a6a8.webp"/>
 </div>
-<div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center cursor-pointer" onclick="showToast('第三方登录')">
+<div class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer" style="background: rgba(244,237,241,.6);" onclick="showToast('第三方登录')">
 <img alt="Weibo" class="w-6 h-6" src="assets/packaged/a72205fa4d954b838a341b1e9baa6a45.webp"/>
 </div>
-<div class="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center cursor-pointer" onclick="showToast('第三方登录')">
+<div class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer" style="background: rgba(244,237,241,.6);" onclick="showToast('第三方登录')">
 <img alt="Apple" class="w-6 h-6" src="assets/packaged/60aa4accb4a2495a8758fc18f05b8ee6.jpg"/>
 </div>
 </div>
@@ -140,14 +145,14 @@
 <div class="" id="toast">第三方登录</div>
 <!-- 引导弹窗 -->
 <div class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 backdrop-blur-sm px-8" id="onboarding-modal">
-  <div class="bg-white w-full max-w-[300px] overflow-hidden shadow-2xl">
+  <div class="bg-white w-full max-w-[300px] overflow-hidden shadow-2xl" style="border-radius: 12px;">
     <div class="p-6 text-center">
       <h3 class="text-[16px] font-bold text-black mb-2">完善个人资料</h3>
       <p class="text-[13px] text-gray-400 leading-relaxed">花一点时间填写基本信息，让系统为你推荐更合适的内容和伙伴</p>
     </div>
     <div class="flex border-t border-gray-100">
       <button class="flex-1 py-4 text-[14px] text-gray-400 font-medium" onclick="skipOnboarding()">稍后再说</button>
-      <button class="flex-1 py-4 text-[14px] text-[#ec4899] font-bold border-l border-gray-100" onclick="startOnboarding()">开始设置</button>
+      <button class="flex-1 py-4 text-[14px] text-[#ec4899] font-bold" style="border-left: 1px solid rgba(251,207,232,.55);" onclick="startOnboarding()">开始设置</button>
     </div>
   </div>
 </div>
