@@ -63,6 +63,12 @@
     </style>
   </head>
   <body class="flex flex-col">
+    <!-- 右上角跳过 -->
+    <a
+      class="fixed top-[calc(var(--safe-area-inset-top,0px)+12px)] right-4 z-10 text-gray-400 font-medium"
+      onclick="skipOnboarding()"
+      >跳过</a
+    >
     <!-- 进度条 -->
     <div class="flex items-center justify-center gap-1 mt-6">
       <div class="progress-dot active" id="dot-1"></div>
@@ -120,14 +126,8 @@
     </div>
     <!-- 底部操作栏 -->
     <div
-      class="px-8 py-6 border-t border-gray-100 flex items-center justify-between shrink-0 bg-white"
+      class="px-8 py-6 border-t border-gray-100 flex items-center justify-center shrink-0 bg-white"
     >
-      <button
-        class="text-gray-400 font-medium text-lg"
-        onclick="skipOnboarding()"
-      >
-        跳过
-      </button>
       <button
         class="bg-gray-200 text-white font-bold text-lg px-12 py-3 rounded-none transition-colors"
         disabled=""

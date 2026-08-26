@@ -36,6 +36,12 @@
     </style>
   </head>
   <body class="flex flex-col">
+    <!-- 右上角跳过 -->
+    <a
+      class="fixed top-[calc(var(--safe-area-inset-top,0px)+12px)] right-4 z-10 text-gray-400 font-medium"
+      href="onboarding_birth.html"
+      >跳过</a
+    >
     <!-- 主内容区 -->
     <div class="flex-1 px-8 pt-12">
       <div class="flex justify-between items-start mb-20">
@@ -145,8 +151,7 @@
       </div>
     </div>
     <!-- 底部操作栏 -->
-    <div class="h-24 px-8 flex items-center justify-between shrink-0">
-      <a class="text-gray-400 font-medium" href="onboarding_birth.html">跳过</a>
+    <div class="h-24 px-8 flex items-center justify-center shrink-0">
       <button
         class="bg-[#ec4899] text-white px-12 py-3 text-lg font-bold shadow-lg shadow-pink-100"
         onclick="location.href = 'onboarding_birth.html'"
