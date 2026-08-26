@@ -10,82 +10,158 @@
     <script src="assets/vendor/history-favorites.js"></script>
     <style>
       body {
-        background-color: white;
-        font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-          Arial, sans-serif;
         margin: 0;
         padding: 0;
-        color: #333;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI',
+          Roboto, Helvetica, Arial, sans-serif;
+        color: #1f1722;
+        background: #f7f7f8;
+        background-attachment: fixed;
       }
       ::-webkit-scrollbar {
         display: none;
       }
 
-      /* Toast 样式 */
-      #toast {
-        visibility: hidden;
-        min-width: 200px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: #fff;
-        text-align: center;
-        padding: 12px 24px;
-        position: fixed;
-        z-index: 1000;
-        left: 50%;
-        bottom: 50px;
-        transform: translateX(-50%);
-        font-size: 14px;
+      /* ====== 设计 token ====== */
+      :root {
+        --brand: #ec4899;
+        --brand-soft: #fdf2f8;
+        --brand-line: #fbcfe8;
+        --ink-900: #1f1722;
+        --ink-700: #4a3f50;
+        --ink-500: #8b7e93;
+        --ink-100: #f4edf1;
+        --shadow-sm: 0 2px 8px rgba(236, 72, 153, .06);
+        --shadow-md: 0 6px 18px rgba(31, 23, 34, .06);
       }
-      #toast.show {
-        visibility: visible;
-        animation:
-          fadein 0.5s,
-          fadeout 0.5s 2.5s;
-      }
-      @keyframes fadein {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 50px;
-          opacity: 1;
-        }
-      }
-      @keyframes fadeout {
-        from {
-          bottom: 50px;
-          opacity: 1;
-        }
-        to {
-          bottom: 0;
-          opacity: 0;
-        }
-      }
+
+      /* ====== 通用 ====== */
       .vip-badge {
         display: inline-block;
-        width: 22px;
+        width: 18px;
         height: auto;
         margin-left: 4px;
         vertical-align: -3px;
       }
-      /* 共享菜单样式 */
+
+      /* ====== 头像 / Logo ====== */
+      .avatar-ring {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: transform .12s ease;
+      }
+      .avatar-ring:active { transform: scale(.94); }
+      .avatar-ring img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* ====== 搜索条 ====== */
+      .search-wrap {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--ink-100);
+        border-radius: 9999px;
+        padding: 0 16px;
+        height: 40px;
+        transition: box-shadow .15s ease, background .15s ease;
+      }
+      .search-wrap:focus-within {
+        background: #fff;
+        box-shadow: 0 0 0 2px var(--brand-line);
+      }
+      .search-wrap input {
+        flex: 1;
+        min-width: 0;
+        background: transparent;
+        border: 0;
+        outline: none;
+        font-size: 14px;
+        color: var(--ink-900);
+      }
+      .search-wrap input::placeholder { color: var(--ink-500); }
+
+      /* ====== 卡片通用 ====== */
+      .soft-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+      }
+
+      /* ====== 房间网格 ====== */
+      .room-grid-item {
+        transition: background-color .15s ease;
+      }
+      .room-grid-item:active {
+        background: rgba(252, 231, 243, .55);
+      }
+      .room-grid-name {
+        font-size: 12px;
+        color: var(--ink-700);
+        font-weight: 500;
+      }
+
+      /* ====== 新闻网格 ====== */
+      .news-card {
+        position: relative;
+        height: 80px;
+        border-radius: 14px;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: transform .15s ease, box-shadow .15s ease;
+      }
+      .news-card:active {
+        transform: scale(.97);
+      }
+      .news-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .news-card .news-card-title {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 6px 8px;
+        font-size: 10px;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, .55) 100%);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* ====== 共享菜单（浮在房间项上） ====== */
       .action-menu {
         position: absolute;
         width: 132px;
-        background: rgba(255, 255, 255, 0.92);
-        border: 1px solid rgba(229, 231, 235, 0.95);
-        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, .92);
+        border: 0;
+        border-radius: 14px;
+        box-shadow: 0 12px 28px rgba(31, 23, 34, .14);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         opacity: 0;
         visibility: hidden;
         transform: translateY(-4px);
-        transition:
-          opacity 0.18s ease,
-          transform 0.18s ease;
+        transition: opacity .18s ease, transform .18s ease;
         will-change: opacity, transform;
+        overflow: hidden;
       }
       .action-menu.show {
         opacity: 1;
@@ -97,25 +173,26 @@
         height: 34px;
         display: flex;
         align-items: center;
-        padding: 0 10px;
+        padding: 0 12px;
         border: 0;
-        border-bottom: 1px solid rgba(243, 244, 246, 0.95);
+        border-bottom: 1px solid rgba(251, 207, 232, .55);
         background: transparent;
-        color: #374151;
+        color: var(--ink-700);
         font-size: 12px;
         text-align: left;
+        cursor: pointer;
+        transition: background-color .15s ease;
       }
       .action-menu button:last-child {
         border-bottom: 0;
       }
       .action-menu button:active {
-        background: rgba(253, 242, 248, 0.95);
-        color: #ec4899;
+        background: var(--brand-soft);
+        color: var(--brand);
       }
+      .room-action-menu { z-index: 40; }
 
-      .room-action-menu {
-        z-index: 40;
-      }
+      /* ====== 弹窗 ====== */
       .modal-overlay {
         position: fixed;
         inset: 0;
@@ -124,52 +201,97 @@
         align-items: center;
         justify-content: center;
         padding: 16px;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(31, 23, 34, .42);
         -webkit-backdrop-filter: blur(4px);
         backdrop-filter: blur(4px);
       }
-      .modal-overlay.hidden {
-        display: none;
-      }
+      .modal-overlay.hidden { display: none; }
       .modal-card {
         width: 100%;
         max-width: 360px;
         background: #fff;
         position: relative;
-        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
+        border-radius: 20px;
+        box-shadow: 0 20px 48px rgba(31, 23, 34, .18);
+        border: 0;
       }
       .modal-close {
         position: absolute;
         top: 8px;
         right: 8px;
-        color: #6b7280;
-        padding: 4px;
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--ink-500);
+        background: transparent;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color .15s ease;
       }
-      .modal-close:active {
-        color: #000;
+      .modal-close:active { background: var(--ink-100); }
+
+      /* ====== 虚拟身份证字段（保留分隔线、柔化） ====== */
+      .idcard-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(251, 207, 232, .55);
+      }
+      .idcard-avatar {
+        width: 56px;
+        height: 56px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border-radius: 14px;
+        background: var(--ink-100);
       }
       .idcard-name {
         font-size: 16px;
         font-weight: 700;
-        color: #111827;
+        color: var(--ink-900);
+      }
+      .idcard-vid {
+        font-size: 11px;
+        color: var(--ink-500);
+        margin-top: 2px;
       }
       .idcard-field {
-        padding: 9px 0;
-        border-bottom: 1px solid #f3f4f6;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(251, 207, 232, .45);
         display: flex;
         gap: 12px;
       }
+      .idcard-field:last-child { border-bottom: 0; }
       .idcard-field-label {
         width: 72px;
         flex: none;
-        color: #9ca3af;
+        color: #be185d;
         font-size: 11px;
+        font-weight: 600;
       }
       .idcard-field-value {
-        color: #374151;
+        color: var(--ink-900);
         font-size: 12px;
         font-weight: 500;
       }
+      .idcard-close-btn {
+        padding: 8px 24px;
+        background: var(--brand-soft);
+        color: var(--brand);
+        font-size: 13px;
+        font-weight: 600;
+        border: 0;
+        border-radius: 9999px;
+        cursor: pointer;
+        transition: background-color .15s ease;
+      }
+      .idcard-close-btn:active { background: var(--brand-line); }
+
+      /* ====== 简历表（保持印刷风格的硬黑边） ====== */
       .resume-clone-table {
         width: 100%;
         border-collapse: collapse;
@@ -186,12 +308,8 @@
         height: 52px;
         vertical-align: middle;
       }
-      .resume-clone-table .resume-top-row td {
-        height: 62px;
-      }
-      .resume-clone-table .resume-unit-row td {
-        height: 30px;
-      }
+      .resume-clone-table .resume-top-row td { height: 62px; }
+      .resume-clone-table .resume-unit-row td { height: 30px; }
       .resume-label {
         text-align: center;
         font-size: 16px;
@@ -220,8 +338,49 @@
         object-fit: cover;
         border: 1px solid #000;
       }
+      .resume-close-btn {
+        padding: 8px 24px;
+        background: var(--brand-soft);
+        color: var(--brand);
+        font-size: 13px;
+        font-weight: 600;
+        border: 0;
+        border-radius: 9999px;
+        cursor: pointer;
+      }
+      .resume-close-btn:active { background: var(--brand-line); }
 
-      /* 下拉刷新指示器 */
+      /* ====== 社区新闻详情弹窗 ====== */
+      .community-news-image {
+        width: 100%;
+        height: 192px;
+        object-fit: cover;
+        background: var(--ink-100);
+        display: block;
+      }
+      .community-news-fav-bar {
+        flex-shrink: 0;
+        padding: 12px 20px;
+        background: #fff;
+        box-shadow: 0 -4px 12px rgba(31, 23, 34, .04);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .community-news-fav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--ink-500);
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        transition: transform .12s ease, color .15s ease;
+      }
+      .community-news-fav-btn:active { transform: scale(.94); }
+
+      /* ====== 下拉刷新 ====== */
       .pull-to-refresh-indicator {
         position: absolute;
         top: 0;
@@ -232,74 +391,99 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: white;
+        background: #fff;
         z-index: 10;
         transform: translateY(-100%);
         transition: transform 0.3s ease;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid rgba(251, 207, 232, .55);
+        border-radius: 0 0 14px 14px;
         will-change: transform;
       }
-
       .refresh-icon {
         width: 40px;
         height: 40px;
       }
-
       .refresh-text {
         font-size: 12px;
-        color: #6b7280;
+        color: var(--ink-500);
         margin-top: 4px;
       }
 
-      /* 新闻网格动画 */
+      /* ====== Toast ====== */
+      #toast {
+        visibility: hidden;
+        min-width: 200px;
+        background: rgba(31, 23, 34, .78);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: #fff;
+        text-align: center;
+        padding: 12px 20px;
+        position: fixed;
+        z-index: 1000;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 16px;
+        font-size: 14px;
+        box-shadow: 0 12px 32px rgba(31, 23, 34, .18);
+      }
+      #toast.show {
+        visibility: visible;
+        animation:
+          fadein 0.5s,
+          fadeout 0.5s 2.5s;
+      }
+      @keyframes fadein {
+        from { opacity: 0; transform: translate(-50%, -45%); }
+        to   { opacity: 1; transform: translate(-50%, -50%); }
+      }
+      @keyframes fadeout {
+        from { opacity: 1; transform: translate(-50%, -50%); }
+        to   { opacity: 0; transform: translate(-50%, -45%); }
+      }
+
+      /* ====== 新闻网格动画 ====== */
       .news-item-enter {
         opacity: 0;
         transform: translateY(20px);
         animation: fadeInUp 0.3s ease forwards;
       }
-
       @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        to { opacity: 1; transform: translateY(0); }
       }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
-  <body class="bg-white">
+  <body>
     <div
       id="app-root"
-      class="w-full h-[100dvh] bg-white overflow-hidden flex flex-col relative"
+      class="w-full h-[100dvh] overflow-hidden flex flex-col relative"
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
       <!-- 顶部用户信息区 -->
       <div
-        class="flex-none bg-white px-5 pt-10 pb-6 flex items-center gap-3"
+        class="flex-none px-5 pt-10 pb-6 flex items-center gap-3"
       >
         <div class="flex items-center gap-3">
           <!-- Logo -->
           <div
-            class="w-16 h-16 flex-none rounded-full overflow-hidden bg-gray-100 border border-gray-100 cursor-pointer transition-transform active:scale-95"
+            class="avatar-ring"
             onclick="window.location.href='vip_center.html'"
           >
             <img
               alt="标志"
-              class="w-full h-full object-cover"
               src="assets/src_01/标志/标志02.jpg"
             />
           </div>
           <!-- 搜索框 -->
           <div class="flex-1 min-w-0">
-            <div
-              class="flex items-center gap-2 bg-gray-100 rounded-full px-4 h-10"
-            >
+            <div class="search-wrap">
               <iconify-icon
-                class="text-gray-400 text-lg flex-none"
+                style="color: var(--ink-500); font-size: 18px; flex-shrink: 0;"
                 icon="solar:magnifer-linear"
               ></iconify-icon>
               <input
-                class="flex-1 min-w-0 bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400"
                 id="headerSearchInput"
                 placeholder="搜索"
                 type="text"
@@ -310,11 +494,11 @@
       </div>
       <!-- 「我的房间」大盒子 -->
       <div
-        class="flex-none border border-gray-200 bg-white mx-5 mt-2 overflow-hidden"
+        class="flex-none soft-card mx-5 mt-2"
       >
           <!-- 内部标题行 -->
           <div
-            class="px-4 flex items-center justify-center border-b border-gray-100"
+            class="px-4 flex items-center justify-center"
           >
             <img alt="社区房间" class="h-12" src="assets/src_01/icon/社区房间.png" />
           </div>
@@ -322,7 +506,7 @@
         <div class="grid grid-cols-4">
           <!-- 房间 1 -->
           <div
-            class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
             onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
@@ -332,14 +516,11 @@
                 src="assets/packaged/sq/微信图片_20260727180857.jpg"
               />
             </div>
-            <span
-              class="text-[8px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >王爷府</span
-            >
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">王爷府</span>
           </div>
           <!-- 房间 2 -->
           <div
-            class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
             onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
@@ -349,14 +530,11 @@
                 src="assets/packaged/a360e987b470405b93134ddbf8e0e7c2.png"
               />
             </div>
-            <span
-              class="text-[8px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >小美的房间</span
-            >
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">小美的房间</span>
           </div>
           <!-- 房间 3 -->
           <div
-            class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
             onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
@@ -366,14 +544,11 @@
                 src="./assets/shops/shop-coffee-bar.png"
               />
             </div>
-            <span
-              class="text-[8px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >蓝鹊咖啡</span
-            >
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">蓝鹊咖啡</span>
           </div>
           <!-- 房间 4 -->
           <div
-            class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
             onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
@@ -383,14 +558,11 @@
                 src="./assets/shops/shop-pizza-front.png"
               />
             </div>
-            <span
-              class="text-[8px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >布朗披萨</span
-            >
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">布朗披萨</span>
           </div>
           <!-- 房间 5 -->
           <div
-            class="p-2 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
             onclick="showRoomProfileMenu(event)"
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
@@ -400,21 +572,18 @@
                 src="assets/packaged/sq/妮妮的播客.png"
               />
             </div>
-            <span
-              class="text-[8px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >妮妮的播客</span
-            >
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">妮妮的播客</span>
           </div>
         </div>
       </div>
       <!-- 「社区新闻」大盒子 -->
       <div
-        class="flex-none border border-gray-200 bg-white mx-5 mt-2 overflow-hidden"
+        class="flex-none soft-card mx-5 mt-2"
         id="newsContainer"
       >
         <!-- 内部标题行 -->
         <div
-          class="px-4 py-3 flex items-center border-b border-gray-100 cursor-pointer select-none relative"
+          class="px-4 py-3 flex items-center cursor-pointer select-none relative"
           onclick="toggleNews()"
         >
           <div class="flex-1 flex justify-center">
@@ -423,7 +592,7 @@
           <img class="news-arrow h-4 w-auto absolute right-4" src="assets/src_01/icon/展开状态箭头-removebg-preview.png" alt="展开"/>
         </div>
         <!-- 新闻网格 -->
-        <div class="grid grid-cols-3 gap-3 p-4 relative" id="newsList">
+        <div class="grid grid-cols-3 gap-3 p-3 relative" id="newsList">
           <!-- 下拉刷新指示器 -->
           <div class="pull-to-refresh-indicator hidden" id="pullToRefreshIndicator">
             <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
@@ -448,18 +617,18 @@
       </div>
       <!-- 虚拟身份证弹窗 -->
       <div aria-hidden="true" class="modal-overlay hidden" id="idCardModal">
-        <div class="modal-card border border-gray-200 p-5">
+        <div class="modal-card p-5">
           <button aria-label="关闭" class="modal-close" onclick="closeIDCardModal()">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
               <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
             </svg>
           </button>
-          <h3 class="text-center font-bold text-gray-900 text-base mb-4">
+          <h3 class="text-center font-bold text-base mb-4" style="color: var(--ink-900);">
             虚拟身份证
           </h3>
           <div id="idCardContent"></div>
           <div class="mt-4 flex justify-center">
-            <button class="px-6 py-2 border border-black text-sm font-bold hover:bg-gray-100" onclick="closeIDCardModal()">
+            <button class="idcard-close-btn" onclick="closeIDCardModal()">
               关闭
             </button>
           </div>
@@ -467,7 +636,7 @@
       </div>
       <!-- 个人简历弹窗 -->
       <div aria-hidden="true" class="modal-overlay hidden" id="resumeModal">
-        <div class="modal-card border border-black p-4">
+        <div class="modal-card p-4" style="border: 1px solid #000;">
           <button aria-label="关闭" class="modal-close" onclick="closeResumeModal()">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
               <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -476,7 +645,7 @@
           <h2 class="text-center text-lg font-bold mb-4">个人简历</h2>
           <div id="resumeContent"></div>
           <div class="mt-4 flex justify-center">
-            <button class="px-6 py-2 border border-black text-sm font-bold hover:bg-gray-100" onclick="closeResumeModal()">
+            <button class="resume-close-btn" onclick="closeResumeModal()">
               关闭
             </button>
           </div>
@@ -484,22 +653,22 @@
       </div>
       <!-- 社区新闻详情弹窗 -->
       <div aria-hidden="true" class="modal-overlay hidden" id="communityNewsModal">
-        <div class="modal-card border border-gray-200 overflow-hidden flex flex-col" style="max-height:88dvh;">
+        <div class="modal-card overflow-hidden flex flex-col" style="max-height:88dvh;">
           <button aria-label="关闭" class="modal-close" onclick="closeCommunityNewsModal()">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
             </svg>
           </button>
           <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar">
-            <img id="communityNewsImage" class="w-full h-48 object-cover bg-gray-100" src="" alt="新闻图片" />
+            <img id="communityNewsImage" class="community-news-image" src="" alt="新闻图片" />
             <div class="p-5">
-              <h3 id="communityNewsTitle" class="text-lg font-bold text-gray-900 mb-2"></h3>
-              <div id="communityNewsMeta" class="text-xs text-gray-400 mb-3"></div>
-              <p id="communityNewsBody" class="text-sm text-gray-700 leading-relaxed"></p>
+              <h3 id="communityNewsTitle" class="text-lg font-bold mb-2" style="color: var(--ink-900);"></h3>
+              <div id="communityNewsMeta" class="text-xs mb-3" style="color: var(--ink-500);"></div>
+              <p id="communityNewsBody" class="text-sm leading-relaxed" style="color: var(--ink-700);"></p>
             </div>
           </div>
-          <div class="shrink-0 px-5 py-3 border-t border-gray-100 flex items-center gap-3 bg-white">
-            <button id="communityNewsFavBtn" class="flex items-center gap-1.5 text-sm text-gray-500 active:scale-95 transition-transform" onclick="toggleCommunityNewsFavorite()">
+          <div class="community-news-fav-bar">
+            <button id="communityNewsFavBtn" class="community-news-fav-btn" onclick="toggleCommunityNewsFavorite()">
               <svg id="communityNewsFavIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
               </svg>
@@ -684,11 +853,11 @@
       function showIDCard(data) {
         const content = document.getElementById('idCardContent')
         content.innerHTML = `
-          <div class="flex items-center gap-3 pb-4 border-b border-gray-100">
-            <img class="w-16 h-16 object-cover border border-gray-200 flex-none" src="${data.avatar}" alt="${data.name}">
+          <div class="idcard-head">
+            <img class="idcard-avatar" src="${data.avatar}" alt="${data.name}">
             <div class="min-w-0">
               <div class="idcard-name">${data.name}</div>
-              <div class="text-xs text-gray-400 mt-1">虚拟身份证编号：${data.vId}</div>
+              <div class="idcard-vid">虚拟身份证编号：${data.vId}</div>
             </div>
           </div>
           <div class="pt-1">
@@ -899,17 +1068,10 @@
         if (indicator) newsList.appendChild(indicator)
         communityNewsData.forEach((item) => {
           const card = document.createElement('div')
-          card.className =
-            'relative border border-gray-200 overflow-hidden cursor-pointer hover:bg-gray-50 transition-colors news-card'
-          card.style.height = '80px'
+          card.className = 'news-card'
           card.innerHTML =
-            '<img class="w-full h-full object-cover" src="' +
-            item.image +
-            '" alt="' +
-            item.title +
-            '" /><div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-1.5"><span class="text-[10px] text-white font-medium line-clamp-1">' +
-            item.title +
-            '</span></div>'
+            '<img src="' + item.image + '" alt="' + item.title + '" />' +
+            '<div class="news-card-title">' + item.title + '</div>'
           card.addEventListener('click', () => openCommunityNews(item))
           newsList.appendChild(card)
         })
