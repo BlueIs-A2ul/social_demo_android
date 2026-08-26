@@ -10,35 +10,407 @@
     <script src="assets/vendor/history-favorites.js"></script>
     <style>
       body {
-        background-color: white;
-        font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-          Arial, sans-serif;
         margin: 0;
         padding: 0;
-        color: #333;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI',
+          Roboto, Helvetica, Arial, sans-serif;
+        color: #1f1722;
+        background: #f7f7f8;
+        background-attachment: fixed;
       }
       ::-webkit-scrollbar {
         display: none;
       }
-      .straight-edge {
-        border-radius: 0 !important;
+
+      /* ====== 设计 token（页面级轻量版） ====== */
+      :root {
+        --brand: #ec4899;
+        --brand-soft: #fdf2f8;
+        --brand-tint: #fce7f3;
+        --brand-line: #fbcfe8;
+        --ink-900: #1f1722;
+        --ink-700: #4a3f50;
+        --ink-500: #8b7e93;
+        --ink-100: #f4edf1;
+        --shadow-sm: 0 2px 8px rgba(236, 72, 153, .06);
+        --shadow-md: 0 6px 18px rgba(31, 23, 34, .06);
       }
 
-      /* Toast 样式 */
+      .vip-badge {
+        display: inline-block;
+        width: 18px;
+        height: auto;
+        margin-left: 4px;
+        vertical-align: -4px;
+      }
+
+      /* ====== 卡片通用 ====== */
+      .soft-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: var(--shadow-sm);
+      }
+      .soft-divider {
+        border: 0;
+        border-top: 1px solid rgba(251, 207, 232, .55);
+      }
+
+      /* ====== 头像 ====== */
+      .avatar-ring {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .avatar-ring img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* ====== 胶囊标签 ====== */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        height: 20px;
+        padding: 0 10px;
+        border-radius: 9999px;
+        font-size: 10px;
+        font-weight: 600;
+        background: var(--brand-soft);
+        color: #be185d;
+      }
+      .pill-emerald {
+        background: #ecfdf5;
+        color: #059669;
+      }
+      .pill-gray {
+        background: var(--ink-100);
+        color: var(--ink-500);
+      }
+
+      /* ====== 圆角图标按钮（购物车 / 通讯录） ====== */
+      .icon-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 237, 213, .7);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-sm);
+      }
+      .icon-badge {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        background: var(--brand);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        border-radius: 9999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 2px #fff;
+      }
+
+      /* ====== 搜索条 ====== */
+      .search-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--ink-100);
+        border-radius: 9999px;
+        padding: 0 12px;
+        height: 32px;
+        min-width: 0;
+        transition: box-shadow .15s ease, background .15s ease;
+      }
+      .search-wrap:focus-within {
+        background: #fff;
+        box-shadow: 0 0 0 2px var(--brand-line);
+      }
+      .search-wrap input {
+        flex: 1;
+        min-width: 0;
+        background: transparent;
+        border: 0;
+        outline: none;
+        font-size: 12px;
+        color: var(--ink-900);
+      }
+      .search-wrap input::placeholder { color: var(--ink-500); }
+      .btn-search {
+        flex-shrink: 0;
+        height: 24px;
+        padding: 0 12px;
+        background: var(--brand);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        border: 0;
+        border-radius: 9999px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(236, 72, 153, .25);
+        transition: transform .12s ease;
+      }
+      .btn-search:active { transform: scale(.94); }
+
+      /* ====== 房间网格 ====== */
+      .room-item {
+        transition: background-color .15s ease;
+      }
+      .room-item:active {
+        background: rgba(252, 231, 243, .55);
+      }
+      .room-name {
+        font-size: 12px;
+        color: var(--ink-700);
+        font-weight: 500;
+      }
+      .add-room-cell {
+        border: 0;
+        transition: background-color .15s ease;
+      }
+      .add-room-cell:active {
+        background: var(--brand-soft);
+      }
+      .add-room-plus {
+        color: var(--brand);
+        opacity: .55;
+        font-size: 24px;
+      }
+      .add-room-label {
+        color: var(--brand);
+        opacity: .55;
+        font-size: 10px;
+        font-weight: 600;
+      }
+
+      /* ====== 访客条目 ====== */
+      .visitor-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background-color .15s ease;
+      }
+      .visitor-row:active {
+        background: rgba(252, 231, 243, .45);
+      }
+
+      /* ====== 虚拟身份证按钮 ====== */
+      .id-btn {
+        padding: 2px 10px;
+        border: 0;
+        border-radius: 9999px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 4px;
+        transition: background-color .15s ease, color .15s ease;
+      }
+      .id-btn.active {
+        background: #2563eb;
+        color: #fff;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, .25);
+      }
+
+      /* ====== 虚拟身份证展开卡片 ====== */
+      .identity-content {
+        background: linear-gradient(180deg, #fff7fb 0%, #fff 100%);
+        padding: 12px 16px 16px;
+        border-top: 1px solid rgba(251, 207, 232, .55);
+      }
+      .identity-id-no {
+        font-size: 11px;
+        color: var(--ink-500);
+        margin-bottom: 8px;
+        letter-spacing: .02em;
+      }
+      .identity-table {
+        background: #fff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+      }
+      .identity-row {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-bottom: 1px solid rgba(251, 207, 232, .45);
+      }
+      .identity-row:last-child {
+        border-bottom: 0;
+      }
+      .identity-key {
+        width: 70px;
+        flex-shrink: 0;
+        font-size: 11px;
+        font-weight: 600;
+        color: #be185d;
+      }
+      .identity-val {
+        flex: 1;
+        font-size: 12px;
+        color: var(--ink-900);
+      }
+
+      /* ====== 弹窗遮罩 / 主体 ====== */
+      .modal-mask {
+        position: fixed;
+        inset: 0;
+        background: rgba(31, 23, 34, .42);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 50;
+      }
+      .modal-shell {
+        position: absolute;
+        inset: 16px;
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 48px rgba(31, 23, 34, .18);
+        display: flex;
+        flex-direction: column;
+      }
+      .modal-head {
+        flex-shrink: 0;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .modal-head h3 {
+        font-weight: 700;
+        font-size: 16px;
+        color: var(--ink-900);
+        margin: 0;
+      }
+      .modal-close {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--ink-500);
+        background: transparent;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color .15s ease;
+      }
+      .modal-close:active { background: var(--ink-100); }
+
+      /* ====== 信息栏分类项 ====== */
+      .category-item {
+        border-radius: 12px;
+        transition: transform .15s ease, box-shadow .15s ease;
+        position: relative;
+      }
+      .category-item.active {
+        opacity: 1 !important;
+        box-shadow: 0 0 0 2px var(--brand), 0 4px 10px rgba(236, 72, 153, .25);
+      }
+
+      /* ====== 新闻项 ====== */
+      .news-item {
+        background: #fff;
+        border: 0;
+        border-radius: 16px;
+        padding: 12px;
+        cursor: pointer;
+        aspect-ratio: 3/4;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: var(--shadow-sm);
+        transition: transform .15s ease, box-shadow .15s ease;
+      }
+      .news-item:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(236, 72, 153, .12);
+      }
+      .news-item-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink-900);
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .news-item-desc {
+        font-size: 12px;
+        color: var(--ink-500);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        line-height: 1.5;
+      }
+
+      /* ====== 新闻详情 ====== */
+      .news-detail-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      .news-detail-indicator {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .5);
+        cursor: pointer;
+        transition: background-color .2s;
+      }
+      .news-detail-indicator.active {
+        background: #fff;
+      }
+      .news-fav-bar {
+        flex-shrink: 0;
+        padding: 12px 16px;
+        background: #fff;
+        box-shadow: 0 -4px 12px rgba(31, 23, 34, .04);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* ====== Toast ====== */
       #toast {
         visibility: hidden;
         min-width: 200px;
-        background-color: rgba(0, 0, 0, 0.8);
+        background: rgba(31, 23, 34, .78);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         color: #fff;
         text-align: center;
-        padding: 12px 24px;
+        padding: 12px 20px;
         position: fixed;
         z-index: 1000;
         left: 50%;
-        bottom: 50px;
-        transform: translateX(-50%);
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 16px;
         font-size: 14px;
+        box-shadow: 0 12px 32px rgba(31, 23, 34, .18);
       }
       #toast.show {
         visibility: visible;
@@ -47,134 +419,49 @@
           fadeout 0.5s 2.5s;
       }
       @keyframes fadein {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 50px;
-          opacity: 1;
-        }
+        from { opacity: 0; transform: translate(-50%, -45%); }
+        to   { opacity: 1; transform: translate(-50%, -50%); }
       }
       @keyframes fadeout {
-        from {
-          bottom: 50px;
-          opacity: 1;
-        }
-        to {
-          bottom: 0;
-          opacity: 0;
-        }
-      }
-      .vip-badge {
-        display: inline-block;
-        width: 20px;
-        height: auto;
-        margin-left: 4px;
-        vertical-align: -4px;
+        from { opacity: 1; transform: translate(-50%, -50%); }
+        to   { opacity: 0; transform: translate(-50%, -45%); }
       }
 
-      /* 信息栏弹窗样式 */
-      .category-item.active {
-        opacity: 0.8;
-      }
-      
+      /* ====== 信息栏下拉刷新 ====== */
       .pull-to-refresh-indicator {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 10px;
-        color: #9ca3af;
+        color: var(--ink-500);
         font-size: 12px;
       }
-      
       .pull-to-refresh-indicator .refresh-icon {
         width: 24px;
         height: 24px;
         margin-bottom: 5px;
       }
-      
-      .news-item {
-        background-color: #f9fafb;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 12px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        aspect-ratio: 3/4;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-      
-      .news-item:hover {
-        background-color: #f3f4f6;
-      }
-      
-      .news-item-title {
-        font-size: 14px;
-        font-weight: bold;
-        color: #1f2937;
-        margin-bottom: 4px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      
-      .news-item-desc {
-        font-size: 12px;
-        color: #6b7280;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 4;
-        -webkit-box-orient: vertical;
-        line-height: 1.4;
-      }
-      
-      /* 新闻详情弹窗样式 */
-      .news-detail-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        flex-shrink: 0;
-      }
-      
-      .news-detail-indicator {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.5);
-        cursor: pointer;
-        transition: background-color 0.2s;
-      }
-      
-      .news-detail-indicator.active {
-        background-color: white;
-      }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
-  <body class="bg-white is-mb-ai-setting" style="opacity: 1">
+  <body class="is-mb-ai-setting" style="opacity: 1">
     <div
-      class="w-full min-h-[100dvh] bg-white flex flex-col relative"
+      class="w-full min-h-[100dvh] flex flex-col relative"
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
       <!-- 顶部用户信息区 -->
       <div
-        class="flex-none bg-white px-5 pt-10 pb-6 flex items-center justify-between"
+        class="flex-none px-5 pt-10 pb-6 flex items-center justify-between"
       >
         <div class="flex items-center gap-3">
           <!-- 头像 -->
           <div
-            class="w-14 h-14 bg-pink-100 p-0.5 cursor-pointer"
-            style="background-color: rgb(255, 255, 255)"
+            class="avatar-ring"
             onclick="window.location.href='profile_settings.html?from=room_list'"
           >
             <img
               alt="User Avatar"
-              class="w-full h-full object-cover"
               src="assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png"
             />
           </div>
@@ -188,7 +475,7 @@
                   src="assets/src_01/颜色vip/技术服务类vip.jpg"
               /></span>
               <button
-                class="text-gray-400"
+                style="color: var(--ink-500); background: transparent; border: 0; padding: 4px; border-radius: 50%; cursor: pointer;"
                 onclick="location.href = 'profile_edit.html?from=room_list'"
               >
                 <iconify-icon
@@ -197,32 +484,29 @@
                 ></iconify-icon>
               </button>
             </div>
-            <div class="flex items-center gap-2 mt-0.5">
-              <span
-                class="bg-pink-100 text-pink-500 text-[10px] px-1.5 py-0.5 font-medium"
-                >10年老店</span
-              >
+            <div class="flex items-center gap-2 mt-1.5">
+              <span class="pill">10年老店</span>
               <div class="flex items-center gap-1">
-                <span class="text-gray-400 text-[10px]">诚信等级</span>
+                <span style="color: var(--ink-500); font-size: 10px;">诚信等级</span>
                 <div class="flex">
                   <iconify-icon
-                    class="text-red-500 text-xs"
+                    style="color: var(--brand); font-size: 12px;"
                     icon="solar:heart-bold"
                   ></iconify-icon>
                   <iconify-icon
-                    class="text-red-500 text-xs"
+                    style="color: var(--brand); font-size: 12px;"
                     icon="solar:heart-bold"
                   ></iconify-icon>
                   <iconify-icon
-                    class="text-red-500 text-xs"
+                    style="color: var(--brand); font-size: 12px;"
                     icon="solar:heart-bold"
                   ></iconify-icon>
                   <iconify-icon
-                    class="text-gray-300 text-xs"
+                    style="color: var(--ink-100); font-size: 12px;"
                     icon="solar:heart-linear"
                   ></iconify-icon>
                   <iconify-icon
-                    class="text-gray-300 text-xs"
+                    style="color: var(--ink-100); font-size: 12px;"
                     icon="solar:heart-linear"
                   ></iconify-icon>
                 </div>
@@ -237,14 +521,10 @@
         onclick="window.location.href='category.html?from=room_list'"
         style="position: absolute; right: 20px; top: 50px"
       >
-        <div class="w-10 h-10 bg-orange-50 flex items-center justify-center">
+        <div class="icon-circle">
           <img src="assets/src_01/icon/购物车-removebg-preview.png" alt="购物车" class="w-6 h-6 object-contain" />
         </div>
-        <div
-          class="absolute -top-1 -right-1 bg-pink-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center border-2 border-white"
-        >
-          2
-        </div>
+        <div class="icon-badge">2</div>
       </div>
       <!-- 通讯录 -->
       <div
@@ -252,54 +532,45 @@
         onclick="window.location.href='my_contacts.html?from=room_list'"
         style="position: absolute; right: 70px; top: 50px"
       >
-        <div class="w-10 h-10 bg-orange-50 flex items-center justify-center">
+        <div class="icon-circle">
           <img src="assets/src_01/icon/通讯录.jpg" alt="通讯录" class="w-6 h-6 object-contain" />
         </div>
       </div>
       <!-- 「我的房间」大盒子 -->
       <div
-        class="grow shrink-0 flex flex-col border border-gray-200 bg-white mx-5 mt-2 mb-6"
+        class="grow shrink-0 flex flex-col soft-card mx-5 mt-2 mb-6 overflow-hidden"
       >
         <!-- 内部标题行 -->
         <div
-          class="px-4 py-3 flex items-center gap-3 border-b border-gray-100"
-          style=""
+          class="px-4 py-3 flex items-center gap-3"
         >
-          <h3 class="font-bold text-gray-900 flex-none">我的房间</h3>
-          <div
-            class="flex-1 flex items-center gap-1.5 bg-gray-100 rounded-full px-3 h-8 min-w-0"
-          >
+          <h3 style="font-weight: 700; font-size: 16px; color: var(--ink-900); flex-shrink: 0; margin: 0;">我的房间</h3>
+          <div class="search-wrap">
             <iconify-icon
-              class="text-gray-400 text-base flex-none"
+              style="color: var(--ink-500); font-size: 14px; flex-shrink: 0;"
               icon="solar:magnifer-bold"
             ></iconify-icon>
             <input
               id="roomSearchInput"
-              class="flex-1 text-xs bg-transparent focus:outline-none min-w-0"
               type="search"
               placeholder="搜索房间"
             />
             <button
-              class="flex-none text-xs text-white bg-[#ec4899] rounded-full px-3 py-1 active:scale-95 transition-transform"
+              class="btn-search"
               onclick="filterRooms(document.getElementById('roomSearchInput').value)"
             >
               搜索
             </button>
           </div>
-          <span class="text-xs text-gray-400 flex-none">5个空间</span>
+          <span style="font-size: 12px; color: var(--ink-500); flex-shrink: 0;">5个空间</span>
         </div>
         <!-- Grid 网格 -->
         <div
           class="grid grid-cols-4 content-start"
-          style="
-            border-width: 0px;
-            background-color: rgba(255, 255, 255, 0);
-            border-color: rgb(255, 255, 255);
-          "
         >
           <!-- 房间 1: 青铜之门 -->
           <div
-            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer"
             onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
@@ -309,14 +580,11 @@
                 src="assets/packaged/sq/微信图片_20260729140622.jpg"
               />
             </div>
-            <span
-              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >我的房间<br
-            /></span>
+            <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">我的房间<br/></span>
           </div>
           <!-- 房间 2: 娜美的房间 -->
           <div
-            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer"
             onclick="window.location.href='panorama_room.html?from=room_list'"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
@@ -326,14 +594,11 @@
                 src="assets/avatars/新娜美.jpg"
               />
             </div>
-            <span
-              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >娜美的房间<br
-            /></span>
+            <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">娜美的房间<br/></span>
           </div>
           <!-- 房间 3: 直播间 -->
           <div
-            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer"
             onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
@@ -343,14 +608,11 @@
                 src="assets/packaged/sq/直播间图片.png"
               />
             </div>
-            <span
-              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >直播间<br
-            /></span>
+            <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">直播间<br/></span>
           </div>
           <!-- 房间 4: 我的播客 -->
           <div
-            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer"
             onclick="showToast('建设中')"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
@@ -360,14 +622,11 @@
                 src="assets/packaged/sq/我的播客.png"
               />
             </div>
-            <span
-              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >我的播客<br
-            /></span>
+            <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">我的播客<br/></span>
           </div>
           <!-- 房间 5: 信息栏 -->
           <div
-            class="room-item p-3 flex flex-col items-center cursor-pointer hover:bg-gray-50 transition-colors"
+            class="room-item p-3 flex flex-col items-center cursor-pointer"
             onclick="showInfoBarModal()"
           >
             <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
@@ -377,55 +636,52 @@
                 src="assets/src_01/icon/信息栏.png"
               />
             </div>
-            <span
-              class="text-[10px] text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis w-full text-center"
-              >信息栏<br
-            /></span>
+            <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">信息栏<br/></span>
           </div>
           <!-- 房间 4: 无 (占位) -->
           <div
-            class="border-r border-b border-gray-100 p-3 flex flex-col items-center justify-center border-dashed cursor-pointer hover:bg-gray-50 transition-colors"
+            class="add-room-cell p-3 flex flex-col items-center justify-center cursor-pointer"
             onclick="showToast('新建房间')"
           >
             <div
               class="w-full aspect-square mb-2 bg-white flex items-center justify-center"
             >
               <iconify-icon
-                class="text-gray-300 text-2xl"
+                class="add-room-plus"
                 icon="solar:add-circle-linear"
               ></iconify-icon>
             </div>
-            <span class="text-[10px] text-gray-300">新建</span>
+            <span class="add-room-label">新建</span>
           </div>
         </div>
       </div>
       <!-- 访客动态 -->
       <div
-        class="flex-none bg-white border border-gray-200 mx-5 mb-6 flex flex-col"
+        class="flex-none soft-card mx-5 mb-6 flex flex-col overflow-hidden"
       >
         <div
-          class="px-4 py-4 flex items-center justify-between border-b border-gray-100"
+          class="px-4 py-4 flex items-center justify-between"
         >
-          <h3 class="font-bold text-gray-900">访客动态</h3>
-          <span class="text-xs text-gray-400">今日3人</span>
+          <h3 style="font-weight: 700; font-size: 16px; color: var(--ink-900); margin: 0;">访客动态</h3>
+          <span style="font-size: 12px; color: var(--ink-500);">今日3人</span>
         </div>
-        <div class="flex flex-col">
+        <div class="flex flex-col" style="border-top: 1px solid rgba(251, 207, 232, .55);">
           <!-- 条目 1 -->
-          <div class="border-b border-gray-100">
+          <div style="border-bottom: 1px solid rgba(251, 207, 232, .55);">
             <div
-              class="px-4 py-3 flex items-center justify-between cursor-pointer active:bg-gray-50"
+              class="visitor-row"
               onclick="toggleIdentityCard(0)"
             >
               <div class="flex-1 flex items-center gap-2">
-                <span class="text-xs text-gray-400">1.</span>
-                <span class="font-bold text-sm text-gray-900"
+                <span style="font-size: 12px; color: var(--ink-500);">1.</span>
+                <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);"
                   >七七<img
                     alt="个人VIP2"
                     class="vip-badge"
                     src="assets/src_01/颜色vip/技术服务类vip.jpg"
                 /></span>
                 <button
-                  class="identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1"
+                  class="id-btn"
                   onclick="
                     event.stopPropagation()
                     toggleIdentityCard(0)
@@ -435,128 +691,43 @@
                 </button>
               </div>
               <div class="flex items-center gap-3">
-                <span class="text-xs text-gray-700">停留 12 分钟</span>
-                <span class="text-xs font-bold text-[#10b981]">停留</span>
+                <span style="font-size: 12px; color: var(--ink-700);">停留 12 分钟</span>
+                <span class="pill pill-emerald">停留</span>
               </div>
             </div>
-            <div
-              class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
-            >
-              <div class="text-[10px] text-gray-400 mb-2">
+            <div class="identity-content hidden">
+              <div class="identity-id-no">
                 虚拟身份证编号: V3001
               </div>
-              <div
-                class="bg-white border border-gray-200 straight-edge overflow-hidden"
-              >
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    姓名
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    张小强
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    出生
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    1996年5月
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    性别
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    男
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    民族
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    汉族
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    职业
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    后端工程师
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    职业现状
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    在职
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    技能
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    Java/Python/分布式
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    特长
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    系统架构、高并发
-                  </div>
-                </div>
-                <div class="flex border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    爱好
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    徒步、代码、阅读
-                  </div>
-                </div>
+              <div class="identity-table">
+                <div class="identity-row"><span class="identity-key">姓名</span><span class="identity-val">张小强</span></div>
+                <div class="identity-row"><span class="identity-key">出生</span><span class="identity-val">1996年5月</span></div>
+                <div class="identity-row"><span class="identity-key">性别</span><span class="identity-val">男</span></div>
+                <div class="identity-row"><span class="identity-key">民族</span><span class="identity-val">汉族</span></div>
+                <div class="identity-row"><span class="identity-key">职业</span><span class="identity-val">后端工程师</span></div>
+                <div class="identity-row"><span class="identity-key">职业现状</span><span class="identity-val">在职</span></div>
+                <div class="identity-row"><span class="identity-key">技能</span><span class="identity-val">Java/Python/分布式</span></div>
+                <div class="identity-row"><span class="identity-key">特长</span><span class="identity-val">系统架构、高并发</span></div>
+                <div class="identity-row"><span class="identity-key">爱好</span><span class="identity-val">徒步、代码、阅读</span></div>
               </div>
             </div>
           </div>
           <!-- 条目 2 -->
-          <div class="border-b border-gray-100">
+          <div style="border-bottom: 1px solid rgba(251, 207, 232, .55);">
             <div
-              class="px-4 py-3 flex items-center justify-between cursor-pointer active:bg-gray-50"
+              class="visitor-row"
               onclick="toggleIdentityCard(1)"
             >
               <div class="flex-1 flex items-center gap-2">
-                <span class="text-xs text-gray-400">2.</span>
-                <span class="font-bold text-sm text-gray-900"
+                <span style="font-size: 12px; color: var(--ink-500);">2.</span>
+                <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);"
                   >小鹿<img
                     alt="个人VIP2"
                     class="vip-badge"
                     src="assets/src_01/颜色vip/技术服务类vip.jpg"
                 /></span>
                 <button
-                  class="identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1"
+                  class="id-btn"
                   onclick="
                     event.stopPropagation()
                     toggleIdentityCard(1)
@@ -566,128 +737,43 @@
                 </button>
               </div>
               <div class="flex items-center gap-3">
-                <span class="text-xs text-gray-700">停留 8 分钟</span>
-                <span class="text-xs font-bold text-[#9ca3af]">离开</span>
+                <span style="font-size: 12px; color: var(--ink-700);">停留 8 分钟</span>
+                <span class="pill pill-gray">离开</span>
               </div>
             </div>
-            <div
-              class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
-            >
-              <div class="text-[10px] text-gray-400 mb-2">
+            <div class="identity-content hidden">
+              <div class="identity-id-no">
                 虚拟身份证编号: V3002
               </div>
-              <div
-                class="bg-white border border-gray-200 straight-edge overflow-hidden"
-              >
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    姓名
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    李诗韵
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    出生
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    1999年8月
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    性别
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    女
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    民族
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    汉族
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    职业
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    视觉设计师
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    职业现状
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    在职
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    技能
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    UI/UX设计、插画
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    特长
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    审美感知、品牌设计
-                  </div>
-                </div>
-                <div class="flex border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    爱好
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    摄影、油画、旅行
-                  </div>
-                </div>
+              <div class="identity-table">
+                <div class="identity-row"><span class="identity-key">姓名</span><span class="identity-val">李诗韵</span></div>
+                <div class="identity-row"><span class="identity-key">出生</span><span class="identity-val">1999年8月</span></div>
+                <div class="identity-row"><span class="identity-key">性别</span><span class="identity-val">女</span></div>
+                <div class="identity-row"><span class="identity-key">民族</span><span class="identity-val">汉族</span></div>
+                <div class="identity-row"><span class="identity-key">职业</span><span class="identity-val">视觉设计师</span></div>
+                <div class="identity-row"><span class="identity-key">职业现状</span><span class="identity-val">在职</span></div>
+                <div class="identity-row"><span class="identity-key">技能</span><span class="identity-val">UI/UX设计、插画</span></div>
+                <div class="identity-row"><span class="identity-key">特长</span><span class="identity-val">审美感知、品牌设计</span></div>
+                <div class="identity-row"><span class="identity-key">爱好</span><span class="identity-val">摄影、油画、旅行</span></div>
               </div>
             </div>
           </div>
           <!-- 条目 3 -->
-          <div class="border-b border-gray-100">
+          <div>
             <div
-              class="px-4 py-3 flex items-center justify-between cursor-pointer active:bg-gray-50"
+              class="visitor-row"
               onclick="toggleIdentityCard(2)"
             >
               <div class="flex-1 flex items-center gap-2">
-                <span class="text-xs text-gray-400">3.</span>
-                <span class="font-bold text-sm text-gray-900"
+                <span style="font-size: 12px; color: var(--ink-500);">3.</span>
+                <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);"
                   >星河<img
                     alt="个人VIP2"
                     class="vip-badge"
                     src="assets/src_01/颜色vip/技术服务类vip.jpg"
                 /></span>
                 <button
-                  class="identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1"
+                  class="id-btn"
                   onclick="
                     event.stopPropagation()
                     toggleIdentityCard(2)
@@ -697,109 +783,24 @@
                 </button>
               </div>
               <div class="flex items-center gap-3">
-                <span class="text-xs text-gray-700">停留 5 分钟</span>
-                <span class="text-xs font-bold text-[#10b981]">停留</span>
+                <span style="font-size: 12px; color: var(--ink-700);">停留 5 分钟</span>
+                <span class="pill pill-emerald">停留</span>
               </div>
             </div>
-            <div
-              class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
-            >
-              <div class="text-[10px] text-gray-400 mb-2">
+            <div class="identity-content hidden">
+              <div class="identity-id-no">
                 虚拟身份证编号: V3003
               </div>
-              <div
-                class="bg-white border border-gray-200 straight-edge overflow-hidden"
-              >
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    姓名
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    王大龙
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    出生
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    1994年2月
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    性别
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    男
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    民族
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    汉族
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    职业
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    项目经理
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    职业现状
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    在职
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    技能
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    项目管理、敏捷开发
-                  </div>
-                </div>
-                <div class="flex border-b border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    特长
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    团队协调、进度把控
-                  </div>
-                </div>
-                <div class="flex border-gray-100">
-                  <div
-                    class="w-[70px] px-3 py-1.5 bg-gray-50 text-gray-400 text-[10px] border-r border-gray-100"
-                  >
-                    爱好
-                  </div>
-                  <div class="flex-1 px-3 py-1.5 text-black text-[10px]">
-                    篮球、电子竞技、健身
-                  </div>
-                </div>
+              <div class="identity-table">
+                <div class="identity-row"><span class="identity-key">姓名</span><span class="identity-val">王大龙</span></div>
+                <div class="identity-row"><span class="identity-key">出生</span><span class="identity-val">1994年2月</span></div>
+                <div class="identity-row"><span class="identity-key">性别</span><span class="identity-val">男</span></div>
+                <div class="identity-row"><span class="identity-key">民族</span><span class="identity-val">汉族</span></div>
+                <div class="identity-row"><span class="identity-key">职业</span><span class="identity-val">项目经理</span></div>
+                <div class="identity-row"><span class="identity-key">职业现状</span><span class="identity-val">在职</span></div>
+                <div class="identity-row"><span class="identity-key">技能</span><span class="identity-val">项目管理、敏捷开发</span></div>
+                <div class="identity-row"><span class="identity-key">特长</span><span class="identity-val">团队协调、进度把控</span></div>
+                <div class="identity-row"><span class="identity-key">爱好</span><span class="identity-val">篮球、电子竞技、健身</span></div>
               </div>
             </div>
           </div>
@@ -808,13 +809,13 @@
       <!-- 信息栏弹窗 -->
       <div id="infoBarModal" class="fixed inset-0 z-50 hidden">
         <!-- 遮罩层 -->
-        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeInfoBarModal()"></div>
+        <div class="modal-mask" onclick="closeInfoBarModal()"></div>
         <!-- 弹窗主体 -->
-        <div class="absolute inset-4 bg-white rounded-lg overflow-hidden flex flex-col">
+        <div class="modal-shell">
           <!-- 弹窗头部 -->
-          <div class="flex-none px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-            <h3 class="font-bold text-gray-900">信息栏</h3>
-            <button onclick="closeInfoBarModal()" class="text-gray-400 hover:text-gray-600">
+          <div class="modal-head">
+            <h3>信息栏</h3>
+            <button onclick="closeInfoBarModal()" class="modal-close">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
@@ -823,7 +824,7 @@
           <!-- 弹窗内容 -->
           <div class="flex-1 overflow-hidden flex">
             <!-- 左边分类列表 -->
-            <div class="w-1/3 border-r border-gray-100 overflow-y-auto">
+            <div class="w-1/3 overflow-y-auto" style="border-right: 1px solid rgba(251, 207, 232, .55);">
               <div class="p-2">
                 <div class="category-item h-10 flex items-center justify-center rounded cursor-pointer mb-1" style="background-image: url('assets/src_01/信息栏/便签/便签_圆角_1.png'); background-size: cover; background-position: center;" data-category="招聘" onclick="filterNews('招聘')">
                   <span class="text-xs font-medium text-black">招聘</span>
@@ -883,13 +884,13 @@
       <!-- 新闻详情弹窗 -->
       <div id="newsDetailModal" class="fixed inset-0 z-50 hidden">
         <!-- 遮罩层 -->
-        <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeNewsDetailModal()"></div>
+        <div class="modal-mask" onclick="closeNewsDetailModal()"></div>
         <!-- 弹窗主体 -->
-        <div class="absolute inset-4 bg-white rounded-lg overflow-hidden flex flex-col">
+        <div class="modal-shell">
           <!-- 弹窗头部 -->
-          <div class="flex-none px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-            <h3 id="newsDetailTitle" class="font-bold text-gray-900 truncate">新闻详情</h3>
-            <button onclick="closeNewsDetailModal()" class="text-gray-400 hover:text-gray-600">
+          <div class="modal-head">
+            <h3 id="newsDetailTitle" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">新闻详情</h3>
+            <button onclick="closeNewsDetailModal()" class="modal-close">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
@@ -914,8 +915,8 @@
               </div>
             </div>
             <!-- 收藏操作栏 -->
-            <div class="flex-none px-4 py-3 border-t border-gray-100 flex items-center gap-3 bg-white">
-              <button id="newsDetailFavBtn" class="flex items-center gap-1.5 text-sm text-gray-500 active:scale-95 transition-transform" onclick="toggleNewsDetailFavorite()">
+            <div class="news-fav-bar">
+              <button id="newsDetailFavBtn" class="flex items-center gap-1.5 text-sm active:scale-95 transition-transform" style="color: var(--ink-500);" onclick="toggleNewsDetailFavorite()">
                 <svg id="newsDetailFavIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                 </svg>
@@ -932,14 +933,13 @@
       let currentOpenIndex = -1
       function toggleIdentityCard(index) {
         const allContents = document.querySelectorAll('.identity-content')
-        const allButtons = document.querySelectorAll('.identity-btn')
+        const allButtons = document.querySelectorAll('.id-btn')
 
         // 如果点击的是已展开的，收起
         if (currentOpenIndex === index) {
           allContents[index].classList.add('hidden')
           allButtons[index].textContent = '虚拟身份证'
-          allButtons[index].className =
-            'identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1'
+          allButtons[index].classList.remove('active')
           currentOpenIndex = -1
           return
         }
@@ -948,16 +948,14 @@
         if (currentOpenIndex >= 0 && allContents[currentOpenIndex]) {
           allContents[currentOpenIndex].classList.add('hidden')
           allButtons[currentOpenIndex].textContent = '虚拟身份证'
-          allButtons[currentOpenIndex].className =
-            'identity-btn px-2 py-0.5 border border-blue-300 bg-white text-blue-500 text-[10px] straight-edge transition-all ml-1'
+          allButtons[currentOpenIndex].classList.remove('active')
         }
 
         // 展开当前
         if (allContents[index]) {
           allContents[index].classList.remove('hidden')
           allButtons[index].textContent = '收起身份证'
-          allButtons[index].className =
-            'identity-btn px-2 py-0.5 bg-blue-500 text-white text-[10px] straight-edge transition-all ml-1'
+          allButtons[index].classList.add('active')
           currentOpenIndex = index
         }
       }
