@@ -40,27 +40,11 @@
       .interest-card.selected {
         border-color: #ec4899;
         background-color: #fce7f3;
-        transform: scale(1.02);
         font-weight: 500;
         box-shadow: 0 2px 8px rgba(236, 72, 153, .12);
       }
       ::-webkit-scrollbar {
         display: none;
-      }
-      .progress-line {
-        height: 2px;
-        background-color: #f4edf1;
-        width: 20px;
-      }
-      .progress-dot {
-        width: 10px;
-        height: 10px;
-        border: 2px solid #f4edf1;
-        border-radius: 999px;
-      }
-      .progress-dot.active {
-        background-color: #ec4899;
-        border-color: #ec4899;
       }
     </style>
   </head>
@@ -71,16 +55,8 @@
       onclick="skipOnboarding()"
       >跳过</a
     >
-    <!-- 进度条 -->
-    <div class="flex items-center justify-center gap-1 mt-6">
-      <div class="progress-dot active" id="dot-1"></div>
-      <div class="progress-line"></div>
-      <div class="progress-dot" id="dot-2"></div>
-      <div class="progress-line"></div>
-      <div class="progress-dot" id="dot-3"></div>
-    </div>
     <!-- 主内容区 -->
-    <div class="flex-1 px-8 pt-6 flex flex-col min-h-0">
+    <div class="flex-1 px-8 pt-4 flex flex-col min-h-0">
       <div class="flex justify-between items-start mb-2">
         <h1
           class="text-3xl font-bold text-[#ec4899] leading-tight tracking-wider"
@@ -388,16 +364,6 @@
           groupDiv.appendChild(grid)
           container.appendChild(groupDiv)
         })
-
-        // 更新进度条
-        for (let i = 1; i <= 3; i++) {
-          const dot = document.getElementById(`dot-${i}`)
-          if (i <= currentStep + 1) {
-            dot.classList.add('active')
-          } else {
-            dot.classList.remove('active')
-          }
-        }
 
         // 更新按钮
         const nextBtn = document.getElementById('next-btn')
