@@ -138,6 +138,19 @@
 </div>
 <!-- Toast 容器 -->
 <div class="" id="toast">第三方登录</div>
+<!-- 引导弹窗 -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 backdrop-blur-sm px-8" id="onboarding-modal">
+  <div class="bg-white w-full max-w-[300px] overflow-hidden shadow-2xl">
+    <div class="p-6 text-center">
+      <h3 class="text-[16px] font-bold text-black mb-2">完善个人资料</h3>
+      <p class="text-[13px] text-gray-400 leading-relaxed">花一点时间填写基本信息，让系统为你推荐更合适的内容和伙伴</p>
+    </div>
+    <div class="flex border-t border-gray-100">
+      <button class="flex-1 py-4 text-[14px] text-gray-400 font-medium" onclick="skipOnboarding()">稍后再说</button>
+      <button class="flex-1 py-4 text-[14px] text-[#ec4899] font-bold border-l border-gray-100" onclick="startOnboarding()">开始设置</button>
+    </div>
+  </div>
+</div>
 </div>
 <script>
         let isProtocolAgreed = false;
@@ -176,8 +189,17 @@
             }
             showToast('一键登录中...');
             setTimeout(() => {
-                window.location.href = 'profile_init_resume.html';
+                document.getElementById('onboarding-modal').classList.remove('hidden');
+                document.getElementById('onboarding-modal').classList.add('flex');
             }, 1200);
+        }
+
+        function startOnboarding() {
+            window.location.href = 'onboarding_gender.html';
+        }
+
+        function skipOnboarding() {
+            window.location.href = 'index.html';
         }
 
         function handleOtherLogin() {
