@@ -49,7 +49,7 @@
       /* ====== 卡片通用 ====== */
       .soft-card {
         background: #fff;
-        border-radius: 20px;
+        border-radius: 8px;
         box-shadow: var(--shadow-sm);
       }
       .soft-divider {
@@ -80,7 +80,7 @@
         align-items: center;
         height: 20px;
         padding: 0 10px;
-        border-radius: 9999px;
+        border-radius: 6px;
         font-size: 10px;
         font-weight: 600;
         background: var(--brand-soft);
@@ -131,7 +131,7 @@
         align-items: center;
         gap: 6px;
         background: var(--ink-100);
-        border-radius: 9999px;
+        border-radius: 8px;
         padding: 0 12px;
         height: 32px;
         min-width: 0;
@@ -160,7 +160,7 @@
         font-size: 11px;
         font-weight: 600;
         border: 0;
-        border-radius: 9999px;
+        border-radius: 6px;
         cursor: pointer;
         box-shadow: 0 4px 10px rgba(236, 72, 153, .25);
         transition: transform .12s ease;
@@ -215,7 +215,7 @@
       .id-btn {
         padding: 2px 10px;
         border: 0;
-        border-radius: 9999px;
+        border-radius: 6px;
         background: #eff6ff;
         color: #2563eb;
         font-size: 10px;
@@ -244,7 +244,7 @@
       }
       .identity-table {
         background: #fff;
-        border-radius: 14px;
+        border-radius: 8px;
         overflow: hidden;
         box-shadow: var(--shadow-sm);
       }
@@ -283,7 +283,7 @@
         position: absolute;
         inset: 16px;
         background: #fff;
-        border-radius: 20px;
+        border-radius: 8px;
         overflow: hidden;
         box-shadow: 0 20px 48px rgba(31, 23, 34, .18);
         display: flex;
@@ -319,7 +319,7 @@
 
       /* ====== 信息栏分类项 ====== */
       .category-item {
-        border-radius: 12px;
+        border-radius: 6px;
         transition: transform .15s ease, box-shadow .15s ease;
         position: relative;
       }
@@ -332,7 +332,7 @@
       .news-item {
         background: #fff;
         border: 0;
-        border-radius: 16px;
+        border-radius: 8px;
         padding: 12px;
         cursor: pointer;
         aspect-ratio: 3/4;
@@ -409,7 +409,7 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        border-radius: 16px;
+        border-radius: 8px;
         font-size: 14px;
         box-shadow: 0 12px 32px rgba(31, 23, 34, .18);
       }
@@ -443,17 +443,28 @@
         height: 24px;
         margin-bottom: 5px;
       }
+
+      /* ====== 视觉精修：柔和圆角与按压反馈（仅样式，不改布局/图片） ====== */
+      .room-item,
+      .add-room-cell {
+        border-radius: 8px;
+      }
+      .room-item .aspect-square,
+      .add-room-cell .aspect-square {
+        border-radius: 8px;
+      }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
   <body class="is-mb-ai-setting" style="opacity: 1">
     <div
       class="w-full min-h-[100dvh] flex flex-col relative"
+      data-safe-root
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
       <!-- 顶部用户信息区 -->
       <div
-        class="flex-none px-5 pt-10 pb-6 flex items-center justify-between"
+        class="flex-none px-5 pt-3 pb-4 flex items-center justify-between"
       >
         <div class="flex items-center gap-3">
           <!-- 头像 -->

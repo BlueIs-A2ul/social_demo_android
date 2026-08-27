@@ -73,7 +73,7 @@
         align-items: center;
         gap: 8px;
         background: var(--ink-100);
-        border-radius: 9999px;
+        border-radius: 8px;
         padding: 0 16px;
         height: 40px;
         transition: box-shadow .15s ease, background .15s ease;
@@ -96,7 +96,7 @@
       /* ====== 卡片通用 ====== */
       .soft-card {
         background: #fff;
-        border-radius: 20px;
+        border-radius: 8px;
         box-shadow: var(--shadow-sm);
         overflow: hidden;
       }
@@ -118,7 +118,7 @@
       .news-card {
         position: relative;
         aspect-ratio: 3/4;
-        border-radius: 14px;
+        border-radius: 8px;
         overflow: hidden;
         cursor: pointer;
         box-shadow: var(--shadow-sm);
@@ -153,7 +153,7 @@
         width: 132px;
         background: rgba(255, 255, 255, .92);
         border: 0;
-        border-radius: 14px;
+        border-radius: 8px;
         box-shadow: 0 12px 28px rgba(31, 23, 34, .14);
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
@@ -212,7 +212,7 @@
         max-width: 360px;
         background: #fff;
         position: relative;
-        border-radius: 20px;
+        border-radius: 8px;
         box-shadow: 0 20px 48px rgba(31, 23, 34, .18);
         border: 0;
       }
@@ -247,7 +247,7 @@
         height: 56px;
         object-fit: cover;
         flex-shrink: 0;
-        border-radius: 14px;
+        border-radius: 8px;
         background: var(--ink-100);
       }
       .idcard-name {
@@ -286,7 +286,7 @@
         font-size: 13px;
         font-weight: 600;
         border: 0;
-        border-radius: 9999px;
+        border-radius: 6px;
         cursor: pointer;
         transition: background-color .15s ease;
       }
@@ -346,7 +346,7 @@
         font-size: 13px;
         font-weight: 600;
         border: 0;
-        border-radius: 9999px;
+        border-radius: 6px;
         cursor: pointer;
       }
       .resume-close-btn:active { background: var(--brand-line); }
@@ -397,7 +397,7 @@
         transform: translateY(-100%);
         transition: transform 0.3s ease;
         border-bottom: 1px solid rgba(251, 207, 232, .55);
-        border-radius: 0 0 14px 14px;
+        border-radius: 0 0 8px 8px;
         will-change: transform;
       }
       .refresh-icon {
@@ -425,7 +425,7 @@
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        border-radius: 16px;
+        border-radius: 8px;
         font-size: 14px;
         box-shadow: 0 12px 32px rgba(31, 23, 34, .18);
       }
@@ -452,6 +452,14 @@
       }
       @keyframes fadeInUp {
         to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ====== 视觉精修：柔和圆角与按压反馈（仅样式，不改布局/图片） ====== */
+      .room-grid-item {
+        border-radius: 8px;
+      }
+      .room-grid-item > .aspect-square {
+        border-radius: 8px;
       }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
