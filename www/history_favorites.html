@@ -171,9 +171,34 @@
         bottom: 90px;
         transform: translateX(-50%);
         font-size: 13px;
+        border-radius: 8px;
       }
       #toast.show {
         visibility: visible;
+      }
+
+      /* ====== 视觉精修：柔和圆角（仅样式，不改布局/图片） ====== */
+      .level-tab.active::after {
+        border-radius: 2px;
+      }
+      .source-tab {
+        border-radius: 6px;
+        transition: background-color 0.15s ease, color 0.15s ease;
+      }
+      .share-card .thumb {
+        border-radius: 8px;
+      }
+      .info-item {
+        border-radius: 8px;
+      }
+      .news-card {
+        border-radius: 8px;
+      }
+      #share-detail-modal > div > div {
+        border-radius: 8px;
+      }
+      #news-detail-modal > div {
+        border-radius: 8px;
       }
     </style>
   </head>

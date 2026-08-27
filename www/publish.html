@@ -156,6 +156,51 @@
       body.publish-discover-mode .publish-discover-only {
         display: block;
       }
+
+      /* ====== 视觉精修：柔和圆角与按压反馈（仅样式，不改布局/图片） ====== */
+      .publish-home-only div.absolute img {
+        border-radius: 9999px;
+      }
+      .publish-nav-tab.active::after {
+        border-radius: 2px;
+      }
+      .publish-menu-btn,
+      .publish-search-btn {
+        border-radius: 8px;
+        transition: background-color 0.15s ease;
+      }
+      .publish-menu-btn:active,
+      .publish-search-btn:active {
+        background: #f3f4f6;
+      }
+      #feed-grid > div > div:first-child {
+        border-radius: 8px;
+      }
+      #feed-grid span.absolute {
+        border-radius: 6px;
+      }
+      #detail-modal > div > div {
+        border-radius: 8px;
+      }
+      #detail-modal input[type='text'] {
+        border-radius: 8px;
+      }
+      #detail-modal .border-t button {
+        border-radius: 6px;
+        transition: opacity 0.15s ease;
+      }
+      #detail-modal .border-t button:active {
+        opacity: 0.8;
+      }
+      #compose-modal .border-b button:last-child {
+        border-radius: 6px;
+      }
+      #compose-modal textarea {
+        border-radius: 8px;
+      }
+      #compose-grid .aspect-square {
+        border-radius: 8px;
+      }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
