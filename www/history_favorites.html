@@ -6,6 +6,7 @@
     <title>历史与收藏 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
     <script src="assets/vendor/history-favorites.js"></script>
+    <script src="assets/vendor/safe-area.js"></script>
     <style>
       body {
         background-color: white;
@@ -179,11 +180,12 @@
   <body class="bg-white">
     <div
       class="w-full h-[100dvh] bg-gray-50 flex flex-col relative"
+      data-safe-root
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
       <!-- 顶部标题栏 -->
       <div
-        class="flex-none bg-white px-4 pt-10 pb-2 flex items-center justify-center border-b border-gray-100"
+        class="flex-none bg-white px-4 pt-6 pb-2 flex items-center justify-center border-b border-gray-100"
       >
         <h1 class="text-lg font-bold text-gray-900">历史与收藏</h1>
       </div>

@@ -7,6 +7,7 @@
     <title>分享动态 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
     <script src="assets/vendor/history-favorites.js"></script>
+    <script src="assets/vendor/safe-area.js"></script>
     <style>
       body {
         background-color: white;
@@ -22,6 +23,8 @@
         overflow-x: hidden;
         overflow-y: auto;
         position: relative;
+      }
+      html:not(.in-frame) body {
         padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
         padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
       }

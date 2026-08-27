@@ -10,6 +10,7 @@
     <title>雷达探测 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
     <script src="assets/vendor/iconify-icon.min.js"></script>
+    <script src="assets/vendor/safe-area.js"></script>
     <style>
       body {
         margin: 0;
@@ -30,6 +31,8 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+      }
+      html:not(.in-frame) .app-container {
         padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
         padding-bottom: var(
           --safe-area-inset-bottom,

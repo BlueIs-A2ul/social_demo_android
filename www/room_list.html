@@ -8,6 +8,7 @@
     <script src="assets/vendor/tailwindcss.js"></script>
     <script src="assets/vendor/iconify-icon.min.js"></script>
     <script src="assets/vendor/history-favorites.js"></script>
+    <script src="assets/vendor/safe-area.js"></script>
     <style>
       body {
         margin: 0;
@@ -514,26 +515,27 @@
             </div>
           </div>
         </div>
-      </div>
-      <!-- 购物车 -->
-      <div
-        class="relative cursor-pointer"
-        onclick="window.location.href='category.html?from=room_list'"
-        style="position: absolute; right: 20px; top: 50px"
-      >
-        <div class="icon-circle">
-          <img src="assets/src_01/icon/购物车-removebg-preview.png" alt="购物车" class="w-6 h-6 object-contain" />
-        </div>
-        <div class="icon-badge">2</div>
-      </div>
-      <!-- 通讯录 -->
-      <div
-        class="relative cursor-pointer"
-        onclick="window.location.href='my_contacts.html?from=room_list'"
-        style="position: absolute; right: 70px; top: 50px"
-      >
-        <div class="icon-circle">
-          <img src="assets/src_01/icon/通讯录.jpg" alt="通讯录" class="w-6 h-6 object-contain" />
+        <!-- 右侧功能图标 -->
+        <div class="flex items-center gap-3 flex-shrink-0">
+          <!-- 通讯录 -->
+          <div
+            class="relative cursor-pointer"
+            onclick="window.location.href='my_contacts.html?from=room_list'"
+          >
+            <div class="icon-circle">
+              <img src="assets/src_01/icon/通讯录.jpg" alt="通讯录" class="w-6 h-6 object-contain" />
+            </div>
+          </div>
+          <!-- 购物车 -->
+          <div
+            class="relative cursor-pointer"
+            onclick="window.location.href='category.html?from=room_list'"
+          >
+            <div class="icon-circle">
+              <img src="assets/src_01/icon/购物车-removebg-preview.png" alt="购物车" class="w-6 h-6 object-contain" />
+            </div>
+            <div class="icon-badge">2</div>
+          </div>
         </div>
       </div>
       <!-- 「我的房间」大盒子 -->
