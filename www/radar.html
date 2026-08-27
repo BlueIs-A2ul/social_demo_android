@@ -79,6 +79,9 @@
         cursor: pointer;
         transition: transform 0.3s ease;
       }
+      #arrow-icon {
+        transform: translateY(-50%) rotate(180deg);
+      }
       .ai-chat-container {
         position: absolute;
         top: 0;
@@ -923,11 +926,11 @@
           
           if (isAIChatExpanded) {
             arrowIcon.src = 'assets/src_01/icon/展开状态箭头-removebg-preview.png'
-            arrowIcon.style.transform = 'translateY(-50%) rotate(180deg)'
+            arrowIcon.style.transform = 'translateY(-50%) rotate(0deg)'
             aiChatContainer.classList.add('open')
           } else {
             arrowIcon.src = 'assets/src_01/icon/收起状态箭头-removebg-preview.png'
-            arrowIcon.style.transform = 'translateY(-50%) rotate(0deg)'
+            arrowIcon.style.transform = 'translateY(-50%) rotate(180deg)'
             aiChatContainer.classList.remove('open')
           }
         }
