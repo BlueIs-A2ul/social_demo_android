@@ -54,7 +54,7 @@
         scrollbar-width: none;
       }
       .straight-edge {
-        border-radius: 0 !important;
+        border-radius: 6px;
       }
       .identity-content {
         transition: all 0.3s ease;
@@ -216,6 +216,49 @@
         display: none;
         font-size: 14px;
         border-radius: 4px;
+      }
+
+      /* ====== 视觉精修：柔和圆角与层次（仅样式，不改布局/图片） ====== */
+      img.straight-edge {
+        border-radius: 9999px;
+      }
+      div.straight-edge.w-10 {
+        border-radius: 8px;
+      }
+      div.straight-edge.p-1 {
+        border-radius: 8px;
+      }
+      button.straight-edge {
+        border-radius: 6px;
+        transition: all 0.15s ease;
+      }
+      button.straight-edge:active {
+        transform: scale(0.96);
+      }
+      div:has(> #radarSearchInput) {
+        border-radius: 8px;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      div:has(> #radarSearchInput):focus-within {
+        border-color: #f9a8d4;
+        box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.08);
+      }
+      #radius-menu {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #f3f4f6;
+        box-shadow: 0 8px 24px rgba(31, 23, 34, 0.12);
+      }
+      div.shadow-md.straight-edge {
+        box-shadow: 0 6px 20px rgba(31, 23, 34, 0.08);
+      }
+      #add-friend-modal > div {
+        border-radius: 8px;
+      }
+      #toast {
+        border-radius: 8px;
       }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
