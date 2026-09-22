@@ -6,6 +6,15 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>分享动态 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+    <script>
+      (function () {
+        try {
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'setBottomNav', visible: true }, '*')
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script src="assets/vendor/history-favorites.js"></script>
     <script src="assets/vendor/safe-area.js"></script>
     <style>
@@ -179,19 +188,6 @@
       #feed-grid span.absolute {
         border-radius: 6px;
       }
-      #detail-modal > div > div {
-        border-radius: 8px;
-      }
-      #detail-modal input[type='text'] {
-        border-radius: 8px;
-      }
-      #detail-modal .border-t button {
-        border-radius: 6px;
-        transition: opacity 0.15s ease;
-      }
-      #detail-modal .border-t button:active {
-        opacity: 0.8;
-      }
       #compose-modal .border-b button:last-child {
         border-radius: 6px;
       }
@@ -329,349 +325,13 @@
     <!-- 作品瀑布流标题 -->
     <div class="publish-home-only px-5 py-4 flex justify-between items-center shrink-0">
       <h2 class="text-base font-bold text-black">作品</h2>
-      <span class="text-sm text-gray-400">共 8 条</span>
+      <span class="text-sm text-gray-400">共 7 条</span>
     </div>
     <!-- 两列瀑布流网格 -->
     <div
       class="grid grid-cols-2 gap-x-[10px] gap-y-4 px-5 pb-10"
       id="feed-grid"
-    >
-      <div
-        class="cursor-pointer group publish-discover-only"
-        data-order-discover="1"
-        data-order-follow="5"
-        data-order-nearby="3"
-        onclick="openDetail(8)"
-      >
-        <div class="aspect-[3/4] bg-gray-50 overflow-hidden relative">
-          <img
-            alt="力量美学"
-            class="w-full h-full object-cover transition-transform group-active:scale-95"
-            src="assets/new_src/分享图片内容/微信图片_20260815164441.jpg"
-          />
-          <span
-            class="absolute top-2 right-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5"
-            >6图</span
-          >
-        </div>
-        <p class="text-[13px] text-black mt-2 font-medium">
-          力量美学｜健美×摄影专题
-        </p>
-      </div>
-      <div
-        class="cursor-pointer group publish-discover-only"
-        data-order-discover="2"
-        data-order-follow="6"
-        data-order-nearby="4"
-        onclick="openDetail(9)"
-      >
-        <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img
-            alt="训练日常"
-            class="w-full h-full object-cover transition-transform group-active:scale-95"
-            src="assets/new_src/分享图片内容/微信图片_20260815164438.jpg"
-          />
-        </div>
-        <p class="text-[13px] text-black mt-2 font-medium">
-          训练日常｜镜头不会说谎
-        </p>
-      </div>
-      <div class="cursor-pointer group" data-order-discover="3" data-order-follow="1" data-order-nearby="5" onclick="openDetail(0)">
-        <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img
-            alt="明星美女写真"
-            class="w-full h-full object-cover transition-transform group-active:scale-95"
-            src="assets/src_01/分享图片/明星美女写真.jpg"
-          />
-        </div>
-        <p class="text-[13px] text-black mt-2 font-medium">明星美女写真</p>
-      </div>
-      <div class="cursor-pointer group" data-order-discover="4" data-order-follow="2" data-order-nearby="6" onclick="openDetail(1)">
-        <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img
-            alt="武当云溪户外人像"
-            class="w-full h-full object-cover transition-transform group-active:scale-95"
-            src="assets/src_01/分享图片/武当云溪户外人像.jpg"
-          />
-        </div>
-        <p class="text-[13px] text-black mt-2 font-medium">武当云溪户外人像</p>
-      </div>
-      <div class="cursor-pointer group" data-order-discover="5" data-order-follow="3" data-order-nearby="1" onclick="openDetail(2)">
-        <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img
-            alt="珠宝展示搭配美学"
-            class="w-full h-full object-cover transition-transform group-active:scale-95"
-            src="assets/src_01/分享图片/珠宝展示搭配美学.jpg"
-          />
-        </div>
-        <p class="text-[13px] text-black mt-2 font-medium">珠宝展示搭配美学</p>
-      </div>
-      <div class="cursor-pointer group" data-order-discover="6" data-order-follow="4" data-order-nearby="2" onclick="openDetail(3)">
-        <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img
-            alt="运动女孩夜景人像"
-            class="w-full h-full object-cover transition-transform group-active:scale-95"
-            src="assets/src_01/分享图片/运动女孩夜景人像.jpg"
-          />
-        </div>
-        <p class="text-[13px] text-black mt-2 font-medium">运动女孩夜景人像</p>
-      </div>
-      <div class="cursor-pointer group" data-order-discover="7" data-order-follow="8" data-order-nearby="7" onclick="openDetail(4)">
-        <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img
-            alt="芭比风室内写真"
-            class="w-full h-full object-cover transition-transform group-active:scale-95"
-            src="assets/src_01/分享图片/芭比风室内写真.jpg"
-          />
-        </div>
-        <p class="text-[13px] text-black mt-2 font-medium">芭比风室内写真</p>
-      </div>
-      <div class="cursor-pointer group" data-order-discover="8" data-order-follow="7" data-order-nearby="8" onclick="openDetail(7)">
-        <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
-          <img
-            alt="穿搭博主时尚人像"
-            class="w-full h-full object-cover transition-transform group-active:scale-95"
-            src="assets/src_01/分享图片/穿搭博主时尚人像.jpg"
-          />
-        </div>
-        <p class="text-[13px] text-black mt-2 font-medium">穿搭博主时尚人像</p>
-      </div>
-    </div>
-    <!-- 详情模态框 -->
-    <div
-      class="fixed inset-0 bg-black/90 z-[100] hidden flex-col transition-all duration-300 opacity-0"
-      id="detail-modal"
-      style="display: none"
-    >
-      <div class="flex-1 min-h-0 flex items-center justify-center p-5 relative">
-        <div
-          class="w-full max-w-[360px] h-full bg-white relative flex flex-col overflow-hidden shadow-2xl"
-        >
-          <!-- 关闭按钮 -->
-          <button
-            class="absolute top-4 right-4 z-50 text-white bg-black/20 rounded-full p-1 hover:bg-black/40 transition-colors"
-            onclick="closeDetail()"
-          >
-            <svg
-              class=""
-              height="20"
-              viewbox="0 0 24 24"
-              width="20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-                fill="currentColor"
-              ></path>
-            </svg>
-          </button>
-          <!-- 收藏按钮 -->
-          <button
-            class="absolute top-4 left-4 z-50 flex items-center gap-1.5 text-white bg-black/20 rounded-full px-2.5 py-1.5 text-xs hover:bg-black/40 transition-colors"
-            id="detail-fav-btn"
-            onclick="toggleDetailFavorite()"
-          >
-            <svg
-              id="detail-fav-icon"
-              height="16"
-              width="16"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-            </svg>
-            <span id="detail-fav-text">收藏</span>
-          </button>
-          <!-- 滚动区域 -->
-          <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar pb-[72px]">
-            <!-- ① 大图 -->
-            <div id="detail-images">
-              <img
-                alt="动态图片"
-                class="w-full h-[280px] object-contain bg-gray-50 block"
-                src="assets/shops/shop-coffee-corner.png"
-              />
-            </div>
-            <!-- ② 标题/简介区 -->
-            <div class="p-4 border-b border-gray-100">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <img
-                    alt="头像"
-                    class="w-6 h-6 rounded-full object-cover"
-                    id="detail-author-avatar"
-                    src="assets/packaged/7324caaa7daa41839e6f4b764cde141f.jpg"
-                  />
-                  <span class="text-sm font-bold text-black" id="detail-author"
-                    >约翰逊<img
-                      alt="个人VIP2"
-                      class="user-vip-badge user-vip-badge-sm"
-                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
-                  /></span>
-                </div>
-                <span class="text-xs text-gray-400" id="detail-time"
-                  >2小时前</span
-                >
-              </div>
-              <h2 class="text-base font-bold text-black mt-3" id="detail-title">
-                春日花园
-              </h2>
-              <p class="text-[13px] text-gray-400 mt-1" id="detail-desc">
-                一个藏在巷子里的温馨咖啡小店，午后阳光洒进来特别治愈。
-              </p>
-            </div>
-            <!-- ③ 正文区 -->
-            <div class="p-4">
-              <p class="text-sm text-black leading-[1.8]" id="detail-body">
-                周末终于打卡了这家种草已久的咖啡店！店面不大但每个角落都很用心，老板是个很nice的人，推荐了他们家的手冲和提拉米苏。坐在窗边看着街景，喝着咖啡，感觉整个下午都慢下来了。下次还会再来～
-              </p>
-              <div class="flex gap-3 mt-4" id="detail-tags">
-                <span
-                  class="text-[12px] text-[#ec4899] cursor-pointer"
-                  >#咖啡探店</span
-                >
-                <span
-                  class="text-[12px] text-[#ec4899] cursor-pointer"
-                  >#周末日常</span
-                >
-                <span
-                  class="text-[12px] text-[#ec4899] cursor-pointer"
-                  >#治愈系</span
-                >
-              </div>
-            </div>
-            <!-- ④ 评论列表 -->
-            <div class="p-4 mt-2">
-              <h3 class="text-sm font-bold text-black mb-4">评论 12</h3>
-              <div class="space-y-4">
-                <div class="flex gap-2 border-b border-gray-50 pb-3">
-                  <img
-                    alt="头像"
-                    class="w-5 h-5 rounded-full"
-                    src="assets/packaged/8c34ed16529049609cc0396f36b40e41.jpg"
-                  />
-                  <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                      <span class="text-[12px] font-bold text-black"
-                        >小云<img
-                          alt="个人VIP2"
-                          class="user-vip-badge user-vip-badge-sm"
-                          src="assets/src_01/颜色vip/技术服务类vip.jpg"
-                      /></span>
-                      <span class="text-[10px] text-gray-400">2</span>
-                    </div>
-                    <p class="text-[12px] text-gray-500 mt-0.5">
-                      这家店我也去过！提拉米苏真的绝了 👍
-                    </p>
-                  </div>
-                </div>
-                <div class="flex gap-2 border-b border-gray-50 pb-3">
-                  <img
-                    alt="头像"
-                    class="w-5 h-5 rounded-full"
-                    src="assets/packaged/861da2ed40c44c45b74fe46ffe08460b.jpg"
-                  />
-                  <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                      <span class="text-[12px] font-bold text-black"
-                        >七七<img
-                          alt="个人VIP2"
-                          class="user-vip-badge user-vip-badge-sm"
-                          src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
-                      /></span>
-                      <span class="text-[10px] text-gray-400">1小时前</span>
-                    </div>
-                    <p class="text-[12px] text-gray-500 mt-0.5">
-                      求地址！看起来好棒
-                    </p>
-                  </div>
-                </div>
-                <div class="flex gap-2 border-b border-gray-50 pb-3">
-                  <img
-                    alt="头像"
-                    class="w-5 h-5 rounded-full"
-                    src="assets/packaged/7324caaa7daa41839e6f4b764cde141f.jpg"
-                  />
-                  <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                      <span class="text-[12px] font-bold text-black"
-                        >小鹿<img
-                          alt="个人VIP2"
-                          class="user-vip-badge user-vip-badge-sm"
-                          src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
-                      /></span>
-                      <span class="text-[10px] text-gray-400">2小时前</span>
-                    </div>
-                    <p class="text-[12px] text-gray-500 mt-0.5">
-                      咖啡控表示很心动
-                    </p>
-                  </div>
-                </div>
-                <div class="flex gap-2 border-b border-gray-50 pb-3">
-                  <img
-                    alt="头像"
-                    class="w-5 h-5 rounded-full"
-                    src="assets/packaged/8c34ed16529049609cc0396f36b40e41.jpg"
-                  />
-                  <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                      <span class="text-[12px] font-bold text-black"
-                        >星河<img
-                          alt="个人VIP2"
-                          class="user-vip-badge user-vip-badge-sm"
-                          src="assets/src_01/颜色vip/技术服务类vip.jpg"
-                      /></span>
-                      <span class="text-[10px] text-gray-400">3小时前</span>
-                    </div>
-                    <p class="text-[12px] text-gray-500 mt-0.5">周末去打卡</p>
-                  </div>
-                </div>
-                <div class="flex gap-2 pb-3">
-                  <img
-                    alt="头像"
-                    class="w-5 h-5 rounded-full"
-                    src="assets/packaged/6a3b2cb986b949e497a31d8c340bfe69.jpg"
-                  />
-                  <div class="flex-1">
-                    <div class="flex justify-between items-center">
-                      <span class="text-[12px] font-bold text-black"
-                        >阿森<img
-                          alt="个人VIP2"
-                          class="user-vip-badge user-vip-badge-sm"
-                          src="assets/src_01/颜色vip/公益活动类vip.jpg"
-                      /></span>
-                      <span class="text-[10px] text-gray-400">4小时前</span>
-                    </div>
-                    <p class="text-[12px] text-gray-500 mt-0.5">
-                      环境也太好了吧
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- ⑤ 评论输入框 -->
-          <div
-            class="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 flex gap-3 items-center"
-            style="padding-bottom: calc(1rem + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));"
-          >
-            <input
-              class="flex-1 bg-gray-100 rounded-none px-4 py-2 text-sm outline-none"
-              placeholder="说点什么..."
-              type="text"
-            />
-            <button
-              class="bg-[#ec4899] text-white px-4 py-2 text-sm font-medium"
-              onclick="showToast('评论已发布')"
-            >
-              发布
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    ></div>
     <!-- 发布选项弹窗 -->
     <div
       class="fixed inset-0 bg-black/50 z-[110] opacity-0 transition-opacity duration-300 hidden"
@@ -776,179 +436,50 @@
       id="toast"
     ></div>
     <script>
-      const feedData = [
-        { title: '明星美女写真', img: 'assets/src_01/分享图片/明星美女写真.jpg' },
-        { title: '武当云溪户外人像', img: 'assets/src_01/分享图片/武当云溪户外人像.jpg' },
-        { title: '珠宝展示搭配美学', img: 'assets/src_01/分享图片/珠宝展示搭配美学.jpg' },
-        { title: '运动女孩夜景人像', img: 'assets/src_01/分享图片/运动女孩夜景人像.jpg' },
-        { title: '芭比风室内写真', img: 'assets/src_01/分享图片/芭比风室内写真.jpg' },
-        { title: '穿搭博主时尚人像', img: 'assets/src_01/分享图片/穿搭博主时尚人像.jpg' },
-        { title: '明星美女写真', img: 'assets/src_01/分享图片/明星美女写真.jpg' },
-        { title: '武当云溪户外人像', img: 'assets/src_01/分享图片/武当云溪户外人像.jpg' },
-        {
-          title: '力量美学｜健美×摄影专题',
-          img: 'assets/new_src/分享图片内容/微信图片_20260815164441.jpg',
-          author:
-            '大POWER摄影<img alt="个人VIP2" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
-          authorAvatar:
-            'assets/new_src/分享图片内容/微信图片_20260815164431.jpg',
-          time: '1小时前',
-          desc: '健美与摄影的相互成就——身体是最好的雕塑，光影是最好的刻刀。',
-          body: '一组白底棚拍，用极简的高键光突出形体张力。健美赋予镜头力量，摄影赋予肌肉永恒，每一次快门定格，都是身体与镜头的相互成就。POWER 系列 Vol.1，六张大片一次看够。',
-          tags: ['健美摄影', '力量美学', '形体艺术'],
-          images: [
-            'assets/new_src/分享图片内容/微信图片_20260815164441.jpg',
-            'assets/new_src/分享图片内容/微信图片_20260815164402.jpg',
-            'assets/new_src/分享图片内容/微信图片_20260815164434.jpg',
-            'assets/new_src/分享图片内容/微信图片_20260815164445.jpg',
-            'assets/new_src/分享图片内容/微信图片_20260815164449.jpg',
-            'assets/new_src/分享图片内容/微信图片_20260815164431.jpg',
-          ],
-        },
-        {
-          title: '训练日常｜镜头不会说谎',
-          img: 'assets/new_src/分享图片内容/微信图片_20260815164438.jpg',
-          author:
-            '阿Power<img alt="个人VIP2" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
-          authorAvatar:
-            'assets/new_src/分享图片内容/微信图片_20260815164438.jpg',
-          time: '3小时前',
-          desc: '镜头记录下的训练痕迹。',
-          body: '训练打卡。镜子不会说谎，镜头也不会。健身改变的不只是体型，还有面对镜头的底气——所有大片背后，都是日复一日的台下功。',
-          tags: ['健身打卡', '训练日常'],
-          images: ['assets/new_src/分享图片内容/微信图片_20260815164438.jpg'],
-        },
+      // ===== 帖子数据（index 对应 publish_post_detail.html 的 feedData） =====
+      const POSTS = [
+        { index: 0, title: '中医：真正能让气血恢复的方式只有两种', img: 'assets/src_01/分享样例/966C4524685A0374B01D5616402D6C9A.jpg' },
+        { index: 1, title: '一周抗炎 抗氧化 健康饮食食谱 拿走不谢', img: 'assets/src_01/分享样例/1C8309C5D99DCCCCCC45F35D09E22EB4.jpg' },
+        { index: 2, title: '终于有人把全国旅行地说明白了', img: 'assets/src_01/分享样例/E48B6D2A6A6262F98BD99810BE97F390.jpg' },
+        { index: 3, title: '会穿衣服 是一种顶级能力', img: 'assets/src_01/分享样例/B15C88F706527C63D9F2B86FBFF5997F.jpg' },
+        { index: 4, title: '给你3亿在无人深林待三年 六选三', img: 'assets/src_01/分享样例/03C97DD74948F540243370B20E16156B.jpg' },
+        { index: 5, title: '一图看懂整个英语语法体系表', img: 'assets/src_01/分享样例/05823C55FFF4D2081DC3D173711C04F0.jpg' },
+        { index: 6, title: '为什么空调一关马上就热起来了？', img: 'assets/src_01/分享样例/1A9E0D43FC03A6060A194C18AD661F33.jpg' },
+        { index: 7, title: '强者是怎么熬过来的', img: 'assets/src_01/分享样例/358A2C1D61442017F6D2F0216C8556FD.jpg' },
+        { index: 8, title: '做生意 必须知道的11个公式', img: 'assets/src_01/分享样例/6709F497401C22EAC60FCD7E73F82AF5.jpg' },
+        { index: 9, title: '谈话时手势的艺术 肢体语言是灵魂的扩音器', img: 'assets/src_01/分享样例/C152B1D86E487B527AA6B9F98D3A4FC5.jpg' },
+        { index: 10, title: '这些运动习惯 正在悄悄延长你的寿命', img: 'assets/src_01/分享样例/77C3596D45EA99126623724490CCB592.jpg' },
+        { index: 11, title: '你能认出哪颗是水稻 哪颗是杂草吗？', img: 'assets/src_01/分享样例/D3E51E02BB7424C0BC9093BE801FD715.jpg' },
+        { index: 12, title: '有钱人为啥都喜欢这个手势', img: 'assets/src_01/分享样例/2AACCF9E4BB049CF43E35CA29A5BD3EC.jpg' },
+        { index: 13, title: '12种视频剪辑技巧 我看看还有谁不会', img: 'assets/src_01/分享样例/34FBBC70673B58DCA51BD714C29F31B2.jpg' },
       ]
 
-      // 详情弹窗默认文案（条目未带自定义字段时回退展示，保证老内容不变）
-      const detailDefaults = {
-        authorAvatar: document.getElementById('detail-author-avatar').src,
-        author: document.getElementById('detail-author').innerHTML,
-        time: document.getElementById('detail-time').innerHTML,
-        desc: document.getElementById('detail-desc').innerHTML,
-        body: document.getElementById('detail-body').innerHTML,
-        tags: document.getElementById('detail-tags').innerHTML,
+      // 各频道展示的帖子集合与顺序（index 不重复出现即内容不同）
+      const VIEW_FEEDS = {
+        home: [0, 1, 2, 3, 4, 5, 6], // 我的作品
+        follow: [7, 0, 10, 5, 13, 6], // 关注的人近期发布
+        discover: [10, 2, 12, 7, 1, 13, 4, 9, 0, 11, 5, 8, 6, 3], // 全部推荐
+        nearby: [6, 10, 11, 8, 4, 9, 2], // 同城热帖
       }
 
-      let currentDetailIndex = -1
-
-      function openDetail(index) {
-        const data = feedData[index]
-        currentDetailIndex = index
-
-        // 图片区：单图保持原样式，多图竖向堆叠
-        const isSeries = Array.isArray(data.images) && data.images.length > 0
-        const images = isSeries ? data.images : [data.img]
-        document.getElementById('detail-images').innerHTML = images
-          .map(src =>
-            isSeries
-              ? `<img alt="动态图片" class="w-full block bg-gray-50" src="${src}" />`
-              : `<img alt="动态图片" class="w-full h-[280px] object-contain bg-gray-50 block" src="${src}" />`,
-          )
-          .join('')
-
-        document.getElementById('detail-title').innerText = data.title
-
-        // 文案区：有自定义内容则渲染，否则恢复默认
-        document.getElementById('detail-author-avatar').src =
-          data.authorAvatar || detailDefaults.authorAvatar
-        document.getElementById('detail-author').innerHTML =
-          data.author || detailDefaults.author
-        document.getElementById('detail-time').innerHTML =
-          data.time || detailDefaults.time
-        document.getElementById('detail-desc').innerHTML =
-          data.desc || detailDefaults.desc
-        document.getElementById('detail-body').innerHTML =
-          data.body || detailDefaults.body
-        document.getElementById('detail-tags').innerHTML = data.tags
-          ? data.tags
-              .map(
-                t =>
-                  `<span class="text-[12px] text-[#ec4899] cursor-pointer">#${t}</span>`,
-              )
-              .join('')
-          : detailDefaults.tags
-
-        // 初始化收藏按钮状态
-        updateDetailFavBtn()
-
-        const modal = document.getElementById('detail-modal')
-        modal.querySelector('.overflow-y-auto').scrollTop = 0
-        modal.style.display = 'flex'
-        setTimeout(() => {
-          modal.classList.add('opacity-100')
-          modal.classList.remove('opacity-0')
-        }, 10)
-        document.body.classList.add('modal-open')
-
-        // 写入浏览历史
-        if (window.HistoryFavorites) {
-          window.HistoryFavorites.addHistory({
-            id: 'share_' + index,
-            source: 'share',
-            data: {
-              title: data.title,
-              img: data.img,
-              images: data.images,
-              author: data.author,
-              authorAvatar: data.authorAvatar,
-              time: data.time,
-              desc: data.desc,
-              body: data.body,
-              tags: data.tags,
-            },
+      function renderFeed(view) {
+        const feedGrid = document.getElementById('feed-grid')
+        const ids = VIEW_FEEDS[view] || VIEW_FEEDS.home
+        feedGrid.innerHTML = ids
+          .map(i => {
+            const p = POSTS[i]
+            return `<div class="cursor-pointer group" onclick="window.location.href='publish_post_detail.html?index=${p.index}'">
+          <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
+            <img
+              alt="${p.title}"
+              class="w-full h-full object-cover transition-transform group-active:scale-95"
+              src="${p.img}"
+            />
+          </div>
+          <p class="text-[13px] text-black mt-2 font-medium">${p.title}</p>
+        </div>`
           })
-        }
-      }
-
-      function updateDetailFavBtn() {
-        if (currentDetailIndex < 0) return
-        const id = 'share_' + currentDetailIndex
-        const isFav = window.HistoryFavorites.isFavorited(id, 'share')
-        const icon = document.getElementById('detail-fav-icon')
-        const text = document.getElementById('detail-fav-text')
-        if (isFav) {
-          icon.setAttribute('fill', '#ec4899')
-          icon.style.color = '#ec4899'
-          text.textContent = '已收藏'
-        } else {
-          icon.setAttribute('fill', 'none')
-          icon.style.color = ''
-          text.textContent = '收藏'
-        }
-      }
-
-      function toggleDetailFavorite() {
-        if (currentDetailIndex < 0) return
-        const data = feedData[currentDetailIndex]
-        const item = {
-          id: 'share_' + currentDetailIndex,
-          source: 'share',
-          data: {
-            title: data.title,
-            img: data.img,
-            images: data.images,
-            author: data.author,
-            authorAvatar: data.authorAvatar,
-            time: data.time,
-            desc: data.desc,
-            body: data.body,
-            tags: data.tags,
-          },
-        }
-        const fav = window.HistoryFavorites.toggleFavorite(item)
-        updateDetailFavBtn()
-        showToast(fav ? '已收藏' : '已取消收藏')
-      }
-
-      function closeDetail() {
-        const modal = document.getElementById('detail-modal')
-        modal.classList.add('opacity-0')
-        modal.classList.remove('opacity-100')
-        setTimeout(() => {
-          modal.style.display = 'none'
-        }, 300)
-        document.body.classList.remove('modal-open')
+          .join('')
       }
 
       function switchPublishView(view, event) {
@@ -960,12 +491,12 @@
         document.querySelectorAll('.publish-home-only').forEach(section => {
           section.classList.toggle('publish-view-hidden', isDiscover)
         })
-        
+
         // 先移除所有导航标签的active状态
         document.querySelectorAll('.publish-nav-tab').forEach(tab => {
           tab.classList.remove('active')
         })
-        
+
         // 如果有event.target，只在当前点击的按钮上添加active状态
         if (event && event.target) {
           const clickedTab = event.target.closest('.publish-nav-tab')
@@ -973,31 +504,15 @@
             clickedTab.classList.add('active')
           }
         }
-        
-        // 根据不同页面重新排列图片
-        const feedGrid = document.getElementById('feed-grid')
-        const items = Array.from(feedGrid.children)
-        
-        // 根据view参数确定排序方式
-        let orderAttribute = 'data-order-discover'
-        if (view === 'follow') {
-          orderAttribute = 'data-order-follow'
-        } else if (view === 'nearby') {
-          orderAttribute = 'data-order-nearby'
-        }
-        
-        // 按照指定顺序重新排列
-        items.sort((a, b) => {
-          const orderA = parseInt(a.getAttribute(orderAttribute)) || 999
-          const orderB = parseInt(b.getAttribute(orderAttribute)) || 999
-          return orderA - orderB
-        })
-        
-        // 重新添加到DOM
-        items.forEach(item => feedGrid.appendChild(item))
-        
+
+        // 不同频道渲染各自的内容与顺序
+        renderFeed(view)
+
         window.scrollTo(0, 0)
       }
+
+      // 初始渲染“我”的作品
+      renderFeed('home')
 
       function showToast(msg) {
         const toast = document.getElementById('toast')

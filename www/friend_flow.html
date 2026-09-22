@@ -67,7 +67,7 @@
 <button class="identity-btn flex-1 h-10 border border-blue-400 bg-white text-black text-[10px] straight-edge transition-all active" onclick="toggleIdentityCard(0, this)">收起身份证</button>
 </div>
 <div class="identity-content mt-4 bg-gray-50 p-4 border-t border-gray-100 straight-edge" id="identity-0">
-<div class="text-[12px] text-gray-400 mb-2">虚拟身份证编号: V8821</div>
+<div class="text-[12px] text-gray-400 mb-2">个人名片编号: V8821</div>
 <div class="bg-white border border-gray-200 straight-edge overflow-hidden">
 <div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">姓名</div><div class="flex-1 px-3 py-2 text-black text-[12px]">陈晓雨</div></div>
 <div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">出生</div><div class="flex-1 px-3 py-2 text-black text-[12px]">2000年5月</div></div>
@@ -96,10 +96,10 @@
 <div class="flex gap-2 mt-4">
 <button class="flex-1 h-10 bg-[#ec4899] text-white text-[10px] font-bold rounded-xl" style="border-radius: 0px;">同意</button>
 <button class="flex-1 h-10 bg-gray-100 text-gray-500 text-[10px] font-bold rounded-xl" style="border-radius: 0px;">拒绝</button>
-<button class="identity-btn flex-1 h-10 border border-blue-400 bg-white text-black text-[10px] straight-edge transition-all" onclick="toggleIdentityCard(1, this)">虚拟身份证</button>
+<button class="identity-btn flex-1 h-10 border border-blue-400 bg-white text-black text-[10px] straight-edge transition-all" onclick="toggleIdentityCard(1, this)">个人名片</button>
 </div>
 <div class="identity-content mt-4 bg-gray-50 p-4 border-t border-gray-100 straight-edge hidden" id="identity-1">
-<div class="text-[12px] text-gray-400 mb-2">虚拟身份证编号: V9932</div>
+<div class="text-[12px] text-gray-400 mb-2">个人名片编号: V9932</div>
 <div class="bg-white border border-gray-200 straight-edge overflow-hidden">
 <div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">姓名</div><div class="flex-1 px-3 py-2 text-black text-[12px]">赵星辰</div></div>
 <div class="flex border-b border-gray-100"><div class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[12px] border-r border-gray-100">出生</div><div class="flex-1 px-3 py-2 text-black text-[12px]">1997年11月</div></div>
@@ -129,7 +129,7 @@
         document.querySelectorAll('.identity-btn').forEach(b => {
             if (b !== btn) {
                 b.classList.remove('active');
-                b.innerText = '虚拟身份证';
+                b.innerText = '个人名片';
             }
         });
 
@@ -140,7 +140,7 @@
         } else {
             content.classList.add('hidden');
             btn.classList.remove('active');
-            btn.innerText = '虚拟身份证';
+            btn.innerText = '个人名片';
         }
     }
 </script>

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>分享详情 - 智能空间</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <script>
+      (function () {
+        try {
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'setBottomNav', visible: false }, '*')
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script src="assets/vendor/history-favorites.js"></script>
+    <script src="assets/vendor/safe-area.js"></script>
+    <style>
+      body {
+        background-color: white;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      #toast {
+        visibility: hidden;
+        min-width: 160px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        text-align: center;
+        padding: 10px 20px;
+        position: fixed;
+        z-index: 2000;
+        left: 50%;
+        bottom: 90px;
+        transform: translateX(-50%);
+        font-size: 13px;
+        border-radius: 8px;
+      }
+      #toast.show {
+        visibility: visible;
+      }
+    </style>
+  </head>
+  <body class="bg-white">
+    <div
+      class="w-full h-[100dvh] bg-white flex flex-col relative"
+      data-safe-root
+      style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
+    >
+      <!-- 顶部标题栏 -->
+      <div
+        class="flex-none bg-white px-4 pt-6 pb-2 flex items-center justify-center border-b border-gray-100 relative"
+      >
+        <button
+          class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full active:bg-gray-100"
+          onclick="window.location.href='history_favorites.html'"
+        >
+          <svg
+            class="w-6 h-6 text-gray-700"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+        </button>
+        <h1 class="text-lg font-bold text-gray-900">分享详情</h1>
+      </div>
+
+      <!-- 内容区 -->
+      <div class="flex-1 overflow-y-auto pb-6">
+        <div id="share-detail-images"></div>
+        <div class="p-4 border-b border-gray-100">
+          <div class="flex items-center gap-2">
+            <img
+              class="w-6 h-6 rounded-full object-cover"
+              id="share-detail-avatar"
+              src=""
+              alt="头像"
+            />
+            <span class="text-sm font-bold text-black" id="share-detail-author"></span>
+            <span class="text-xs text-gray-400" id="share-detail-time"></span>
+          </div>
+          <h2
+            class="text-base font-bold text-black mt-3"
+            id="share-detail-title"
+          ></h2>
+          <p class="text-[13px] text-gray-400 mt-1" id="share-detail-desc"></p>
+        </div>
+        <div class="p-4">
+          <p class="text-sm text-black leading-[1.8]" id="share-detail-body"></p>
+          <div class="mt-4 text-[12px] leading-[1.8]" id="share-detail-tags"></div>
+        </div>
+      </div>
+
+      <!-- 底部固定操作栏 -->
+      <div
+        class="flex-none px-4 py-3 border-t border-gray-100 flex items-center gap-3 bg-white"
+      >
+        <button
+          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform"
+          id="share-detail-like-btn"
+          onclick="toggleShareDetailLike()"
+        >
+          <img
+            alt="点赞"
+            class="w-5 h-5 object-contain"
+            id="share-detail-like-icon"
+            src="assets/src_01/icon/互动/点赞.png"
+          />
+          <span class="text-[11px]" id="share-detail-like-count">12</span>
+        </button>
+        <button
+          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform"
+          id="share-detail-fav-btn"
+          onclick="toggleShareDetailFav()"
+        >
+          <img
+            alt="收藏"
+            class="w-5 h-5 object-contain"
+            id="share-detail-fav-icon"
+            src="assets/src_01/icon/互动/收藏.png"
+          />
+        </button>
+        <button
+          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform"
+          id="share-detail-share-btn"
+          onclick="showToast('链接已复制')"
+        >
+          <img
+            alt="分享"
+            class="w-5 h-5 object-contain"
+            src="assets/src_01/icon/互动/分享.png"
+          />
+        </button>
+      </div>
+
+      <!-- Toast -->
+      <div id="toast"></div>
+    </div>
+
+    <script>
+      var HF = window.HistoryFavorites;
+
+      var query = new URLSearchParams(window.location.search);
+      var entryId = query.get('id');
+      var currentShareFav = null;
+
+      function findEntry(id) {
+        var sources = [HF.getHistory('share'), HF.getFavorites('share')];
+        for (var s = 0; s < sources.length; s++) {
+          for (var i = 0; i < sources[s].length; i++) {
+            if (String(sources[s][i].id) === String(id)) return sources[s][i];
+          }
+        }
+        return null;
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+          return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+      }
+
+      function render() {
+        var entry = findEntry(entryId);
+        if (!entry) {
+          showToast('内容不存在');
+          setTimeout(function () {
+            window.location.href = 'history_favorites.html';
+          }, 1000);
+          return;
+        }
+        var d = entry.data || {};
+        var images = (d.images && d.images.length) ? d.images : [d.img];
+        document.getElementById('share-detail-images').innerHTML = images
+          .map(function (src) {
+            return '<img alt="动态图片" class="w-full h-[280px] object-contain bg-gray-50 block" src="' + src + '" />';
+          })
+          .join('');
+        document.getElementById('share-detail-avatar').src = d.authorAvatar || 'assets/vendor/placeholder.svg';
+        document.getElementById('share-detail-author').innerHTML = d.author || '';
+        document.getElementById('share-detail-time').innerText = d.time || HF.formatTime(entry.timestamp); 
+        document.getElementById('share-detail-title').innerText = d.title || '';
+        document.getElementById('share-detail-desc').innerText = d.desc || '';
+        document.getElementById('share-detail-body').innerText = d.body || '';
+        document.getElementById('share-detail-tags').innerHTML = d.tags
+          ? d.tags.map(function (t) { return '<span class="text-[12px] text-[#ec4899]">#' + escapeHtml(t) + '</span>'; }).join(' ')
+          : '';
+
+        currentShareFav = { id: entry.id, source: 'share', data: d };
+        updateShareDetailLike();
+        updateShareDetailFavBtn();
+      }
+
+      function updateShareDetailLike() {
+        if (!currentShareFav) return;
+        var liked = localStorage.getItem('shareDetailLike_' + currentShareFav.id) === '1';
+        var icon = document.getElementById('share-detail-like-icon');
+        var count = document.getElementById('share-detail-like-count');
+        icon.src = liked
+          ? 'assets/src_01/icon/互动/点赞-active.png'
+          : 'assets/src_01/icon/互动/点赞.png';
+        count.textContent = 12 + (liked ? 1 : 0);
+      }
+
+      function toggleShareDetailLike() {
+        if (!currentShareFav) return;
+        var key = 'shareDetailLike_' + currentShareFav.id;
+        var liked = localStorage.getItem(key) === '1';
+        localStorage.setItem(key, liked ? '0' : '1');
+        updateShareDetailLike();
+        showToast(liked ? '已取消点赞' : '已点赞');
+      }
+
+      function updateShareDetailFavBtn() {
+        if (!currentShareFav) return;
+        var fav = localStorage.getItem('shareDetailFav_' + currentShareFav.id) === '1';
+        var icon = document.getElementById('share-detail-fav-icon');
+        icon.src = fav
+          ? 'assets/src_01/icon/互动/收藏-active.png'
+          : 'assets/src_01/icon/互动/收藏.png';
+      }
+
+      function toggleShareDetailFav() {
+        if (!currentShareFav) return;
+        var key = 'shareDetailFav_' + currentShareFav.id;
+        var fav = localStorage.getItem(key) === '1';
+        localStorage.setItem(key, fav ? '0' : '1');
+        updateShareDetailFavBtn();
+        showToast(fav ? '已取消收藏' : '已收藏');
+      }
+
+      function showToast(msg) {
+        var toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.className = 'show';
+        setTimeout(function () { toast.className = ''; }, 2000);
+      }
+
+      render();
+    </script>
+  </body>
+</html>

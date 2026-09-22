@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 
 <html lang="zh-CN">
   <head>
@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1.0"
       name="viewport"
     />
-    <title>生成虚拟身份证 - 智能空间</title>
+    <title>生成个人名片 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
     <style>
       body {
@@ -74,7 +74,7 @@
       <h1
         class="text-2xl font-bold text-[#ec4899] leading-relaxed tracking-wider mb-2"
       >
-        生成虚拟身份证
+        生成个人名片
       </h1>
       <p class="text-sm text-gray-400 mb-6">
         已为你自动生成，确认后即可进入智能空间
@@ -92,7 +92,7 @@
           <div class="min-w-0">
             <div class="text-base font-bold text-gray-900" id="card-name"></div>
             <div class="text-xs text-gray-400 mt-1">
-              虚拟身份证编号：<span id="card-vid"></span>
+              个人名片编号：<span id="card-vid"></span>
             </div>
           </div>
         </div>
@@ -166,7 +166,7 @@
       }
 
       function confirmAndEnter() {
-        showToast('虚拟身份证生成成功')
+        showToast('个人名片生成成功')
         setTimeout(() => {
           window.location.href = 'onboarding_interests.html'
         }, 800)

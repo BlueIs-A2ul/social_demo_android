@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8"/>
@@ -139,9 +139,9 @@
     <div class="flex-none border-b border-gray-100">
       <div class="flex">
         <button class="flex-1 py-3 text-sm font-medium text-center tab-active" onclick="switchTab('personal')" data-tab="personal">个人简历</button>
-        <button class="flex-1 py-3 text-sm font-medium text-center text-gray-500" onclick="switchTab('idcard')" data-tab="idcard">虚拟身份证</button>
+        <button class="flex-1 py-3 text-sm font-medium text-center text-gray-500" onclick="switchTab('idcard')" data-tab="idcard">个人名片</button>
         <button class="flex-1 py-3 text-sm font-medium text-center text-gray-500" onclick="switchTab('company')" data-tab="company">公司简历</button>
-        <button class="flex-1 py-3 text-sm font-medium text-center text-gray-500" onclick="switchTab('companyIdCard')" data-tab="companyIdCard">公司虚拟身份证</button>
+        <button class="flex-1 py-3 text-sm font-medium text-center text-gray-500" onclick="switchTab('companyIdCard')" data-tab="companyIdCard">公司个人名片</button>
       </div>
     </div>
 
@@ -158,7 +158,6 @@
           <div class="flex gap-2">
             <button class="gender-btn" data-gender="男" onclick="selectGender('男')">男</button>
             <button class="gender-btn" data-gender="女" onclick="selectGender('女')">女</button>
-            <button class="gender-btn" data-gender="其他" onclick="selectGender('其他')">其他</button>
           </div>
         </div>
         <div class="form-group">
@@ -211,7 +210,7 @@
         </div>
       </div>
 
-      <!-- 虚拟身份证 Tab -->
+      <!-- 个人名片 Tab -->
       <div id="tab-idcard" class="tab-content p-4">
         <div class="bg-gray-50 p-4 rounded-lg">
           <div class="flex items-center gap-4 mb-4">
@@ -301,7 +300,7 @@
         </div>
       </div>
 
-      <!-- 公司虚拟身份证 Tab -->
+      <!-- 公司个人名片 Tab -->
       <div id="tab-companyIdCard" class="tab-content p-4">
         <div class="form-group">
           <label class="form-label">公司图标</label>
@@ -475,7 +474,7 @@
         document.getElementById('businessLicensePreview').classList.remove('hidden');
       }
       
-      // 公司虚拟身份证字段
+      // 公司个人名片字段
       const companyIdCard = company.companyIdCard || {};
       document.getElementById('companyName').value = companyIdCard.companyName || '';
       document.getElementById('establishTime').value = companyIdCard.establishTime || '';
@@ -520,7 +519,7 @@
       document.getElementById('tab-' + tabName).classList.add('active');
     }
 
-    // 更新虚拟身份证显示
+    // 更新个人名片显示
     function updateIdCard() {
       document.getElementById('idcardName').textContent = userData.name || '-';
       document.getElementById('idcardVId').textContent = userData.vId || '-';

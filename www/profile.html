@@ -6,6 +6,15 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>个人空间 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+    <script>
+      (function () {
+        try {
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'setBottomNav', visible: true }, '*')
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script src="assets/vendor/iconify-icon.min.js"></script>
     <script src="assets/vendor/history-favorites.js"></script>
     <script src="assets/vendor/safe-area.js"></script>
@@ -92,6 +101,21 @@
         color: var(--ink-900);
       }
       .search-wrap input::placeholder { color: var(--ink-500); }
+      .btn-search {
+        flex-shrink: 0;
+        height: 28px;
+        padding: 0 14px;
+        background: var(--brand);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        border: 0;
+        border-radius: 6px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(236, 72, 153, .25);
+        transition: transform .12s ease;
+      }
+      .btn-search:active { transform: scale(.94); }
 
       /* ====== 卡片通用 ====== */
       .soft-card {
@@ -99,6 +123,11 @@
         border-radius: 8px;
         box-shadow: var(--shadow-sm);
         overflow: hidden;
+      }
+
+      /* ====== 内部标题行彩色横条背景 ====== */
+      .title-strip {
+        background: url('assets/src_01/radar/彩色栏.png') center / 100% 100% no-repeat;
       }
 
       /* ====== 房间网格 ====== */
@@ -234,7 +263,7 @@
       }
       .modal-close:active { background: var(--ink-100); }
 
-      /* ====== 虚拟身份证字段（保留分隔线、柔化） ====== */
+      /* ====== 个人名片字段（保留分隔线、柔化） ====== */
       .idcard-head {
         display: flex;
         align-items: center;
@@ -498,8 +527,10 @@
                 placeholder="搜索"
                 type="text"
               />
+              <button class="btn-search" onclick="handleHeaderSearch()">搜索</button>
             </div>
           </div>
+
         </div>
       </div>
       <!-- 「我的房间」大盒子 -->
@@ -508,9 +539,10 @@
       >
           <!-- 内部标题行 -->
           <div
-            class="px-4 flex items-center justify-center"
+            class="relative px-4 py-1.5 flex items-center justify-center"
           >
-            <img alt="社区房间" class="h-12" src="assets/src_01/icon/社区房间.png" />
+            <div class="title-strip absolute inset-0"></div>
+            <img alt="社区房间" class="h-12 relative z-10" src="assets/src_01/icon/社区房间-removebg-preview.png" />
           </div>
         <!-- Grid 网格 -->
         <div class="grid grid-cols-4">
@@ -593,13 +625,14 @@
       >
         <!-- 内部标题行 -->
         <div
-          class="px-4 py-3 flex items-center cursor-pointer select-none relative"
+          class="relative px-4 py-1.5 flex items-center cursor-pointer select-none"
           onclick="toggleNews()"
         >
-          <div class="flex-1 flex justify-center">
+          <div class="title-strip absolute inset-0"></div>
+          <div class="flex-1 flex justify-center relative z-10">
             <img src="assets/src_01/icon/社区新闻.png" alt="社区新闻" class="h-12 w-auto" />
           </div>
-          <img class="news-arrow h-4 w-auto absolute right-4" src="assets/src_01/icon/展开状态箭头-removebg-preview.png" alt="展开"/>
+          <img class="news-arrow h-4 w-auto absolute right-4 z-10" src="assets/src_01/icon/展开状态箭头-removebg-preview.png" alt="展开"/>
         </div>
         <!-- 新闻网格 -->
         <div class="grid grid-cols-3 gap-3 p-3 relative" id="newsList">
@@ -615,8 +648,8 @@
         <button onclick="handleRoomProfileAction(event, '分享主页')">
           查看分享
         </button>
-        <button onclick="handleRoomProfileAction(event, '查看虚拟身份证')">
-          查看虚拟身份证
+        <button onclick="handleRoomProfileAction(event, '查看个人名片')">
+          查看个人名片
         </button>
         <button onclick="handleRoomProfileAction(event, '查看个人简历')">
           查看个人简历
@@ -625,7 +658,7 @@
           收藏
         </button>
       </div>
-      <!-- 虚拟身份证弹窗 -->
+      <!-- 个人名片弹窗 -->
       <div aria-hidden="true" class="modal-overlay hidden" id="idCardModal">
         <div class="modal-card p-5">
           <button aria-label="关闭" class="modal-close" onclick="closeIDCardModal()">
@@ -634,7 +667,7 @@
             </svg>
           </button>
           <h3 class="text-center font-bold text-base mb-4" style="color: var(--ink-900);">
-            虚拟身份证
+            个人名片
           </h3>
           <div id="idCardContent"></div>
           <div class="mt-4 flex justify-center">
@@ -867,7 +900,7 @@
             <img class="idcard-avatar" src="${data.avatar}" alt="${data.name}">
             <div class="min-w-0">
               <div class="idcard-name">${data.name}</div>
-              <div class="idcard-vid">虚拟身份证编号：${data.vId}</div>
+              <div class="idcard-vid">个人名片编号：${data.vId}</div>
             </div>
           </div>
           <div class="pt-1">
@@ -995,7 +1028,7 @@
         const owner = roomOwners[currentRoomIndex] || roomOwners[0]
         if (label === '分享主页') {
           showToast('建设中')
-        } else if (label === '查看虚拟身份证') {
+        } else if (label === '查看个人名片') {
           showIDCard(owner)
         } else if (label === '查看个人简历') {
           showResume(owner)
@@ -1020,51 +1053,35 @@
       const communityNewsData = [
         {
           id: 'cn_1',
-          title: '社区年度设计大赛开启',
-          image: 'assets/products/space-living-room.jpg',
-          source: '社区公告',
+          title: '什么是焦虑?',
+          image: 'assets/src_01/简讯样例/企鹅.jpg',
+          source: '网络丨铭哲',
           time: '2小时前',
-          body: '一年一度的社区空间设计大赛正式开启！本次大赛以"光影与材质"为主题，鼓励创作者用虚拟空间的灯光、材质、陈设讲述故事。参赛作品将由社区投票与评委共同评选，优胜者可获得专属徽章与空间装饰奖励。提交截止时间为本月底，欢迎所有空间爱好者踊跃投稿。',
+          body: '没有力气再往前走，也没有余地往后退，原地踏步又心有不甘，这就是所谓的焦虑。',
         },
         {
           id: 'cn_2',
-          title: '新晋商家入驻：蓝鹊咖啡',
-          image: 'assets/shops/shop-coffee-corner.png',
-          source: '商家动态',
+          title: '余秋雨笔下的「成熟」',
+          image: 'assets/src_01/简讯样例/麦穗.jpg',
+          source: '山居笔记丨Pamela',
           time: '5小时前',
-          body: '蓝鹊咖啡正式入驻社区空间！主理人蓝叔带来手冲咖啡体验空间，店内陈列多款特调配方与黑胶唱片墙。即日起至本周末，到店打卡可领取限定咖啡杯装饰，数量有限先到先得。欢迎邻居们来蓝鹊坐坐，用一杯咖啡开启慢下来的下午。',
+          body: '在余秋雨的「山居笔记」散文集中，有这么一句话：成熟是一种明亮而不刺眼的光辉；一种圆润而不腻耳的声响；一种不再需要对别人察言观色的从容；一种终于停止向周围申诉求告的大气；一种不理会喧闹的微笑；一种洗刷了偏激的淡漠；一种无需声张的厚实；一种能够看得很远却并不陡峭的高度。',
         },
         {
           id: 'cn_3',
-          title: '装饰指南：打造你的 Dream Room',
-          image: 'assets/products/space-furniture.jpg',
-          source: '内容精选',
+          title: '去北京还可以这样玩',
+          image: 'assets/src_01/简讯样例/故宫角楼.jpg',
+          source: '网络丨大王',
           time: '昨天',
-          body: '从灯光到家具到特效，手把手教你打造理想房间。本篇涵盖三层布光法则、软装搭配比例、粒子特效的克制使用三个核心模块，并附有 12 个实战案例拆解。无论你是新手还是老玩家，都能找到适合自己的装饰思路。建议收藏备用，装修不迷路。',
+          body: '去北京游玩，如果你要爬长城，最好不要去八达岭，抬头低头都是人。建议去慕田峪长城，门票40元，人少景美，还能坐滑道下山。如果是逛胡同，千万不要去南锣鼓巷，那儿就是一条商业街。不妨去什刹海，坐在三轮车上穿梭在大小胡同中感受老北京的烟火气。如果要尝尝北京的本地美食，千万打住，不要轻易尝试北京的豆汁，"一喝一个不吱声"。可以去护国寺的小吃街和牛街，那儿有不少地道北京小吃。还有，如果不想在故宫感受人挤人的"盛况"，但又想感受一番皇家气派，可以去景山公园，站在万春亭就能俯瞰故宫全景，只需要花费2元的门票钱。',
         },
         {
           id: 'cn_4',
-          title: '数字藏品上新：极简古典画框',
-          image: 'assets/packaged/sq/OIP-C.webp',
-          source: '藏品资讯',
+          title: '文章产生「代入感」的几个技巧',
+          image: 'assets/src_01/简讯样例/书桌静物.jpg',
+          source: '网络丨星月',
           time: '2天前',
-          body: '本期数字藏品上新以"极简古典"为线索，推出 6 款画框藏品，适配多种空间风格。每款藏品均支持自由悬挂与尺寸调节，并可与既有的雕塑、灯具藏品组合搭配。藏品将在今晚八点准时发售，社区会员可享早鸟价。',
-        },
-        {
-          id: 'cn_5',
-          title: '邻里夜话：聊聊你的治愈角落',
-          image: 'assets/products/space-lighting.jpg',
-          source: '社区话题',
-          time: '3天前',
-          body: '每个人心里都有一个治愈角落，可能是一盏暖灯下的阅读角，也可能是窗边发呆的小沙发。本周邻里夜话征集"你的治愈角落"，带图分享你的空间一隅与背后的故事。优质内容将被精选置顶，并有机会获得治愈系装饰礼包。',
-        },
-        {
-          id: 'cn_6',
-          title: '播客推荐：声音陪伴的深夜',
-          image: 'assets/packaged/sq/妮妮的播客.png',
-          source: '内容精选',
-          time: '4天前',
-          body: '电台主播妮妮带来新一期深夜播客，主题是"用声音陪伴每个深夜"。本期围绕独处时的情绪管理、睡前仪式感与白噪音助眠展开，温柔的声音与恰到好处的音乐穿插，让这个夜晚不再孤单。点击收听，把夜晚交给声音。',
+          body: '一、开头用一个大多数人会经常遇到的小场景；二、用具体化的描写代替形容；三、多举例而少讲道理；四、用倒叙的方式制造悬念；五、多用短句来提高阅读快感；六、删除重复表达以及可有可无的字；七、抛出固有的观念后话锋一转戳中人心。',
         },
       ]
 

@@ -9,6 +9,15 @@
     />
     <title>雷达探测 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+    <script>
+      (function () {
+        try {
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'setBottomNav', visible: true }, '*')
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script src="assets/vendor/iconify-icon.min.js"></script>
     <script src="assets/vendor/safe-area.js"></script>
     <style>
@@ -489,7 +498,7 @@
                       toggleIdentityCard(0)
                     "
                   >
-                    虚拟身份证
+                    个人名片
                   </button>
                   <button
                     class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all"
@@ -508,7 +517,7 @@
                 class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
               >
                 <div class="text-[12px] text-gray-400 mb-2">
-                  虚拟身份证编号: V2032
+                  个人名片编号: V2032
                 </div>
                 <div
                   class="bg-white border border-gray-200 straight-edge overflow-hidden"
@@ -644,7 +653,7 @@
                       toggleIdentityCard(1)
                     "
                   >
-                    虚拟身份证
+                    个人名片
                   </button>
                   <button
                     class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all"
@@ -663,7 +672,7 @@
                 class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
               >
                 <div class="text-[12px] text-gray-400 mb-2">
-                  虚拟身份证编号: V2033
+                  个人名片编号: V2033
                 </div>
                 <div
                   class="bg-white border border-gray-200 straight-edge overflow-hidden"
@@ -857,7 +866,7 @@
 
           if (currentOpenIndex === index) {
             allContents[index].classList.add('hidden')
-            allButtons[index].textContent = '虚拟身份证'
+            allButtons[index].textContent = '个人名片'
             allButtons[index].className =
               'identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all'
             currentOpenIndex = -1
@@ -866,7 +875,7 @@
 
           if (currentOpenIndex >= 0) {
             allContents[currentOpenIndex].classList.add('hidden')
-            allButtons[currentOpenIndex].textContent = '虚拟身份证'
+            allButtons[currentOpenIndex].textContent = '个人名片'
             allButtons[currentOpenIndex].className =
               'identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all'
           }

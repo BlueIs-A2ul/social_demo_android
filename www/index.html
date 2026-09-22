@@ -58,7 +58,7 @@
 <iframe class="w-full h-full border-none" id="content-frame" src="radar.html"></iframe>
 </div>
 <!-- 底部导航栏 -->
-<nav class="h-[64px] bg-white/80 backdrop-blur-lg border-t border-gray-100 flex items-center justify-between px-2 relative z-50">
+<nav class="h-[64px] bg-white/80 backdrop-blur-lg border-t border-gray-100 flex items-center justify-between px-2 relative z-50" id="bottom-nav">
 <!-- 房间 -->
 <button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('room_list.html', this)">
 <img class="nav-icon h-[28px] object-contain" data-normal="assets/src_01/icon/nav-icons/normal_房间.png" data-active="assets/src_01/icon/nav-icons/active_房间.png" src="assets/src_01/icon/nav-icons/normal_房间.png" alt="房间"/>
@@ -105,5 +105,12 @@
             toast.className = toast.className.replace("show", "");
         }, 3000);
     }
+
+    window.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'setBottomNav') {
+            const nav = document.getElementById('bottom-nav');
+            if (nav) nav.style.display = e.data.visible ? '' : 'none';
+        }
+    });
 </script>
 </body></html>

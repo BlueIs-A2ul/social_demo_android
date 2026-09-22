@@ -6,6 +6,15 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>房间列表 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+    <script>
+      (function () {
+        try {
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'setBottomNav', visible: true }, '*')
+          }
+        } catch (e) {}
+      })();
+    </script>
     <script src="assets/vendor/iconify-icon.min.js"></script>
     <script src="assets/vendor/history-favorites.js"></script>
     <script src="assets/vendor/safe-area.js"></script>
@@ -44,6 +53,21 @@
         height: auto;
         margin-left: 4px;
         vertical-align: -4px;
+      }
+
+      /* ====== 访客名片切换图标（尺寸与vip一致，置于右侧） ====== */
+      .id-card-toggle {
+        display: inline-block;
+        width: 18px;
+        height: auto;
+        margin-left: 4px;
+        vertical-align: -4px;
+        cursor: pointer;
+        transition: transform .15s ease, opacity .15s ease;
+      }
+      .id-card-toggle:active {
+        transform: scale(.9);
+        opacity: .8;
       }
 
       /* ====== 卡片通用 ====== */
@@ -211,26 +235,7 @@
         background: rgba(252, 231, 243, .45);
       }
 
-      /* ====== 虚拟身份证按钮 ====== */
-      .id-btn {
-        padding: 2px 10px;
-        border: 0;
-        border-radius: 6px;
-        background: #eff6ff;
-        color: #2563eb;
-        font-size: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-left: 4px;
-        transition: background-color .15s ease, color .15s ease;
-      }
-      .id-btn.active {
-        background: #2563eb;
-        color: #fff;
-        box-shadow: 0 4px 10px rgba(37, 99, 235, .25);
-      }
-
-      /* ====== 虚拟身份证展开卡片 ====== */
+      /* ====== 个人名片展开卡片 ====== */
       .identity-content {
         background: linear-gradient(180deg, #fff7fb 0%, #fff 100%);
         padding: 12px 16px 16px;
@@ -315,6 +320,11 @@
         transition: background-color .15s ease;
       }
       .modal-close:active { background: var(--ink-100); }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
 
       /* ====== 信息栏分类项 ====== */
       .category-item {
@@ -464,21 +474,21 @@
           <!-- 用户信息 -->
           <div>
             <div class="flex items-center gap-1">
-              <span class="font-bold text-lg"
-                >小云<img
-                  alt="个人VIP2"
-                  class="vip-badge"
-                  src="assets/src_01/颜色vip/技术服务类vip.jpg"
-              /></span>
+              <span class="font-bold text-lg">小云</span>
               <button
-                style="color: var(--ink-500); background: transparent; border: 0; padding: 4px; border-radius: 50%; cursor: pointer;"
+                style="color: var(--ink-500); background: transparent; border: 0; padding: 0; border-radius: 50%; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1;"
                 onclick="location.href = 'profile_edit.html?from=room_list'"
               >
                 <iconify-icon
-                  class="text-lg"
+                  style="font-size: 15px; display: block;"
                   icon="solar:pen-bold"
                 ></iconify-icon>
               </button>
+              <img
+                alt="个人VIP2"
+                class="vip-badge"
+                src="assets/src_01/颜色vip/技术服务类vip.jpg"
+              />
             </div>
             <div class="flex items-center gap-2 mt-1.5">
               <span class="pill">10年老店</span>
@@ -541,7 +551,6 @@
         <div
           class="px-4 py-3 flex items-center gap-3"
         >
-          <h3 style="font-weight: 700; font-size: 16px; color: var(--ink-900); flex-shrink: 0; margin: 0;">我的房间</h3>
           <div class="search-wrap">
             <iconify-icon
               style="color: var(--ink-500); font-size: 14px; flex-shrink: 0;"
@@ -677,15 +686,15 @@
                     class="vip-badge"
                     src="assets/src_01/颜色vip/技术服务类vip.jpg"
                 /></span>
-                <button
-                  class="id-btn"
+                <img
+                  class="id-card-toggle"
+                  alt="个人名片"
+                  src="assets/src_01/icon/个人名片-removebg-preview.png"
                   onclick="
                     event.stopPropagation()
                     toggleIdentityCard(0)
                   "
-                >
-                  虚拟身份证
-                </button>
+                />
               </div>
               <div class="flex items-center gap-3">
                 <span style="font-size: 12px; color: var(--ink-700);">停留 12 分钟</span>
@@ -694,7 +703,7 @@
             </div>
             <div class="identity-content hidden">
               <div class="identity-id-no">
-                虚拟身份证编号: V3001
+                个人名片编号: V3001
               </div>
               <div class="identity-table">
                 <div class="identity-row"><span class="identity-key">姓名</span><span class="identity-val">张小强</span></div>
@@ -723,15 +732,15 @@
                     class="vip-badge"
                     src="assets/src_01/颜色vip/技术服务类vip.jpg"
                 /></span>
-                <button
-                  class="id-btn"
+                <img
+                  class="id-card-toggle"
+                  alt="个人名片"
+                  src="assets/src_01/icon/个人名片-removebg-preview.png"
                   onclick="
                     event.stopPropagation()
                     toggleIdentityCard(1)
                   "
-                >
-                  虚拟身份证
-                </button>
+                />
               </div>
               <div class="flex items-center gap-3">
                 <span style="font-size: 12px; color: var(--ink-700);">停留 8 分钟</span>
@@ -740,7 +749,7 @@
             </div>
             <div class="identity-content hidden">
               <div class="identity-id-no">
-                虚拟身份证编号: V3002
+                个人名片编号: V3002
               </div>
               <div class="identity-table">
                 <div class="identity-row"><span class="identity-key">姓名</span><span class="identity-val">李诗韵</span></div>
@@ -769,15 +778,15 @@
                     class="vip-badge"
                     src="assets/src_01/颜色vip/技术服务类vip.jpg"
                 /></span>
-                <button
-                  class="id-btn"
+                <img
+                  class="id-card-toggle"
+                  alt="公司名片"
+                  src="assets/src_01/icon/公司名片-removebg-preview.png"
                   onclick="
                     event.stopPropagation()
                     toggleIdentityCard(2)
                   "
-                >
-                  虚拟身份证
-                </button>
+                />
               </div>
               <div class="flex items-center gap-3">
                 <span style="font-size: 12px; color: var(--ink-700);">停留 5 分钟</span>
@@ -786,18 +795,18 @@
             </div>
             <div class="identity-content hidden">
               <div class="identity-id-no">
-                虚拟身份证编号: V3003
+                个人名片编号: V3003
               </div>
               <div class="identity-table">
-                <div class="identity-row"><span class="identity-key">姓名</span><span class="identity-val">王大龙</span></div>
-                <div class="identity-row"><span class="identity-key">出生</span><span class="identity-val">1994年2月</span></div>
-                <div class="identity-row"><span class="identity-key">性别</span><span class="identity-val">男</span></div>
-                <div class="identity-row"><span class="identity-key">民族</span><span class="identity-val">汉族</span></div>
-                <div class="identity-row"><span class="identity-key">职业</span><span class="identity-val">项目经理</span></div>
-                <div class="identity-row"><span class="identity-key">职业现状</span><span class="identity-val">在职</span></div>
-                <div class="identity-row"><span class="identity-key">技能</span><span class="identity-val">项目管理、敏捷开发</span></div>
-                <div class="identity-row"><span class="identity-key">特长</span><span class="identity-val">团队协调、进度把控</span></div>
-                <div class="identity-row"><span class="identity-key">爱好</span><span class="identity-val">篮球、电子竞技、健身</span></div>
+                <div class="identity-row"><span class="identity-key">企业名称</span><span class="identity-val">星穹工坊文化传媒有限公司</span></div>
+                <div class="identity-row"><span class="identity-key">成立时间</span><span class="identity-val">2018年6月</span></div>
+                <div class="identity-row"><span class="identity-key">法定代表人</span><span class="identity-val">王大龙</span></div>
+                <div class="identity-row"><span class="identity-key">注册资本</span><span class="identity-val">500万元人民币</span></div>
+                <div class="identity-row"><span class="identity-key">所属行业</span><span class="identity-val">文化创意</span></div>
+                <div class="identity-row"><span class="identity-key">经营现状</span><span class="identity-val">在营</span></div>
+                <div class="identity-row"><span class="identity-key">主营业务</span><span class="identity-val">空间设计、品牌策划、直播运营</span></div>
+                <div class="identity-row"><span class="identity-key">企业规模</span><span class="identity-val">50-99人</span></div>
+                <div class="identity-row"><span class="identity-key">联系邮箱</span><span class="identity-val">contact@xingqiong.works</span></div>
               </div>
             </div>
           </div>
@@ -875,19 +884,15 @@
         <div class="modal-mask" onclick="closeNewsDetailModal()"></div>
         <!-- 弹窗主体 -->
         <div class="modal-shell">
-          <!-- 弹窗头部 -->
-          <div class="modal-head">
-            <h3 id="newsDetailTitle" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">新闻详情</h3>
-            <button onclick="closeNewsDetailModal()" class="modal-close">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-          </div>
-          <!-- 弹窗内容 -->
-          <div class="flex-1 overflow-hidden flex flex-col">
-            <!-- 图片轮播区域 -->
-            <div class="relative flex-none h-1/2 bg-gray-100 overflow-hidden">
+          <!-- 关闭按钮 -->
+          <button onclick="closeNewsDetailModal()" class="modal-close absolute top-2 right-2 z-10">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+          <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+            <!-- 图片区：多张图片时可左右滑动翻看 -->
+            <div class="relative flex-none h-48 bg-gray-100 overflow-hidden">
               <div id="newsDetailCarousel" class="flex h-full transition-transform duration-300 ease-out">
                 <!-- 图片内容将通过JavaScript动态生成 -->
               </div>
@@ -896,21 +901,23 @@
                 <!-- 指示器将通过JavaScript动态生成 -->
               </div>
             </div>
-            <!-- 信息内容区域 -->
-            <div class="flex-1 overflow-y-auto p-4">
-              <div id="newsDetailDesc" class="text-sm text-gray-600 leading-relaxed">
+            <!-- 内容区：参考社区新闻内容部分 -->
+            <div class="p-5">
+              <h3 id="newsDetailTitle" class="text-lg font-bold mb-2" style="color: var(--ink-900);"></h3>
+              <div id="newsDetailMeta" class="text-xs mb-3" style="color: var(--ink-500);"></div>
+              <p id="newsDetailDesc" class="text-sm leading-relaxed whitespace-pre-line" style="color: var(--ink-700);">
                 <!-- 内容将通过JavaScript动态生成 -->
-              </div>
+              </p>
             </div>
-            <!-- 收藏操作栏 -->
-            <div class="news-fav-bar">
-              <button id="newsDetailFavBtn" class="flex items-center gap-1.5 text-sm active:scale-95 transition-transform" style="color: var(--ink-500);" onclick="toggleNewsDetailFavorite()">
-                <svg id="newsDetailFavIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                </svg>
-                <span id="newsDetailFavText">收藏</span>
-              </button>
-            </div>
+          </div>
+          <!-- 收藏操作栏 -->
+          <div class="news-fav-bar">
+            <button id="newsDetailFavBtn" class="flex items-center gap-1.5 text-sm active:scale-95 transition-transform" style="color: var(--ink-500);" onclick="toggleNewsDetailFavorite()">
+              <svg id="newsDetailFavIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+              </svg>
+              <span id="newsDetailFavText">收藏</span>
+            </button>
           </div>
         </div>
       </div>
@@ -918,16 +925,14 @@
       <div class="" id="toast"></div>
     </div>
     <script>
+      // 访客名片图标：点击展开、再点收起
       let currentOpenIndex = -1
       function toggleIdentityCard(index) {
         const allContents = document.querySelectorAll('.identity-content')
-        const allButtons = document.querySelectorAll('.id-btn')
 
         // 如果点击的是已展开的，收起
         if (currentOpenIndex === index) {
           allContents[index].classList.add('hidden')
-          allButtons[index].textContent = '虚拟身份证'
-          allButtons[index].classList.remove('active')
           currentOpenIndex = -1
           return
         }
@@ -935,15 +940,11 @@
         // 收起上一个
         if (currentOpenIndex >= 0 && allContents[currentOpenIndex]) {
           allContents[currentOpenIndex].classList.add('hidden')
-          allButtons[currentOpenIndex].textContent = '虚拟身份证'
-          allButtons[currentOpenIndex].classList.remove('active')
         }
 
         // 展开当前
         if (allContents[index]) {
           allContents[index].classList.remove('hidden')
-          allButtons[index].textContent = '收起身份证'
-          allButtons[index].classList.add('active')
           currentOpenIndex = index
         }
       }
@@ -971,100 +972,100 @@
       // 新闻数据（固定内容）
       const newsData = {
         '招聘': [
-          { title: '程序员招聘', desc: 'Java/Python开发工程师，年薪30-50万', images: ['assets/vendor/placeholder.svg'] },
-          { title: '设计师招聘', desc: 'UI/UX设计师，有经验者优先', images: ['assets/vendor/placeholder.svg'] },
-          { title: '产品经理招聘', desc: '3年以上经验，熟悉互联网产品', images: ['assets/vendor/placeholder.svg'] },
-          { title: '运营专员招聘', desc: '负责社群运营，有相关经验', images: ['assets/vendor/placeholder.svg'] },
-          { title: '市场推广招聘', desc: '负责品牌推广，有资源者优先', images: ['assets/vendor/placeholder.svg'] },
-          { title: '客服专员招聘', desc: '负责客户咨询，有耐心', images: ['assets/vendor/placeholder.svg'] },
+          { title: 'UU跑腿招募快递配送员', desc: '380-490元/天，就近接单，经验学历不限，完工结算，8月13日更新。', images: ['assets/products/space-living-room.jpg', 'assets/products/space-furniture.jpg', 'assets/products/space-lighting.jpg'] },
+          { title: '同城即时配送骑手', desc: '时间自由，全天候/碎片化时间任选；多劳多得，按单即时结算。要求18-45周岁，会骑电动车，熟悉本地路况。', images: ['assets/products/space-furniture.jpg', 'assets/products/space-lighting.jpg'] },
+          { title: '门店店员（万象城）', desc: '长期兼职，排班制，时薪结算。负责商品陈列、顾客接待与收银，有零售经验者优先。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '新媒体运营专员', desc: '负责短视频账号内容策划与日常更新，撰写推广文案，3年以上经验优先。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '商务拓展经理', desc: '负责本地商户合作洽谈与渠道维护，有BD资源者优先，底薪+高额提成。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '行政前台', desc: '负责访客接待、会议室管理与办公用品采购，形象气质佳，办公软件熟练。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '兼职': [
-          { title: '周末兼职', desc: '周六周日，每天8小时', images: ['assets/vendor/placeholder.svg'] },
-          { title: '晚间兼职', desc: '晚上7点到10点', images: ['assets/vendor/placeholder.svg'] },
-          { title: '节假日兼职', desc: '法定节假日，工资翻倍', images: ['assets/vendor/placeholder.svg'] },
-          { title: '远程兼职', desc: '在家办公，时间灵活', images: ['assets/vendor/placeholder.svg'] },
-          { title: '短期兼职', desc: '1-3个月，可长期合作', images: ['assets/vendor/placeholder.svg'] },
-          { title: '项目兼职', desc: '按项目结算，有经验者优先', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周末传单派发', desc: '周六周日全天，商场门口派发传单，130元/天，当日现金结算。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '晚间服务员', desc: '晚上6点到10点，餐饮门店传菜收台，22元/小时，包晚餐。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '节假日促销兼职', desc: '法定节假日商超促销，工资翻倍，180-220元/天，可短结。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '线上客服兼职', desc: '在家办公，回复咨询消息，时间灵活，按有效接待量结算。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '问卷调查员', desc: '线下问卷访问，1-2个月短期合作，多做多得，周结。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '活动协助兼职', desc: '按场次结算，布置与现场执行，有经验者优先，含工作餐。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '零工': [
-          { title: '搬运工', desc: '日结，150-200元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '快递分拣', desc: '夜班，200-250元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '促销员', desc: '商场促销，120-150元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '传单派发', desc: '80-100元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '临时工', desc: '工厂临时工，180-220元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '活动执行', desc: '活动现场执行，150-200元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '同城跑腿急送', desc: '文件、钥匙、礼品等小件速递，智能定位推送订单，收入透明多劳多得。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '快递分拣夜班', desc: '夜班200-250元/天，完工即结，仓库空调环境，需自带手套。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '生鲜代买代送', desc: '生鲜、日用品等即时采买配送，熟悉本地路况者优先，按单结算。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '搬运装卸零工', desc: '物流园搬运装卸，180-250元/天，日结不拖欠，体力活自带水杯。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '宠物照看临时工', desc: '上门喂猫遛狗，节假日鲜花蛋糕配送也可接单，时间自由。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '展会搭建零工', desc: '会展中心展位搭建拆除，150-200元/天，工期2-5天，日结。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '小时工': [
-          { title: '餐厅服务员', desc: '20-25元/小时', images: ['assets/vendor/placeholder.svg'] },
-          { title: '家教', desc: '50-100元/小时', images: ['assets/vendor/placeholder.svg'] },
-          { title: '翻译', desc: '80-150元/小时', images: ['assets/vendor/placeholder.svg'] },
-          { title: '健身教练', desc: '100-200元/小时', images: ['assets/vendor/placeholder.svg'] },
-          { title: '按摩师', desc: '80-120元/小时', images: ['assets/vendor/placeholder.svg'] },
-          { title: '代驾', desc: '30-50元/小时', images: ['assets/vendor/placeholder.svg'] },
+          { title: '连锁餐厅计时工', desc: '20-25元/小时，弹性排班，可协商工时，满4小时补贴一餐。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '小学全科家教', desc: '50-100元/小时，辅导作业与查漏补缺，师范专业或有家教经验者优先。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '陪同口译（日语）', desc: '80-150元/小时，商务考察随行翻译，要求口语流利、守时保密。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '健身房课时教练', desc: '100-200元/小时，带操课与器械指导，持证上岗，课时费周结。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '理疗按摩师', desc: '80-120元/小时，正规理疗馆，手法娴熟，客源稳定，时间灵活。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '夜间代驾司机', desc: '30-50元/小时起步价另计，驾龄5年以上，平台派单，当晚提现。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '短期工': [
-          { title: '暑假工', desc: '2-3个月，包吃住', images: ['assets/vendor/placeholder.svg'] },
-          { title: '寒假工', desc: '1-2个月，工资高', images: ['assets/vendor/placeholder.svg'] },
-          { title: '活动临时工', desc: '3-7天，日结', images: ['assets/vendor/placeholder.svg'] },
-          { title: '展会临时工', desc: '2-5天，150-200元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '促销短期工', desc: '1-4周，有提成', images: ['assets/vendor/placeholder.svg'] },
-          { title: '建筑短期工', desc: '1-3个月，包吃住', images: ['assets/vendor/placeholder.svg'] },
+          { title: '暑假长期工', desc: '2-3个月，电子厂组装质检，综合月薪4500-5500元，包吃住。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '寒假高峰支援', desc: '1-2个月，快递物流旺季工，工资高，多劳多得，春节前统一结算奖励。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '大型活动短期工', desc: '音乐节/球赛现场引导与服务，3-7天，日结，含餐补交通补助。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '车展临促', desc: '车展发单与秩序维护，150-200元/天，着装统一培训后上岗。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '年货节帮卖', desc: '商超年货专区销售，1-4周，底薪+提成，多卖多得。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '酒店宴会帮工', desc: '婚宴季传菜摆台，包吃住，工期灵活可选，做得好可转长留。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '天工': [
-          { title: '日结工', desc: '当天结算，不拖欠', images: ['assets/vendor/placeholder.svg'] },
-          { title: '临时日结', desc: '急招，马上上岗', images: ['assets/vendor/placeholder.svg'] },
-          { title: '高薪日结', desc: '200-300元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '轻松日结', desc: '工作简单，100-150元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '体力日结', desc: '搬运、装卸，180-250元/天', images: ['assets/vendor/placeholder.svg'] },
-          { title: '技术日结', desc: '技术工种，250-350元/天', images: ['assets/vendor/placeholder.svg'] },
+          { title: '工厂临时日结', desc: '当天结算不拖欠，急招马上上岗，产品包装贴标，坐着干活。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '高薪急聘日结', desc: '200-300元/天，仓储周转急用工，当天做满9小时有全勤奖30元。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '轻松分拣日结', desc: '小件分拣扫描，工作简单上手快，100-150元/天，午晚各休半小时。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '搬运日结工', desc: '建材市场搬运装卸，180-250元/天，现结现走，工具由场地提供。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '技术工种日结', desc: '水电安装临时用工，250-350元/天，要求持证有经验，完工验收后结算。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '绿化养护日结', desc: '市政绿篱修剪浇水，120-160元/天，早6点至下午3点，遮阳帽发放。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '周结工': [
-          { title: '周结普工', desc: '每周结算，稳定收入', images: ['assets/vendor/placeholder.svg'] },
-          { title: '周结技工', desc: '有技术要求，工资高', images: ['assets/vendor/placeholder.svg'] },
-          { title: '周结服务员', desc: '餐饮服务，包吃', images: ['assets/vendor/placeholder.svg'] },
-          { title: '周结保安', desc: '负责安全，工作轻松', images: ['assets/vendor/placeholder.svg'] },
-          { title: '周结保洁', desc: '负责清洁，时间灵活', images: ['assets/vendor/placeholder.svg'] },
-          { title: '周结文员', desc: '办公室工作，环境好', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结普工', desc: '流水线操作每周结算，稳定收入，包住宿，在职满一个月补贴500元。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结技工', desc: '设备维护有技术要求，工资高于普工，师傅带教，周结准时。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结餐厅服务', desc: '酒楼服务员包吃两餐，每周五结算工资，还可选择避开饭点的班次。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结保安员', desc: '园区门岗巡逻，工作轻松有岗亭，制服装备由物业统一配发。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结保洁', desc: '写字楼公共区域保洁，时间灵活，可选招早班或晚班，工具齐全。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '周结文员', desc: '办公室资料整理录入，环境好空调房，会基本电脑操作即可，周结。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '假期兼职': [
-          { title: '寒假兼职', desc: '学生优先，时间灵活', images: ['assets/vendor/placeholder.svg'] },
-          { title: '暑假兼职', desc: '2-3个月，包吃住', images: ['assets/vendor/placeholder.svg'] },
-          { title: '国庆兼职', desc: '7天，工资高', images: ['assets/vendor/placeholder.svg'] },
-          { title: '春节兼职', desc: '春节不回家，3倍工资', images: ['assets/vendor/placeholder.svg'] },
-          { title: '中秋兼职', desc: '3天，有红包', images: ['assets/vendor/placeholder.svg'] },
-          { title: '五一兼职', desc: '5天，有提成', images: ['assets/vendor/placeholder.svg'] },
+          { title: '寒假学生兼职', desc: '学生优先，奶茶店点单制作，时间灵活可换班，时薪足额发放。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '暑假训练营助教', desc: '2-3个月，青少年夏令营带队助教，包食宿，表现优秀可开具实习证明。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '国庆景区引导', desc: '黄金周7天，游客咨询与路线引导，工资高于平日，含节日加班补贴。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '春节值守兼职', desc: '春节不回家可报名门店值守，3倍工资另发留岗红包，宿舍供暖齐全。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '中秋礼盒打包', desc: '月饼礼盒装配打包，3天短期，完工即结红包加餐，计件多劳多得。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '五一车展兼职', desc: '5天，车模站位配合与集客登记，底薪加提成，优秀者可获商家返聘。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '发布': [
-          { title: '发布招聘信息', desc: '免费发布，快速招人', images: ['assets/vendor/placeholder.svg'] },
-          { title: '发布求职信息', desc: '展示自己，找到好工作', images: ['assets/vendor/placeholder.svg'] },
-          { title: '发布兼职信息', desc: '找到合适的兼职', images: ['assets/vendor/placeholder.svg'] },
-          { title: '发布零工信息', desc: '快速找到零工', images: ['assets/vendor/placeholder.svg'] },
-          { title: '发布短期工信息', desc: '短期用工需求', images: ['assets/vendor/placeholder.svg'] },
-          { title: '发布小时工信息', desc: '灵活用工需求', images: ['assets/vendor/placeholder.svg'] },
+          { title: '免费发布招聘', desc: '企业认证后即可免费发布职位信息，快速触达本地求职者。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布求职名片', desc: '完善个人名片与技能标签，让好工作主动找上你。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布兼职需求', desc: '商家可发布短期兼职需求，系统按距离优先推荐给附近用户。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布零工接单', desc: '个人可发布可接零工类型与时段，坐等派单通知。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布用工求助', desc: '短期用工缺口一键发布，平台客服协助审核置顶。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '发布注意事项', desc: '请勿发布虚假岗位或收取押金，违规内容将被下架并封禁账号。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '消息': [
-          { title: '系统消息', desc: '查看系统通知', images: ['assets/vendor/placeholder.svg'] },
-          { title: '私信消息', desc: '查看私信', images: ['assets/vendor/placeholder.svg'] },
-          { title: '评论消息', desc: '查看评论回复', images: ['assets/vendor/placeholder.svg'] },
-          { title: '点赞消息', desc: '查看点赞通知', images: ['assets/vendor/placeholder.svg'] },
-          { title: '关注消息', desc: '查看关注动态', images: ['assets/vendor/placeholder.svg'] },
-          { title: '活动消息', desc: '查看活动通知', images: ['assets/vendor/placeholder.svg'] },
+          { title: '投递成功提醒', desc: '您的简历已成功投递给UU跑腿招聘方，可在动态中查看进度。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '私信回复通知', desc: '付女士积极回复了你的咨询，点击查看聊天记录。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '评论与回复', desc: '你的求职笔记收到新评论，前往社区查看详情。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '简历被浏览', desc: '陈**8分钟前浏览了你的在线简历，快去打个招呼吧。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '关注动态', desc: '你关注的商家发布了新职位，第一时间获知开工机会。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '活动邀请', desc: '本周六线下招聘会邀请函已送达，点击报名预留席位。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '通知': [
-          { title: '职位通知', desc: '新职位推荐', images: ['assets/vendor/placeholder.svg'] },
-          { title: '面试通知', desc: '面试安排提醒', images: ['assets/vendor/placeholder.svg'] },
-          { title: '入职通知', desc: '入职流程提醒', images: ['assets/vendor/placeholder.svg'] },
-          { title: '薪资通知', desc: '薪资发放提醒', images: ['assets/vendor/placeholder.svg'] },
-          { title: '培训通知', desc: '培训安排提醒', images: ['assets/vendor/placeholder.svg'] },
-          { title: '活动通知', desc: '活动参与提醒', images: ['assets/vendor/placeholder.svg'] },
+          { title: '新职位推荐', desc: '根据你的位置与技能，为你推荐附近的就近接单岗位。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '面试安排提醒', desc: '明日14:00万象城门店面试，地址已同步到导航，请注意查收。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '入职流程提醒', desc: '恭喜通过初审！请携带身份证原件于周五前办理入职手续。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '薪资到账通知', desc: '您上周的兼职工资已发放到账，可在钱包明细中查询。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '培训开课通知', desc: '免费岗前培训今晚8点开播，完成课程可获得接单加权。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '活动参与提醒', desc: '‘你好星期五’线上专场即将开始，参与互动赢取奖励。', images: ['assets/vendor/placeholder.svg'] },
         ],
         '简讯': [
-          { title: '行业资讯', desc: '最新行业动态', images: ['assets/vendor/placeholder.svg'] },
-          { title: '职场技巧', desc: '提升职场竞争力', images: ['assets/vendor/placeholder.svg'] },
-          { title: '面试技巧', desc: '面试准备指南', images: ['assets/vendor/placeholder.svg'] },
-          { title: '简历技巧', desc: '简历优化建议', images: ['assets/vendor/placeholder.svg'] },
-          { title: '薪资行情', desc: '各岗位薪资参考', images: ['assets/vendor/placeholder.svg'] },
-          { title: '政策法规', desc: '劳动法相关政策', images: ['assets/vendor/placeholder.svg'] },
+          { title: '即时配送行业观察', desc: '同城即时生活服务平台业务已覆盖全国230余座城市，合作运力超850万人。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '灵活就业趋势', desc: '碎片化时间接单成为新就业形态，自主规划时段受年轻人青睐。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '求职防坑指南', desc: '凡是先交押金培训费的都要警惕，认准平台认证企业与官方渠道。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '简历优化建议', desc: '突出近一段经历的量化成果，正文控制在一页以内更易被HR看到。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '本地薪资行情', desc: '配送类日结380-490元，餐饮时薪20-25元，技术工种日结可达350元。', images: ['assets/vendor/placeholder.svg'] },
+          { title: '劳动权益须知', desc: '非全日制用工同样享有劳动报酬与工伤保障权利，签约前看清条款。', images: ['assets/vendor/placeholder.svg'] },
         ]
       };
       
@@ -1111,8 +1112,9 @@
         const newsId = 'infoBar_' + currentCategory + '_' + newsItem.title;
         newsItem._id = newsId;
         
-        // 设置标题和描述
+        // 设置标题、分类与描述
         title.textContent = newsItem.title;
+        document.getElementById('newsDetailMeta').textContent = currentCategory;
         desc.textContent = newsItem.desc;
         
         // 设置图片轮播
@@ -1215,26 +1217,31 @@
       function initCarouselTouchEvents() {
         const carousel = document.getElementById('newsDetailCarousel');
         let startX = 0;
+        let startY = 0;
         let isDragging = false;
         
         carousel.addEventListener('touchstart', (e) => {
           startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
           isDragging = true;
         });
         
         carousel.addEventListener('touchmove', (e) => {
           if (!isDragging) return;
-          e.preventDefault();
-        });
+          // 仅横向滑动时阻止滚动，纵向仍可上下滚动内容区
+          if (Math.abs(e.touches[0].clientX - startX) > Math.abs(e.touches[0].clientY - startY)) {
+            e.preventDefault();
+          }
+        }, { passive: false });
         
         carousel.addEventListener('touchend', (e) => {
           if (!isDragging) return;
           
-          const endX = e.changedTouches[0].clientX;
-          const diffX = startX - endX;
+          const diffX = startX - e.changedTouches[0].clientX;
+          const diffY = startY - e.changedTouches[0].clientY;
           
-          // 判断滑动方向
-          if (Math.abs(diffX) > 50) {
+          // 判断滑动方向：横向为主时才切换图片
+          if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
             if (diffX > 0 && currentImageIndex < currentNewsImages.length - 1) {
               // 向左滑动，显示下一张
               goToImage(currentImageIndex + 1);

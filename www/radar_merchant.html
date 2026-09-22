@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
 <meta charset="utf-8"/>
@@ -126,14 +126,14 @@
 </div>
 <!-- 操作按钮区 -->
 <div class="p-3 grid grid-cols-2 gap-3 border-t border-gray-100">
-<button class="id-btn h-10 border border-blue-600 text-sm font-bold bg-white text-blue-600" onclick="toggleIDCard(this, 'id-1')">虚拟身份证</button>
+<button class="id-btn h-10 border border-blue-600 text-sm font-bold bg-white text-blue-600" onclick="toggleIDCard(this, 'id-1')">个人名片</button>
 <a class="h-10 bg-[#ec4899] text-white text-sm font-bold flex items-center justify-center" href="merchant_shop.html">进店逛逛</a>
 </div>
-<!-- 虚拟身份证展开区域 -->
+<!-- 个人名片展开区域 -->
 <div class="id-card-content bg-gray-50" id="id-1">
 <div class="p-4 space-y-3">
 <div class="flex justify-between items-center border-b border-gray-200 pb-2">
-<span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest">虚拟身份证编号: V5001</span>
+<span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest">个人名片编号: V5001</span>
 <div class="w-8 h-8 bg-blue-100 flex items-center justify-center text-blue-600">
 <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
 </div>
@@ -192,13 +192,13 @@
 </div>
 </div>
 <div class="p-3 grid grid-cols-2 gap-3 border-t border-gray-100">
-<button class="id-btn h-10 border border-blue-600 text-blue-600 text-sm font-bold bg-white" onclick="toggleIDCard(this, 'id-2')">虚拟身份证</button>
+<button class="id-btn h-10 border border-blue-600 text-blue-600 text-sm font-bold bg-white" onclick="toggleIDCard(this, 'id-2')">个人名片</button>
 <a class="h-10 bg-[#ec4899] text-white text-sm font-bold flex items-center justify-center" href="merchant_shop.html">进店逛逛</a>
 </div>
 <div class="id-card-content bg-gray-50" id="id-2">
 <div class="p-4 space-y-3">
 <div class="flex justify-between items-center border-b border-gray-200 pb-2">
-<span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest">虚拟身份证编号: V5002</span>
+<span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest">个人名片编号: V5002</span>
 <div class="w-8 h-8 bg-blue-100 flex items-center justify-center text-blue-600">
 <svg fill="none" height="16" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
 </div>
@@ -259,7 +259,7 @@
             btn.classList.add('bg-[#ec4899]', 'text-white', 'border-[#ec4899]');
         }
 
-        // 切换虚拟身份证展开
+        // 切换个人名片展开
         function toggleIDCard(btn, id) {
             const content = document.getElementById(id);
             const isOpen = content.classList.contains('open');
@@ -269,7 +269,7 @@
                 el.classList.remove('open');
             });
             document.querySelectorAll('.id-btn').forEach(el => {
-                el.innerText = '虚拟身份证';
+                el.innerText = '个人名片';
                 el.classList.remove('bg-blue-600', 'text-white');
                 el.classList.add('bg-white', 'text-blue-600');
             });

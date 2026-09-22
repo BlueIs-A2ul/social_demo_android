@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>动态详情 - 智能空间</title>
+    <script src="assets/vendor/tailwindcss.js"></script>
+    <script>
+      (function () {
+        try {
+          if (window.parent !== window) {
+            window.parent.postMessage({ type: 'setBottomNav', visible: false }, '*')
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script src="assets/vendor/history-favorites.js"></script>
+    <script src="assets/vendor/safe-area.js"></script>
+    <style>
+      body {
+        background-color: white;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      .user-vip-badge {
+        display: inline-block;
+        width: 20px;
+        height: auto;
+        margin-left: 4px;
+        vertical-align: -4px;
+      }
+      .user-vip-badge-sm {
+        width: 15px;
+        margin-left: 3px;
+        vertical-align: -3px;
+      }
+      #toast {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        text-align: center;
+        padding: 8px 16px;
+        border-radius: 9999px;
+        font-size: 12px;
+        z-index: 200;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      #toast.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="bg-white">
+    <div
+      class="w-full h-[100dvh] bg-white flex flex-col relative"
+      data-safe-root
+      style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
+    >
+      <!-- 顶部标题栏 -->
+      <div
+        class="flex-none bg-white px-4 pt-6 pb-2 flex items-center justify-center border-b border-gray-100 relative"
+      >
+        <button
+          class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full active:bg-gray-100"
+          onclick="window.location.href='publish.html'"
+        >
+          <svg
+            class="w-6 h-6 text-gray-700"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+        </button>
+        <h1 class="text-base font-bold text-black">动态详情</h1>
+      </div>
+
+      <!-- 内容区 -->
+      <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar pb-[88px]">
+        <!-- ① 大图 -->
+        <div id="detail-images"></div>
+        <!-- ② 标题/简介区 -->
+        <div class="p-4 border-b border-gray-100">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <img
+                alt="头像"
+                class="w-6 h-6 rounded-full object-cover"
+                id="detail-author-avatar"
+                src="assets/packaged/7324caaa7daa41839e6f4b764cde141f.jpg"
+              />
+              <span class="text-sm font-bold text-black" id="detail-author"
+                >约翰逊<img
+                  alt="个人VIP2"
+                  class="user-vip-badge user-vip-badge-sm"
+                  src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
+              /></span>
+            </div>
+            <span class="text-xs text-gray-400" id="detail-time">2小时前</span>
+          </div>
+          <h2 class="text-base font-bold text-black mt-3" id="detail-title">
+            春日花园
+          </h2>
+          <p class="text-[13px] text-gray-400 mt-1" id="detail-desc">
+            一个藏在巷子里的温馨咖啡小店，午后阳光洒进来特别治愈。
+          </p>
+        </div>
+        <!-- ③ 正文区 -->
+        <div class="p-4">
+          <p class="text-sm text-black leading-[1.8]" id="detail-body">
+            周末终于打卡了这家种草已久的咖啡店！店面不大但每个角落都很用心，老板是个很nice的人，推荐了他们家的手冲和提拉米苏。坐在窗边看着街景，喝着咖啡，感觉整个下午都慢下来了。下次还会再来～
+          </p>
+          <div class="mt-4 text-[12px] leading-[1.8]" id="detail-tags">
+            <span class="text-[12px] text-[#ec4899] cursor-pointer"
+              >#咖啡探店</span
+            >
+            <span class="text-[12px] text-[#ec4899] cursor-pointer"
+              >#周末日常</span
+            >
+            <span class="text-[12px] text-[#ec4899] cursor-pointer">#治愈系</span>
+          </div>
+        </div>
+        <!-- ④ 评论列表 -->
+        <div class="p-4 mt-2">
+          <h3 class="text-sm font-bold text-black mb-4">评论 12</h3>
+          <div class="space-y-4">
+            <div class="flex gap-2 border-b border-gray-50 pb-3">
+              <img
+                alt="头像"
+                class="w-5 h-5 rounded-full"
+                src="assets/packaged/8c34ed16529049609cc0396f36b40e41.jpg"
+              />
+              <div class="flex-1">
+                <div class="flex justify-between items-center">
+                  <span class="text-[12px] font-bold text-black"
+                    >小云<img
+                      alt="个人VIP2"
+                      class="user-vip-badge user-vip-badge-sm"
+                      src="assets/src_01/颜色vip/技术服务类vip.jpg"
+                  /></span>
+                  <span class="text-[10px] text-gray-400">刚刚</span>
+                </div>
+                <p class="text-[12px] text-gray-500 mt-0.5">
+                  这家店我也去过！提拉米苏真的绝了 👍
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-2 border-b border-gray-50 pb-3">
+              <img
+                alt="头像"
+                class="w-5 h-5 rounded-full"
+                src="assets/packaged/861da2ed40c44c45b74fe46ffe08460b.jpg"
+              />
+              <div class="flex-1">
+                <div class="flex justify-between items-center">
+                  <span class="text-[12px] font-bold text-black"
+                    >七七<img
+                      alt="个人VIP2"
+                      class="user-vip-badge user-vip-badge-sm"
+                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
+                  /></span>
+                  <span class="text-[10px] text-gray-400">1小时前</span>
+                </div>
+                <p class="text-[12px] text-gray-500 mt-0.5">
+                  求地址！看起来好棒
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-2 border-b border-gray-50 pb-3">
+              <img
+                alt="头像"
+                class="w-5 h-5 rounded-full"
+                src="assets/packaged/7324caaa7daa41839e6f4b764cde141f.jpg"
+              />
+              <div class="flex-1">
+                <div class="flex justify-between items-center">
+                  <span class="text-[12px] font-bold text-black"
+                    >小鹿<img
+                      alt="个人VIP2"
+                      class="user-vip-badge user-vip-badge-sm"
+                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
+                  /></span>
+                  <span class="text-[10px] text-gray-400">2小时前</span>
+                </div>
+                <p class="text-[12px] text-gray-500 mt-0.5">
+                  咖啡控表示很心动
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-2 border-b border-gray-50 pb-3">
+              <img
+                alt="头像"
+                class="w-5 h-5 rounded-full"
+                src="assets/packaged/8c34ed16529049609cc0396f36b40e41.jpg"
+              />
+              <div class="flex-1">
+                <div class="flex justify-between items-center">
+                  <span class="text-[12px] font-bold text-black"
+                    >星河<img
+                      alt="个人VIP2"
+                      class="user-vip-badge user-vip-badge-sm"
+                      src="assets/src_01/颜色vip/技术服务类vip.jpg"
+                  /></span>
+                  <span class="text-[10px] text-gray-400">3小时前</span>
+                </div>
+                <p class="text-[12px] text-gray-500 mt-0.5">周末去打卡</p>
+              </div>
+            </div>
+            <div class="flex gap-2 pb-3">
+              <img
+                alt="头像"
+                class="w-5 h-5 rounded-full"
+                src="assets/packaged/6a3b2cb986b949e497a31d8c340bfe69.jpg"
+              />
+              <div class="flex-1">
+                <div class="flex justify-between items-center">
+                  <span class="text-[12px] font-bold text-black"
+                    >阿森<img
+                      alt="个人VIP2"
+                      class="user-vip-badge user-vip-badge-sm"
+                      src="assets/src_01/颜色vip/公益活动类vip.jpg"
+                  /></span>
+                  <span class="text-[10px] text-gray-400">4小时前</span>
+                </div>
+                <p class="text-[12px] text-gray-500 mt-0.5">
+                  环境也太好了吧
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ 底部固定：点赞/收藏/分享 + 评论输入框 -->
+      <div
+        class="flex-none px-4 py-3 bg-white border-t border-gray-100 flex items-center gap-3"
+        style="padding-bottom: max(0.75rem, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));"
+      >
+        <button
+          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform shrink-0"
+          id="detail-like-btn"
+          onclick="toggleDetailLike()"
+        >
+          <img
+            alt="点赞"
+            class="w-5 h-5 object-contain"
+            id="detail-like-icon"
+            src="assets/src_01/icon/互动/点赞.png"
+          />
+          <span class="text-[11px]" id="detail-like-count">12</span>
+        </button>
+        <button
+          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform shrink-0"
+          id="detail-fav-btn"
+          onclick="toggleDetailFavorite()"
+        >
+          <img
+            alt="收藏"
+            class="w-5 h-5 object-contain"
+            id="detail-fav-icon"
+            src="assets/src_01/icon/互动/收藏.png"
+          />
+        </button>
+        <button
+          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform shrink-0"
+          id="detail-share-btn"
+          onclick="showToast('链接已复制')"
+        >
+          <img
+            alt="分享"
+            class="w-5 h-5 object-contain"
+            src="assets/src_01/icon/互动/分享.png"
+          />
+        </button>
+        <input
+          class="flex-1 bg-gray-100 rounded-none px-4 py-2 text-sm outline-none min-w-0"
+          placeholder="说点什么..."
+          type="text"
+          id="comment-input"
+        />
+        <button
+          class="bg-[#ec4899] text-white px-4 py-2 text-sm font-medium shrink-0"
+          onclick="showToast('评论已发布')"
+        >
+          发布
+        </button>
+      </div>
+
+      <!-- Toast -->
+      <div id="toast"></div>
+    </div>
+
+    <script>
+      const feedData = [
+        {
+          title: '中医：真正能让气血恢复的方式只有两种',
+          img: 'assets/src_01/分享样例/966C4524685A0374B01D5616402D6C9A.jpg',
+          author:
+            '小雨<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
+          authorAvatar: 'assets/packaged/sq/a77b22c0b5bc9f41da21ad3aaa910c86abae5fe8.webp',
+          time: '08-05 江苏',
+          desc: '中医：真正能让气血恢复的方式只有两种。',
+          body: '吃什么补品，看什么名医，都只是外力，如果不能从内在调养，所有的养生都是徒劳。比如：①一个人整天躺在家里，你天天给他吃鹿茸、阿胶、人参，照样气血不足；②每天盯着电脑看一整天，盯着手机看一整天，喝多少补气血的也没用；③明明气血不足，还天天暴汗运动，只会加重各种不适感觉，气血只会越来越亏。可真正能让气血充盈的方式，只有两种：做加法和做减法。',
+          tags: ['养生补气血', '养生养心养神', '中医养生', '学会养生很重要', '养生就是养命'],
+          images: [
+            'assets/src_01/分享样例/966C4524685A0374B01D5616402D6C9A.jpg',
+          ],
+        },
+        {
+          title: '一周抗炎 抗氧化 健康饮食食谱 拿走不谢',
+          img: 'assets/src_01/分享样例/1C8309C5D99DCCCCCC45F35D09E22EB4.jpg',
+          author:
+            '老罗<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/技术服务类vip.jpg" />',
+          authorAvatar: 'assets/packaged/sq/图片1.png',
+          time: '07-31 江苏',
+          desc: '一周抗炎 抗氧化 健康饮食食谱 拿走不谢。',
+          body: '高蛋白 | 低负担 | 吃饱吃好 | 开启活力一周。周一·高蛋白启动日：早餐牛肉三明治+酸奶碗（蛋白质35g），加餐坚果+香蕉；午餐双椒炒鸡胸肉+杂粮饭（蛋白质45g）；加餐蛋白粉或纯牛奶400ml；晚餐香煎三文鱼+烤土豆+西兰花（蛋白质35g），睡前希腊酸奶100g。全天合计蛋白质约155g、热量约2290kcal，照着吃就行！',
+          tags: ['美食SOP指南', '春日无痛减肥食谱', '均衡饮食和营养', '食物多样化', '健康饮食', '一周减脂餐不重样', '饮食与健康'],
+          images: [
+            'assets/src_01/分享样例/1C8309C5D99DCCCCCC45F35D09E22EB4.jpg',
+          ],
+        },
+        {
+          title: '终于有人把全国旅行地说明白了',
+          img: 'assets/src_01/分享样例/E48B6D2A6A6262F98BD99810BE97F390.jpg',
+          author:
+            '阿树<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-08.jpg',
+          time: '07-13 江苏',
+          desc: '终于有人把全国的旅行地用一张图给说明白了，赶紧收藏备用。',
+          body: '终于有人把全国的旅行地用一张图给说明白了！新疆喀纳斯赛里木湖、青海茶卡盐湖、甘肃莫高窟七彩丹霞、山西云冈石窟平遥古城、北京故宫长城颐和园、浙江西湖乌镇普陀山……各省必去景点一图尽览，赶紧收藏备用，跟着季节去中国！',
+          tags: ['我的旅行足迹', '自由行旅游', '一生中值得去旅游的地方', '旅游爱好者', '跟着季节游中国', '旅游推荐', '旅游不踩坑', '地理科普', '本地人做的攻略', '穷游攻略'],
+          images: [
+            'assets/src_01/分享样例/E48B6D2A6A6262F98BD99810BE97F390.jpg',
+          ],
+        },
+        {
+          title: '会穿衣服 是一种顶级能力',
+          img: 'assets/src_01/分享样例/B15C88F706527C63D9F2B86FBFF5997F.jpg',
+          author:
+            '令狐夏人<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/教育培训类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-03.jpg',
+          time: '07-16 江苏',
+          desc: '会打扮是被严重低估的能力。',
+          body: '我始终觉得，会穿搭、懂打扮的能力，才是真正的百里挑一、难得一见。为什么这么说？因为穿搭从来不是随便套上衣服那么简单，它的背后，藏着一套超硬核的综合实力，缺一不可。一 顶尖审美感知力：一眼锁定和谐配色、精准拿捏风格氛围、玩转材质碰撞巧思，这背后是无数艺术积累的沉淀，穿搭高手，本就是行走的美学教科书。二 透彻自我认知力：最懂自己的身材优劣，最清楚自身的气质基调，会穿的人，总能精准扬长避短，让衣服为自己赋能，搭配起来信手拈来、毫不费力。',
+          tags: ['穿搭经验howto', '形象走在能力前', '提升气场做个精致女人', '小众买手经验', '女生的气质有多重要', '女人自我形象管理', '如何提升穿衣品质', '拒绝精致羞耻', '提升衣品', '穿搭底层逻辑'],
+          images: [
+            'assets/src_01/分享样例/B15C88F706527C63D9F2B86FBFF5997F.jpg',
+          ],
+        },
+        {
+          title: '给你3亿在无人深林待三年 六选三',
+          img: 'assets/src_01/分享样例/03C97DD74948F540243370B20E16156B.jpg',
+          author:
+            '阿森<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/公益活动类vip.jpg" />',
+          authorAvatar: 'assets/packaged/sq/修改图片形状 (1).png',
+          time: '07-28',
+          desc: '给你3亿在无人森林待3年，六选三！',
+          body: '给你3亿在无人深林待三年，六选三你会怎么选？①冲锋枪无限弹药 ②忠诚于你的狼狗 ③400人特种兵 ④无限续航越野房车 ⑤无限供应泡面 ⑥性感御姐迷恋你→评论区已经吵疯了，说说你的组合思路！#请做出你的选择',
+          tags: ['请做出你的选择', '敢不敢挑战', '选择题', '你的选择是', '选择你想要的生活', '选择与挑战', '未来的选择', '人生不做选择题', '三角洲行动赛事'],
+          images: [
+            'assets/src_01/分享样例/03C97DD74948F540243370B20E16156B.jpg',
+          ],
+        },
+        {
+          title: '一图看懂整个英语语法体系表',
+          img: 'assets/src_01/分享样例/05823C55FFF4D2081DC3D173711C04F0.jpg',
+          author:
+            '东林<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/技术服务类vip.jpg" />',
+          authorAvatar: 'assets/packaged/sq/修改图片形状 (1).png',
+          time: '08-06 江苏',
+          desc: '一图看懂整个英语语法体系表。',
+          body: '①26个字母大小写；②20个疑问代词——问什么用what、问原因用why、问哪里用where、问哪个用which、问多久用how long/how soon/how often；③英语16时态从一般现在时do到过去将来完成进行时would have been doing 全梳理；④英语常用缩略词 I am=I\'m、can not=can\'t 等。初中英语怎么学再也不迷路，建议收藏打印！',
+          tags: ['英语时态', '英语词汇', '动词的时态和语态', '初中英语怎么学', '完形填空', '英语语法', '英语笔记', '英语作文模板', '英语思维导图', '学习英语'],
+          images: [
+            'assets/src_01/分享样例/05823C55FFF4D2081DC3D173711C04F0.jpg',
+          ],
+        },
+        {
+          title: '为什么空调一关马上就热起来了？',
+          img: 'assets/src_01/分享样例/1A9E0D43FC03A6060A194C18AD661F33.jpg',
+          author:
+            '西郊<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
+          authorAvatar: 'assets/packaged/sq/8401169b53134beca3685656529d68e7.jpg',
+          time: '07-27 江苏',
+          desc: '为什么 空调一关 马上就热起来了？',
+          body: '为什么空调一关就热，明明在房间里充了一天冷气😹 你的房间是不是也这样？据说是墙体储热加上空气湿度大影响体感，所以一停冷气就闷热反扑…你们那儿现在多少度了？评论区聊聊夏天热怎么降温！',
+          tags: ['空调使用冷知识', '知识', '空气湿度大', '空调', '夏天', '热死了', '气温', '温度', '夏天热怎么降温'],
+          images: [
+            'assets/src_01/分享样例/1A9E0D43FC03A6060A194C18AD661F33.jpg',
+          ],
+        },
+        {
+          title: '强者是怎么熬过来的',
+          img: 'assets/src_01/分享样例/358A2C1D61442017F6D2F0216C8556FD.jpg',
+          author:
+            '文案馆<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-05.jpg',
+          time: '07-05 江苏',
+          desc: '强者是怎么熬过来的。',
+          body: '1、开始深度的思考，否则，再怎么努力都是徒劳，因为这个世界要争的是智慧，拼的是大脑，而不是比谁搬砖的速度更快。2、本质上而言，人与树是相似的，越是往高处的阳光，根就要扎向黑暗的地底。3、嘴巴越来越紧，处事舍得投入，执行力越来越强，说话却越来越慢。4、天狂必有雨，人狂必有祸。做人也好，做事也罢，凡事别太过，饱谷必弯腰，智者常温顺，低调谦虚总没错。5、不较真，很多事真的没答案，都是糊涂账。较真，除了让自己疲惫不堪以外，毫无作用。6、直视人性、慢慢释怀过往，接纳世事变化，从容处世、平稳心态，便是成长的历程。7、懂得钱财的重要意义，踏实赚钱改善生活，经济安稳能化解大部分生活难题。8、意识到外在形象的重要性，得体的仪容外表，能收获更多机遇与人缘。9、总有一段时日，要我们哭着、忍着、熬着、装着、扛着。人的底气和胆气都是历经磨难之后慢慢练就的。',
+          tags: ['人是怎么变强的', '戒掉弱者思维', '强者思维格局', '成大事者的心态', '成熟的表现', '努力成长变强', '低谷期一定要默默的熬过去', '让自己变强大', '如何变得不浮躁'],
+          images: [
+            'assets/src_01/分享样例/358A2C1D61442017F6D2F0216C8556FD.jpg',
+          ],
+        },
+        {
+          title: '做生意，必须知道的11个公式',
+          img: 'assets/src_01/分享样例/6709F497401C22EAC60FCD7E73F82AF5.jpg',
+          author:
+            '财税老周<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/教育培训类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-06.jpg',
+          time: '07-04 江苏',
+          desc: '想赚钱，先学会算账！这11个公式让你的生意不再瞎做。',
+          body: '毛利=营业额-成本；毛利率=毛利÷营业额；利润=毛利-费用；利润率=利润÷营业额；成本=营业额×(1-毛利率)；成本率=成本÷营业额；费用率=费用÷营业额；净料率=(净料重量÷毛料量)×100%；理想营业额=(房租+折旧)÷10%；保本营业额=(房租+折旧)÷10%×保率点；生意增长公式=流量×转化×单价×复购×裂变。想赚钱，先学会算账！这11个公式让你的生意不再瞎做，一定要对钱有概念。',
+          tags: ['实现财务自由', '如何财富自由', '财务规划', '一定要对钱有概念', '如何赚钱'],
+          images: [
+            'assets/src_01/分享样例/6709F497401C22EAC60FCD7E73F82AF5.jpg',
+          ],
+        },
+        {
+          title: '谈话时手势的艺术，肢体语言是灵魂的扩音器',
+          img: 'assets/src_01/分享样例/C152B1D86E487B527AA6B9F98D3A4FC5.jpg',
+          author:
+            '白老师<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/教育培训类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-07.jpg',
+          time: '07-11 江苏',
+          desc: '谈话时手势的艺术，肢体语言是灵魂的扩音器。',
+          body: '一阳指：基础手势，问责压制；二刀流：进阶版本，讲流程时使用；龙门架：还没想好词，但权威；水滴手：问题的关键是找到问题的问题；鸡爪手：没有逻辑也会显得有逻辑。这些手势只能领导用，如果不是领导的话，用这些手势等着挨呲儿吧😂',
+          tags: ['灵活的手指', '说话有条理', '说话技巧', '手指灵活度', '说话是门艺术', '交互手势控制', '语言是一门艺术', '手不是用来打人的'],
+          images: [
+            'assets/src_01/分享样例/C152B1D86E487B527AA6B9F98D3A4FC5.jpg',
+          ],
+        },
+        {
+          title: '这些运动习惯，正在悄悄延长你的寿命！',
+          img: 'assets/src_01/分享样例/77C3596D45EA99126623724490CCB592.jpg',
+          author:
+            '康康教练<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/文化娱乐类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-09.jpg',
+          time: '08-01 江苏',
+          desc: '说个冷知识：每天走4000步是生死线，每天走8000步是长寿线。',
+          body: '定期运动：每天走4000步，是生死线，每天走8000步是长寿线，每周至少三次力量训练，每次建议一个小时。俯卧撑：完成四十个俯卧撑，促进生长激素分泌。平板支撑：增加基础代谢率，降低脂肪百分比。握力训练：增加力量可以降低血压和中风风险。墙壁深蹲保持：增强下半身稳定性，改善腰椎稳定性。单腿平衡：降低中风的风险，改善脑循环和血管健康。清晨户外运动：每天早上户外运动一小时，能极大提升幸福感。阳光的力量：暴露在日光下，激活眼睛蓝光传感器，减少沮丧感，心情更愉悦。运动是最好的投资，从今天开始，为健康和长寿打下基础！',
+          tags: ['运动是最好的投资', '每天坚持运动', '悄悄改变自己', '健康养生', '长寿秘诀', '运动打卡'],
+          images: [
+            'assets/src_01/分享样例/77C3596D45EA99126623724490CCB592.jpg',
+          ],
+        },
+        {
+          title: '你能认出哪颗是水稻，哪颗是杂草吗？',
+          img: 'assets/src_01/分享样例/D3E51E02BB7424C0BC9093BE801FD715.jpg',
+          author:
+            '阿禾<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/公益活动类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-01.jpg',
+          time: '08-02 江苏',
+          desc: '你能认出哪颗是水稻，哪颗是杂草吗？我是分不出来🙈🙈🙈',
+          body: '你能认出哪颗是水稻，哪颗是杂草吗？我是分不出来🙈🙈🙈 左边叶脉更细、叶色浓绿带点白毫的是水稻秧苗，右边叶鞘发红、叶片更宽大粗糙的是稗草，也就是稻田里最常见杂草。评论区已经吵翻了，你猜对了吗？观察植物生长真的很有意思，中国人爱种菜是刻在DNA里的！',
+          tags: ['草是一种植物', '农作物种植', '生物圈中的绿色植物', '路边的野草', '观察植物生长', '水稻', '中国人爱种菜', '种菜要有种菜的样子', '种子与播种人', '禾本科植物'],
+          images: [
+            'assets/src_01/分享样例/D3E51E02BB7424C0BC9093BE801FD715.jpg',
+          ],
+        },
+        {
+          title: '有钱人为啥都喜欢这个手势',
+          img: 'assets/src_01/分享样例/2AACCF9E4BB049CF43E35CA29A5BD3EC.jpg',
+          author:
+            '星河<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/技术服务类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-02.jpg',
+          time: '07-04 中国香港',
+          desc: '有钱人为啥都喜欢这个手势。',
+          body: '你发现没有？特朗普、C罗、马斯克……有钱人接受采访时都爱摆这个手势：双手指尖相对，搭成一座"塔"。这个手势在肢体语言学里叫塔尖手势（steepling），是自信、掌控感和权威感的象征，心理学研究发现，越有掌控欲的人越喜欢用它。长见识了，你身边有人爱这么摆吗？',
+          tags: ['有品位的人', '长见识开眼界', '手指穿出屏幕', '肢体语言', '冷知识'],
+          images: [
+            'assets/src_01/分享样例/2AACCF9E4BB049CF43E35CA29A5BD3EC.jpg',
+          ],
+        },
+        {
+          title: '12种视频剪辑技巧‼️我看看还有谁不会👀',
+          img: 'assets/src_01/分享样例/34FBBC70673B58DCA51BD714C29F31B2.jpg',
+          author:
+            '剪辑喵<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/技术服务类vip.jpg" />',
+          authorAvatar: 'assets/avatars/member-04.jpg',
+          time: '07-14 江苏',
+          desc: '12种视频剪辑技巧，我看看还有谁不会👀',
+          body: '①蒙太奇：将不同地点、距离和角度拍摄的镜头排列组合；②插入镜头：两个镜头之间插入有意义的关联镜头；③跳切剪辑：同一场景相邻镜头直接连接，制造时间跳跃；④平行剪辑：多组镜头交替排列表现主题；⑤反向镜头：对话人物分别拍摄再交替剪辑；⑥故事版：用图画或文字预览整体效果；⑦交叉剪辑；⑧淡入淡出；⑨切入/切出；⑩动作顺接剪辑；⑪视线匹配剪辑；⑫非线性剪辑。新手小白学剪辑，建议收藏慢慢练！',
+          tags: ['剪辑教程', '剪辑师', '新手小白学剪辑', '新手剪辑', '视频剪辑学习', '后期剪辑', '剪辑工具', '影视后期培训', '自学剪辑', '视频制作'],
+          images: [
+            'assets/src_01/分享样例/34FBBC70673B58DCA51BD714C29F31B2.jpg',
+          ],
+        },
+      ]
+
+      const detailDefaults = {
+        authorAvatar: document.getElementById('detail-author-avatar').src,
+        author: document.getElementById('detail-author').innerHTML,
+        time: document.getElementById('detail-time').innerHTML,
+        desc: document.getElementById('detail-desc').innerHTML,
+        body: document.getElementById('detail-body').innerHTML,
+        tags: document.getElementById('detail-tags').innerHTML,
+      }
+
+      let currentDetailIndex = -1
+
+      function renderDetail(index) {
+        const data = feedData[index]
+        if (!data) {
+          showToast('内容不存在')
+          setTimeout(function () {
+            window.location.href = 'publish.html'
+          }, 1000)
+          return
+        }
+        currentDetailIndex = index
+
+        const isSeries = Array.isArray(data.images) && data.images.length > 0
+        const images = isSeries ? data.images : [data.img]
+        document.getElementById('detail-images').innerHTML = images
+          .map(src =>
+            isSeries
+              ? `<img alt="动态图片" class="w-full block bg-gray-50" src="${src}" />`
+              : `<img alt="动态图片" class="w-full h-[280px] object-contain bg-gray-50 block" src="${src}" />`,
+          )
+          .join('')
+
+        document.getElementById('detail-title').innerText = data.title
+        document.getElementById('detail-author-avatar').src =
+          data.authorAvatar || detailDefaults.authorAvatar
+        document.getElementById('detail-author').innerHTML =
+          data.author || detailDefaults.author
+        document.getElementById('detail-time').innerHTML =
+          data.time || detailDefaults.time
+        document.getElementById('detail-desc').innerHTML =
+          data.desc || detailDefaults.desc
+        document.getElementById('detail-body').innerHTML =
+          data.body || detailDefaults.body
+        document.getElementById('detail-tags').innerHTML = data.tags
+          ? data.tags
+              .map(
+                t =>
+                  `<span class="text-[12px] text-[#ec4899] cursor-pointer">#${t}</span>`,
+              )
+              .join(' ')
+          : detailDefaults.tags
+
+        updateDetailLike()
+        updateDetailFavBtn()
+
+        if (window.HistoryFavorites) {
+          window.HistoryFavorites.addHistory({
+            id: 'share_' + index,
+            source: 'share',
+            data: {
+              title: data.title,
+              img: data.img,
+              images: data.images,
+              author: data.author,
+              authorAvatar: data.authorAvatar,
+              time: data.time,
+              desc: data.desc,
+              body: data.body,
+              tags: data.tags,
+            },
+          })
+        }
+      }
+
+      const detailLikeBase = 12
+
+      function updateDetailLike() {
+        if (currentDetailIndex < 0) return
+        const liked = localStorage.getItem('detailLike_' + currentDetailIndex) === '1'
+        const icon = document.getElementById('detail-like-icon')
+        const count = document.getElementById('detail-like-count')
+        icon.src = liked
+          ? 'assets/src_01/icon/互动/点赞-active.png'
+          : 'assets/src_01/icon/互动/点赞.png'
+        count.textContent = detailLikeBase + (liked ? 1 : 0)
+      }
+
+      function toggleDetailLike() {
+        if (currentDetailIndex < 0) return
+        const key = 'detailLike_' + currentDetailIndex
+        const liked = localStorage.getItem(key) === '1'
+        localStorage.setItem(key, liked ? '0' : '1')
+        updateDetailLike()
+        showToast(liked ? '已取消点赞' : '已点赞')
+      }
+
+      function updateDetailFavBtn() {
+        if (currentDetailIndex < 0) return
+        const fav = localStorage.getItem('detailFav_' + currentDetailIndex) === '1'
+        const icon = document.getElementById('detail-fav-icon')
+        icon.src = fav
+          ? 'assets/src_01/icon/互动/收藏-active.png'
+          : 'assets/src_01/icon/互动/收藏.png'
+      }
+
+      function toggleDetailFavorite() {
+        if (currentDetailIndex < 0) return
+        const key = 'detailFav_' + currentDetailIndex
+        const fav = localStorage.getItem(key) === '1'
+        localStorage.setItem(key, fav ? '0' : '1')
+        updateDetailFavBtn()
+        showToast(fav ? '已取消收藏' : '已收藏')
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById('toast')
+        toast.innerText = msg
+        toast.classList.add('show')
+        setTimeout(() => {
+          toast.classList.remove('show')
+        }, 2000)
+      }
+
+      document
+        .getElementById('comment-input')
+        .addEventListener('keydown', e => {
+          if (e.key === 'Enter') showToast('评论已发布')
+        })
+
+      const index = parseInt(
+        new URLSearchParams(window.location.search).get('index'),
+        10,
+      )
+      renderDetail(isNaN(index) ? -1 : index)
+    </script>
+  </body>
+</html>

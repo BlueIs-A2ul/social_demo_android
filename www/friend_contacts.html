@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 
 <html data-immersive-translate-page-theme="light" lang="zh-CN">
   <head>
@@ -247,7 +247,7 @@
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
                 onclick="toggleIDCard(1, this)"
               >
-                虚拟身份证
+                个人名片
               </button>
               <button
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
@@ -263,7 +263,7 @@
             id="id-expand-1"
           >
             <div class="grid grid-cols-2 gap-y-2 text-xs">
-              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="text-gray-500">个人名片编号:</div>
               <div class="font-medium">V2031</div>
               <div class="text-gray-500">姓名:</div>
               <div class="font-medium">林晓</div>
@@ -305,7 +305,7 @@
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
                 onclick="toggleIDCard(2, this)"
               >
-                虚拟身份证
+                个人名片
               </button>
               <button
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
@@ -321,7 +321,7 @@
             id="id-expand-2"
           >
             <div class="grid grid-cols-2 gap-y-2 text-xs">
-              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="text-gray-500">个人名片编号:</div>
               <div class="font-medium">V1588</div>
               <div class="text-gray-500">姓名:</div>
               <div class="font-medium">张明</div>
@@ -363,7 +363,7 @@
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
                 onclick="toggleIDCard(3, this)"
               >
-                虚拟身份证
+                个人名片
               </button>
               <button
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
@@ -379,7 +379,7 @@
             id="id-expand-3"
           >
             <div class="grid grid-cols-2 gap-y-2 text-xs">
-              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="text-gray-500">个人名片编号:</div>
               <div class="font-medium">V3096</div>
               <div class="text-gray-500">姓名:</div>
               <div class="font-medium">王芳</div>
@@ -421,7 +421,7 @@
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
                 onclick="toggleIDCard(4, this)"
               >
-                虚拟身份证
+                个人名片
               </button>
               <button
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
@@ -437,7 +437,7 @@
             id="id-expand-4"
           >
             <div class="grid grid-cols-2 gap-y-2 text-xs">
-              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="text-gray-500">个人名片编号:</div>
               <div class="font-medium">V4096</div>
               <div class="text-gray-500">姓名:</div>
               <div class="font-medium">赵强</div>
@@ -479,7 +479,7 @@
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
                 onclick="toggleIDCard(5, this)"
               >
-                虚拟身份证
+                个人名片
               </button>
               <button
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
@@ -495,7 +495,7 @@
             id="id-expand-5"
           >
             <div class="grid grid-cols-2 gap-y-2 text-xs">
-              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="text-gray-500">个人名片编号:</div>
               <div class="font-medium">V1024</div>
               <div class="text-gray-500">姓名:</div>
               <div class="font-medium">陈静</div>
@@ -537,7 +537,7 @@
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
                 onclick="toggleIDCard(6, this)"
               >
-                虚拟身份证
+                个人名片
               </button>
               <button
                 class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50"
@@ -553,7 +553,7 @@
             id="id-expand-6"
           >
             <div class="grid grid-cols-2 gap-y-2 text-xs">
-              <div class="text-gray-500">虚拟身份证编号:</div>
+              <div class="text-gray-500">个人名片编号:</div>
               <div class="font-medium">V6618</div>
               <div class="text-gray-500">姓名:</div>
               <div class="font-medium">刘洋</div>
@@ -788,14 +788,14 @@
               <p class="text-xs ${friend.status === '在线' ? 'text-green-500' : 'text-gray-400'} mt-0.5">${friend.status}</p>
                         </div>
                         <div class="flex space-x-2 flex-none">
-                            <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(${friend.id}, this)">虚拟身份证</button>
+                            <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(${friend.id}, this)">个人名片</button>
                             <button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(${friend.id})">个人简历</button>
                         </div>
                     </div>
                     <!-- 展开的身份证信息 -->
                     <div id="id-expand-${friend.id}" class="hidden mt-4 bg-gray-50 border border-gray-200 p-3">
                         <div class="grid grid-cols-2 gap-y-2 text-xs">
-                            <div class="text-gray-500">虚拟身份证编号:</div> <div class="font-medium">${friend.vId}</div>
+                            <div class="text-gray-500">个人名片编号:</div> <div class="font-medium">${friend.vId}</div>
                             <div class="text-gray-500">姓名:</div> <div class="font-medium">${friend.name}</div>
                             <div class="text-gray-500">出生:</div> <div class="font-medium">${friend.birth}</div>
                             <div class="text-gray-500">性别:</div> <div class="font-medium">${friend.gender}</div>
@@ -823,7 +823,7 @@
           // Reset other buttons text
           const otherBtn =
             currentlyExpanded.previousElementSibling.querySelector('button')
-          if (otherBtn) otherBtn.innerText = '虚拟身份证'
+          if (otherBtn) otherBtn.innerText = '个人名片'
         }
 
         if (expandDiv.classList.contains('hidden')) {
@@ -832,7 +832,7 @@
           currentlyExpanded = expandDiv
         } else {
           expandDiv.classList.add('hidden')
-          btn.innerText = '虚拟身份证'
+          btn.innerText = '个人名片'
           currentlyExpanded = null
         }
       }

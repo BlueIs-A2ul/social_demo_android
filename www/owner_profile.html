@@ -107,9 +107,9 @@
 <button class="bg-white text-[#ec4899] h-[40px] text-sm font-medium border border-[#ec4899] active:bg-[#fce7f3]" onclick="window.location.href='room_chat.html?from=owner_profile'">
                 发消息
             </button>
-<button class="bg-white text-blue-500 h-[40px] text-sm font-medium border border-blue-500 active:bg-blue-50" id="toggleIDBtn" onclick="toggleIDCard()">虚拟身份证</button>
+<button class="bg-white text-blue-500 h-[40px] text-sm font-medium border border-blue-500 active:bg-blue-50" id="toggleIDBtn" onclick="toggleIDCard()">个人名片</button>
 </div>
-<!-- 虚拟身份证展开区域 -->
+<!-- 个人名片展开区域 -->
 <div class="animate-fade-in bg-gray-100 p-3 border border-gray-200 hidden" id="idCardBox">
 <div class="bg-white p-4 space-y-2 text-sm relative">
 <div class="flex justify-between border-b border-dashed border-gray-200 pb-2 mb-2">
@@ -521,7 +521,7 @@
             btn.classList.replace('text-blue-500', 'text-white');
         } else {
             box.classList.add('hidden');
-            btn.textContent = '虚拟身份证';
+            btn.textContent = '个人名片';
             btn.classList.replace('bg-blue-500', 'bg-white');
             btn.classList.replace('text-white', 'text-blue-500');
         }
