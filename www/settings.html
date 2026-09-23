@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>设置 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        #toast {
+            position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px;
+            padding: 8px 16px; border-radius: 6px; z-index: 999; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col bg-white"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <!-- 顶栏 -->
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white" style="font-size: 17px; font-weight: 700">设置</h1>
+        <span style="width: 32px"></span>
+    </header>
+    <!-- 行内容 -->
+    <div class="flex-1 overflow-y-auto">
+        <a class="setting-row" href="profile_info.html">
+            个人资料
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="security.html">
+            账号安全
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="notify.html">
+            通知
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="display.html">
+            界面与显示
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="friend_privacy.html">
+            朋友权限
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="chat_records.html">
+            聊天记录管理
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="feedback.html">
+            帮助与反馈
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('关于我们')">
+            关于我们
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <div class="flex justify-center" style="padding: 28px 0">
+            <button class="btn-brand" style="height: 40px; padding: 0 40px; font-size: 15px" onclick="showToast('已退出登录')">
+                退出登录
+            </button>
+        </div>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+    function toggleSwitch(el) {
+        el.classList.toggle('on')
+    }
+</script>
+</body>
+</html>
