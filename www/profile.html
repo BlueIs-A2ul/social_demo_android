@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 
 <html data-immersive-translate-page-theme="light" lang="zh-CN">
   <head>
@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>个人空间 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
     <script>
       (function () {
         try {
@@ -25,8 +26,8 @@
         font-family:
           -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI',
           Roboto, Helvetica, Arial, sans-serif;
-        color: #1f1722;
-        background: #f7f7f8;
+        color: #17313a;
+        background: #f5f9fa;
         background-attachment: fixed;
       }
       ::-webkit-scrollbar {
@@ -35,14 +36,14 @@
 
       /* ====== 设计 token ====== */
       :root {
-        --brand: #ec4899;
-        --brand-soft: #fdf2f8;
-        --brand-line: #fbcfe8;
-        --ink-900: #1f1722;
-        --ink-700: #4a3f50;
-        --ink-500: #8b7e93;
-        --ink-100: #f4edf1;
-        --shadow-sm: 0 2px 8px rgba(236, 72, 153, .06);
+        --brand: #26c6da;
+        --brand-soft: #f2fcfd;
+        --brand-line: #b8e9f0;
+        --ink-900: #17313a;
+        --ink-700: #3f5b64;
+        --ink-500: #8aa0a8;
+        --ink-100: #eef4f6;
+        --shadow-sm: 0 2px 8px rgba(38, 198, 218, .06);
         --shadow-md: 0 6px 18px rgba(31, 23, 34, .06);
       }
 
@@ -112,7 +113,7 @@
         border: 0;
         border-radius: 6px;
         cursor: pointer;
-        box-shadow: 0 4px 10px rgba(236, 72, 153, .25);
+        box-shadow: 0 4px 10px rgba(38, 198, 218, .25);
         transition: transform .12s ease;
       }
       .btn-search:active { transform: scale(.94); }
@@ -127,7 +128,7 @@
 
       /* ====== 内部标题行彩色横条背景 ====== */
       .title-strip {
-        background: url('assets/src_01/radar/彩色栏.png') center / 100% 100% no-repeat;
+        background: transparent;
       }
 
       /* ====== 房间网格 ====== */
@@ -135,7 +136,7 @@
         transition: background-color .15s ease;
       }
       .room-grid-item:active {
-        background: rgba(252, 231, 243, .55);
+        background: rgba(230, 249, 252, .55);
       }
       .room-grid-name {
         font-size: 12px;
@@ -143,37 +144,75 @@
         font-weight: 500;
       }
 
-      /* ====== 新闻网格 ====== */
+      /* ====== 新闻网格（两列卡片 + 赞/星底栏） ====== */
       .news-card {
         position: relative;
-        aspect-ratio: 3/4;
         border-radius: 8px;
         overflow: hidden;
         cursor: pointer;
-        box-shadow: var(--shadow-sm);
+        background: #fff;
+        border: 1px solid var(--brand-line);
         transition: transform .15s ease, box-shadow .15s ease;
       }
       .news-card:active {
         transform: scale(.97);
       }
-      .news-card img {
+      .news-card .news-card-img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        overflow: hidden;
+      }
+      .news-card .news-card-img img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
+      .news-card .news-card-body {
+        padding: 8px;
+      }
       .news-card .news-card-title {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 6px 8px;
-        font-size: 10px;
-        font-weight: 600;
-        color: #fff;
-        background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, .55) 100%);
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-900);
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      }
+      .news-card .news-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+        font-size: 11px;
+        color: var(--ink-500);
+      }
+      .news-card .news-card-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .news-card .news-card-meta img {
+        width: 14px;
+        height: 14px;
+        object-fit: contain;
+      }
+      /* ====== 标题行角标 ====== */
+      .badge-dot {
+        position: absolute;
+        top: -5px;
+        right: -6px;
+        min-width: 15px;
+        height: 15px;
+        padding: 0 3px;
+        border-radius: 4px;
+        font-size: 9px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 1.5px #fff;
       }
 
       /* ====== 共享菜单（浮在房间项上） ====== */
@@ -205,7 +244,7 @@
         align-items: center;
         padding: 0 12px;
         border: 0;
-        border-bottom: 1px solid rgba(251, 207, 232, .55);
+        border-bottom: 1px solid rgba(184, 233, 240, .55);
         background: transparent;
         color: var(--ink-700);
         font-size: 12px;
@@ -269,7 +308,7 @@
         align-items: center;
         gap: 12px;
         padding-bottom: 14px;
-        border-bottom: 1px solid rgba(251, 207, 232, .55);
+        border-bottom: 1px solid rgba(184, 233, 240, .55);
       }
       .idcard-avatar {
         width: 56px;
@@ -291,7 +330,7 @@
       }
       .idcard-field {
         padding: 10px 0;
-        border-bottom: 1px solid rgba(251, 207, 232, .45);
+        border-bottom: 1px solid rgba(184, 233, 240, .45);
         display: flex;
         gap: 12px;
       }
@@ -299,7 +338,7 @@
       .idcard-field-label {
         width: 72px;
         flex: none;
-        color: #be185d;
+        color: #00838f;
         font-size: 11px;
         font-weight: 600;
       }
@@ -425,7 +464,7 @@
         z-index: 10;
         transform: translateY(-100%);
         transition: transform 0.3s ease;
-        border-bottom: 1px solid rgba(251, 207, 232, .55);
+        border-bottom: 1px solid rgba(184, 233, 240, .55);
         border-radius: 0 0 8px 8px;
         will-change: transform;
       }
@@ -502,35 +541,68 @@
     >
       <!-- 顶部用户信息区 -->
       <div
-        class="flex-none px-5 pt-3 pb-4 flex items-center gap-3"
+        class="flex-none px-5 pt-3 pb-4 flex items-center gap-3 topbar"
       >
-        <div class="flex items-center gap-3">
-          <!-- Logo -->
+        <!-- Logo -->
+        <div
+          class="avatar-ring flex-none"
+          onclick="window.location.href='vip_center.html'"
+        >
+          <img
+            alt="标志"
+            src="assets/new_src/logo-cy.png"
+          />
+        </div>
+        <!-- 搜索框 -->
+        <div class="flex-1 min-w-0">
           <div
-            class="avatar-ring"
-            onclick="window.location.href='vip_center.html'"
+            class="flex items-center h-9 px-3 gap-2 bg-white"
+            style="border-radius: 9999px"
           >
-            <img
-              alt="标志"
-              src="assets/src_01/标志/标志02.jpg"
+            <iconify-icon
+              style="color: var(--ink-500); font-size: 16px; flex-shrink: 0;"
+              icon="solar:magnifer-linear"
+            ></iconify-icon>
+            <input
+              id="headerSearchInput"
+              class="flex-1 min-w-0 bg-transparent outline-none"
+              style="font-size: 13px; border: 0"
+              placeholder="搜索"
+              type="text"
+              onkeydown="if (event.key === 'Enter') handleHeaderSearch()"
             />
           </div>
-          <!-- 搜索框 -->
-          <div class="flex-1 min-w-0">
-            <div class="search-wrap">
-              <iconify-icon
-                style="color: var(--ink-500); font-size: 18px; flex-shrink: 0;"
-                icon="solar:magnifer-linear"
-              ></iconify-icon>
-              <input
-                id="headerSearchInput"
-                placeholder="搜索"
-                type="text"
-              />
-              <button class="btn-search" onclick="handleHeaderSearch()">搜索</button>
-            </div>
+        </div>
+        <!-- 消息 / 通知 -->
+        <div class="flex items-center gap-3 flex-none">
+          <div
+            class="relative cursor-pointer"
+            onclick="window.location.href='message_center.html'"
+          >
+            <iconify-icon
+              style="color: #fff; font-size: 24px"
+              icon="solar:letter-bold"
+            ></iconify-icon>
+            <span
+              class="absolute flex items-center justify-center"
+              style="top: -6px; right: -8px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 4px; background: var(--gold); color: #6b4a00; font-size: 10px; font-weight: 700; box-shadow: 0 0 0 1.5px #fff"
+              >5</span
+            >
           </div>
-
+          <div
+            class="relative cursor-pointer"
+            onclick="window.location.href='announcements.html'"
+          >
+            <iconify-icon
+              style="color: #fff; font-size: 24px"
+              icon="solar:bell-bold"
+            ></iconify-icon>
+            <span
+              class="absolute flex items-center justify-center"
+              style="top: -6px; right: -8px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 4px; background: var(--gold); color: #6b4a00; font-size: 10px; font-weight: 700; box-shadow: 0 0 0 1.5px #fff"
+              >4</span
+            >
+          </div>
         </div>
       </div>
       <!-- 「我的房间」大盒子 -->
@@ -542,7 +614,7 @@
             class="relative px-4 py-1.5 flex items-center justify-center"
           >
             <div class="title-strip absolute inset-0"></div>
-            <img alt="社区房间" class="h-12 relative z-10" src="assets/src_01/icon/社区房间-removebg-preview.png" />
+            <img alt="社区空间" class="h-12 relative z-10" src="assets/src_01/icon/社区空间.png" />
           </div>
         <!-- Grid 网格 -->
         <div class="grid grid-cols-4">
@@ -551,28 +623,38 @@
             class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
             onclick="showRoomProfileMenu(event)"
           >
-            <div class="w-full aspect-square mb-1 overflow-hidden">
+            <div class="relative w-full aspect-square mb-1 overflow-hidden">
               <img
-                alt="房间缩略图"
+                alt="雅柔的房间"
                 class="w-full h-full object-cover"
-                src="assets/packaged/sq/微信图片_20260727180857.jpg"
+                src="assets/new_src/分享头像/头像1.jpg"
               />
+              <span
+                class="absolute left-0 top-0 px-1.5 py-0.5 text-[10px] text-white"
+                style="background: #3b9df8; border-bottom-right-radius: 6px"
+                >置顶</span
+              >
             </div>
-            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">王爷府</span>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">雅柔的房间</span>
           </div>
           <!-- 房间 2 -->
           <div
             class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
             onclick="showRoomProfileMenu(event)"
           >
-            <div class="w-full aspect-square mb-1 overflow-hidden">
+            <div class="relative w-full aspect-square mb-1 overflow-hidden">
               <img
-                alt="房间缩略图"
+                alt="碧晨的房间"
                 class="w-full h-full object-cover"
-                src="assets/packaged/a360e987b470405b93134ddbf8e0e7c2.png"
+                src="assets/packaged/src/generated_avatars/avatar-02.png"
               />
+              <span
+                class="absolute left-0 top-0 px-1.5 py-0.5 text-[10px] text-white"
+                style="background: #3b9df8; border-bottom-right-radius: 6px"
+                >置顶</span
+              >
             </div>
-            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">小美的房间</span>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">碧晨的房间</span>
           </div>
           <!-- 房间 3 -->
           <div
@@ -581,12 +663,12 @@
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
-                alt="房间缩略图"
+                alt="童灵的房间"
                 class="w-full h-full object-cover"
-                src="./assets/shops/shop-coffee-bar.png"
+                src="assets/packaged/src/generated_avatars/avatar-03.png"
               />
             </div>
-            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">蓝鹊咖啡</span>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">童灵的房间</span>
           </div>
           <!-- 房间 4 -->
           <div
@@ -595,12 +677,12 @@
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
-                alt="房间缩略图"
+                alt="JOJO的房间"
                 class="w-full h-full object-cover"
-                src="./assets/shops/shop-pizza-front.png"
+                src="assets/packaged/src/generated_avatars/avatar-04.png"
               />
             </div>
-            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">布朗披萨</span>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">JOJO的房间</span>
           </div>
           <!-- 房间 5 -->
           <div
@@ -609,12 +691,110 @@
           >
             <div class="w-full aspect-square mb-1 overflow-hidden">
               <img
-                alt="妮妮的播客"
+                alt="心忧的房间"
                 class="w-full h-full object-cover"
-                src="assets/packaged/sq/妮妮的播客.png"
+                src="assets/packaged/src/generated_avatars/avatar-05.png"
               />
             </div>
-            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">妮妮的播客</span>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">心忧的房间</span>
+          </div>
+          <!-- 房间 6 -->
+          <div
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
+            onclick="showRoomProfileMenu(event)"
+          >
+            <div class="w-full aspect-square mb-1 overflow-hidden">
+              <img
+                alt="小慧的房间"
+                class="w-full h-full object-cover"
+                src="assets/packaged/src/generated_avatars/avatar-06.png"
+              />
+            </div>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">小慧的房间</span>
+          </div>
+          <!-- 房间 7 -->
+          <div
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
+            onclick="showRoomProfileMenu(event)"
+          >
+            <div class="w-full aspect-square mb-1 overflow-hidden">
+              <img
+                alt="美美的房间"
+                class="w-full h-full object-cover"
+                src="assets/packaged/src/generated_avatars/avatar-07.png"
+              />
+            </div>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">美美的房间</span>
+          </div>
+          <!-- 房间 8 -->
+          <div
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
+            onclick="showRoomProfileMenu(event)"
+          >
+            <div class="w-full aspect-square mb-1 overflow-hidden">
+              <img
+                alt="不凡的房间"
+                class="w-full h-full object-cover"
+                src="assets/packaged/src/generated_avatars/avatar-08.png"
+              />
+            </div>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">不凡的房间</span>
+          </div>
+          <!-- 房间 9 -->
+          <div
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
+            onclick="showRoomProfileMenu(event)"
+          >
+            <div class="w-full aspect-square mb-1 overflow-hidden">
+              <img
+                alt="童童的房间"
+                class="w-full h-full object-cover"
+                src="assets/packaged/src/generated_avatars/avatar-09.png"
+              />
+            </div>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">童童的房间</span>
+          </div>
+          <!-- 房间 10 -->
+          <div
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
+            onclick="showRoomProfileMenu(event)"
+          >
+            <div class="w-full aspect-square mb-1 overflow-hidden">
+              <img
+                alt="小鹿的房间"
+                class="w-full h-full object-cover"
+                src="assets/packaged/src/generated_avatars/avatar-10.png"
+              />
+            </div>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">小鹿的房间</span>
+          </div>
+          <!-- 房间 11 -->
+          <div
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
+            onclick="showRoomProfileMenu(event)"
+          >
+            <div class="w-full aspect-square mb-1 overflow-hidden">
+              <img
+                alt="七七的房间"
+                class="w-full h-full object-cover"
+                src="assets/avatars/member-01.jpg"
+              />
+            </div>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">七七的房间</span>
+          </div>
+          <!-- 房间 12 -->
+          <div
+            class="room-grid-item p-2 flex flex-col items-center cursor-pointer"
+            onclick="showRoomProfileMenu(event)"
+          >
+            <div class="w-full aspect-square mb-1 overflow-hidden">
+              <img
+                alt="卓一的房间"
+                class="w-full h-full object-cover"
+                src="assets/avatars/member-02.jpg"
+              />
+            </div>
+            <span class="room-grid-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">卓一的房间</span>
           </div>
         </div>
       </div>
@@ -629,13 +809,35 @@
           onclick="toggleNews()"
         >
           <div class="title-strip absolute inset-0"></div>
+          <!-- 左侧图标排 -->
+          <div class="flex items-center gap-1.5 relative z-10 pl-1">
+            <div class="relative">
+              <iconify-icon
+                style="color: var(--brand-deep); font-size: 20px"
+                icon="solar:letter-bold"
+              ></iconify-icon>
+              <span class="badge-dot" style="background: var(--gold); color: #6b4a00">6</span>
+            </div>
+            <div class="relative">
+              <img class="w-[20px] h-[20px] object-contain" src="assets/v2/icon/star.png" alt="星" />
+              <span class="badge-dot" style="background: var(--gold); color: #6b4a00">7</span>
+            </div>
+            <div class="relative">
+              <img class="w-[20px] h-[20px] object-contain" src="assets/v2/icon/like.png" alt="赞" />
+              <span class="badge-dot" style="background: #ff4d4f; color: #fff">1</span>
+            </div>
+            <div class="relative">
+              <img class="w-[20px] h-[20px] object-contain" src="assets/v2/coin/rmb.png" alt="币" />
+              <span class="badge-dot" style="background: var(--gold); color: #6b4a00">9</span>
+            </div>
+          </div>
           <div class="flex-1 flex justify-center relative z-10">
             <img src="assets/src_01/icon/社区新闻.png" alt="社区新闻" class="h-12 w-auto" />
           </div>
           <img class="news-arrow h-4 w-auto absolute right-4 z-10" src="assets/src_01/icon/展开状态箭头-removebg-preview.png" alt="展开"/>
         </div>
         <!-- 新闻网格 -->
-        <div class="grid grid-cols-3 gap-3 p-3 relative" id="newsList">
+        <div class="grid grid-cols-2 gap-3 p-3 relative" id="newsList">
           <!-- 下拉刷新指示器 -->
           <div class="pull-to-refresh-indicator hidden" id="pullToRefreshIndicator">
             <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
@@ -1097,8 +1299,13 @@
           const card = document.createElement('div')
           card.className = 'news-card'
           card.innerHTML =
-            '<img src="' + item.image + '" alt="' + item.title + '" />' +
-            '<div class="news-card-title">' + item.title + '</div>'
+            '<div class="news-card-img"><img src="' + item.image + '" alt="' + item.title + '" /></div>' +
+            '<div class="news-card-body">' +
+            '<div class="news-card-title">' + item.title + '</div>' +
+            '<div class="news-card-meta">' +
+            '<span><img src="assets/v2/icon/like.png" alt="赞" />120</span>' +
+            '<span><img src="assets/v2/icon/star.png" alt="星" />80</span>' +
+            '</div></div>'
           card.addEventListener('click', () => openCommunityNews(item))
           newsList.appendChild(card)
         })
@@ -1145,10 +1352,10 @@
         const icon = document.getElementById('communityNewsFavIcon')
         const text = document.getElementById('communityNewsFavText')
         if (isFav) {
-          icon.setAttribute('fill', '#ec4899')
-          icon.style.color = '#ec4899'
+          icon.setAttribute('fill', '#26c6da')
+          icon.style.color = '#26c6da'
           text.textContent = '已收藏'
-          text.style.color = '#ec4899'
+          text.style.color = '#26c6da'
         } else {
           icon.setAttribute('fill', 'none')
           icon.style.color = ''
