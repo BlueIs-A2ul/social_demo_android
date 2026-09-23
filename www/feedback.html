@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>帮助与反馈 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        #toast {
+            position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px;
+            padding: 8px 16px; border-radius: 6px; z-index: 999; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col bg-white"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white" style="font-size: 17px; font-weight: 700">帮助与反馈</h1>
+        <span style="width: 32px"></span>
+    </header>
+    <div class="flex-1 overflow-y-auto">
+        <div style="padding: 14px 16px 0">
+            <div style="font-size: 14px; color: var(--ink-900); margin-bottom: 8px">标题</div>
+            <input
+                class="w-full outline-none"
+                style="height: 40px; padding: 0 12px; font-size: 14px; border: 1px solid var(--brand-line); border-radius: 6px; background: #fff"
+                placeholder=""
+                type="text"
+            />
+            <div style="font-size: 14px; color: var(--ink-900); margin: 16px 0 8px">内容</div>
+            <textarea
+                class="w-full outline-none resize-none"
+                style="height: 150px; padding: 12px; font-size: 14px; border: 1px solid var(--brand-line); border-radius: 6px; background: #f7f9fa"
+            ></textarea>
+            <div class="flex justify-center" style="padding: 28px 0">
+                <button class="btn-brand" style="height: 40px; padding: 0 40px; font-size: 15px" onclick="showToast('已提交')">
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+    function toggleSwitch(el) {
+        el.classList.toggle('on')
+    }
+</script>
+</body>
+</html>
