@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>个人资料 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        #toast {
+            position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px;
+            padding: 8px 16px; border-radius: 6px; z-index: 999; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col bg-white"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white" style="font-size: 17px; font-weight: 700">个人资料</h1>
+        <span style="width: 32px"></span>
+    </header>
+    <div class="flex-1 overflow-y-auto">
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('更换头像')">
+            头像
+            <span class="row-value">
+                <img
+                    alt="头像"
+                    class="w-9 h-9 object-cover"
+                    style="border-radius: 9999px"
+                    src="assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png"
+                />
+                <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+            </span>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('修改名字')">
+            名字
+            <span class="row-value">雅柔<iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon></span>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('修改性别')">
+            性别
+            <span class="row-value">女<iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon></span>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('修改地区')">
+            地区
+            <span class="row-value">成都<iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon></span>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('修改手机号')">
+            手机号
+            <span class="row-value">15800000000<iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon></span>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('我的二维码')">
+            我的二维码
+            <span class="row-value">
+                <iconify-icon style="font-size: 24px; color: var(--ink-900)" icon="solar:qr-code-bold"></iconify-icon>
+                <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+            </span>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('修改签名')">
+            签名
+            <span class="row-value">慢品人间烟火色，闲观万事岁月长<iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon></span>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('我的地址')">
+            我的地址
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <div class="flex justify-center" style="padding: 28px 0">
+            <button class="btn-brand" style="height: 40px; padding: 0 40px; font-size: 15px" onclick="showToast('已退出登录')">
+                退出登录
+            </button>
+        </div>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+    function toggleSwitch(el) {
+        el.classList.toggle('on')
+    }
+</script>
+</body>
+</html>

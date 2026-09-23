@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>账号安全 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        #toast {
+            position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px;
+            padding: 8px 16px; border-radius: 6px; z-index: 999; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col bg-white"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white" style="font-size: 17px; font-weight: 700">账号安全</h1>
+        <span style="width: 32px"></span>
+    </header>
+    <div class="flex-1 overflow-y-auto">
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('设置密码')">
+            设置密码
+            <span class="row-value">未设置<iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon></span>
+        </a>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+    function toggleSwitch(el) {
+        el.classList.toggle('on')
+    }
+</script>
+</body>
+</html>
