@@ -423,11 +423,11 @@
       const subTabs = document.getElementById('subTabs');
 
       const TILE_STYLE = {
-        '装修类': { bg: '#e6f9fc', icon: 'solar:home-2-bold', color: '#00acc1' },
-        '家具类': { bg: '#fff4e5', icon: 'solar:sofa-bold', color: '#f0a04b' },
-        '文具': { bg: '#e8f6ff', icon: 'solar:pen-bold', color: '#3b9df8' },
-        '装饰类': { bg: '#ffeceb', icon: 'solar:gallery-wide-bold', color: '#ff6b6b' },
-        '饰品类': { bg: '#f3ecff', icon: 'solar:box-bold', color: '#8b6bf0' },
+        '装修类': { bg: 'transparent', img: 'assets/v2/processed/T恤-青色1.png' },
+        '家具类': { bg: 'transparent', img: 'assets/v2/processed/沙发-1.png' },
+        '文具': { bg: 'transparent', img: 'assets/v2/processed/铅笔橡皮-1.png' },
+        '装饰类': { bg: 'transparent', img: 'assets/v2/processed/蝴蝶结-1.png' },
+        '饰品类': { bg: 'transparent', img: 'assets/v2/processed/宝箱-1.png' },
         '灯具类': { bg: '#fffbe6', icon: 'solar:lamp-bold', color: '#e0b500' },
         '文案类': { bg: '#eafaf1', icon: 'solar:document-text-bold', color: '#2ecc71' }
       };
@@ -446,9 +446,12 @@
           .slice(0, 5)
           .map(g => {
             const s = TILE_STYLE[g.category] || TILE_STYLE['装修类'];
+            const inner = s.img
+              ? `<img src="${s.img}" alt="${g.category}" style="width:30px;height:30px;object-fit:contain" />`
+              : `<iconify-icon style="font-size:24px" icon="${s.icon}"></iconify-icon>`;
             return `<button class="tile" onclick="selectCategory('${g.category}')">
-              <span class="tile-icon" style="background:${s.bg}; color:${s.color}">
-                <iconify-icon style="font-size:24px" icon="${s.icon}"></iconify-icon>
+              <span class="tile-icon" style="background:${s.bg}; color:${s.color || 'inherit'}">
+                ${inner}
               </span>
               <span class="tile-label">${g.category}</span>
             </button>`;
