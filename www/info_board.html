@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>信息栏 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        .board-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+        }
+        .board-card:active { transform: scale(.98); }
+        .board-card img.cover {
+            width: 100%;
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            display: block;
+        }
+        .board-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 8px 10px;
+            font-size: 11px;
+            color: var(--ink-500);
+        }
+        .board-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .board-meta img {
+            width: 14px;
+            height: 14px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white" style="font-size: 17px; font-weight: 700">信息栏</h1>
+        <span style="width: 32px"></span>
+    </header>
+    <div class="flex-1 overflow-y-auto" style="padding: 10px 12px 24px">
+        <div class="grid grid-cols-2 gap-3" id="boardGrid"></div>
+    </div>
+</div>
+<script>
+    const BOARD_ITEMS = [
+        {
+            title: '外贸经理/主管',
+            desc: '国际贸易、商务英语类专业大专以上学历，具有3年以上外贸平台海外销售经验',
+            image: 'assets/v2/board/board-01.jpg',
+            like: 260,
+            star: 320,
+        },
+        {
+            title: '顺丰同城配送骑手招募',
+            desc: '在固定门店取货，将生鲜、水果、牛奶、面包、饮料、零食等食品及小件商品配送至客户手中',
+            image: 'assets/v2/board/board-02.jpg',
+            like: 260,
+            star: 320,
+        },
+        {
+            title: '新媒体运营经理',
+            desc: '负责短视频内容拍摄与剪辑，确保视频质量与节奏感，独立完成文案策划',
+            image: 'assets/v2/board/board-03.jpg',
+            like: 260,
+            star: 320,
+        },
+        {
+            title: '销售专员',
+            desc: '负责客户沟通与需求对接，完成销售目标，维护客户关系，提供专业服务',
+            image: 'assets/v2/board/board-04.jpg',
+            like: 260,
+            star: 320,
+        },
+        {
+            title: '生活无趣，打旅游搭子',
+            desc: '生活很无趣，需要找个旅游搭子散散心，本人女80后',
+            image: 'assets/v2/board/board-05.jpg',
+            like: 260,
+            star: 320,
+        },
+        {
+            title: '出门踏青去…找自驾搭子',
+            desc: '出门踏青，找自驾搭子，目前两女，缺搭子。我负责车和一起散散心。去哪一起商量',
+            image: 'assets/v2/board/board-06.jpg',
+            like: 260,
+            star: 320,
+        },
+        {
+            title: '大学生成都出发找搭子',
+            desc: '宝子们，我就想在四川省内的城市转转，周边游主打一个轻松',
+            image: 'assets/v2/board/board-07.jpg',
+            like: 260,
+            star: 320,
+        },
+        {
+            title: '找个长期的旅游搭子',
+            desc: '想找个长期稳定的旅游搭子，一起看世界',
+            image: 'assets/v2/board/board-08.jpg',
+            like: 260,
+            star: 320,
+        },
+    ]
+
+    const grid = document.getElementById('boardGrid')
+    grid.innerHTML = BOARD_ITEMS.map((item, index) => `
+        <div class="board-card" onclick="location.href='info_detail.html?index=${index}'">
+            <img class="cover" src="${item.image}" alt="${item.title}"/>
+            <div style="padding: 8px 10px 0">
+                <div style="font-size: 14px; font-weight: 700; color: var(--ink-900); line-height: 1.35">${item.title}</div>
+                <div style="font-size: 12px; color: var(--ink-500); margin-top: 6px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden">${item.desc}</div>
+            </div>
+            <div class="board-meta">
+                <span><img src="assets/v2/icon/like.png" alt="赞"/>${item.like}</span>
+                <span><img src="assets/v2/icon/star.png" alt="星"/>${item.star}</span>
+            </div>
+        </div>
+    `).join('')
+</script>
+</body>
+</html>
