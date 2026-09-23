@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>关于我们 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        .about-head {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 30px 0 24px;
+            background: #fff;
+        }
+        .about-logo {
+            width: 76px;
+            height: 76px;
+            object-fit: contain;
+        }
+        .about-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink-900);
+        }
+        .about-version {
+            font-size: 12px;
+            color: var(--ink-500);
+        }
+        .about-foot {
+            padding: 26px 0 34px;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.9;
+            color: var(--ink-500);
+        }
+        #toast {
+            position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px;
+            padding: 8px 16px; border-radius: 6px; z-index: 999; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col bg-white"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <!-- 顶栏 -->
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white" style="font-size: 17px; font-weight: 700">关于我们</h1>
+        <span style="width: 32px"></span>
+    </header>
+    <!-- 内容 -->
+    <div class="flex-1 overflow-y-auto">
+        <div class="about-head">
+            <img class="about-logo" alt="智慧空间" src="assets/new_src/logo-cy.png"/>
+            <div class="about-name">智慧空间</div>
+            <div class="about-version">版本 v1.0.0</div>
+        </div>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('用户协议')">
+            用户协议
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('隐私条款')">
+            隐私条款
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('天翼账号认证服务协议')">
+            天翼账号认证服务协议
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('已是最新版本')">
+            检查更新
+            <span class="setting-value" style="font-size: 13px; color: var(--ink-500)">v1.0.0</span>
+        </a>
+        <a class="setting-row" href="javascript:void(0)" onclick="showToast('欢迎反馈')">
+            意见反馈
+            <iconify-icon class="setting-arrow" icon="solar:alt-arrow-right-linear"></iconify-icon>
+        </a>
+        <div class="about-foot">
+            智慧空间 · 让每一次相遇都有温度<br/>
+            © 2026 智慧空间 版权所有
+        </div>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+</script>
+</body>
+</html>

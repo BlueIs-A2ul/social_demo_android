@@ -545,15 +545,23 @@
       const HEART_SVG =
         '<svg fill="none" height="14" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="14"><path d="M12 20.3 4.7 13a4.6 4.6 0 0 1 6.5-6.5l.8.8.8-.8A4.6 4.6 0 0 1 19.3 13Z"/></svg>'
 
+      const VIEW_AUTHOR_ORDER = {
+        follow: [0, 1, 2, 3],
+        discover: [4, 1, 5, 6],
+        nearby: [4, 1, 5, 6],
+        home: []
+      }
+
       function renderFeed(view) {
         const feedGrid = document.getElementById('feed-grid')
         const ids = VIEW_FEEDS[view] || VIEW_FEEDS.follow
         const isHome = view === 'home'
+        const order = VIEW_AUTHOR_ORDER[view] || VIEW_AUTHOR_ORDER.follow
         feedGrid.classList.toggle('publish-grid-3', isHome)
         feedGrid.innerHTML = ids
           .map((i, n) => {
             const p = POSTS[i]
-            const a = AUTHORS[n % AUTHORS.length]
+            const a = AUTHORS[order.length ? order[n % order.length] : 0]
             const likes = LIKE_COUNTS[n % LIKE_COUNTS.length]
             const isVideo = n % 3 === 0
             const overlay = isVideo
