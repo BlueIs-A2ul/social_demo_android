@@ -9,14 +9,15 @@
     />
     <title>引导页 - 兴趣选择</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+    <link href="assets/vendor/theme.css" rel="stylesheet" />
     <style>
       body {
         width: 100%;
         height: 100dvh;
-        background-color: #f7f7f8;
+        background-color: #ffffff;
         font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-          Arial, sans-serif;
+          -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto,
+          Helvetica, Arial, sans-serif;
         overflow: hidden;
         position: relative;
         padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
@@ -25,80 +26,37 @@
           env(safe-area-inset-bottom, 0px)
         );
       }
-      .interest-card {
-        border: 1px solid #f4edf1;
-        background-color: #ffffff;
-        border-radius: 10px;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 8px;
-        text-align: center;
-      }
-      .interest-card.selected {
-        border-color: #ec4899;
-        background-color: #fce7f3;
-        font-weight: 500;
-        box-shadow: 0 2px 8px rgba(236, 72, 153, .12);
-      }
       ::-webkit-scrollbar {
         display: none;
       }
     </style>
   </head>
   <body class="flex flex-col">
-    <!-- 右上角跳过 -->
-    <a
-      class="fixed top-[calc(var(--safe-area-inset-top,0px)+12px)] right-4 z-10 text-gray-400 font-medium"
-      onclick="skipOnboarding()"
-      >跳过</a
+    <!-- 顶部：返回 + 跳过 -->
+    <div
+      class="flex items-center justify-between px-5 pt-3 shrink-0"
+      style="padding-top: calc(var(--safe-area-inset-top, 0px) + 12px)"
     >
-    <!-- 占位（与其它 onboarding 页进度条等高） -->
-    <div class="shrink-0" style="height: 36px;"></div>
+      <button class="text-[#9fb3b9] text-2xl leading-none" onclick="history.back()">‹</button>
+      <a
+        class="text-[13px] text-[#9fb3b9] px-4 py-1.5 rounded-full bg-[#f2f7f8]"
+        onclick="skipOnboarding()"
+        >跳过</a
+      >
+    </div>
     <!-- 主内容区 -->
-    <div class="flex-1 px-8 pt-4 flex flex-col min-h-0">
-      <div class="flex justify-between items-start mb-2">
-        <h1
-          class="text-3xl font-bold text-[#ec4899] leading-tight tracking-wider"
-          id="step-title"
-        >
-          选择你的文化偏好
-        </h1>
-        <div class="text-[#ec4899] mt-1 shrink-0">
-          <svg
-            fill="none"
-            height="40"
-            viewbox="0 0 60 40"
-            width="60"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="30"
-              cy="20"
-              fill="#ec4899"
-              fill-opacity="0.2"
-              r="14"
-            ></circle>
-            <circle cx="30" cy="20" fill="#ec4899" r="10"></circle>
-            <ellipse
-              cx="30"
-              cy="20"
-              rx="28"
-              ry="6"
-              stroke="#cbbccf"
-              stroke-width="1.5"
-              transform="rotate(-15, 30, 20)"
-            ></ellipse>
-          </svg>
-        </div>
-      </div>
-      <p class="text-gray-400 text-sm mb-6" id="step-subtitle">
+    <div class="flex-1 px-6 pt-4 flex flex-col min-h-0">
+      <h1
+        class="text-[26px] font-bold title-brand leading-snug tracking-wide mb-1"
+        id="step-title"
+      >
+        选择你的文化偏好
+      </h1>
+      <p class="text-[#9fb3b9] text-[12px] mb-4" id="step-subtitle">
         文化类：艺术、历史、传统、教育等
       </p>
       <!-- 标签选择区 -->
-      <div class="flex-1 overflow-y-auto pb-10" id="tag-scroll-area">
+      <div class="flex-1 overflow-y-auto pb-8" id="tag-scroll-area">
         <div class="space-y-6" id="tag-container">
           <!-- 动态填充 -->
         </div>
@@ -106,12 +64,11 @@
     </div>
     <!-- 底部操作栏 -->
     <div
-      class="px-8 py-6 flex items-center justify-center shrink-0"
-      style="border-top: 1px solid rgba(251,207,232,.55);"
+      class="px-8 py-5 flex items-center justify-center shrink-0"
+      style="border-top: 1px solid #eef4f6"
     >
       <button
-        class="bg-pink-100 text-pink-300 font-bold text-lg px-12 py-3 transition-colors"
-        style="border-radius: 10px;"
+        class="btn-brand text-base px-12 py-3"
         disabled=""
         id="next-btn"
         onclick="handleNext()"
@@ -148,10 +105,10 @@
                 '历史文献',
                 '美食历史文化',
                 '音乐历史文化',
-                '名族历史文化',
+                '民族历史文化',
                 '非物质历史文化',
                 '宗教历史文化',
-                '游牧历史文革',
+                '游牧历史文化',
                 '古迹历史文化',
               ],
             },
@@ -253,10 +210,10 @@
                 '绘画',
                 '摄影',
                 '舞蹈',
-                '世界名族音乐',
+                '世界民族音乐',
                 'R&B',
                 '灵魂乐Soul',
-                '4. Neo-Soul 新灵魂乐',
+                'Neo-Soul 新灵魂乐',
                 '布鲁斯',
                 '爵士乐',
                 '乡村音乐',
@@ -349,7 +306,7 @@
 
         data.groups.forEach(group => {
           const groupDiv = document.createElement('div')
-          groupDiv.innerHTML = `<h3 class="text-gray-800 font-bold mb-3 text-sm">${group.name}</h3>`
+          groupDiv.innerHTML = `<h3 class="text-[#17313a] font-bold mb-3 text-sm">${group.name}</h3>`
 
           const grid = document.createElement('div')
           grid.className = 'grid grid-cols-2 gap-3'
@@ -357,7 +314,7 @@
           group.tags.forEach(tag => {
             const isSelected = selectedTags[currentStep].has(tag)
             const card = document.createElement('div')
-            card.className = `interest-card text-sm ${isSelected ? 'selected' : ''}`
+            card.className = `chip text-[13px] ${isSelected ? 'selected' : ''}`
             card.innerText = tag
             card.onclick = () => toggleTag(tag, card)
             grid.appendChild(card)
@@ -367,16 +324,10 @@
           container.appendChild(groupDiv)
         })
 
-        // 更新按钮
         const nextBtn = document.getElementById('next-btn')
-        if (currentStep === 2) {
-          nextBtn.innerText = '完成'
-        } else {
-          nextBtn.innerText = '下一步'
-        }
+        nextBtn.innerText = currentStep === 2 ? '完成' : '下一步'
         updateButtonState()
 
-        // 滚动到顶部
         document.getElementById('tag-scroll-area').scrollTop = 0
       }
 
@@ -393,16 +344,8 @@
       }
 
       function updateButtonState() {
-        const nextBtn = document.getElementById('next-btn')
-        if (selectedTags[currentStep].size > 0) {
-          nextBtn.disabled = false
-          nextBtn.classList.remove('bg-pink-100', 'text-pink-300')
-          nextBtn.classList.add('bg-[#ec4899]', 'text-white')
-        } else {
-          nextBtn.disabled = true
-          nextBtn.classList.add('bg-pink-100', 'text-pink-300')
-          nextBtn.classList.remove('bg-[#ec4899]', 'text-white')
-        }
+        document.getElementById('next-btn').disabled =
+          selectedTags[currentStep].size === 0
       }
 
       function handleNext() {

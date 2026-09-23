@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>房主主页 - 元宇宙社交</title>
 <script src="assets/vendor/tailwindcss.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
 <style>
         body {
             background-color: #f3f4f6;
@@ -71,12 +72,12 @@
 </span>
 </div>
 <div class="flex items-center gap-3 mt-2">
-<span class="bg-[#ec4899] text-white text-xs px-2 py-0.5 font-medium">10年老店</span>
+<span class="bg-[#26c6da] text-white text-xs px-2 py-0.5 font-medium">10年老店</span>
 <div class="flex items-center gap-0.5">
 <span class="text-xs text-gray-500 mr-1">诚信:</span>
-<svg class="text-[#ec4899]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
-<svg class="text-[#ec4899]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
-<svg class="text-[#ec4899]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<svg class="text-[#26c6da]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<svg class="text-[#26c6da]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<svg class="text-[#26c6da]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
 <svg class="text-gray-300" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
 <svg class="text-gray-300" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
 </div>
@@ -101,10 +102,10 @@
 <!-- 3. 操作按钮区 -->
 <div class="px-4 py-3 bg-white border-t border-gray-100 flex flex-col gap-3 flex-none">
 <div class="grid grid-cols-3 gap-2">
-<button class="bg-[#ec4899] text-white h-[40px] text-sm font-medium border border-[#ec4899] active:opacity-80" id="addFriendBtn" onclick="openAddFriendModal()">
+<button class="bg-[#26c6da] text-white h-[40px] text-sm font-medium border border-[#26c6da] active:opacity-80" id="addFriendBtn" onclick="openAddFriendModal()">
                 加好友
             </button>
-<button class="bg-white text-[#ec4899] h-[40px] text-sm font-medium border border-[#ec4899] active:bg-[#fce7f3]" onclick="window.location.href='room_chat.html?from=owner_profile'">
+<button class="bg-white text-[#26c6da] h-[40px] text-sm font-medium border border-[#26c6da] active:bg-[#e6f9fc]" onclick="window.location.href='room_chat.html?from=owner_profile'">
                 发消息
             </button>
 <button class="bg-white text-blue-500 h-[40px] text-sm font-medium border border-blue-500 active:bg-blue-50" id="toggleIDBtn" onclick="toggleIDCard()">个人名片</button>
@@ -427,7 +428,7 @@
 </div>
 <div class="p-4 border-b border-gray-100">
 <h3 class="text-lg font-bold text-gray-900" id="modalTitle">标题</h3>
-<p class="text-sm text-[#ec4899] mt-1" id="modalTag">#标签</p>
+<p class="text-sm text-[#26c6da] mt-1" id="modalTag">#标签</p>
 </div>
 <div class="p-4 text-sm text-gray-700 leading-relaxed border-b border-gray-100">
 <div id="modalContent">内容详情...</div>
@@ -463,7 +464,7 @@
 </div>
 <div class="p-4 bg-white border-t border-gray-100 flex gap-2 items-center">
 <input class="flex-1 bg-gray-100 border-none h-10 px-4 text-sm focus:outline-none rounded-none" placeholder="说点什么吧..." type="text"/>
-<button class="bg-[#ec4899] text-white px-4 h-10 text-sm font-medium rounded-none">发布</button>
+<button class="bg-[#26c6da] text-white px-4 h-10 text-sm font-medium rounded-none">发布</button>
 </div>
 </div>
 </div>
@@ -472,10 +473,10 @@
 <div class="absolute inset-0 bg-black/60" onclick="closeAddFriendModal()"></div>
 <div class="relative bg-white w-full max-w-[320px] p-6 rounded-none">
 <h3 class="text-lg font-bold text-gray-900 mb-4">发送好友申请</h3>
-<textarea class="w-full border border-gray-200 p-3 text-sm focus:outline-none focus:border-[#ec4899] mb-4 rounded-none" id="friendMsg" placeholder="我是...想和你交个朋友" rows="3"></textarea>
+<textarea class="w-full border border-gray-200 p-3 text-sm focus:outline-none focus:border-[#26c6da] mb-4 rounded-none" id="friendMsg" placeholder="我是...想和你交个朋友" rows="3"></textarea>
 <div class="grid grid-cols-2 gap-3">
 <button class="h-10 border border-gray-200 text-gray-600 text-sm font-medium rounded-none" onclick="closeAddFriendModal()">取消</button>
-<button class="h-10 bg-[#ec4899] text-white text-sm font-medium rounded-none" onclick="sendFriendRequest()">发送</button>
+<button class="h-10 bg-[#26c6da] text-white text-sm font-medium rounded-none" onclick="sendFriendRequest()">发送</button>
 </div>
 </div>
 </div>
@@ -553,8 +554,8 @@
         const btn = document.getElementById('addFriendBtn');
         btn.textContent = '已申请';
         btn.disabled = true;
-        btn.classList.replace('bg-[#ec4899]', 'bg-gray-300');
-        btn.classList.replace('border-[#ec4899]', 'border-gray-300');
+        btn.classList.replace('bg-[#26c6da]', 'bg-gray-300');
+        btn.classList.replace('border-[#26c6da]', 'border-gray-300');
         closeAddFriendModal();
     }
 

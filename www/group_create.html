@@ -13,10 +13,10 @@
     }
     ::-webkit-scrollbar { display: none; }
     * { border-radius: 0 !important; }
-    .avatar { border-radius: 9999px !important; display: block; border: 1px solid #fce7f3; background: #fdf2f8; object-fit: cover; flex: none; }
-    .text-pink-main { color: #ec4899; }
-    .bg-pink-main { background-color: #ec4899; }
-    .border-pink-main { border-color: #ec4899; }
+    .avatar { border-radius: 9999px !important; display: block; border: 1px solid #e6f9fc; background: #f2fcfd; object-fit: cover; flex: none; }
+    .text-pink-main { color: #26c6da; }
+    .bg-pink-main { background-color: #26c6da; }
+    .border-pink-main { border-color: #26c6da; }
     .flex { display: flex; }
     .grid { display: grid; }
     .block { display: block; }
@@ -66,11 +66,11 @@
     .border-gray-100 { border-color: #f3f4f6; }
     .border-gray-200 { border-color: #e5e7eb; }
     .border-gray-300 { border-color: #d1d5db; }
-    .border-pink-main { border-color: #ec4899; }
+    .border-pink-main { border-color: #26c6da; }
     .bg-white { background-color: #fff; }
     .bg-gray-50 { background-color: #f9fafb; }
     .bg-gray-100 { background-color: #f3f4f6; }
-    .bg-pink-50 { background-color: #fdf2f8; }
+    .bg-[#f2fcfd] { background-color: #f2fcfd; }
     .bg-black\/70 { background-color: rgba(0, 0, 0, .7); }
     .text-white { color: #fff; }
     .text-gray-400 { color: #9ca3af; }
@@ -88,13 +88,13 @@
     .opacity-0 { opacity: 0; }
     .transition-opacity { transition: opacity .2s ease; }
     .focus\:outline-none:focus { outline: none; }
-    .focus\:border-pink-main:focus { border-color: #ec4899; }
+    .focus\:border-pink-main:focus { border-color: #26c6da; }
     .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0,0,0,.25); }
-    .type-active { background: #ec4899; color: #fff; border-color: #ec4899; }
-    .admin-active { border-color: #ec4899; background: #fdf2f8; }
+    .type-active { background: #26c6da; color: #fff; border-color: #26c6da; }
+    .admin-active { border-color: #26c6da; background: #f2fcfd; }
     .switch { width: 38px; height: 22px; background: #d1d5db; position: relative; transition: background .2s ease; }
     .switch::after { content: ""; width: 18px; height: 18px; background: white; position: absolute; left: 2px; top: 2px; transition: left .2s ease; }
-    .switch.on { background: #ec4899; }
+    .switch.on { background: #26c6da; }
     .switch.on::after { left: 18px; }
 </style>
 </head>
@@ -173,7 +173,7 @@
                 <span class="text-[10px] text-pink-main">已选 2 人</span>
             </div>
             <div class="space-y-2">
-                <button class="admin-card w-full p-3 border border-pink-main bg-pink-50 flex items-center gap-3 text-left admin-active" onclick="toggleAdmin(this)">
+                <button class="admin-card w-full p-3 border border-pink-main bg-[#f2fcfd] flex items-center gap-3 text-left admin-active" onclick="toggleAdmin(this)">
                     <img class="avatar w-10 h-10" alt="小云头像" src="assets/packaged/src/generated_avatars/avatar-01.png" />
                     <span class="flex-1">
                         <span class="block text-sm font-bold text-gray-900">小云</span>
@@ -181,7 +181,7 @@
                     </span>
                     <span class="admin-role text-[10px] text-pink-main font-bold">管理员</span>
                 </button>
-                <button class="admin-card w-full p-3 border border-pink-main bg-pink-50 flex items-center gap-3 text-left admin-active" onclick="toggleAdmin(this)">
+                <button class="admin-card w-full p-3 border border-pink-main bg-[#f2fcfd] flex items-center gap-3 text-left admin-active" onclick="toggleAdmin(this)">
                     <img class="avatar w-10 h-10" alt="约翰逊头像" src="assets/packaged/src/generated_avatars/avatar-07.png" />
                     <span class="flex-1">
                         <span class="block text-sm font-bold text-gray-900">约翰逊</span>
@@ -247,7 +247,7 @@
         const label = button.querySelector('.admin-role');
         button.classList.toggle('admin-active');
         button.classList.toggle('border-pink-main');
-        button.classList.toggle('bg-pink-50');
+        button.classList.toggle('bg-[#f2fcfd]');
         button.classList.toggle('border-gray-200');
         label.textContent = button.classList.contains('admin-active') ? '管理员' : '成员';
         label.classList.toggle('text-pink-main');

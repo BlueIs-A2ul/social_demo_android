@@ -21,8 +21,8 @@
         scrollbar-width: none;
       }
       .tab-active {
-        color: #ec4899;
-        border-bottom: 2px solid #ec4899;
+        color: #26c6da;
+        border-bottom: 2px solid #26c6da;
       }
       .line-clamp-3 {
         display: -webkit-box;
@@ -136,7 +136,7 @@
             有什么新鲜事想分享？
           </div>
           <button
-            class="bg-[#ec4899] text-white px-3 py-1 text-sm font-medium"
+            class="bg-[#26c6da] text-white px-3 py-1 text-sm font-medium"
           >
             发布
           </button>
@@ -147,7 +147,7 @@
           id="refresh-indicator"
         >
           <svg
-            class="animate-spin h-5 w-5 text-[#ec4899]"
+            class="animate-spin h-5 w-5 text-[#26c6da]"
             fill="none"
             viewbox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
@@ -194,7 +194,7 @@
             你还没有关注任何人，去发现更多用户吧
           </p>
           <button
-            class="bg-[#ec4899] text-white px-8 py-2 font-medium"
+            class="bg-[#26c6da] text-white px-8 py-2 font-medium"
             onclick="switchTab('recommend')"
           >
             去发现
@@ -372,7 +372,7 @@
                 </div>
               </div>
               <button
-                class="text-xs px-3 py-1 text-[#ec4899] border border-[#ec4899] font-medium"
+                class="text-xs px-3 py-1 text-[#26c6da] border border-[#26c6da] font-medium"
                 onclick="toggleFollow(this, 2)"
               >
                 + 关注
@@ -385,7 +385,7 @@
                 id="post-content-2"
               >
                 在家里复刻了优雅的古风经典场景，配合光影特效和粒子效果，沉浸感拉满！欢迎来探索🗺️
-                <span class="text-[#ec4899] cursor-pointer">#3D</span>空间
+                <span class="text-[#26c6da] cursor-pointer">#3D</span>空间
                 #游戏场景
               </div>
             </div>
@@ -544,7 +544,7 @@
                 </div>
               </div>
               <button
-                class="text-xs px-3 py-1 text-[#ec4899] border border-[#ec4899] font-medium"
+                class="text-xs px-3 py-1 text-[#26c6da] border border-[#26c6da] font-medium"
                 onclick="toggleFollow(this, 4)"
               >
                 + 关注
@@ -862,7 +862,7 @@
               onclick="openForwardModal()"
             >
               <div
-                class="w-12 h-12 bg-[#ec4899] flex items-center justify-center text-white"
+                class="w-12 h-12 bg-[#26c6da] flex items-center justify-center text-white"
               >
                 <svg
                   class="w-6 h-6"
@@ -886,7 +886,7 @@
               onclick="location.href = 'room_chat.html?from=square'"
             >
               <div
-                class="w-12 h-12 bg-[#ec4899] flex items-center justify-center text-white"
+                class="w-12 h-12 bg-[#26c6da] flex items-center justify-center text-white"
               >
                 <svg
                   class="w-6 h-6"
@@ -910,7 +910,7 @@
               onclick="copyLink()"
             >
               <div
-                class="w-12 h-12 bg-[#ec4899] flex items-center justify-center text-white"
+                class="w-12 h-12 bg-[#26c6da] flex items-center justify-center text-white"
               >
                 <svg
                   class="w-6 h-6"
@@ -1019,7 +1019,7 @@
             </div>
             <!-- 输入区 -->
             <textarea
-              class="w-full h-24 p-3 text-sm border border-gray-200 focus:outline-none focus:border-[#ec4899] resize-none mb-4"
+              class="w-full h-24 p-3 text-sm border border-gray-200 focus:outline-none focus:border-[#26c6da] resize-none mb-4"
               placeholder="说说你的看法..."
             ></textarea>
             <!-- 选项 -->
@@ -1030,13 +1030,13 @@
                 转发
               </button>
               <button
-                class="flex-1 py-2 text-xs bg-[#fce7f3] text-[#ec4899] border border-[#f472b6]"
+                class="flex-1 py-2 text-xs bg-[#e6f9fc] text-[#26c6da] border border-[#f472b6]"
               >
                 写评论并转发
               </button>
             </div>
             <button
-              class="w-full bg-[#ec4899] text-white py-3 font-bold"
+              class="w-full bg-[#26c6da] text-white py-3 font-bold"
               onclick="submitForward()"
             >
               转发
@@ -1143,7 +1143,7 @@
             placeholder="留个脚印吧..."
             type="text"
           />
-          <button class="bg-[#ec4899] text-white px-4 h-9 text-sm font-bold">
+          <button class="bg-[#26c6da] text-white px-4 h-9 text-sm font-bold">
             发送
           </button>
         </div>
@@ -1391,7 +1391,7 @@
         // 正文处理
         let contentDisplay = post.content.replace(
           /#(\w+)/g,
-          '<span class="text-[#ec4899] cursor-pointer">#$1</span>',
+          '<span class="text-[#26c6da] cursor-pointer">#$1</span>',
         )
         const isLong = post.content.length > 80
 
@@ -1406,7 +1406,7 @@
                                 <div class="text-[10px] text-gray-400">${post.time}${post.source ? ' · ' + post.source : ''}</div>
                             </div>
                         </div>
-                        <button onclick="toggleFollow(this, ${post.id})" class="text-xs px-3 py-1 ${post.followed ? 'text-gray-400 bg-gray-50' : 'text-[#ec4899] border border-[#ec4899] font-medium'}">
+                        <button onclick="toggleFollow(this, ${post.id})" class="text-xs px-3 py-1 ${post.followed ? 'text-gray-400 bg-gray-50' : 'text-[#26c6da] border border-[#26c6da] font-medium'}">
                             ${post.followed ? '已关注' : '+ 关注'}
                         </button>
                     </div>
@@ -1416,7 +1416,7 @@
                         <div class="text-sm text-gray-800 leading-relaxed ${isLong ? 'line-clamp-3' : ''}" id="post-content-${post.id}">
                             ${contentDisplay}
                         </div>
-                        ${isLong ? `<button class="text-xs text-[#ec4899] mt-1 font-medium" onclick="expandText(${post.id}, this)">展开全文</button>` : ''}
+                        ${isLong ? `<button class="text-xs text-[#26c6da] mt-1 font-medium" onclick="expandText(${post.id}, this)">展开全文</button>` : ''}
                     </div>
 
                     ${imagesSection}
@@ -1457,7 +1457,7 @@
         if (isFollowed) {
           btn.innerText = '+ 关注'
           btn.className =
-            'text-xs px-3 py-1 text-[#ec4899] border border-[#ec4899] font-medium'
+            'text-xs px-3 py-1 text-[#26c6da] border border-[#26c6da] font-medium'
           toast('已取消关注')
         } else {
           btn.innerText = '已关注'
@@ -1469,19 +1469,19 @@
       function toggleLike(el, count) {
         const svg = el.querySelector('svg')
         const span = el.querySelector('span')
-        const isActive = svg.getAttribute('fill') === '#ec4899'
+        const isActive = svg.getAttribute('fill') === '#26c6da'
 
         if (isActive) {
           svg.setAttribute('fill', 'none')
           svg.setAttribute('stroke', 'currentColor')
           svg.classList.add('text-gray-400')
-          svg.classList.remove('text-[#ec4899]')
+          svg.classList.remove('text-[#26c6da]')
           span.innerText = count
         } else {
-          svg.setAttribute('fill', '#ec4899')
-          svg.setAttribute('stroke', '#ec4899')
+          svg.setAttribute('fill', '#26c6da')
+          svg.setAttribute('stroke', '#26c6da')
           svg.classList.remove('text-gray-400')
-          svg.classList.add('text-[#ec4899]')
+          svg.classList.add('text-[#26c6da]')
           span.innerText = count + 1
         }
       }

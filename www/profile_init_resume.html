@@ -39,22 +39,22 @@
         color: #9ca3af;
       }
       .input-field:focus {
-        border-bottom-color: #ec4899;
+        border-bottom-color: #26c6da;
       }
       .gender-btn {
         border: 1px solid #d1d5db;
         color: #6b7280;
       }
       .gender-btn.on {
-        border-color: #ec4899;
-        background: #ec4899;
+        border-color: #26c6da;
+        background: #26c6da;
         color: #fff;
       }
       .avatar-option {
         border: 2px solid transparent;
       }
       .avatar-option.on {
-        border-color: #ec4899;
+        border-color: #26c6da;
       }
       .step-panel {
         display: none;
@@ -65,11 +65,11 @@
       .dot {
         width: 12px;
         height: 12px;
-        border: 2px solid #ec4899;
+        border: 2px solid #26c6da;
         transition: all 0.2s;
       }
       .dot.filled {
-        background-color: #ec4899;
+        background-color: #26c6da;
       }
       #toast {
         position: absolute;
@@ -95,7 +95,7 @@
     <div class="flex-1 overflow-y-auto px-6 pt-10 pb-4">
       <div class="flex justify-between items-start mb-6">
         <h1
-          class="text-2xl font-bold text-[#ec4899] leading-relaxed tracking-wider"
+          class="text-2xl font-bold text-[#26c6da] leading-relaxed tracking-wider"
         >
           完善个人简历<br />
           <span class="text-sm text-gray-400 tracking-normal" id="step-title"
@@ -385,11 +385,11 @@
         if (allFilled) {
           btn.disabled = false
           btn.classList.remove('bg-gray-200')
-          btn.classList.add('bg-[#ec4899]')
+          btn.classList.add('bg-[#26c6da]')
         } else {
           btn.disabled = true
           btn.classList.add('bg-gray-200')
-          btn.classList.remove('bg-[#ec4899]')
+          btn.classList.remove('bg-[#26c6da]')
         }
       }
 

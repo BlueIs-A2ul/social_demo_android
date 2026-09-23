@@ -6,12 +6,13 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>引导页 - 出生年份</title>
 <script src="assets/vendor/tailwindcss.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
 <style>
         body {
             width: 100%;
             height: 100dvh;
-            background-color: #f7f7f8;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
             position: relative;
             padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
@@ -21,43 +22,37 @@
             width: 56px;
             height: 64px;
             background-color: #ffffff;
-            border: 2px solid #f4edf1;
+            border: 2px solid #e2eef1;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.75rem;
             font-weight: 700;
-            color: #1f2937;
+            color: #17313a;
             transition: border-color 0.2s;
         }
         .digit-box.filled {
-            border-color: #ec4899;
+            border-color: var(--brand-strong);
         }
         .digit-box.next {
-            border-color: #f9a8d4;
+            border-color: var(--brand-line);
         }
     </style>
 </head>
 <body class="flex flex-col">
-<!-- 右上角跳过 -->
-<a class="fixed top-[calc(var(--safe-area-inset-top,0px)+12px)] right-4 z-10 text-gray-400 font-medium" href="onboarding_interests.html">跳过</a>
+<!-- 顶部：返回 + 跳过 -->
+<div class="flex items-center justify-between px-5 pt-3 shrink-0" style="padding-top: calc(var(--safe-area-inset-top, 0px) + 12px)">
+<button class="text-[#9fb3b9] text-2xl leading-none" onclick="history.back()">‹</button>
+<a class="text-[13px] text-[#9fb3b9] px-4 py-1.5 rounded-full bg-[#f2f7f8]" href="onboarding_interests.html">跳过</a>
+</div>
 <!-- 主内容区 -->
-<div class="flex-1 px-8 pt-12">
-<div class="flex justify-between items-start mb-16">
-<h1 class="text-3xl font-bold text-[#ec4899] leading-relaxed tracking-wider">
-                告诉我<br/>你的出生年份
+<div class="flex-1 px-8 pt-10">
+<h1 class="text-[28px] font-bold title-brand leading-snug tracking-wide">
+                告诉我们<br/>你的出生年份
             </h1>
-<div class="text-[#ec4899] mt-2">
-<svg fill="none" height="40" viewbox="0 0 60 40" width="60" xmlns="http://www.w3.org/2000/svg">
-<circle cx="30" cy="20" fill="#ec4899" fill-opacity="0.2" r="14"></circle>
-<circle cx="30" cy="20" fill="#ec4899" r="10"></circle>
-            <ellipse cx="30" cy="20" rx="28" ry="6" stroke="#cbbccf" stroke-width="1.5" transform="rotate(-15, 30, 20)"></ellipse>
-</svg>
-</div>
-</div>
 <!-- 输入展示框（点击唤起系统数字键盘） -->
-<div class="relative flex justify-center mb-20">
+<div class="relative flex justify-center mt-16">
   <div class="flex gap-3" aria-hidden="true">
     <div class="digit-box next" id="digit-0"></div>
     <div class="digit-box" id="digit-1"></div>
@@ -78,9 +73,9 @@
 </div>
 </div>
 <!-- 底部操作栏 -->
-<div class="h-24 px-8 flex items-center justify-center shrink-0">
-<button class="bg-pink-100 text-pink-300 px-12 py-3 text-lg font-bold transition-colors" style="border-radius: 10px;" disabled="" id="submit-btn" onclick="location.href='onboarding_interests.html'">
-            提交
+<div class="px-8 py-6 flex items-center justify-center shrink-0">
+<button class="btn-brand text-base px-12 py-3" disabled="" id="submit-btn" onclick="location.href='onboarding_interests.html'">
+            下一步
         </button>
 </div>
 <script>
@@ -103,15 +98,7 @@
                 box.classList.toggle('next', i === digits.length && digits.length < 4);
             }
 
-            if (digits.length === 4) {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('bg-pink-100', 'text-pink-300');
-                submitBtn.classList.add('bg-[#ec4899]', 'text-white');
-            } else {
-                submitBtn.disabled = true;
-                submitBtn.classList.add('bg-pink-100', 'text-pink-300');
-                submitBtn.classList.remove('bg-[#ec4899]', 'text-white');
-            }
+            submitBtn.disabled = digits.length !== 4;
         }
 
         yearInput.addEventListener('input', () => {

@@ -9,14 +9,15 @@
     />
     <title>引导页 - 性别选择</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+    <link href="assets/vendor/theme.css" rel="stylesheet" />
     <style>
       body {
         width: 100%;
         height: 100dvh;
-        background-color: #f7f7f8;
+        background-color: #ffffff;
         font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-          Arial, sans-serif;
+          -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto,
+          Helvetica, Arial, sans-serif;
         overflow: hidden;
         position: relative;
         padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
@@ -25,139 +26,83 @@
           env(safe-area-inset-bottom, 0px)
         );
       }
-      .active-gender {
-        background-color: #ec4899 !important;
-        border-color: #ec4899 !important;
-        color: white !important;
+      .gender-btn {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.18s ease;
+        cursor: pointer;
+        background: transparent;
+        border: 2px solid transparent;
       }
-      .active-gender svg {
-        stroke: white !important;
+      .gender-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .gender-btn.selected {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 6px var(--brand-soft);
+        transform: scale(1.04);
       }
     </style>
   </head>
   <body class="flex flex-col">
-    <!-- 右上角跳过 -->
-    <a
-      class="fixed top-[calc(var(--safe-area-inset-top,0px)+12px)] right-4 z-10 text-gray-400 font-medium"
-      href="onboarding_birth.html"
-      >跳过</a
+    <!-- 顶部：返回 + 跳过 -->
+    <div
+      class="flex items-center justify-between px-5 pt-3 shrink-0"
+      style="padding-top: calc(var(--safe-area-inset-top, 0px) + 12px)"
     >
+      <button class="text-[#9fb3b9] text-2xl leading-none" onclick="history.back()">‹</button>
+      <a
+        class="text-[13px] text-[#9fb3b9] px-4 py-1.5 rounded-full bg-[#f2f7f8]"
+        href="onboarding_birth.html"
+        >跳过</a
+      >
+    </div>
     <!-- 主内容区 -->
-    <div class="flex-1 px-8 pt-12">
-      <div class="flex justify-between items-start mb-20">
-        <h1
-          class="text-3xl font-bold text-[#ec4899] leading-relaxed tracking-wider"
-        >
-          告诉我<br />你的性别
-        </h1>
-        <!-- 土星环星球装饰 -->
-        <div class="text-[#ec4899] mt-2">
-          <svg
-            fill="none"
-            height="40"
-            viewbox="0 0 60 40"
-            width="60"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              cx="30"
-              cy="20"
-              fill="#ec4899"
-              fill-opacity="0.2"
-              r="14"
-            ></circle>
-            <circle cx="30" cy="20" fill="#ec4899" r="10"></circle>
-            <ellipse
-              cx="30"
-              cy="20"
-              rx="28"
-              ry="6"
-              stroke="#cbbccf"
-              stroke-width="1.5"
-              transform="rotate(-15, 30, 20)"
-            ></ellipse>
-          </svg>
-        </div>
-      </div>
-      <div class="flex flex-col items-center gap-10 mt-10">
+    <div class="flex-1 px-8 pt-10 flex flex-col min-h-0">
+      <h1 class="text-[28px] font-bold title-brand leading-snug tracking-wide">
+        告诉我们<br />你的性别
+      </h1>
+      <div class="flex-1 flex flex-col items-center justify-center gap-9 pb-6">
         <!-- 男 -->
         <div class="flex flex-col items-center gap-2">
           <button
-            class="w-24 h-24 border border-[#ec4899] flex items-center justify-center transition-all active-gender rounded-full"
+            class="gender-btn selected"
             id="btn-male"
             onclick="selectGender('male')"
           >
-            <svg
-              class="w-10 h-10"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2.5"
-              viewbox="0 0 24 24"
-            >
-              <circle cx="10" cy="14" r="5"></circle>
-              <path d="M14 10l7-7"></path>
-              <path d="M21 10V3h-7"></path>
-            </svg>
+            <img alt="男" src="assets/new_src/gender/male.png" />
           </button>
-          <span class="text-lg font-medium">男</span>
+          <span class="text-[15px] text-[#3f5b64]">男</span>
         </div>
         <!-- 女 -->
         <div class="flex flex-col items-center gap-2">
-          <button
-            class="w-24 h-24 border border-[#ec4899] flex items-center justify-center transition-all rounded-full bg-white text-[#ec4899]"
-            id="btn-female"
-            onclick="selectGender('female')"
-          >
-            <svg
-              class="w-10 h-10"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2.5"
-              viewbox="0 0 24 24"
-            >
-              <circle cx="12" cy="9" r="5"></circle>
-              <path d="M12 14v7"></path>
-              <path d="M9 18h6"></path>
-            </svg>
+          <button class="gender-btn" id="btn-female" onclick="selectGender('female')">
+            <img alt="女" src="assets/new_src/gender/female.png" />
           </button>
-          <span class="text-lg font-medium">女</span>
+          <span class="text-[15px] text-[#3f5b64]">女</span>
         </div>
-        <!-- 其他 -->
+        <!-- 其它 -->
         <div class="flex flex-col items-center gap-2">
-          <button
-            class="w-24 h-24 border border-gray-300 flex items-center justify-center transition-all rounded-full bg-white text-gray-400"
-            id="btn-other"
-            onclick="selectGender('other')"
-          >
-            <svg
-              class="w-10 h-10"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2.5"
-              viewbox="0 0 24 24"
-            >
-              <line x1="18" x2="6" y1="6" y2="18"></line>
-              <line x1="6" x2="18" y1="6" y2="18"></line>
-            </svg>
+          <button class="gender-btn" id="btn-other" onclick="selectGender('other')">
+            <img alt="其它" src="assets/new_src/gender/other.png" />
           </button>
-          <span class="text-lg font-medium text-gray-400">其他</span>
+          <span class="text-[15px] text-[#3f5b64]">其它</span>
         </div>
       </div>
     </div>
     <!-- 底部操作栏 -->
-    <div class="h-24 px-8 flex items-center justify-center shrink-0">
+    <div class="px-8 py-6 flex items-center justify-center shrink-0">
       <button
-        class="bg-[#ec4899] text-white px-12 py-3 text-lg font-bold shadow-lg shadow-pink-100"
-        style="border-radius: 10px;"
+        class="btn-brand text-base px-12 py-3"
         onclick="location.href = 'onboarding_birth.html'"
       >
-        提交
+        下一步
       </button>
     </div>
     <script>
@@ -167,27 +112,8 @@
           female: document.getElementById('btn-female'),
           other: document.getElementById('btn-other'),
         }
-
-        // 重置
-        Object.values(btns).forEach(btn => {
-          btn.classList.remove('active-gender')
-          if (btn.id === 'btn-other') {
-            btn.classList.add('border-gray-300', 'text-gray-400')
-            btn.classList.remove('border-[#ec4899]', 'text-[#ec4899]')
-          } else {
-            btn.classList.add('border-[#ec4899]', 'text-[#ec4899]')
-            btn.classList.remove('border-gray-300', 'text-gray-400')
-          }
-        })
-
-        // 激活
-        const activeBtn = btns[gender]
-        activeBtn.classList.add('active-gender')
-        activeBtn.classList.remove(
-          'text-[#ec4899]',
-          'text-gray-400',
-          'border-gray-300',
-        )
+        Object.values(btns).forEach(btn => btn.classList.remove('selected'))
+        btns[gender].classList.add('selected')
       }
     </script>
   </body>

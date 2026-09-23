@@ -47,7 +47,7 @@
         bottom: 0;
         width: 24px;
         height: 3px;
-        background: #ec4899;
+        background: #26c6da;
       }
       .source-tab {
         font-size: 13px;
@@ -57,9 +57,9 @@
         background: #fff;
       }
       .source-tab.active {
-        border-color: #ec4899;
-        color: #ec4899;
-        background: #fdf2f8;
+        border-color: #26c6da;
+        color: #26c6da;
+        background: #f2fcfd;
       }
 
       /* 分享：2列瀑布流卡片 */
@@ -270,7 +270,7 @@
         </button>
         <div class="flex-1"></div>
         <button
-          class="text-xs text-gray-400 active:text-pink-500"
+          class="text-xs text-gray-400 active:text-[#26c6da]"
           id="clear-btn"
           onclick="handleClear()"
         >
@@ -672,10 +672,10 @@
         var icon = document.getElementById('infoBar-detail-fav-icon');
         var text = document.getElementById('infoBar-detail-fav-text');
         if (isFav) {
-          icon.setAttribute('fill', '#ec4899');
-          icon.style.color = '#ec4899';
+          icon.setAttribute('fill', '#26c6da');
+          icon.style.color = '#26c6da';
           text.textContent = '已收藏';
-          text.style.color = '#ec4899';
+          text.style.color = '#26c6da';
         } else {
           icon.setAttribute('fill', 'none');
           icon.style.color = '';
@@ -718,10 +718,10 @@
         var icon = document.getElementById('news-detail-fav-icon');
         var text = document.getElementById('news-detail-fav-text');
         if (isFav) {
-          icon.setAttribute('fill', '#ec4899');
-          icon.style.color = '#ec4899';
+          icon.setAttribute('fill', '#26c6da');
+          icon.style.color = '#26c6da';
           text.textContent = '已收藏';
-          text.style.color = '#ec4899';
+          text.style.color = '#26c6da';
         } else {
           icon.setAttribute('fill', 'none');
           icon.style.color = '';

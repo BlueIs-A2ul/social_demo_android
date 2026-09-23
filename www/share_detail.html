@@ -198,7 +198,7 @@
         document.getElementById('share-detail-desc').innerText = d.desc || '';
         document.getElementById('share-detail-body').innerText = d.body || '';
         document.getElementById('share-detail-tags').innerHTML = d.tags
-          ? d.tags.map(function (t) { return '<span class="text-[12px] text-[#ec4899]">#' + escapeHtml(t) + '</span>'; }).join(' ')
+          ? d.tags.map(function (t) { return '<span class="text-[12px] text-[#26c6da]">#' + escapeHtml(t) + '</span>'; }).join(' ')
           : '';
 
         currentShareFav = { id: entry.id, source: 'share', data: d };
