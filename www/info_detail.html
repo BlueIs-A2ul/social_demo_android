@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>信息详情 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            background: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        .detail-cover {
+            width: 100%;
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            display: block;
+        }
+        .detail-body {
+            padding: 14px 16px 20px;
+            font-size: 14px;
+            color: var(--ink-900);
+            line-height: 1.75;
+            white-space: pre-line;
+        }
+        .detail-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-top: 1px solid var(--ink-100);
+            background: #fff;
+            padding: 10px 0;
+            flex: none;
+        }
+        .detail-bar button {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--ink-500);
+            background: transparent;
+            border: 0;
+        }
+        .detail-bar img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+        }
+        #toast {
+            position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px;
+            padding: 8px 16px; border-radius: 6px; z-index: 999; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white truncate" id="detailTitle" style="font-size: 17px; font-weight: 700">信息详情</h1>
+        <span style="width: 32px"></span>
+    </header>
+    <div class="flex-1 overflow-y-auto">
+        <img class="detail-cover" id="detailCover" alt="封面" src=""/>
+        <div style="padding: 14px 16px 0">
+            <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--ink-900)" id="detailHeading">标题</h2>
+            <p style="margin: 8px 0 0; font-size: 13px; color: var(--ink-500); line-height: 1.6" id="detailSummary">摘要</p>
+            <div style="height: 1px; background: var(--ink-100); margin: 14px 0"></div>
+        </div>
+        <div class="detail-body" id="detailBody">正文</div>
+    </div>
+    <div class="detail-bar">
+        <button onclick="toggleLike(this)">
+            <img src="assets/v2/icon/like.png" alt="赞"/><span id="likeCount">260</span>
+        </button>
+        <button onclick="showToast('已收藏')">
+            <img src="assets/v2/icon/star.png" alt="星"/><span>320</span>
+        </button>
+        <button onclick="showToast('评论')">
+            <img src="assets/v2/icon/comment.png" alt="评论"/><span>180</span>
+        </button>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    const DETAILS = {
+        0: {
+            title: '外贸经理/主管',
+            summary: '国际贸易、商务英语类专业大专以上学历，具有3年以上外贸平台海外销售经验',
+            image: 'assets/v2/board/board-01.jpg',
+            body:
+                '1、国际贸易、商务英语类相关专业大专以上学历，具有3年以上外贸平台海外销售经验（有工业自动化设备或工业机械手海外市场销售经验者优先）；\n' +
+                '2、熟悉外贸操作流程及阿里巴巴海外版、亚马逊，ebay等外贸平台的运营与推广；\n' +
+                '3、具有优秀的英文听、说、读、写能力，熟悉使用各种办公软件；\n' +
+                '4、具备良好的沟通和谈判技巧，良好的创新意识、团队合作能力及服务意识，责任心强。\n' +
+                '5、能力突出者可挑战外贸主管或经理经理岗位。\n' +
+                '6、有志于在自动化行业、机器人行业长期发展。',
+        },
+        1: {
+            title: '顺丰同城配送骑手招募',
+            summary: '在固定门店取货，将生鲜、水果、牛奶、面包、饮料、零食等食品及小件商品配送至客户手中',
+            image: 'assets/v2/board/board-02.jpg',
+            body:
+                '【岗位职责】\n' +
+                '1、在固定门店取货，将生鲜、水果、牛奶、面包、饮料、零食等食品及小件商品配送至客户手中\n' +
+                '2、3公里内配送为主，超距离有补贴，同方向订单每题6-10单\n' +
+                '【职位要求】\n' +
+                '1、会骑电动车\n' +
+                '2、能接受短途骑车配送\n' +
+                '【工作时间】\n' +
+                '正常门店上下班时间，无单时可自行休息',
+        },
+        2: {
+            title: '新媒体运营经理',
+            summary: '负责短视频内容拍摄与剪辑，确保视频质量与节奏感，独立完成文案策划',
+            image: 'assets/v2/board/board-03.jpg',
+            body:
+                '【岗位职责】\n' +
+                '- 负责短视频内容拍摄与剪辑，确保视频质量与节奏感\n' +
+                '- 独立完成文案策划，提升视频吸引力与转化率\n' +
+                '- 参与店铺运营，优化产品展示与用户互动\n' +
+                '【职位要求】\n' +
+                '- 1年内相关经验，高中及以上学历\n' +
+                '- 熟练掌握拍摄剪辑工具及文案创作能力\n' +
+                '- 对短视频平台有基本了解，具备学习意愿\n' +
+                '【工作时间】\n' +
+                '具体时间班次面议',
+        },
+        3: {
+            title: '销售专员',
+            summary: '负责客户沟通与需求对接，完成销售目标，维护客户关系，提供专业服务',
+            image: 'assets/v2/board/board-04.jpg',
+            body:
+                '【岗位职责】\n' +
+                '- 负责客户沟通与需求对接，完成销售目标\n' +
+                '- 维护客户关系，提供专业服务支持\n' +
+                '【职位要求】\n' +
+                '- 无经验要求，可接受应届毕业生\n' +
+                '- 学历不限，年龄不限（如未提及则不体现）\n' +
+                '【工作时间】\n' +
+                '- 具体时间班次面议',
+        },
+        4: {
+            title: '生活无趣，打旅游搭子',
+            summary: '生活很无趣，需要找个旅游搭子散散心，本人女80后',
+            image: 'assets/v2/board/board-05.jpg',
+            body: '生活很无趣，需要找个旅游搭子散散心，本人女80后，喜欢慢节奏的行程，不赶景点，一起吃吃喝喝拍拍照就好。',
+        },
+        5: {
+            title: '出门踏青去…找自驾搭子',
+            summary: '出门踏青，找自驾搭子，目前两女，缺搭子。我负责车和一起散散心。去哪一起商量',
+            image: 'assets/v2/board/board-06.jpg',
+            body: '出门踏青，找自驾搭子，目前两女，缺搭子。我负责车和一起散散心。去哪一起商量，周末两天往返，费用 AA。',
+        },
+        6: {
+            title: '大学生成都出发找搭子',
+            summary: '宝子们，我就想在四川省内的城市转转，周边游主打一个轻松',
+            image: 'assets/v2/board/board-07.jpg',
+            body: '宝子们，我就想在四川省内的城市转转，周边游主打一个轻松，预算有限，能接受青旅和公共交通，时间灵活。',
+        },
+        7: {
+            title: '找个长期的旅游搭子',
+            summary: '想找个长期稳定的旅游搭子，一起看世界',
+            image: 'assets/v2/board/board-08.jpg',
+            body: '想找个长期稳定的旅游搭子，一起看世界。一年计划出行 3~4 次，国内为主，偶尔出境，希望性格好相处。',
+        },
+    }
+
+    const params = new URLSearchParams(location.search)
+    const detail = DETAILS[params.get('index')] || DETAILS[0]
+
+    document.title = detail.title + ' - 智慧空间'
+    document.getElementById('detailTitle').textContent = detail.title
+    document.getElementById('detailHeading').textContent = detail.title
+    document.getElementById('detailSummary').textContent = detail.summary
+    document.getElementById('detailCover').src = detail.image
+    document.getElementById('detailBody').textContent = detail.body
+
+    let liked = false
+    function toggleLike(btn) {
+        liked = !liked
+        btn.style.color = liked ? 'var(--brand-deep)' : 'var(--ink-500)'
+        document.getElementById('likeCount').textContent = liked ? '261' : '260'
+    }
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+</script>
+</body>
+</html>
