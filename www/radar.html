@@ -9,6 +9,7 @@
     />
     <title>雷达探测 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
     <script>
       (function () {
         try {
@@ -72,7 +73,7 @@
         position: relative;
         width: 100%;
         height: 40px;
-        background-image: url('assets/src_01/radar/彩色栏.png');
+        background: linear-gradient(135deg, #4dd0e1 0%, #26c6da 100%);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -144,7 +145,7 @@
       }
       .ai-message.user {
         align-self: flex-end;
-        background-color: #ec4899;
+        background-color: #26c6da;
         color: white;
         border-bottom-right-radius: 4px;
       }
@@ -199,11 +200,11 @@
         outline: none;
       }
       .ai-input:focus {
-        border-color: #ec4899;
+        border-color: #26c6da;
       }
       .ai-send-btn {
         padding: 12px 20px;
-        background-color: #ec4899;
+        background-color: #26c6da;
         color: white;
         border: none;
         border-radius: 8px;
@@ -212,7 +213,7 @@
         cursor: pointer;
       }
       .ai-send-btn:hover {
-        background-color: #db2777;
+        background-color: #00acc1;
       }
       .ai-send-btn:disabled {
         background-color: #9ca3af;
@@ -264,8 +265,8 @@
           box-shadow 0.2s ease;
       }
       div:has(> #radarSearchInput):focus-within {
-        border-color: #f9a8d4;
-        box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.08);
+        border-color: #8fdde8;
+        box-shadow: 0 0 0 3px rgba(38, 198, 218, 0.08);
       }
       #radius-menu {
         border-radius: 8px;
@@ -383,24 +384,13 @@
               </div>
             </div>
           </div>
-          <!-- Tab 切换 -->
-          <div
-            class="flex bg-white/90 backdrop-blur-md straight-edge p-1 shadow-sm self-center pointer-events-auto"
-          >
-            <button
-              class="px-4 py-1.5 straight-edge text-sm font-bold bg-[#ec4899] text-white shadow-sm"
-            >
-              雷达扫描
-            </button>
-            <button
-              class="px-4 py-1.5 straight-edge text-sm font-medium text-gray-500"
-              onclick="window.location.href = 'radar_nearby.html'"
-            >
-              附近的人
-            </button>
-
-          </div>
         </div>
+        <!-- 吉祥物 -->
+        <img
+          alt="吉祥物"
+          class="absolute right-4 bottom-6 w-[64px] h-auto z-40 pointer-events-none"
+          src="assets/v2/mascot/cream-spoon.png"
+        />
       </div>
       <!-- 彩色栏背景和箭头 -->
       <div class="color-bar-container">
@@ -421,39 +411,46 @@
           <button class="ai-send-btn" id="ai-send-btn" onclick="sendAIMessage()">发送</button>
         </div>
       </div>
-      <!-- 底部内容容器 (搜索框和推荐用户) -->
+      <!-- 底部内容容器 -->
       <div
-        class="bg-white p-4 flex flex-col gap-3 z-50 overflow-y-auto no-scrollbar max-h-[450px] border-t border-gray-100"
+        class="bg-white flex flex-col z-50 overflow-y-auto no-scrollbar max-h-[450px] border-t border-gray-100"
       >
-        <!-- 搜索框 -->
-        <div class="pointer-events-auto">
-          <div
-            class="flex items-center bg-white border border-gray-300 h-[48px] px-3 gap-2 shadow-sm straight-edge"
+        <!-- 分段 Tab -->
+        <div class="flex items-center gap-2 px-4 pt-3">
+          <button
+            class="relative h-8 px-4 rounded-full text-[13px] font-bold text-white"
+            style="background: var(--brand-strong)"
           >
-            <iconify-icon
-              class="text-gray-400 text-xl flex-none"
-              icon="solar:magnifer-linear"
-            ></iconify-icon>
-            <input
-              class="flex-1 min-w-0 bg-transparent outline-none text-sm text-gray-900 placeholder-gray-400"
-              id="radarSearchInput"
-              placeholder="搜索关键字信息"
-              type="text"
-            />
-            <button
-              class="flex-none h-[32px] px-4 bg-[#ec4899] text-white text-[13px] font-bold straight-edge"
-              onclick="handleRadarSearch()"
+            雷达扫描
+            <span
+              class="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded flex items-center justify-center text-[10px] font-bold"
+              style="background: var(--gold); color: #6b4a00; box-shadow: 0 0 0 1.5px #fff"
+              >11</span
             >
-              搜索
-            </button>
-          </div>
+          </button>
+          <button
+            class="h-8 px-4 rounded-full text-[13px] font-medium"
+            style="color: var(--ink-700)"
+            onclick="window.location.href = 'radar_nearby.html'"
+          >
+            附近的人
+          </button>
+        </div>
+        <div class="px-4 pt-3 pb-1 flex items-center justify-between">
+          <span class="text-[15px] font-bold" style="color: var(--ink-900)"
+            >附近推荐</span
+          >
+          <a
+            class="text-[12px]"
+            style="color: var(--ink-500)"
+            href="radar_nearby.html"
+            >更多&gt;&gt;</a
+          >
         </div>
         <!-- 推荐用户区域 -->
-        <div
-          class="pointer-events-auto bg-white straight-edge shadow-md border border-gray-100 overflow-hidden flex flex-col"
-        >
+        <div class="pointer-events-auto flex flex-col">
           <div
-            class="px-4 py-2 border-b border-gray-100 flex justify-between items-center"
+            class="hidden px-4 py-2 border-b border-gray-100 flex justify-between items-center"
             style="opacity: 1"
           >
             <span class="text-[14px] font-bold text-black">推荐用户</span>
@@ -464,11 +461,11 @@
             <div class="border-b border-gray-100 last:border-0">
               <div
                 class="flex items-center px-4 py-3 cursor-pointer"
-                onclick="showToast('查看小雨详情')"
+                onclick="toggleIdentityCard(0)"
               >
                 <img
                   alt="Avatar of Xiao Yu"
-                  class="w-10 h-10 straight-edge object-cover bg-gray-100"
+                  class="w-10 h-10 rounded-full object-cover bg-gray-100"
                   src="assets/packaged/5fc72dacf46b4396bc02fd047935c43f.webp"
                 />
                 <div class="flex-1 ml-3">
@@ -477,6 +474,11 @@
                       alt="个人VIP2"
                       class="user-vip-badge"
                       src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
+                    />
+                    <img
+                      alt="等级"
+                      class="user-vip-badge"
+                      src="assets/v2/icon/gear-badge.png"
                     />
                     <img
                       alt="房间已点亮"
@@ -490,27 +492,13 @@
                     <span class="text-[#10b981] ml-2">在线</span>
                   </div>
                 </div>
-                <div class="flex gap-2">
-                  <button
-                    class="identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all"
-                    onclick="
-                      event.stopPropagation()
-                      toggleIdentityCard(0)
-                    "
-                  >
-                    个人名片
-                  </button>
-                  <button
-                    class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all"
-                    id="add-friend-btn-0"
-                    onclick="
-                      event.stopPropagation()
-                      showAddFriendModal(0)
-                    "
-                  >
-                    添加好友
-                  </button>
-                </div>
+                <button
+                  class="flex-none px-3 py-1.5 rounded-full bg-[#26c6da] text-white text-[12px] font-bold"
+                  id="add-friend-btn-0"
+                  onclick="event.stopPropagation(); showAddFriendModal(0)"
+                >
+                  加好友
+                </button>
               </div>
               <!-- Identity Content 1 -->
               <div
@@ -619,11 +607,11 @@
             <div class="border-b border-gray-100 last:border-0">
               <div
                 class="flex items-center px-4 py-3 cursor-pointer"
-                onclick="showToast('查看星辰详情')"
+                onclick="toggleIdentityCard(1)"
               >
                 <img
                   alt="Avatar of Xing Chen"
-                  class="w-10 h-10 straight-edge object-cover bg-gray-100"
+                  class="w-10 h-10 rounded-full object-cover bg-gray-100"
                   src="assets/packaged/0fb46cc23dbe469e949ecce4cfd9a77a.jpg"
                 />
                 <div class="flex-1 ml-3">
@@ -632,6 +620,11 @@
                       alt="个人VIP2"
                       class="user-vip-badge"
                       src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
+                    />
+                    <img
+                      alt="等级"
+                      class="user-vip-badge"
+                      src="assets/v2/icon/gear-badge.png"
                     />
                     <img
                       alt="房间未点亮"
@@ -645,27 +638,13 @@
                     <span class="text-gray-400 ml-2">离线</span>
                   </div>
                 </div>
-                <div class="flex gap-2">
-                  <button
-                    class="identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all"
-                    onclick="
-                      event.stopPropagation()
-                      toggleIdentityCard(1)
-                    "
-                  >
-                    个人名片
-                  </button>
-                  <button
-                    class="px-2 py-1 bg-[#ec4899] text-white text-[12px] straight-edge transition-all"
-                    id="add-friend-btn-1"
-                    onclick="
-                      event.stopPropagation()
-                      showAddFriendModal(1)
-                    "
-                  >
-                    添加好友
-                  </button>
-                </div>
+                <button
+                  class="flex-none px-3 py-1.5 rounded-full bg-[#26c6da] text-white text-[12px] font-bold"
+                  id="add-friend-btn-1"
+                  onclick="event.stopPropagation(); showAddFriendModal(1)"
+                >
+                  加好友
+                </button>
               </div>
               <!-- Identity Content 2 -->
               <div
@@ -776,33 +755,40 @@
       <!-- 底部 Tab Bar -->
       <!-- Add Friend Modal -->
       <div
-        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 backdrop-blur-sm px-4"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 px-4"
         id="add-friend-modal"
       >
         <div
-          class="bg-white w-full max-w-[320px] straight-edge overflow-hidden shadow-2xl"
+          class="bg-white w-full max-w-[300px] rounded-xl overflow-hidden shadow-2xl"
         >
-          <div class="p-6">
-            <h3 class="text-[18px] font-bold text-black mb-4">发送好友申请</h3>
-            <textarea
-              class="w-full h-24 p-3 border border-gray-200 straight-edge text-[14px] focus:outline-none focus:border-[#ec4899] resize-none"
-              id="request-message"
-              placeholder="输入申请理由..."
-            ></textarea>
-          </div>
-          <div class="flex border-t border-gray-100">
+          <div class="relative py-3 text-center text-[15px] font-bold text-black">
+            添加好友
             <button
-              class="flex-1 py-4 text-[14px] text-gray-500 font-medium"
+              aria-label="关闭"
+              class="absolute right-3 top-2.5 text-gray-300"
               onclick="closeAddFriendModal()"
             >
-              取消
+              <iconify-icon
+                class="text-[20px]"
+                icon="solar:close-circle-linear"
+              ></iconify-icon>
             </button>
-            <button
-              class="flex-1 py-4 text-[14px] text-[#ec4899] font-bold border-l border-gray-100"
-              onclick="sendFriendRequest()"
-            >
-              发送
-            </button>
+          </div>
+          <div class="px-4 pb-5">
+            <textarea
+              class="w-full h-20 p-3 rounded border text-[13px] focus:outline-none resize-none"
+              id="request-message"
+              placeholder="输入验证信息"
+              style="border-color: var(--brand-line)"
+            ></textarea>
+            <div class="mt-4 flex justify-center">
+              <button
+                class="btn-brand h-9 px-8 text-[14px]"
+                onclick="sendFriendRequest()"
+              >
+                发送
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -862,28 +848,18 @@
 
         function toggleIdentityCard(index) {
           const allContents = document.querySelectorAll('.identity-content')
-          const allButtons = document.querySelectorAll('.identity-btn')
 
           if (currentOpenIndex === index) {
             allContents[index].classList.add('hidden')
-            allButtons[index].textContent = '个人名片'
-            allButtons[index].className =
-              'identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all'
             currentOpenIndex = -1
             return
           }
 
           if (currentOpenIndex >= 0) {
             allContents[currentOpenIndex].classList.add('hidden')
-            allButtons[currentOpenIndex].textContent = '个人名片'
-            allButtons[currentOpenIndex].className =
-              'identity-btn px-2 py-1 border border-blue-300 bg-white text-black text-[12px] straight-edge transition-all'
           }
 
           allContents[index].classList.remove('hidden')
-          allButtons[index].textContent = '收起身份证'
-          allButtons[index].className =
-            'identity-btn px-2 py-1 bg-blue-500 text-white text-[12px] straight-edge transition-all'
           currentOpenIndex = index
         }
 
@@ -911,7 +887,7 @@
           )
           btn.textContent = '已申请'
           btn.disabled = true
-          btn.classList.remove('bg-[#ec4899]')
+          btn.classList.remove('bg-[#26c6da]')
           btn.classList.add(
             'bg-gray-300',
             'text-gray-500',
