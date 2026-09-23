@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>其它图标介绍 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        #toast {
+            position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px;
+            padding: 8px 16px; border-radius: 6px; z-index: 999; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white" style="font-size: 17px; font-weight: 700">其它图标介绍</h1>
+        <span style="width: 32px"></span>
+    </header>
+    <div class="flex-1 overflow-y-auto" style="padding: 10px 0 20px">
+        <div class="guide-card" onclick="showToast('房间')">
+            <iconify-icon class="guide-icon" style="color: #f4813f" icon="solar:home-angle-bold"></iconify-icon>
+            <span class="guide-label">房间</span>
+        </div>
+        <div class="guide-card" onclick="showToast('TV')">
+            <iconify-icon class="guide-icon" style="color: var(--gold-deep)" icon="solar:videocamera-record-bold"></iconify-icon>
+            <span class="guide-label">TV</span>
+        </div>
+        <div class="guide-card" onclick="showToast('个人名片')">
+            <img class="guide-icon" alt="个人名片" src="assets/v2/card/idcard.png"/>
+            <span class="guide-label">个人名片</span>
+        </div>
+        <div class="guide-card" onclick="showToast('个人简历')">
+            <img class="guide-icon" alt="个人简历" src="assets/v2/card/resume.png"/>
+            <span class="guide-label">个人简历</span>
+        </div>
+        <div class="guide-card" onclick="showToast('公司名片')">
+            <img class="guide-icon" alt="公司名片" src="assets/v2/card/company-idcard.png"/>
+            <span class="guide-label">公司名片</span>
+        </div>
+        <div class="guide-card" onclick="showToast('公司简历')">
+            <img class="guide-icon" alt="公司简历" src="assets/v2/card/company-resume.png"/>
+            <span class="guide-label">公司简历</span>
+        </div>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+</script>
+</body>
+</html>
