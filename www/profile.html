@@ -1231,9 +1231,9 @@
         if (label === '分享主页') {
           showToast('建设中')
         } else if (label === '查看个人名片') {
-          showIDCard(owner)
+          window.location.href = 'profile_center.html'
         } else if (label === '查看个人简历') {
-          showResume(owner)
+          window.location.href = 'profile_center.html'
         } else if (label === '收藏') {
           const item = {
             id: 'room_' + owner.vId,
