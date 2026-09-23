@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI 语音 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<script>window.parent.postMessage({ type: 'setBottomNav', visible: true }, '*')</script>
+<style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        .ai-bg {
+            background-color: #f4f5f6;
+            background-image: url('assets/src_01/radar/扩大图片背景尺寸.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .ai-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(246, 247, 248, .9);
+        }
+        .ai-letters {
+            width: 46%;
+            max-width: 220px;
+            opacity: .92;
+        }
+        .plus-grid { display: none; }
+        .plus-grid.open { display: flex; }
+        #toast {
+            position: fixed;
+            left: 50%;
+            bottom: 160px;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78);
+            color: #fff;
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            z-index: 999;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div
+    class="w-full h-[100dvh] relative overflow-hidden ai-bg"
+    style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
+>
+    <!-- 右上吉祥物 -->
+    <img
+        alt="吉祥物"
+        class="absolute right-5 top-6 w-[72px] h-auto z-20"
+        src="assets/v2/mascot/cream.png"
+    />
+
+    <!-- 中央 AI 浮雕字 -->
+    <div class="absolute inset-0 flex items-center justify-center z-10">
+        <img class="ai-letters" src="assets/v2/mascot/ai-letters.png" alt="AI"/>
+    </div>
+
+    <!-- 底部输入区 -->
+    <div
+        class="absolute left-0 right-0 bottom-0 z-30 px-4"
+        style="padding-bottom: calc(var(--safe-area-inset-bottom, 0px) + 12px)"
+    >
+        <!-- 四宫格（⊕ 展开） -->
+        <div class="plus-grid gap-3 justify-center mb-3" id="plusGrid">
+            <button
+                class="flex flex-col items-center justify-center gap-1 bg-white"
+                style="width: 76px; height: 76px; border-radius: 12px; border: 0; box-shadow: 0 2px 8px rgba(23, 49, 58, .08)"
+                onclick="showToast('相机')"
+            >
+                <iconify-icon style="color: var(--ink-900); font-size: 24px" icon="solar:camera-bold"></iconify-icon>
+                <span style="font-size: 11px; color: var(--ink-700)">相机</span>
+            </button>
+            <button
+                class="flex flex-col items-center justify-center gap-1 bg-white"
+                style="width: 76px; height: 76px; border-radius: 12px; border: 0; box-shadow: 0 2px 8px rgba(23, 49, 58, .08)"
+                onclick="showToast('相册')"
+            >
+                <iconify-icon style="color: var(--ink-900); font-size: 24px" icon="solar:gallery-bold"></iconify-icon>
+                <span style="font-size: 11px; color: var(--ink-700)">相册</span>
+            </button>
+            <button
+                class="flex flex-col items-center justify-center gap-1 bg-white"
+                style="width: 76px; height: 76px; border-radius: 12px; border: 0; box-shadow: 0 2px 8px rgba(23, 49, 58, .08)"
+                onclick="showToast('文件')"
+            >
+                <iconify-icon style="color: var(--ink-900); font-size: 24px" icon="solar:paperclip-bold"></iconify-icon>
+                <span style="font-size: 11px; color: var(--ink-700)">文件</span>
+            </button>
+            <button
+                class="flex flex-col items-center justify-center gap-1 bg-white"
+                style="width: 76px; height: 76px; border-radius: 12px; border: 0; box-shadow: 0 2px 8px rgba(23, 49, 58, .08)"
+                onclick="showToast('打电话')"
+            >
+                <iconify-icon style="color: var(--ink-900); font-size: 24px" icon="solar:phone-bold"></iconify-icon>
+                <span style="font-size: 11px; color: var(--ink-700)">打电话</span>
+            </button>
+        </div>
+
+        <!-- 主输入行 -->
+        <div class="flex items-center gap-3">
+            <img
+                alt="语音助手"
+                class="w-10 h-10 object-cover flex-none cursor-pointer"
+                style="border-radius: 9999px"
+                src="assets/v2/mascot/cream-spoon.png"
+                onclick="showToast('语音助手')"
+            />
+            <div
+                class="flex-1 flex items-center justify-center bg-white cursor-pointer"
+                style="height: 44px; border-radius: 8px; box-shadow: 0 2px 8px rgba(23, 49, 58, .08)"
+                onmousedown="startHold()"
+                onmouseup="endHold()"
+                onmouseleave="endHold()"
+                ontouchstart="startHold()"
+                ontouchend="endHold()"
+            >
+                <span id="holdText" style="font-size: 14px; color: var(--ink-700)">按住说话</span>
+            </div>
+            <button
+                aria-label="表情"
+                class="flex-none"
+                style="border: 0; background: transparent"
+                onclick="showToast('表情')"
+            >
+                <iconify-icon style="color: var(--ink-700); font-size: 26px" icon="solar:emoji-funny-circle-linear"></iconify-icon>
+            </button>
+            <button
+                aria-label="更多"
+                class="flex-none"
+                style="border: 0; background: transparent"
+                onclick="togglePlus()"
+            >
+                <iconify-icon style="color: var(--ink-700); font-size: 26px" icon="solar:add-circle-linear"></iconify-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    function togglePlus() {
+        document.getElementById('plusGrid').classList.toggle('open')
+    }
+    function startHold() {
+        document.getElementById('holdText').textContent = '松开 发送'
+    }
+    function endHold() {
+        document.getElementById('holdText').textContent = '按住说话'
+    }
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+</script>
+</body>
+</html>
