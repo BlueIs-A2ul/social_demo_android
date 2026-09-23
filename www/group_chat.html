@@ -3,8 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>群聊 - 周末空间设计小组</title>
-    <script src="assets/vendor/tailwindcss.js"></script>
+    <title>群聊 - 群聊信息</title>
+    <script src="assets/vendor/iconify-icon.min.js"></script>
+<script src="assets/vendor/tailwindcss.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
     <style>
       body {
         background-color: #f3f4f6;
@@ -344,15 +346,27 @@
         opacity: 1;
         visibility: visible;
       }
-    </style>
+    .msg-tab { color: var(--ink-500); gap: 2px; border: 0; background: transparent; }
+.msg-tab-text { font-size: 10px; line-height: 1.2; }
+.msg-tab.active { color: var(--brand-deep); }
+.msg-tab.active .msg-tab-text { font-weight: 700; }
+.msg-tab-badge {
+    position: absolute; top: -5px; right: -12px;
+    min-width: 15px; height: 15px; padding: 0 3px;
+    background: #ff4d4f; color: #fff; font-size: 10px; font-weight: 700;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 1.5px #fff;
+}
+</style>
   </head>
   <body class="flex items-center justify-center min-h-screen">
     <div class="app-container shadow-2xl">
       <header
-        class="p-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0"
+        class="flex-none topbar flex items-center"
+        style="height: 48px; padding: 0 12px"
       >
         <div class="flex items-center gap-3 min-w-0">
-          <button class="text-gray-900 shrink-0" onclick="window.location.href='message_center.html'">
+          <button class="text-white shrink-0" onclick="window.location.href='message_center.html'">
             <svg
               fill="none"
               height="24"
@@ -368,7 +382,7 @@
           </button>
           <div class="flex items-center gap-2 min-w-0">
             <div
-              class="w-10 h-10 bg-[#f2fcfd] border border-gray-200 flex items-center justify-center text-pink-main shrink-0"
+              class="w-10 h-10 flex items-center justify-center shrink-0" style="background: rgba(255,255,255,.25); color: #fff; border-radius: 8px"
             >
               <svg
                 fill="none"
@@ -387,18 +401,32 @@
             </div>
             <div class="min-w-0">
               <h1
-                class="font-bold text-sm text-gray-900 leading-tight truncate"
+                class="font-bold text-sm text-white leading-tight truncate"
               >
-                周末空间设计小组
+                群聊信息
               </h1>
-              <p class="text-[10px] text-gray-400 leading-tight">
+              <p class="text-[10px] leading-tight" style="color: rgba(255,255,255,.8)">
                 26 人 · 朋友群 · 2 位管理员
               </p>
             </div>
           </div>
         </div>
+        <button
+          aria-label="搜索"
+          class="w-8 h-8 flex items-center justify-center text-white shrink-0"
+          onclick="showToast('搜索')"
+        >
+          <iconify-icon class="text-[22px]" icon="solar:magnifer-linear"></iconify-icon>
+        </button>
+        <button
+          aria-label="添加成员"
+          class="w-8 h-8 flex items-center justify-center text-white shrink-0"
+          onclick="showToast('添加成员')"
+        >
+          <iconify-icon class="text-[22px]" icon="solar:user-plus-rounded-bold"></iconify-icon>
+        </button>
         <a
-          class="w-8 h-8 flex items-center justify-center text-gray-600 shrink-0"
+          class="w-8 h-8 flex items-center justify-center text-white shrink-0"
           href="group_settings.html?from=group_chat"
           aria-label="群设置"
         >
@@ -637,6 +665,30 @@
           </button>
         </div>
       </footer>
+<!-- 底部三 Tab -->
+<nav class="flex-none bg-white border-t border-[#e6f2f4] flex items-stretch shrink-0" style="height: 58px" id="msgBottomTabs">
+<button class="msg-tab flex-1 flex flex-col items-center justify-center" onclick="location.href='message_center.html'">
+<span class="relative flex">
+<iconify-icon class="text-[22px]" icon="solar:chat-round-dots-bold"></iconify-icon>
+<span class="msg-tab-badge">1</span>
+</span>
+<span class="msg-tab-text">信息</span>
+</button>
+<button class="msg-tab active flex-1 flex flex-col items-center justify-center" onclick="showToast('群聊')">
+<span class="relative flex">
+<iconify-icon class="text-[22px]" icon="solar:users-group-rounded-bold"></iconify-icon>
+<span class="msg-tab-badge">1</span>
+</span>
+<span class="msg-tab-text">群聊</span>
+</button>
+<button class="msg-tab flex-1 flex flex-col items-center justify-center" onclick="location.href='my_contacts.html'">
+<span class="relative flex">
+<iconify-icon class="text-[22px]" icon="solar:notebook-bookmark-bold"></iconify-icon>
+<span class="msg-tab-badge">1</span>
+</span>
+<span class="msg-tab-text">通讯录</span>
+</button>
+</nav>
 
       <!-- 成员权限设置底部面板 -->
       <div
@@ -773,7 +825,15 @@
         showSheetToast(name + ' ' + action + label)
       }
 
-      function showSheetToast(msg) {
+      function showToast(message) {
+const el = document.createElement('div')
+el.textContent = message
+el.style.cssText =
+'position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;font-size:13px;padding:8px 16px;border-radius:6px;z-index:999;'
+document.body.appendChild(el)
+setTimeout(() => el.remove(), 1600)
+}
+function showSheetToast(msg) {
         const toast = document.getElementById('memberSheetToast')
         toast.textContent = msg
         toast.classList.add('show')
