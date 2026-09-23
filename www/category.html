@@ -5,6 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>商品空间</title>
     <script src="assets/vendor/nav.js"></script>
+    <script src="assets/vendor/iconify-icon.min.js"></script>
+    <link href="assets/vendor/theme.css" rel="stylesheet"/>
     <style>
       * {
         box-sizing: border-box;
@@ -149,7 +151,7 @@
 
       .products-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 8px;
       }
 
@@ -194,10 +196,115 @@
 
       .empty-state {
         grid-column: 1 / -1;
+        padding: 40px 0;
         text-align: center;
-        padding: 40px 20px;
         color: #9ca3af;
-        font-size: 14px;
+        font-size: 13px;
+      }
+
+      /* ====== 商城：顶栏链接 ====== */
+      .header-link {
+        flex: none;
+        font-size: 13px;
+        color: var(--ink-700);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      /* ====== 分类宫格 ====== */
+      .category-tiles {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 12px 14px;
+        background: #fff;
+        flex: none;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .tile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+        cursor: pointer;
+        border: 0;
+        background: transparent;
+      }
+      .tile .tile-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 9999px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tile .tile-label {
+        font-size: 11px;
+        color: var(--ink-700);
+      }
+
+      /* ====== 二级分类 ====== */
+      .sub-tabs {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 8px 14px;
+        background: #fff;
+        border-bottom: 1px solid #f3f4f6;
+        overflow-x: auto;
+        flex: none;
+      }
+      .sub-tabs:empty {
+        display: none;
+      }
+      .sub-tab {
+        position: relative;
+        font-size: 13px;
+        color: var(--ink-500);
+        white-space: nowrap;
+        border: 0;
+        background: transparent;
+        padding: 4px 0;
+        cursor: pointer;
+      }
+      .sub-tab.active {
+        color: var(--brand-deep);
+        font-weight: 700;
+        border-bottom: 2px solid var(--brand-strong);
+      }
+      .sub-tab .tab-badge {
+        position: absolute;
+        top: -6px;
+        right: -14px;
+        min-width: 15px;
+        height: 15px;
+        padding: 0 3px;
+        background: var(--gold);
+        color: #6b4a00;
+        font-size: 10px;
+        font-weight: 700;
+        border-radius: 4px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ====== 商品价格与销量 ====== */
+      .product-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 10px 10px;
+      }
+      .product-price {
+        color: #ff4d4f;
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .product-sold {
+        font-size: 11px;
+        color: var(--ink-500);
       }
     </style>
   </head>
@@ -219,7 +326,6 @@
             <path d="M12 19l-7-7 7-7"></path>
           </svg>
         </button>
-        <h1 class="page-title">商品空间</h1>
         <label class="search-field" aria-label="搜索商品">
           <svg
             width="17"
@@ -233,9 +339,17 @@
             <circle cx="11" cy="11" r="7"></circle>
             <path d="M20 20l-3.8-3.8"></path>
           </svg>
-          <input type="search" id="searchInput" placeholder="搜索商品" />
+          <input type="search" id="searchInput" placeholder="输入商品名称" />
         </label>
+        <a class="header-link" href="history_favorites.html">我的订单</a>
+        <button class="icon-button" aria-label="购物车" onclick="showToast('购物车')">
+          <img src="assets/v2/icon/cart.png" alt="购物车" style="width: 26px; height: 26px; object-fit: contain" />
+        </button>
       </header>
+      <!-- 分类宫格 -->
+      <div class="category-tiles" id="categoryTiles"></div>
+      <!-- 二级分类 -->
+      <div class="sub-tabs" id="subTabs"></div>
 
       <main class="main-container">
         <nav class="category-sidebar" id="categorySidebar" aria-label="商品分类"></nav>
@@ -248,12 +362,8 @@
     <script>
       const categoryGroups = [
         {
-          category: '房型类',
-          children: ['住宅公寓', '复式 Loft', '庭院别墅', '商务写字楼', '店铺空间', '展厅空间', '直播间', '主题房间']
-        },
-        {
           category: '装修类',
-          children: ['现代简约', '国风雅居', '未来空间', '温馨软装', '商务精装', '复古怀旧', '露营风', '轻奢风']
+          children: ['住宅公寓', '复式 Loft', '庭院别墅', '商务写字楼', '店铺空间', '展厅空间', '直播间', '主题房间']
         },
         {
           category: '家具类',
@@ -282,52 +392,132 @@
       ];
 
       const products = [
-        { id: 1, title: '云上会客厅全景房型模板', image: 'assets/products/space-living-room.jpg', category: '房型类' },
-        { id: 2, title: '咖啡角氛围装饰组合', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类' },
-        { id: 3, title: '街角店铺门头空间', image: 'assets/products/space-shopfront.jpg', category: '房型类' },
-        { id: 4, title: '沉浸式休闲房装修方案', image: 'assets/products/space-renovation.jpg', category: '装修类' },
-        { id: 5, title: '小型吧台家具套件', image: 'assets/products/space-furniture.jpg', category: '家具类' },
-        { id: 6, title: '开业活动空间文案包', image: 'assets/products/space-lighting.jpg', category: '文案类' },
-        { id: 7, title: '现代简约客厅家具组合', image: 'assets/products/space-furniture.jpg', category: '家具类' },
-        { id: 8, title: '直播间灯光布置方案', image: 'assets/products/space-lighting.jpg', category: '灯具类' },
-        { id: 9, title: '国风雅居书房套装', image: 'assets/products/space-renovation.jpg', category: '装修类' },
-        { id: 10, title: '商务办公桌椅组合', image: 'assets/products/space-furniture.jpg', category: '家具类' },
-        { id: 11, title: '墙面装饰画精选集', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类' },
-        { id: 12, title: '氛围灯带套装', image: 'assets/products/space-lighting.jpg', category: '灯具类' },
-        { id: 13, title: '复式Loft空间模板', image: 'assets/products/space-living-room.jpg', category: '房型类' },
-        { id: 14, title: '展示货架组合', image: 'assets/products/space-furniture.jpg', category: '家具类' },
-        { id: 15, title: '店铺介绍文案模板', image: 'assets/products/space-lighting.jpg', category: '文案类' },
-        { id: 16, title: '温馨软装搭配方案', image: 'assets/products/space-renovation.jpg', category: '装修类' },
-        { id: 17, title: '桌面摆件精选', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类' },
-        { id: 18, title: '智能灯组控制系统', image: 'assets/products/space-lighting.jpg', category: '灯具类' }
+        { id: 1, title: '云上会客厅全景房型模板', image: 'assets/products/space-living-room.jpg', category: '装修类', price: 12.8, sold: 2230 },
+        { id: 2, title: '咖啡角氛围装饰组合', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类', price: 16.8, sold: 10000 },
+        { id: 3, title: '街角店铺门头空间', image: 'assets/products/space-shopfront.jpg', category: '装修类', price: 39.9, sold: 860 },
+        { id: 4, title: '沉浸式休闲房装修方案', image: 'assets/products/space-renovation.jpg', category: '装修类', price: 29.9, sold: 1520 },
+        { id: 5, title: '小型吧台家具套件', image: 'assets/products/space-furniture.jpg', category: '家具类', price: 128, sold: 320 },
+        { id: 6, title: '开业活动空间文案包', image: 'assets/products/space-lighting.jpg', category: '文案类', price: 9.9, sold: 4210 },
+        { id: 7, title: '现代简约客厅家具组合', image: 'assets/products/space-furniture.jpg', category: '家具类', price: 268, sold: 145 },
+        { id: 8, title: '直播间灯光布置方案', image: 'assets/products/space-lighting.jpg', category: '灯具类', price: 59.9, sold: 780 },
+        { id: 9, title: '国风雅居书房套装', image: 'assets/products/space-renovation.jpg', category: '装修类', price: 88, sold: 260 },
+        { id: 10, title: '商务办公桌椅组合', image: 'assets/products/space-furniture.jpg', category: '家具类', price: 199, sold: 190 },
+        { id: 11, title: '墙面装饰画精选集', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类', price: 45.9, sold: 1320 },
+        { id: 12, title: '氛围灯带套装', image: 'assets/products/space-lighting.jpg', category: '灯具类', price: 19.9, sold: 5600 },
+        { id: 13, title: '复式Loft空间模板', image: 'assets/products/space-living-room.jpg', category: '装修类', price: 68, sold: 430 },
+        { id: 14, title: '展示货架组合', image: 'assets/products/space-furniture.jpg', category: '家具类', price: 158, sold: 275 },
+        { id: 15, title: '店铺介绍文案模板', image: 'assets/products/space-lighting.jpg', category: '文案类', price: 6.9, sold: 8800 },
+        { id: 16, title: '温馨软装搭配方案', image: 'assets/products/space-renovation.jpg', category: '装修类', price: 25.9, sold: 1010 },
+        { id: 17, title: '桌面摆件精选', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类', price: 15.8, sold: 2340 },
+        { id: 18, title: '智能灯组控制系统', image: 'assets/products/space-lighting.jpg', category: '灯具类', price: 299, sold: 88 }
       ];
 
-      let currentCategory = '房型类';
+      let currentCategory = '装修类';
+      let currentChild = '';
       let searchKeyword = '';
 
       const categorySidebar = document.getElementById('categorySidebar');
       const productsGrid = document.getElementById('productsGrid');
       const searchInput = document.getElementById('searchInput');
+      const categoryTiles = document.getElementById('categoryTiles');
+      const subTabs = document.getElementById('subTabs');
 
-      function renderCategoryTabs() {
-        categorySidebar.innerHTML = categoryGroups
-          .map(
-            (group, index) =>
-              `<button class="category-tab${group.category === currentCategory ? ' active' : ''}" data-category="${group.category}">${group.category}</button>`
-          )
-          .join('');
+      const TILE_STYLE = {
+        '装修类': { bg: '#e6f9fc', icon: 'solar:home-2-bold', color: '#00acc1' },
+        '家具类': { bg: '#fff4e5', icon: 'solar:sofa-bold', color: '#f0a04b' },
+        '文具': { bg: '#e8f6ff', icon: 'solar:pen-bold', color: '#3b9df8' },
+        '装饰类': { bg: '#ffeceb', icon: 'solar:gallery-wide-bold', color: '#ff6b6b' },
+        '饰品类': { bg: '#f3ecff', icon: 'solar:box-bold', color: '#8b6bf0' },
+        '灯具类': { bg: '#fffbe6', icon: 'solar:lamp-bold', color: '#e0b500' },
+        '文案类': { bg: '#eafaf1', icon: 'solar:document-text-bold', color: '#2ecc71' }
+      };
 
-        categorySidebar.addEventListener('click', event => {
-          const tab = event.target.closest('.category-tab');
-          if (!tab) return;
-          currentCategory = tab.dataset.category;
-          renderCategoryTabs();
-          renderProducts();
-        });
+      function showToast(message) {
+        const el = document.createElement('div');
+        el.textContent = message;
+        el.style.cssText =
+          'position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;font-size:13px;padding:8px 16px;border-radius:6px;z-index:999;';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1600);
       }
 
+      function renderTiles() {
+        categoryTiles.innerHTML = categoryGroups
+          .slice(0, 5)
+          .map(g => {
+            const s = TILE_STYLE[g.category] || TILE_STYLE['装修类'];
+            return `<button class="tile" onclick="selectCategory('${g.category}')">
+              <span class="tile-icon" style="background:${s.bg}; color:${s.color}">
+                <iconify-icon style="font-size:24px" icon="${s.icon}"></iconify-icon>
+              </span>
+              <span class="tile-label">${g.category}</span>
+            </button>`;
+          })
+          .join('');
+      }
+
+      function renderSubTabs() {
+        const group = categoryGroups.find(g => g.category === currentCategory);
+        if (!group) {
+          subTabs.innerHTML = '';
+          return;
+        }
+        subTabs.innerHTML = group.children
+          .map((child, index) => {
+            const count = index === 0 ? 12 : 0;
+            return `<button class="sub-tab${currentChild === child ? ' active' : ''}" onclick="selectChild('${child}')">
+              ${child}${count ? `<span class="tab-badge">${count}</span>` : ''}
+            </button>`;
+          })
+          .join('');
+      }
+
+      function selectCategory(category) {
+        currentCategory = category;
+        currentChild = '';
+        renderCategoryTabs();
+        renderSubTabs();
+        renderProducts();
+      }
+
+      function selectChild(child) {
+        currentChild = child;
+        renderSubTabs();
+        renderProducts();
+      }
+
+      function renderCategoryTabs() {
+        categorySidebar.innerHTML =
+          `<button class="category-tab${currentCategory === '全部' ? ' active' : ''}" data-category="全部">全部</button>` +
+          categoryGroups
+            .map(
+              (group, index) =>
+                `<button class="category-tab${group.category === currentCategory ? ' active' : ''}" data-category="${group.category}">${group.category}</button>`
+            )
+            .join('');
+      }
+
+      categorySidebar.addEventListener('click', event => {
+        const tab = event.target.closest('.category-tab');
+        if (!tab) return;
+        currentCategory = tab.dataset.category;
+        currentChild = '';
+        renderCategoryTabs();
+        renderSubTabs();
+        renderProducts();
+      });
+
       function renderProducts() {
-        let filteredProducts = products.filter(p => p.category === currentCategory);
+        let filteredProducts = products.filter(
+          p => currentCategory === '全部' || p.category === currentCategory
+        );
+
+        if (currentChild) {
+          const matched = filteredProducts.filter(p =>
+            p.title.includes(currentChild.replace(/\s/g, ''))
+          );
+          if (matched.length) filteredProducts = matched;
+        }
 
         if (searchKeyword) {
           filteredProducts = filteredProducts.filter(p =>
@@ -348,6 +538,10 @@
                 <img src="${product.image}" alt="${product.title}" loading="lazy" />
               </div>
               <h3 class="product-title">${product.title}</h3>
+              <div class="product-foot">
+                <span class="product-price">¥${product.price.toFixed(2)}</span>
+                <span class="product-sold">已售${product.sold}</span>
+              </div>
             </article>
           `
           )
@@ -359,7 +553,9 @@
         renderProducts();
       });
 
+      renderTiles();
       renderCategoryTabs();
+      renderSubTabs();
       renderProducts();
     </script>
   </body>
