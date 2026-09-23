@@ -42,9 +42,11 @@
             align-items: center;
             gap: 4px;
         }
-        .board-meta img {
+        .board-meta img,
+        .board-meta iconify-icon {
             width: 14px;
             height: 14px;
+            font-size: 14px;
             object-fit: contain;
         }
     </style>
@@ -132,8 +134,8 @@
                 <div style="font-size: 12px; color: var(--ink-500); margin-top: 6px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden">${item.desc}</div>
             </div>
             <div class="board-meta">
-                <span><img src="assets/v2/icon/like.png" alt="赞"/>${item.like}</span>
-                <span><img src="assets/v2/icon/star.png" alt="星"/>${item.star}</span>
+<span><iconify-icon icon="solar:heart-linear"></iconify-icon>${item.like}</span>
+<span><iconify-icon icon="solar:star-linear"></iconify-icon>${item.star}</span>
             </div>
         </div>
     `).join('')

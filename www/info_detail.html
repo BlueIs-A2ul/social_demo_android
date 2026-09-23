@@ -46,9 +46,11 @@
             background: transparent;
             border: 0;
         }
-        .detail-bar img {
+        .detail-bar img,
+        .detail-bar iconify-icon {
             width: 18px;
             height: 18px;
+            font-size: 18px;
             object-fit: contain;
         }
         #toast {
@@ -79,13 +81,13 @@
     </div>
     <div class="detail-bar">
         <button onclick="toggleLike(this)">
-            <img src="assets/v2/icon/like.png" alt="赞"/><span id="likeCount">260</span>
-        </button>
-        <button onclick="showToast('已收藏')">
-            <img src="assets/v2/icon/star.png" alt="星"/><span>320</span>
-        </button>
-        <button onclick="showToast('评论')">
-            <img src="assets/v2/icon/comment.png" alt="评论"/><span>180</span>
+                <iconify-icon icon="solar:heart-linear"></iconify-icon><span id="likeCount">260</span>
+            </button>
+            <button onclick="showToast('已收藏')">
+                <iconify-icon icon="solar:star-linear"></iconify-icon><span>320</span>
+            </button>
+            <button onclick="showToast('评论')">
+                <iconify-icon icon="solar:chat-round-linear"></iconify-icon><span>180</span>
         </button>
     </div>
 </div>

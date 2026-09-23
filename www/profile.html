@@ -193,9 +193,11 @@
         align-items: center;
         gap: 4px;
       }
-      .news-card .news-card-meta img {
+      .news-card .news-card-meta img,
+      .news-card .news-card-meta iconify-icon {
         width: 14px;
         height: 14px;
+        font-size: 14px;
         object-fit: contain;
       }
       /* ====== 标题行角标 ====== */
@@ -1299,8 +1301,8 @@
             '<div class="news-card-body">' +
             '<div class="news-card-title">' + item.title + '</div>' +
             '<div class="news-card-meta">' +
-            '<span><img src="assets/v2/icon/like.png" alt="赞" />120</span>' +
-            '<span><img src="assets/v2/icon/star.png" alt="星" />80</span>' +
+            '<span><iconify-icon icon="solar:heart-linear"></iconify-icon>120</span>' +
+            '<span><iconify-icon icon="solar:star-linear"></iconify-icon>80</span>' +
             '</div></div>'
           card.addEventListener('click', () => openCommunityNews(item))
           newsList.appendChild(card)
