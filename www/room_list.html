@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>房间列表 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
     <script>
       (function () {
         try {
@@ -25,8 +26,8 @@
         font-family:
           -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI',
           Roboto, Helvetica, Arial, sans-serif;
-        color: #1f1722;
-        background: #f7f7f8;
+        color: #17313a;
+        background: #f5f9fa;
         background-attachment: fixed;
       }
       ::-webkit-scrollbar {
@@ -35,15 +36,15 @@
 
       /* ====== 设计 token（页面级轻量版） ====== */
       :root {
-        --brand: #ec4899;
-        --brand-soft: #fdf2f8;
-        --brand-tint: #fce7f3;
-        --brand-line: #fbcfe8;
-        --ink-900: #1f1722;
-        --ink-700: #4a3f50;
-        --ink-500: #8b7e93;
-        --ink-100: #f4edf1;
-        --shadow-sm: 0 2px 8px rgba(236, 72, 153, .06);
+        --brand: #26c6da;
+        --brand-soft: #f2fcfd;
+        --brand-tint: #e6f9fc;
+        --brand-line: #b8e9f0;
+        --ink-900: #17313a;
+        --ink-700: #3f5b64;
+        --ink-500: #8aa0a8;
+        --ink-100: #eef4f6;
+        --shadow-sm: 0 2px 8px rgba(38, 198, 218, .06);
         --shadow-md: 0 6px 18px rgba(31, 23, 34, .06);
       }
 
@@ -78,7 +79,7 @@
       }
       .soft-divider {
         border: 0;
-        border-top: 1px solid rgba(251, 207, 232, .55);
+        border-top: 1px solid rgba(184, 233, 240, .55);
       }
 
       /* ====== 头像 ====== */
@@ -108,7 +109,7 @@
         font-size: 10px;
         font-weight: 600;
         background: var(--brand-soft);
-        color: #be185d;
+        color: #00838f;
       }
       .pill-emerald {
         background: #ecfdf5;
@@ -117,6 +118,18 @@
       .pill-gray {
         background: var(--ink-100);
         color: var(--ink-500);
+      }
+
+      /* ====== 顶部青色渐变栏 ====== */
+      .topbar {
+        background: linear-gradient(135deg, #4dd0e1 0%, #26c6da 100%);
+      }
+      .topbar .pill {
+        background: rgba(255, 255, 255, .25);
+        color: #fff;
+      }
+      .topbar .icon-circle {
+        background: rgba(255, 255, 255, .92);
       }
 
       /* ====== 圆角图标按钮（购物车 / 通讯录） ====== */
@@ -186,7 +199,7 @@
         border: 0;
         border-radius: 6px;
         cursor: pointer;
-        box-shadow: 0 4px 10px rgba(236, 72, 153, .25);
+        box-shadow: 0 4px 10px rgba(38, 198, 218, .25);
         transition: transform .12s ease;
       }
       .btn-search:active { transform: scale(.94); }
@@ -196,7 +209,7 @@
         transition: background-color .15s ease;
       }
       .room-item:active {
-        background: rgba(252, 231, 243, .55);
+        background: rgba(230, 249, 252, .55);
       }
       .room-name {
         font-size: 12px;
@@ -232,14 +245,14 @@
         transition: background-color .15s ease;
       }
       .visitor-row:active {
-        background: rgba(252, 231, 243, .45);
+        background: rgba(230, 249, 252, .45);
       }
 
       /* ====== 个人名片展开卡片 ====== */
       .identity-content {
-        background: linear-gradient(180deg, #fff7fb 0%, #fff 100%);
+        background: linear-gradient(180deg, #f7fdfe 0%, #fff 100%);
         padding: 12px 16px 16px;
-        border-top: 1px solid rgba(251, 207, 232, .55);
+        border-top: 1px solid rgba(184, 233, 240, .55);
       }
       .identity-id-no {
         font-size: 11px;
@@ -257,7 +270,7 @@
         display: flex;
         align-items: center;
         padding: 8px 12px;
-        border-bottom: 1px solid rgba(251, 207, 232, .45);
+        border-bottom: 1px solid rgba(184, 233, 240, .45);
       }
       .identity-row:last-child {
         border-bottom: 0;
@@ -267,7 +280,7 @@
         flex-shrink: 0;
         font-size: 11px;
         font-weight: 600;
-        color: #be185d;
+        color: #00838f;
       }
       .identity-val {
         flex: 1;
@@ -354,7 +367,7 @@
       }
       .news-item:hover {
         transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(236, 72, 153, .12);
+        box-shadow: 0 6px 16px rgba(38, 198, 218, .12);
       }
       .news-item-title {
         font-size: 14px;
@@ -458,7 +471,7 @@
     >
       <!-- 顶部用户信息区 -->
       <div
-        class="flex-none px-5 pt-3 pb-4 flex items-center justify-between"
+        class="flex-none px-5 pt-3 pb-4 flex items-center justify-between topbar"
       >
         <div class="flex items-center gap-3">
           <!-- 头像 -->
@@ -473,84 +486,45 @@
           </div>
           <!-- 用户信息 -->
           <div>
-            <div class="flex items-center gap-1">
-              <span class="font-bold text-lg">小云</span>
-              <button
-                style="color: var(--ink-500); background: transparent; border: 0; padding: 0; border-radius: 50%; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1;"
-                onclick="location.href = 'profile_edit.html?from=room_list'"
-              >
-                <iconify-icon
-                  style="font-size: 15px; display: block;"
-                  icon="solar:pen-bold"
-                ></iconify-icon>
-              </button>
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-lg text-white">雅柔</span>
               <img
-                alt="个人VIP2"
+                alt="个人VIP"
                 class="vip-badge"
-                src="assets/src_01/颜色vip/技术服务类vip.jpg"
+                src="assets/v2/vip/cat-entertainment.png"
+              />
+              <img
+                alt="等级"
+                class="vip-badge"
+                src="assets/v2/icon/gear-badge.png"
               />
             </div>
-            <div class="flex items-center gap-2 mt-1.5">
-              <span class="pill">10年老店</span>
-              <div class="flex items-center gap-1">
-                <span style="color: var(--ink-500); font-size: 10px;">诚信等级</span>
-                <div class="flex">
-                  <iconify-icon
-                    style="color: var(--brand); font-size: 12px;"
-                    icon="solar:heart-bold"
-                  ></iconify-icon>
-                  <iconify-icon
-                    style="color: var(--brand); font-size: 12px;"
-                    icon="solar:heart-bold"
-                  ></iconify-icon>
-                  <iconify-icon
-                    style="color: var(--brand); font-size: 12px;"
-                    icon="solar:heart-bold"
-                  ></iconify-icon>
-                  <iconify-icon
-                    style="color: var(--ink-100); font-size: 12px;"
-                    icon="solar:heart-linear"
-                  ></iconify-icon>
-                  <iconify-icon
-                    style="color: var(--ink-100); font-size: 12px;"
-                    icon="solar:heart-linear"
-                  ></iconify-icon>
-                </div>
-              </div>
+            <div
+              class="mt-1"
+              style="font-size: 12px; color: rgba(255, 255, 255, .88)"
+            >
+              5个空间
             </div>
           </div>
         </div>
         <!-- 右侧功能图标 -->
         <div class="flex items-center gap-3 flex-shrink-0">
-          <!-- 通讯录 -->
-          <div
-            class="relative cursor-pointer"
-            onclick="window.location.href='my_contacts.html?from=room_list'"
-          >
-            <div class="icon-circle">
-              <img src="assets/src_01/icon/通讯录.jpg" alt="通讯录" class="w-6 h-6 object-contain" />
-            </div>
-          </div>
-          <!-- 购物车 -->
-          <div
-            class="relative cursor-pointer"
-            onclick="window.location.href='category.html?from=room_list'"
-          >
-            <div class="icon-circle">
-              <img src="assets/src_01/icon/购物车-removebg-preview.png" alt="购物车" class="w-6 h-6 object-contain" />
-            </div>
-            <div class="icon-badge">2</div>
+          <div class="relative cursor-pointer" onclick="showToast('微信')">
+            <img
+              class="w-9 h-9 object-contain"
+              src="assets/v2/icon/wechat.png"
+              alt="微信"
+            />
+            <div class="icon-badge" style="background: #ff4d4f">1</div>
           </div>
         </div>
       </div>
       <!-- 「我的房间」大盒子 -->
       <div
-        class="grow shrink-0 flex flex-col soft-card mx-5 mt-2 mb-6 overflow-hidden"
+        class="flex-none flex flex-col soft-card mx-5 mt-2 mb-4 overflow-hidden"
       >
         <!-- 内部标题行 -->
-        <div
-          class="px-4 py-3 flex items-center gap-3"
-        >
+        <div class="px-4 py-3 flex items-center gap-3">
           <div class="search-wrap">
             <iconify-icon
               style="color: var(--ink-500); font-size: 14px; flex-shrink: 0;"
@@ -559,16 +533,21 @@
             <input
               id="roomSearchInput"
               type="search"
-              placeholder="搜索房间"
+              placeholder="输入房间名称"
+              oninput="filterRooms(this.value)"
             />
-            <button
-              class="btn-search"
-              onclick="filterRooms(document.getElementById('roomSearchInput').value)"
-            >
-              搜索
-            </button>
           </div>
-          <span style="font-size: 12px; color: var(--ink-500); flex-shrink: 0;">5个空间</span>
+          <button
+            aria-label="新建房间"
+            class="flex-shrink-0 flex items-center justify-center"
+            style="width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--brand); color: var(--brand-deep); background: #fff; cursor: pointer;"
+            onclick="showCreateRoomModal()"
+          >
+            <iconify-icon
+              style="font-size: 20px"
+              icon="solar:add-circle-linear"
+            ></iconify-icon>
+          </button>
         </div>
         <!-- Grid 网格 -->
         <div
@@ -579,12 +558,17 @@
             class="room-item p-3 flex flex-col items-center cursor-pointer"
             onclick="showToast('建设中')"
           >
-            <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
+            <div class="relative w-full aspect-square mb-2 overflow-hidden bg-white">
               <img
                 alt="青铜之门"
                 class="w-full h-full object-cover"
                 src="assets/packaged/sq/微信图片_20260729140622.jpg"
               />
+              <span
+                class="absolute left-0 top-0 px-1.5 py-0.5 text-[10px] text-white"
+                style="background: #3b9df8; border-bottom-right-radius: 6px"
+                >置顶</span
+              >
             </div>
             <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">我的房间<br/></span>
           </div>
@@ -593,12 +577,17 @@
             class="room-item p-3 flex flex-col items-center cursor-pointer"
             onclick="window.location.href='panorama_room.html?from=room_list'"
           >
-            <div class="w-full aspect-square mb-2 overflow-hidden bg-white">
+            <div class="relative w-full aspect-square mb-2 overflow-hidden bg-white">
               <img
                 alt="娜美的房间"
                 class="w-full h-full object-cover"
                 src="assets/avatars/新娜美.jpg"
               />
+              <span
+                class="absolute left-0 top-0 px-1.5 py-0.5 text-[10px] text-white"
+                style="background: #3b9df8; border-bottom-right-radius: 6px"
+                >置顶</span
+              >
             </div>
             <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">娜美的房间<br/></span>
           </div>
@@ -644,20 +633,64 @@
             </div>
             <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">信息栏<br/></span>
           </div>
-          <!-- 房间 4: 无 (占位) -->
+        </div>
+      </div>
+      <!-- 我的收藏 -->
+      <div class="flex-none soft-card mx-5 mb-4 pt-3 pb-4">
+        <h3
+          class="px-4 pb-3"
+          style="font-weight: 700; font-size: 16px; color: var(--ink-900); margin: 0"
+        >
+          我的收藏
+        </h3>
+        <div class="grid grid-cols-4 gap-y-3">
           <div
-            class="add-room-cell p-3 flex flex-col items-center justify-center cursor-pointer"
-            onclick="showToast('新建房间')"
+            class="flex flex-col items-center gap-1.5 cursor-pointer"
+            onclick="showToast('进入小鹿的房间')"
           >
-            <div
-              class="w-full aspect-square mb-2 bg-white flex items-center justify-center"
-            >
-              <iconify-icon
-                class="add-room-plus"
-                icon="solar:add-circle-linear"
-              ></iconify-icon>
-            </div>
-            <span class="add-room-label">新建</span>
+            <img
+              alt="小鹿的房间"
+              class="w-[64px] h-[64px] object-cover"
+              style="border-radius: 9999px"
+              src="assets/avatars/member-05.jpg"
+            />
+            <span style="font-size: 12px; color: var(--ink-700)">小鹿的房间</span>
+          </div>
+          <div
+            class="flex flex-col items-center gap-1.5 cursor-pointer"
+            onclick="showToast('进入文卓的房间')"
+          >
+            <img
+              alt="文卓的房间"
+              class="w-[64px] h-[64px] object-cover"
+              style="border-radius: 9999px"
+              src="assets/avatars/member-01.jpg"
+            />
+            <span style="font-size: 12px; color: var(--ink-700)">文卓的房间</span>
+          </div>
+          <div
+            class="flex flex-col items-center gap-1.5 cursor-pointer"
+            onclick="showToast('进入星河的房间')"
+          >
+            <img
+              alt="星河的房间"
+              class="w-[64px] h-[64px] object-cover"
+              style="border-radius: 9999px"
+              src="assets/avatars/member-07.jpg"
+            />
+            <span style="font-size: 12px; color: var(--ink-700)">星河的房间</span>
+          </div>
+          <div
+            class="flex flex-col items-center gap-1.5 cursor-pointer"
+            onclick="showToast('进入七七的房间')"
+          >
+            <img
+              alt="七七的房间"
+              class="w-[64px] h-[64px] object-cover"
+              style="border-radius: 9999px"
+              src="assets/avatars/member-06.jpg"
+            />
+            <span style="font-size: 12px; color: var(--ink-700)">七七的房间</span>
           </div>
         </div>
       </div>
@@ -669,37 +702,53 @@
           class="px-4 py-4 flex items-center justify-between"
         >
           <h3 style="font-weight: 700; font-size: 16px; color: var(--ink-900); margin: 0;">访客动态</h3>
-          <span style="font-size: 12px; color: var(--ink-500);">今日3人</span>
+          <div class="flex items-center gap-2">
+            <span style="font-size: 12px; color: var(--ink-500);">今日 4 人</span>
+            <span
+              class="flex items-center justify-center"
+              style="min-width: 16px; height: 16px; padding: 0 4px; border-radius: 4px; background: var(--gold); color: #6b4a00; font-size: 10px; font-weight: 700;"
+              >1</span
+            >
+          </div>
         </div>
-        <div class="flex flex-col" style="border-top: 1px solid rgba(251, 207, 232, .55);">
+        <div class="flex flex-col" style="border-top: 1px solid rgba(184, 233, 240, .55);">
           <!-- 条目 1 -->
-          <div style="border-bottom: 1px solid rgba(251, 207, 232, .55);">
+          <div style="border-bottom: 1px solid rgba(184, 233, 240, .55);">
             <div
               class="visitor-row"
               onclick="toggleIdentityCard(0)"
             >
-              <div class="flex-1 flex items-center gap-2">
-                <span style="font-size: 12px; color: var(--ink-500);">1.</span>
-                <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);"
-                  >七七<img
-                    alt="个人VIP2"
-                    class="vip-badge"
-                    src="assets/src_01/颜色vip/技术服务类vip.jpg"
-                /></span>
+              <div class="flex-1 flex items-center gap-2.5 min-w-0">
                 <img
-                  class="id-card-toggle"
-                  alt="个人名片"
-                  src="assets/src_01/icon/个人名片-removebg-preview.png"
-                  onclick="
-                    event.stopPropagation()
-                    toggleIdentityCard(0)
-                  "
+                  alt="七七"
+                  class="w-10 h-10 object-cover flex-shrink-0"
+                  style="border-radius: 9999px"
+                  src="assets/avatars/member-06.jpg"
                 />
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);">七七</span>
+                    <img
+                      alt="个人VIP"
+                      class="vip-badge"
+                      src="assets/v2/vip/cat-entertainment.png"
+                    />
+                    <img
+                      alt="等级"
+                      class="vip-badge"
+                      src="assets/v2/icon/gear-badge.png"
+                    />
+                  </div>
+                  <div style="font-size: 12px; color: var(--ink-700); margin-top: 2px;">停留 12 分钟</div>
+                </div>
               </div>
-              <div class="flex items-center gap-3">
-                <span style="font-size: 12px; color: var(--ink-700);">停留 12 分钟</span>
-                <span class="pill pill-emerald">停留</span>
-              </div>
+              <button
+                class="flex-shrink-0"
+                style="height: 30px; padding: 0 12px; border-radius: 9999px; background: var(--brand-strong); color: #fff; font-size: 12px; font-weight: 700; border: 0;"
+                onclick="event.stopPropagation(); showToast('已发送好友申请')"
+              >
+                加好友
+              </button>
             </div>
             <div class="identity-content hidden">
               <div class="identity-id-no">
@@ -719,33 +768,42 @@
             </div>
           </div>
           <!-- 条目 2 -->
-          <div style="border-bottom: 1px solid rgba(251, 207, 232, .55);">
+          <div style="border-bottom: 1px solid rgba(184, 233, 240, .55);">
             <div
               class="visitor-row"
               onclick="toggleIdentityCard(1)"
             >
-              <div class="flex-1 flex items-center gap-2">
-                <span style="font-size: 12px; color: var(--ink-500);">2.</span>
-                <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);"
-                  >小鹿<img
-                    alt="个人VIP2"
-                    class="vip-badge"
-                    src="assets/src_01/颜色vip/技术服务类vip.jpg"
-                /></span>
+              <div class="flex-1 flex items-center gap-2.5 min-w-0">
                 <img
-                  class="id-card-toggle"
-                  alt="个人名片"
-                  src="assets/src_01/icon/个人名片-removebg-preview.png"
-                  onclick="
-                    event.stopPropagation()
-                    toggleIdentityCard(1)
-                  "
+                  alt="小鹿"
+                  class="w-10 h-10 object-cover flex-shrink-0"
+                  style="border-radius: 9999px"
+                  src="assets/avatars/member-05.jpg"
                 />
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);">小鹿</span>
+                    <img
+                      alt="个人VIP"
+                      class="vip-badge"
+                      src="assets/v2/vip/cat-tech.png"
+                    />
+                    <img
+                      alt="等级"
+                      class="vip-badge"
+                      src="assets/v2/icon/gear-badge.png"
+                    />
+                  </div>
+                  <div style="font-size: 12px; color: var(--ink-700); margin-top: 2px;">停留 8 分钟</div>
+                </div>
               </div>
-              <div class="flex items-center gap-3">
-                <span style="font-size: 12px; color: var(--ink-700);">停留 8 分钟</span>
-                <span class="pill pill-gray">离开</span>
-              </div>
+              <button
+                class="flex-shrink-0"
+                style="height: 30px; padding: 0 12px; border-radius: 9999px; background: var(--brand-strong); color: #fff; font-size: 12px; font-weight: 700; border: 0;"
+                onclick="event.stopPropagation(); showToast('已发送好友申请')"
+              >
+                加好友
+              </button>
             </div>
             <div class="identity-content hidden">
               <div class="identity-id-no">
@@ -770,28 +828,37 @@
               class="visitor-row"
               onclick="toggleIdentityCard(2)"
             >
-              <div class="flex-1 flex items-center gap-2">
-                <span style="font-size: 12px; color: var(--ink-500);">3.</span>
-                <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);"
-                  >星河<img
-                    alt="个人VIP2"
-                    class="vip-badge"
-                    src="assets/src_01/颜色vip/技术服务类vip.jpg"
-                /></span>
+              <div class="flex-1 flex items-center gap-2.5 min-w-0">
                 <img
-                  class="id-card-toggle"
-                  alt="公司名片"
-                  src="assets/src_01/icon/公司名片-removebg-preview.png"
-                  onclick="
-                    event.stopPropagation()
-                    toggleIdentityCard(2)
-                  "
+                  alt="星河"
+                  class="w-10 h-10 object-cover flex-shrink-0"
+                  style="border-radius: 9999px"
+                  src="assets/avatars/member-07.jpg"
                 />
+                <div class="min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span style="font-weight: 700; font-size: 14px; color: var(--ink-900);">星河</span>
+                    <img
+                      alt="个人VIP"
+                      class="vip-badge"
+                      src="assets/v2/vip/cat-charity.png"
+                    />
+                    <img
+                      alt="等级"
+                      class="vip-badge"
+                      src="assets/v2/icon/gear-badge.png"
+                    />
+                  </div>
+                  <div style="font-size: 12px; color: var(--ink-700); margin-top: 2px;">停留 5 分钟</div>
+                </div>
               </div>
-              <div class="flex items-center gap-3">
-                <span style="font-size: 12px; color: var(--ink-700);">停留 5 分钟</span>
-                <span class="pill pill-emerald">停留</span>
-              </div>
+              <button
+                class="flex-shrink-0"
+                style="height: 30px; padding: 0 12px; border-radius: 9999px; background: var(--brand-strong); color: #fff; font-size: 12px; font-weight: 700; border: 0;"
+                onclick="event.stopPropagation(); showToast('已发送好友申请')"
+              >
+                加好友
+              </button>
             </div>
             <div class="identity-content hidden">
               <div class="identity-id-no">
@@ -809,6 +876,60 @@
                 <div class="identity-row"><span class="identity-key">联系邮箱</span><span class="identity-val">contact@xingqiong.works</span></div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <!-- 填写空间名称弹窗 -->
+      <div id="createRoomModal" class="fixed inset-0 z-[60] hidden">
+        <div class="modal-mask" onclick="hideCreateRoomModal()"></div>
+        <div
+          class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white"
+          style="width: 82%; max-width: 340px; border-radius: 12px; overflow: hidden; z-index: 51;"
+        >
+          <div
+            class="py-3 text-center"
+            style="font-size: 15px; font-weight: 700; color: var(--ink-900)"
+          >
+            填写空间名称
+          </div>
+          <div class="px-5 pb-2 flex items-center gap-3">
+            <span class="flex-shrink-0" style="width: 68px; font-size: 14px; color: var(--ink-700)">房间名称</span>
+            <input
+              id="createRoomName"
+              class="flex-1 outline-none"
+              style="height: 36px; padding: 0 12px; font-size: 13px; border: 1px solid var(--brand-line); border-radius: 6px;"
+              placeholder="输入空间名称"
+              type="text"
+            />
+          </div>
+          <div class="px-5 pt-2 pb-4 flex items-center gap-3">
+            <span class="flex-shrink-0" style="width: 68px; font-size: 14px; color: var(--ink-700)">上传图标</span>
+            <div class="flex flex-col items-center gap-1">
+              <div
+                class="flex items-center justify-center cursor-pointer"
+                style="width: 72px; height: 72px; border: 1.5px dashed var(--brand-line); border-radius: 8px; color: var(--brand-deep);"
+                onclick="showToast('选择图片')"
+              >
+                <iconify-icon style="font-size: 24px" icon="solar:add-circle-linear"></iconify-icon>
+              </div>
+              <span style="font-size: 10px; color: var(--ink-500)">图片&lt;1MB</span>
+            </div>
+          </div>
+          <div class="px-5 pb-5 flex gap-4">
+            <button
+              class="btn-brand-outline flex-1"
+              style="height: 40px; font-size: 14px"
+              onclick="hideCreateRoomModal()"
+            >
+              取消
+            </button>
+            <button
+              class="btn-brand flex-1"
+              style="height: 40px; font-size: 14px"
+              onclick="hideCreateRoomModal()"
+            >
+              确定
+            </button>
           </div>
         </div>
       </div>
@@ -1070,6 +1191,18 @@
       };
       
       // 显示信息栏弹窗
+      function showCreateRoomModal() {
+        const modal = document.getElementById('createRoomModal');
+        modal.classList.remove('hidden');
+      }
+
+      function hideCreateRoomModal() {
+        const modal = document.getElementById('createRoomModal');
+        modal.classList.add('hidden');
+        const input = document.getElementById('createRoomName');
+        if (input) input.value = '';
+      }
+
       function showInfoBarModal() {
         const modal = document.getElementById('infoBarModal');
         modal.classList.remove('hidden');
@@ -1161,10 +1294,10 @@
         const icon = document.getElementById('newsDetailFavIcon');
         const text = document.getElementById('newsDetailFavText');
         if (isFav) {
-          icon.setAttribute('fill', '#ec4899');
-          icon.style.color = '#ec4899';
+          icon.setAttribute('fill', '#26c6da');
+          icon.style.color = '#26c6da';
           text.textContent = '已收藏';
-          text.style.color = '#ec4899';
+          text.style.color = '#26c6da';
         } else {
           icon.setAttribute('fill', 'none');
           icon.style.color = '';
