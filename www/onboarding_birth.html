@@ -6,6 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>引导页 - 出生年份</title>
 <script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
 <link href="assets/vendor/theme.css" rel="stylesheet"/>
 <style>
         body {
@@ -38,6 +39,23 @@
         .digit-box.next {
             border-color: var(--brand-line);
         }
+    .key {
+    height: 52px;
+    background: #fff;
+    border: 1.5px solid var(--brand-line);
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink-900);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+.key:active {
+    background: var(--brand-soft);
+}
     </style>
 </head>
 <body class="flex flex-col">
@@ -51,26 +69,31 @@
 <h1 class="text-[28px] font-bold title-brand leading-snug tracking-wide">
                 告诉我们<br/>你的出生年份
             </h1>
-<!-- 输入展示框（点击唤起系统数字键盘） -->
-<div class="relative flex justify-center mt-16">
-  <div class="flex gap-3" aria-hidden="true">
-    <div class="digit-box next" id="digit-0"></div>
-    <div class="digit-box" id="digit-1"></div>
-    <div class="digit-box" id="digit-2"></div>
-    <div class="digit-box" id="digit-3"></div>
-  </div>
-  <input
-    id="year-input"
-    type="text"
-    inputmode="numeric"
-    maxlength="4"
-    autocomplete="off"
-    autocorrect="off"
-    spellcheck="false"
-    aria-label="出生年份"
-    class="absolute inset-0 w-full h-full opacity-0 cursor-text"
-  />
+<!-- 输入展示框 -->
+<div class="flex justify-center mt-10" aria-hidden="true">
+<div class="flex gap-3">
+<div class="digit-box next" id="digit-0"></div>
+<div class="digit-box" id="digit-1"></div>
+<div class="digit-box" id="digit-2"></div>
+<div class="digit-box" id="digit-3"></div>
 </div>
+</div>
+<!-- 数字键盘 -->
+<div class="grid grid-cols-3 gap-3 mt-10 px-2">
+<button class="key" onclick="pressKey('1')">1</button>
+<button class="key" onclick="pressKey('2')">2</button>
+<button class="key" onclick="pressKey('3')">3</button>
+<button class="key" onclick="pressKey('4')">4</button>
+<button class="key" onclick="pressKey('5')">5</button>
+<button class="key" onclick="pressKey('6')">6</button>
+<button class="key" onclick="pressKey('7')">7</button>
+<button class="key" onclick="pressKey('8')">8</button>
+<button class="key" onclick="pressKey('9')">9</button>
+<button class="key" onclick="pressKey('#')">#</button>
+<button class="key" onclick="pressKey('0')">0</button>
+<button class="key" onclick="pressKey('del')">
+<iconify-icon class="text-[20px]" icon="solar:backspace-linear"></iconify-icon>
+</button>
 </div>
 <!-- 底部操作栏 -->
 <div class="px-8 py-6 flex items-center justify-center shrink-0">
@@ -79,37 +102,34 @@
         </button>
 </div>
 <script>
-        const yearInput = document.getElementById('year-input');
         const digitBoxes = [
             document.getElementById('digit-0'),
             document.getElementById('digit-1'),
             document.getElementById('digit-2'),
-            document.getElementById('digit-3')
-        ];
-        const submitBtn = document.getElementById('submit-btn');
+            document.getElementById('digit-3'),
+        ]
+        const submitBtn = document.getElementById('submit-btn')
 
-        let digits = "";
+        let digits = ''
 
         function updateBoxes() {
             for (let i = 0; i < 4; i++) {
-                const box = digitBoxes[i];
-                box.textContent = i < digits.length ? digits[i] : '';
-                box.classList.toggle('filled', i < digits.length);
-                box.classList.toggle('next', i === digits.length && digits.length < 4);
+                const box = digitBoxes[i]
+                box.textContent = i < digits.length ? digits[i] : ''
+                box.classList.toggle('filled', i < digits.length)
+                box.classList.toggle('next', i === digits.length && digits.length < 4)
             }
-
-            submitBtn.disabled = digits.length !== 4;
+            submitBtn.disabled = digits.length !== 4
         }
 
-        yearInput.addEventListener('input', () => {
-            digits = yearInput.value.replace(/\D/g, '').slice(0, 4);
-            if (yearInput.value !== digits) {
-                yearInput.value = digits;
+        function pressKey(key) {
+            if (key === 'del') {
+                digits = digits.slice(0, -1)
+            } else if (digits.length < 4) {
+                digits += key
             }
-            updateBoxes();
-        });
+            updateBoxes()
+        }
 
-        updateBoxes();
+        updateBoxes()
     </script>
-</body>
-</html>
