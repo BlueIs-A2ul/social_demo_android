@@ -197,34 +197,76 @@
       #compose-grid .aspect-square {
         border-radius: 8px;
       }
+      /* ====== 二级 Tab（全部 / 图文 / 视频） ====== */
+      .publish-sub-tabs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        padding: 10px 0;
+        background: #fff;
+        border-bottom: 1px solid #f3f4f6;
+        flex: none;
+      }
+      .sub-tab {
+        position: relative;
+        font-size: 13px;
+        color: var(--ink-500);
+        padding-bottom: 4px;
+        border: 0;
+        background: transparent;
+      }
+      .sub-tab.active {
+        color: var(--ink-900);
+        font-weight: 700;
+      }
+      .sub-tab.active::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 18px;
+        height: 2px;
+        background: var(--brand-strong);
+      }
+      /* ====== 我的内容分类 ====== */
+      .my-tab {
+        font-size: 13px;
+        color: var(--ink-500);
+        white-space: nowrap;
+        border: 0;
+        background: transparent;
+      }
+      .my-tab.active {
+        color: var(--brand-deep);
+        font-weight: 700;
+      }
+      /* ====== 我的作品：三列网格 ====== */
+      #feed-grid.publish-grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 3px;
+        padding: 0 0 40px;
+      }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
   </head>
   <body class="bg-white">
     <!-- 顶部导航栏 -->
     <div class="publish-top-nav">
-      <button
-        aria-label="展开菜单"
-        class="publish-menu-btn"
-      >
-        <svg
-          fill="none"
-          height="26"
-          stroke="currentColor"
-          stroke-linecap="butt"
-          stroke-width="2"
-          viewbox="0 0 24 24"
-          width="26"
-        >
-          <path d="M3 6h18M3 12h18M3 18h18"></path>
-        </svg>
-      </button>
       <nav aria-label="内容频道" class="publish-nav-tabs">
+        <a class="publish-nav-tab" href="category.html">商城</a>
         <a
           class="publish-nav-tab"
           href="javascript:void(0)"
+          onclick="switchPublishView('home', event)"
+          >我</a
+        >
+        <a
+          class="publish-nav-tab active"
+          href="javascript:void(0)"
           onclick="switchPublishView('follow', event)"
-          >关注<span class="publish-nav-caret">▼</span></a
+          >关注</a
         >
         <a
           class="publish-nav-tab"
@@ -238,36 +280,18 @@
           onclick="switchPublishView('nearby', event)"
           >同城</a
         >
-        <a
-          class="publish-nav-tab active"
-          href="javascript:void(0)"
-          onclick="switchPublishView('home', event)"
-          >我</a
-        >
-        <a class="publish-nav-tab" href="message_center.html">消息</a>
-        <a
-          class="publish-nav-tab"
-          href="javascript:void(0)"
-          onclick="openPublishSheet()"
-          >发布</a
-        >
       </nav>
-      <button
-        aria-label="搜索"
-        class="publish-search-btn"
-        onclick="showToast('搜索')"
-      >
-        <svg
-          fill="none"
-          height="27"
-          stroke="currentColor"
-          stroke-width="2.2"
-          viewbox="0 0 24 24"
-          width="27"
-        >
-          <circle cx="11" cy="11" r="7"></circle>
-          <path d="M20 20l-4.2-4.2"></path>
-        </svg>
+    </div>
+    <!-- 二级 Tab：全部 / 图文 / 视频 -->
+    <div class="publish-sub-tabs" id="subTabs">
+      <button class="sub-tab active" data-kind="all" onclick="setSubTab(this)">
+        全部
+      </button>
+      <button class="sub-tab" data-kind="text" onclick="setSubTab(this)">
+        图文
+      </button>
+      <button class="sub-tab" data-kind="video" onclick="setSubTab(this)">
+        视频
       </button>
     </div>
     <!-- 顶部封面区 -->
@@ -282,56 +306,94 @@
       />
     </div>
     <!-- 用户信息区 -->
-    <div class="publish-home-only relative px-5 pt-2 pb-5 shrink-0">
+    <div class="publish-home-only relative px-5 pt-2 pb-3 shrink-0">
       <!-- 头像叠加 -->
       <div
         class="absolute -top-8 left-5 cursor-pointer"
-        onclick="location.href = 'profile.html'"
+        onclick="showToast('我的主页')"
       >
         <img
           alt="User Avatar"
-          class="w-[64px] h-[64px] rounded-none border-2 border-white object-cover bg-gray-100"
+          class="w-[64px] h-[64px] border-2 border-white object-cover bg-gray-100"
+          style="border-radius: 9999px"
           src="assets/new_src/分享头像/头像1.jpg"
         />
       </div>
       <div class="mt-10">
         <div class="flex items-center">
-          <span class="text-xl font-bold text-black"
-            >哦是猪猪崽耶<img
-              alt="个人VIP2"
-              class="user-vip-badge"
-              src="assets/src_01/颜色vip/技术服务类vip.jpg"
-          /></span>
-          <span class="v-badge">V</span>
+          <span class="text-xl font-bold text-black">雅柔</span>
+          <img
+            alt="个人VIP"
+            class="user-vip-badge"
+            src="assets/v2/vip/cat-entertainment.png"
+          />
+          <img
+            alt="等级"
+            class="user-vip-badge"
+            src="assets/v2/icon/gear-badge.png"
+          />
         </div>
-        <p class="text-sm text-gray-400 mt-1">记录空间、生活和有趣见闻。</p>
-        <div class="flex gap-4 mt-4">
-          <div>
-            <span class="text-sm font-bold text-[#ec4899]">28</span>
-            <span class="text-sm text-gray-400 ml-1">动态</span>
+        <p class="text-[12px] text-gray-400 mt-1">id:202609060012</p>
+        <div
+          class="mt-2 flex items-center gap-2 text-[13px] text-gray-500 cursor-pointer"
+          onclick="showToast('编辑介绍')"
+        >
+          添加介绍，让大家都来了解一下你
+          <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
+            <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+          </svg>
+        </div>
+        <div class="flex gap-6 mt-4">
+          <div class="text-center">
+            <div class="text-[16px] font-bold text-[#26c6da]">100</div>
+            <div class="text-[12px] text-gray-400">粉丝</div>
           </div>
-          <div>
-            <span class="text-sm font-bold text-[#ec4899]">1151</span>
-            <span class="text-sm text-gray-400 ml-1">关注</span>
+          <div class="text-center">
+            <div class="text-[16px] font-bold text-[#26c6da]">20</div>
+            <div class="text-[12px] text-gray-400">关注</div>
           </div>
-          <div>
-            <span class="text-sm font-bold text-[#ec4899]">407</span>
-            <span class="text-sm text-gray-400 ml-1">粉丝</span>
+          <div class="text-center">
+            <div class="text-[16px] font-bold text-[#26c6da]">60</div>
+            <div class="text-[12px] text-gray-400">获赞</div>
           </div>
         </div>
       </div>
     </div>
     <div class="publish-home-only h-1 bg-gray-50 w-full shrink-0"></div>
-    <!-- 作品瀑布流标题 -->
-    <div class="publish-home-only px-5 py-4 flex justify-between items-center shrink-0">
-      <h2 class="text-base font-bold text-black">作品</h2>
-      <span class="text-sm text-gray-400">共 7 条</span>
+    <!-- 我的内容分类 -->
+    <div
+      class="publish-home-only px-5 py-3 flex items-center gap-5 overflow-x-auto no-scrollbar shrink-0 border-b border-gray-100"
+    >
+      <button class="my-tab active" onclick="setMyTab(this)">作品（3）</button>
+      <button class="my-tab" onclick="setMyTab(this)">草稿（0）</button>
+      <button class="my-tab" onclick="setMyTab(this)">私密（0）</button>
+      <button class="my-tab" onclick="setMyTab(this)">收藏（0）</button>
+      <button class="my-tab" onclick="setMyTab(this)">点赞（0）</button>
     </div>
     <!-- 两列瀑布流网格 -->
     <div
       class="grid grid-cols-2 gap-x-[10px] gap-y-4 px-5 pb-10"
       id="feed-grid"
     ></div>
+    <!-- 发布入口 -->
+    <button
+      aria-label="发布"
+      class="fixed right-4 z-[100] flex items-center justify-center bg-[#26c6da] text-white"
+      style="bottom: calc(var(--safe-area-inset-bottom, 0px) + 84px); width: 48px; height: 48px; border-radius: 9999px; box-shadow: 0 6px 18px rgba(38, 198, 218, .45); border: 0;"
+      onclick="openPublishSheet()"
+    >
+      <svg
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="2.4"
+        viewbox="0 0 24 24"
+        width="24"
+      >
+        <path d="M12 5v14M5 12h14"></path>
+      </svg>
+    </button>
     <!-- 发布选项弹窗 -->
     <div
       class="fixed inset-0 bg-black/50 z-[110] opacity-0 transition-opacity duration-300 hidden"
@@ -362,6 +424,12 @@
           onclick="selectPublishOption('text')"
         >
           写文字
+        </button>
+        <button
+          class="w-full py-4 text-base font-bold text-black border-t border-gray-100 active:bg-gray-50"
+          onclick="window.location.href = 'ai_voice.html'"
+        >
+          AI 语音助手
         </button>
       </div>
       <div class="h-1.5 bg-gray-100"></div>
@@ -403,7 +471,7 @@
         </button>
         <span class="text-base font-bold text-black">发布动态</span>
         <button
-          class="text-sm font-bold text-white bg-[#ec4899] px-4 py-1.5 active:opacity-80"
+          class="text-sm font-bold text-white bg-[#26c6da] px-4 py-1.5 active:opacity-80"
           onclick="publishCompose()"
         >
           发布
@@ -462,24 +530,74 @@
         nearby: [6, 10, 11, 8, 4, 9, 2], // 同城热帖
       }
 
+      // 卡片底栏的作者与点赞数
+      const AUTHORS = [
+        { name: '谢锋FM', avatar: 'assets/avatars/member-01.jpg' },
+        { name: '小鹿', avatar: 'assets/avatars/member-05.jpg' },
+        { name: '阿Z想开了', avatar: 'assets/avatars/member-03.jpg' },
+        { name: '武当云溪', avatar: 'assets/avatars/member-07.jpg' },
+        { name: '昔日老雷', avatar: 'assets/avatars/member-08.jpg' },
+        { name: '许升', avatar: 'assets/avatars/member-02.jpg' },
+        { name: '雷法', avatar: 'assets/avatars/member-04.jpg' },
+      ]
+      const LIKE_COUNTS = [1000, 880, 10000, 10000, 620, 360, 550]
+
+      const HEART_SVG =
+        '<svg fill="none" height="14" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" width="14"><path d="M12 20.3 4.7 13a4.6 4.6 0 0 1 6.5-6.5l.8.8.8-.8A4.6 4.6 0 0 1 19.3 13Z"/></svg>'
+
       function renderFeed(view) {
         const feedGrid = document.getElementById('feed-grid')
-        const ids = VIEW_FEEDS[view] || VIEW_FEEDS.home
+        const ids = VIEW_FEEDS[view] || VIEW_FEEDS.follow
+        const isHome = view === 'home'
+        feedGrid.classList.toggle('publish-grid-3', isHome)
         feedGrid.innerHTML = ids
-          .map(i => {
+          .map((i, n) => {
             const p = POSTS[i]
+            const a = AUTHORS[n % AUTHORS.length]
+            const likes = LIKE_COUNTS[n % LIKE_COUNTS.length]
+            const isVideo = n % 3 === 0
+            const overlay = isVideo
+              ? '<span class="absolute right-1.5 bottom-1.5 px-1 bg-black/45 text-white text-[10px]">▶ 0:23</span>'
+              : ''
+            const footer = isHome
+              ? ''
+              : '<div class="flex items-center justify-between mt-1.5">' +
+                '<span class="flex items-center gap-1.5 min-w-0">' +
+                '<img class="w-5 h-5 object-cover flex-none" style="border-radius:9999px" src="' + a.avatar + '" alt="" />' +
+                '<span class="text-[12px] text-gray-700 truncate">' + a.name + '</span>' +
+                '</span>' +
+                '<span class="flex items-center gap-1 text-[12px] text-gray-500 flex-none">' +
+                HEART_SVG + likes +
+                '</span>' +
+                '</div>'
             return `<div class="cursor-pointer group" onclick="window.location.href='publish_post_detail.html?index=${p.index}'">
-          <div class="aspect-[3/4] bg-gray-50 overflow-hidden">
+          <div class="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
             <img
               alt="${p.title}"
               class="w-full h-full object-cover transition-transform group-active:scale-95"
               src="${p.img}"
             />
+            ${overlay}
           </div>
-          <p class="text-[13px] text-black mt-2 font-medium">${p.title}</p>
+          ${footer}
         </div>`
           })
           .join('')
+      }
+
+      function setSubTab(el) {
+        document
+          .querySelectorAll('#subTabs .sub-tab')
+          .forEach(t => t.classList.remove('active'))
+        el.classList.add('active')
+        showToast('筛选：' + el.textContent.trim())
+      }
+
+      function setMyTab(el) {
+        document
+          .querySelectorAll('.my-tab')
+          .forEach(t => t.classList.remove('active'))
+        el.classList.add('active')
       }
 
       function switchPublishView(view, event) {
@@ -491,6 +609,10 @@
         document.querySelectorAll('.publish-home-only').forEach(section => {
           section.classList.toggle('publish-view-hidden', isDiscover)
         })
+        const subTabs = document.getElementById('subTabs')
+        if (subTabs) {
+          subTabs.classList.toggle('publish-view-hidden', view === 'home')
+        }
 
         // 先移除所有导航标签的active状态
         document.querySelectorAll('.publish-nav-tab').forEach(tab => {
@@ -511,8 +633,8 @@
         window.scrollTo(0, 0)
       }
 
-      // 初始渲染“我”的作品
-      renderFeed('home')
+      // 初始渲染「关注」频道（与目标稿一致）
+      switchPublishView('follow')
 
       function showToast(msg) {
         const toast = document.getElementById('toast')
