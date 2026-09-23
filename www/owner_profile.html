@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>房主主页 - 元宇宙社交</title>
+<script src="assets/vendor/iconify-icon.min.js"></script>
 <script src="assets/vendor/tailwindcss.js"></script>
 <link href="assets/vendor/theme.css" rel="stylesheet"/>
 <style>
@@ -51,64 +52,58 @@
 </head>
 <body class="">
 <div class="flex flex-col" id="app-shell">
-<!-- 1. 顶部封面区 -->
-<div class="relative h-[150px] flex-none">
-<img alt="owner cover background" class="w-full h-full object-cover" src="assets/packaged/51d5074a8e9b4137a446190685b907c3.jpg"/>
-<button class="absolute top-4 right-4 w-10 h-10 bg-black/30 flex items-center justify-center text-white rounded-none">
-<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" x2="12" y1="2" y2="15"></line></svg>
+<!-- 1. 顶部用户信息条 -->
+<div class="flex-none topbar px-4 pt-4 pb-3 flex items-center gap-3">
+<div class="flex items-center gap-2 min-w-0">
+<img alt="owner avatar" class="w-11 h-11 object-cover flex-none" style="border-radius: 9999px" src="assets/packaged/6bd56b0fa1c343a4a14b4ad2ae601343.png"/>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="text-white font-bold truncate" style="font-size: 16px">小鹿的房间</span>
+<img alt="个人VIP" class="vip-badge" src="assets/v2/vip/cat-entertainment.png"/>
+<img alt="等级" class="vip-badge" src="assets/v2/icon/gear-badge.png"/>
+<img alt="房间已点亮" class="vip-badge" src="assets/new_src/雷达点亮房间图.jpg"/>
+</div>
+<div style="font-size: 12px; color: rgba(255,255,255,.88); margin-top: 2px">5个空间</div>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0 ml-auto">
+<button class="flex-none" style="height: 30px; padding: 0 12px; border-radius: 9999px; background: #f4813f; color: #fff; font-size: 12px; font-weight: 700; border: 0" id="addFriendBtn" onclick="openAddFriendModal()">
+加好友
 </button>
-</div>
-<!-- 2. 用户信息区 -->
-<div class="relative px-4 pb-4 bg-white flex-none">
-<!-- 头像 -->
-<div class="absolute -top-10 left-4 w-20 h-20 border-4 border-white rounded-none overflow-hidden bg-white">
-<img alt="owner avatar" class="w-full h-full object-cover" src="assets/packaged/6bd56b0fa1c343a4a14b4ad2ae601343.png"/>
-</div>
-<div class="pt-12">
-<div class="flex items-center gap-2">
-<h1 class="text-xl font-bold text-gray-900">约翰逊<img alt="个人VIP2" class="vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/></h1>
-<span class="bg-yellow-400 p-0.5 rounded-none" title="V认证">
-<svg fill="white" height="14" stroke="none" viewbox="0 0 24 24" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path></svg>
-</span>
-</div>
-<div class="flex items-center gap-3 mt-2">
-<span class="bg-[#26c6da] text-white text-xs px-2 py-0.5 font-medium">10年老店</span>
-<div class="flex items-center gap-0.5">
-<span class="text-xs text-gray-500 mr-1">诚信:</span>
-<svg class="text-[#26c6da]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
-<svg class="text-[#26c6da]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
-<svg class="text-[#26c6da]" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
-<svg class="text-gray-300" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
-<svg class="text-gray-300" fill="currentColor" height="12" viewbox="0 0 24 24" width="12" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<img class="w-8 h-8 object-contain" src="assets/v2/icon/wechat.png" alt="微信" onclick="showToast('微信')"/>
 </div>
 </div>
-<p class="text-sm text-gray-600 mt-3 leading-relaxed">记录空间、生活和有趣见闻。</p>
-<div class="flex gap-6 mt-4 border-t border-gray-100 pt-4">
-<div class="text-center">
-<div class="font-bold text-gray-900">28</div>
-<div class="text-xs text-gray-500">动态</div>
+<!-- 2. 搜索 + 房间网格 -->
+<div class="flex-none px-4 pt-3 pb-4 bg-white">
+<div class="flex items-center h-9 px-3 gap-2" style="background: var(--ink-100); border-radius: 8px">
+<iconify-icon style="color: var(--ink-500); font-size: 15px" icon="solar:magnifer-bold"></iconify-icon>
+<input class="flex-1 min-w-0 bg-transparent outline-none" style="font-size: 12px" placeholder="输入房间名称" type="text"/>
 </div>
-<div class="text-center">
-<div class="font-bold text-gray-900">1151</div>
-<div class="text-xs text-gray-500">关注</div>
+<div class="grid grid-cols-4" style="margin-top: 10px">
+<div class="flex flex-col items-center cursor-pointer" style="padding: 8px" onclick="showToast('我的房间')">
+<img class="w-full aspect-square object-cover" style="border-radius: 10px" src="assets/packaged/sq/微信图片_20260729140622.jpg" alt="我的房间"/>
+<span style="font-size: 12px; color: var(--ink-700); margin-top: 6px">我的房间</span>
 </div>
-<div class="text-center">
-<div class="font-bold text-gray-900">407</div>
-<div class="text-xs text-gray-500">粉丝</div>
+<div class="flex flex-col items-center cursor-pointer" style="padding: 8px" onclick="showToast('娜美的房间')">
+<img class="w-full aspect-square object-cover" style="border-radius: 10px" src="assets/avatars/新娜美.jpg" alt="娜美的房间"/>
+<span style="font-size: 12px; color: var(--ink-700); margin-top: 6px">娜美的房间</span>
+</div>
+<div class="flex flex-col items-center cursor-pointer" style="padding: 8px" onclick="showToast('直播间')">
+<img class="w-full aspect-square object-cover" style="border-radius: 10px" src="assets/packaged/sq/直播间图片.png" alt="直播间"/>
+<span style="font-size: 12px; color: var(--ink-700); margin-top: 6px">直播间</span>
+</div>
+<div class="flex flex-col items-center cursor-pointer" style="padding: 8px" onclick="showToast('我的播客')">
+<img class="w-full aspect-square object-cover" style="border-radius: 10px" src="assets/packaged/sq/我的播客.png" alt="我的播客"/>
+<span style="font-size: 12px; color: var(--ink-700); margin-top: 6px">我的播客</span>
+</div>
+<div class="flex flex-col items-center cursor-pointer" style="padding: 8px" onclick="location.href='info_board.html'">
+<img class="w-full aspect-square object-cover" style="border-radius: 10px" src="assets/src_01/icon/信息栏.png" alt="信息栏"/>
+<span style="font-size: 12px; color: var(--ink-700); margin-top: 6px">信息栏</span>
 </div>
 </div>
-</div>
-</div>
-<!-- 3. 操作按钮区 -->
-<div class="px-4 py-3 bg-white border-t border-gray-100 flex flex-col gap-3 flex-none">
-<div class="grid grid-cols-3 gap-2">
-<button class="bg-[#26c6da] text-white h-[40px] text-sm font-medium border border-[#26c6da] active:opacity-80" id="addFriendBtn" onclick="openAddFriendModal()">
-                加好友
-            </button>
-<button class="bg-white text-[#26c6da] h-[40px] text-sm font-medium border border-[#26c6da] active:bg-[#e6f9fc]" onclick="window.location.href='room_chat.html?from=owner_profile'">
-                发消息
-            </button>
-<button class="bg-white text-blue-500 h-[40px] text-sm font-medium border border-blue-500 active:bg-blue-50" id="toggleIDBtn" onclick="toggleIDCard()">个人名片</button>
+<button class="w-full text-left" style="padding: 10px 0 0; font-size: 13px; color: var(--brand-deep); background: #fff; border: 0" onclick="toggleIDCard()">
+查看个人名片 / 个人简历
+</button>
 </div>
 <!-- 个人名片展开区域 -->
 <div class="animate-fade-in bg-gray-100 p-3 border border-gray-200 hidden" id="idCardBox">
@@ -135,52 +130,10 @@
                 </div>
 </div>
 </div>
-</div>
-<!-- 4. TA 的房间模块 -->
-<div class="mt-2 bg-white p-4 flex-none">
-<div class="flex justify-between items-end mb-4">
-<h2 class="text-lg font-bold text-gray-900">TA 的房间</h2>
-<span class="text-xs text-gray-400 mb-0.5">3个空间</span>
-</div>
-<div class="flex overflow-x-auto no-scrollbar gap-3 pb-2">
-<!-- 房间 1 -->
-<div class="flex-none w-[140px] border border-gray-100 active:opacity-90" onclick="window.location.href='panorama_room.html?from=owner_profile'">
-<div class="h-[100px] bg-blue-50">
-<img alt="room bronze door" class="w-full h-full object-cover" src="assets/packaged/b1f060927ed14123a942506bb5a043cf.png"/>
-</div>
-<div class="p-2">
-<div class="text-sm font-bold truncate" style="opacity: 1;">他的房间</div><div class="text-[10px] text-green-500 mt-1 flex items-center gap-1">
-<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                        可进入
-                    </div>
-</div>
-</div>
-<!-- 房间 2 -->
-<div class="flex-none w-[140px] border border-gray-100 active:opacity-90" onclick="window.location.href='panorama_room.html?from=owner_profile'">
-<div class="h-[100px] bg-orange-50">
-<img alt="room orchard" class="w-full h-full object-cover" src="assets/packaged/9e93a3d8c1764d7aab962cd0242b2890.png"/>
-</div>
-<div class="p-2">
-<div class="text-sm font-bold truncate" style="opacity: 1;">他的客厅</div><div class="text-[10px] text-green-500 mt-1 flex items-center gap-1">
-<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                        可进入
-                    </div>
-</div>
-</div>
-<!-- 房间 3 -->
-<div class="flex-none w-[140px] border border-dashed border-gray-300 flex flex-col items-center justify-center h-[142px] bg-gray-50">
-<div class="text-gray-300">
-<svg fill="none" height="32" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
-</div>
-<div class="text-[10px] text-gray-400 mt-2">尚未开放</div>
-<div class="text-xs font-bold text-gray-400 mt-1">敬请期待</div>
-</div>
-</div>
-</div>
 <!-- 5. 作品/帖子区域 -->
 <div class="mt-2 bg-white p-4">
 <div class="flex justify-between items-end mb-4">
-<h2 class="text-lg font-bold text-gray-900">作品</h2>
+<h2 class="text-lg font-bold text-gray-900">TA 的动态</h2>
 <span class="text-xs text-gray-400 mb-0.5">共 8 条</span>
 </div>
 <div class="grid grid-cols-2 gap-[10px]" id="posts-grid">
@@ -190,224 +143,224 @@
 <img alt="post_1" class="w-full h-full object-cover" src="assets/packaged/14c0ed0d27074ddba9471035222de7e5.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">发现一家藏在巷子里的宝藏咖啡店，手冲单品超赞 #咖啡探店</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">发现一家藏在巷子里的宝藏咖啡店，手冲单品超赞 #咖啡探店</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_2" class="w-full h-full object-cover" src="assets/packaged/efe05180c71b44c898a3a183bbbc2d9b.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">给我的全景房间换上了夏日主题，大家来看看效果 #房间装饰</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">给我的全景房间换上了夏日主题，大家来看看效果 #房间装饰</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_3" class="w-full h-full object-cover" src="assets/packaged/269bfd3b55484782948d00a5c5313b59.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">在虚拟空间里复刻了古墓丽影场景，欢迎来挑战 #3D空间</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">在虚拟空间里复刻了古墓丽影场景，欢迎来挑战 #3D空间</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_4" class="w-full h-full object-cover" src="assets/packaged/b1439eeab49d4aba81223af4f8d5323a.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">OOTD 简约休闲风，附商品链接在房间 #穿搭</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">OOTD 简约休闲风，附商品链接在房间 #穿搭</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_5" class="w-full h-full object-cover" src="assets/packaged/9087c3cc11874e1baedeae8862f9b6da.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">《设计心理学》阅读感悟，好的设计是不需要说明书的 #阅读</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">《设计心理学》阅读感悟，好的设计是不需要说明书的 #阅读</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_6" class="w-full h-full object-cover" src="assets/packaged/131df86b491045e7b7fe95f09e57896b.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">最近发现的宝藏 indie 乐队，循环了一整天 #音乐</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">最近发现的宝藏 indie 乐队，循环了一整天 #音乐</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_7" class="w-full h-full object-cover" src="assets/packaged/b9f400433533436fa04fe2d1c3cac609.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">大理洱海边的日落，用全景相机记录了下来 #旅行</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">大理洱海边的日落，用全景相机记录了下来 #旅行</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_8" class="w-full h-full object-cover" src="assets/packaged/4b627455d0594e45b43fd544db5335bc.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">第一次尝试做提拉米苏，虽然卖相一般但味道不错 #美食</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">第一次尝试做提拉米苏，虽然卖相一般但味道不错 #美食</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_1" class="w-full h-full object-cover" src="assets/packaged/36666b7e0d594f58bb8b786a08c4e423.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">发现一家藏在巷子里的宝藏咖啡店，手冲单品超赞 #咖啡探店</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">发现一家藏在巷子里的宝藏咖啡店，手冲单品超赞 #咖啡探店</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_2" class="w-full h-full object-cover" src="assets/packaged/5e1a193da12c4a92823625142f14dfdd.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">给我的全景房间换上了夏日主题，大家来看看效果 #房间装饰</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">给我的全景房间换上了夏日主题，大家来看看效果 #房间装饰</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_3" class="w-full h-full object-cover" src="assets/packaged/32744ea0c7a74e6684791769219af801.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">在虚拟空间里复刻了古墓丽影场景，欢迎来挑战 #3D空间</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">在虚拟空间里复刻了古墓丽影场景，欢迎来挑战 #3D空间</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_4" class="w-full h-full object-cover" src="assets/packaged/b50d457ad6ba4899ae888aadcf43d5ae.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">OOTD 简约休闲风，附商品链接在房间 #穿搭</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">OOTD 简约休闲风，附商品链接在房间 #穿搭</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_5" class="w-full h-full object-cover" src="assets/packaged/a7f3f651cc1d4b81b90e3a44ac1c78b4.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">《设计心理学》阅读感悟，好的设计是不需要说明书的 #阅读</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">《设计心理学》阅读感悟，好的设计是不需要说明书的 #阅读</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_6" class="w-full h-full object-cover" src="assets/packaged/a93dc86e9bd241d89aa583f78ed0e1c2.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">最近发现的宝藏 indie 乐队，循环了一整天 #音乐</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">最近发现的宝藏 indie 乐队，循环了一整天 #音乐</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_7" class="w-full h-full object-cover" src="assets/packaged/b9f400433533436fa04fe2d1c3cac609.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">大理洱海边的日落，用全景相机记录了下来 #旅行</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">大理洱海边的日落，用全景相机记录了下来 #旅行</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_8" class="w-full h-full object-cover" src="assets/packaged/4b627455d0594e45b43fd544db5335bc.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">第一次尝试做提拉米苏，虽然卖相一般但味道不错 #美食</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">第一次尝试做提拉米苏，虽然卖相一般但味道不错 #美食</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_1" class="w-full h-full object-cover" src="assets/packaged/36666b7e0d594f58bb8b786a08c4e423.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">发现一家藏在巷子里的宝藏咖啡店，手冲单品超赞 #咖啡探店</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">发现一家藏在巷子里的宝藏咖啡店，手冲单品超赞 #咖啡探店</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_2" class="w-full h-full object-cover" src="assets/packaged/5e1a193da12c4a92823625142f14dfdd.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">给我的全景房间换上了夏日主题，大家来看看效果 #房间装饰</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">给我的全景房间换上了夏日主题，大家来看看效果 #房间装饰</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_3" class="w-full h-full object-cover" src="assets/packaged/32744ea0c7a74e6684791769219af801.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">在虚拟空间里复刻了古墓丽影场景，欢迎来挑战 #3D空间</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">在虚拟空间里复刻了古墓丽影场景，欢迎来挑战 #3D空间</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_4" class="w-full h-full object-cover" src="assets/packaged/b50d457ad6ba4899ae888aadcf43d5ae.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">OOTD 简约休闲风，附商品链接在房间 #穿搭</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">OOTD 简约休闲风，附商品链接在房间 #穿搭</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_5" class="w-full h-full object-cover" src="assets/packaged/a7f3f651cc1d4b81b90e3a44ac1c78b4.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">《设计心理学》阅读感悟，好的设计是不需要说明书的 #阅读</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">《设计心理学》阅读感悟，好的设计是不需要说明书的 #阅读</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_6" class="w-full h-full object-cover" src="assets/packaged/a93dc86e9bd241d89aa583f78ed0e1c2.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">最近发现的宝藏 indie 乐队，循环了一整天 #音乐</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">最近发现的宝藏 indie 乐队，循环了一整天 #音乐</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_7" class="w-full h-full object-cover" src="assets/packaged/b9f400433533436fa04fe2d1c3cac609.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">大理洱海边的日落，用全景相机记录了下来 #旅行</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">大理洱海边的日落，用全景相机记录了下来 #旅行</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_8" class="w-full h-full object-cover" src="assets/packaged/4b627455d0594e45b43fd544db5335bc.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">第一次尝试做提拉米苏，虽然卖相一般但味道不错 #美食</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">第一次尝试做提拉米苏，虽然卖相一般但味道不错 #美食</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_1" class="w-full h-full object-cover" src="assets/packaged/36666b7e0d594f58bb8b786a08c4e423.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">发现一家藏在巷子里的宝藏咖啡店，手冲单品超赞 #咖啡探店</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">发现一家藏在巷子里的宝藏咖啡店，手冲单品超赞 #咖啡探店</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_2" class="w-full h-full object-cover" src="assets/packaged/5e1a193da12c4a92823625142f14dfdd.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">给我的全景房间换上了夏日主题，大家来看看效果 #房间装饰</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">给我的全景房间换上了夏日主题，大家来看看效果 #房间装饰</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_3" class="w-full h-full object-cover" src="assets/packaged/32744ea0c7a74e6684791769219af801.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">在虚拟空间里复刻了古墓丽影场景，欢迎来挑战 #3D空间</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">在虚拟空间里复刻了古墓丽影场景，欢迎来挑战 #3D空间</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_4" class="w-full h-full object-cover" src="assets/packaged/b50d457ad6ba4899ae888aadcf43d5ae.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">OOTD 简约休闲风，附商品链接在房间 #穿搭</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">OOTD 简约休闲风，附商品链接在房间 #穿搭</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_5" class="w-full h-full object-cover" src="assets/packaged/a7f3f651cc1d4b81b90e3a44ac1c78b4.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">《设计心理学》阅读感悟，好的设计是不需要说明书的 #阅读</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">《设计心理学》阅读感悟，好的设计是不需要说明书的 #阅读</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_6" class="w-full h-full object-cover" src="assets/packaged/a93dc86e9bd241d89aa583f78ed0e1c2.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">最近发现的宝藏 indie 乐队，循环了一整天 #音乐</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">最近发现的宝藏 indie 乐队，循环了一整天 #音乐</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_7" class="w-full h-full object-cover" src="assets/packaged/b9f400433533436fa04fe2d1c3cac609.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">大理洱海边的日落，用全景相机记录了下来 #旅行</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">大理洱海边的日落，用全景相机记录了下来 #旅行</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div><div class="bg-white border border-gray-100 active:opacity-90 cursor-pointer overflow-hidden">
 <div class="aspect-square bg-gray-50">
 <img alt="post_8" class="w-full h-full object-cover" src="assets/packaged/4b627455d0594e45b43fd544db5335bc.jpg"/>
 </div>
 <div class="p-2">
-<p class="text-xs text-gray-800 line-clamp-2 font-medium">第一次尝试做提拉米苏，虽然卖相一般但味道不错 #美食</p>
+<p class="text-xs text-gray-800 line-clamp-2 font-medium">第一次尝试做提拉米苏，虽然卖相一般但味道不错 #美食</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
 </div>
 </div></div>
 </div>
@@ -503,13 +456,21 @@
                     <img src="assets/vendor/placeholder.svg" alt="post_${index+1}" class="w-full h-full object-cover">
                 </div>
                 <div class="p-2">
-                    <p class="text-xs text-gray-800 line-clamp-2 font-medium">${post.desc}</p>
+                    <p class="text-xs text-gray-800 line-clamp-2 font-medium">${post.desc}</p><div class="flex items-center justify-between" style="margin-top:6px"><span style="font-size:12px;color:var(--ink-700)">小鹿</span><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--ink-500)"><img src="assets/v2/icon/like.png" alt="赞" style="width:14px;height:14px;object-fit:contain"/>260</span></div>
                 </div>
             `;
             grid.appendChild(card);
         });
     }
 
+    function showToast(message) {
+        const el = document.createElement('div')
+        el.textContent = message
+        el.style.cssText =
+            'position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;font-size:13px;padding:8px 16px;border-radius:6px;z-index:999;'
+        document.body.appendChild(el)
+        setTimeout(() => el.remove(), 1600)
+    }
     function toggleIDCard() {
         const box = document.getElementById('idCardBox');
         const btn = document.getElementById('toggleIDBtn');
