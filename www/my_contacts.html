@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html data-immersive-translate-page-theme="light" lang="zh-CN"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>我的通讯录 - 元宇宙社交</title>
 <script src="assets/vendor/tailwindcss.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
 <script src="assets/vendor/nav.js"></script>
 <style>
         @import url('assets/vendor/inter.css');
@@ -118,309 +119,130 @@
 <body class="">
 <div class="mobile-container">
 <!-- Header -->
-<header class="px-4 py-3 flex justify-between items-center bg-[#ec4899] text-white flex-none" style="background-color: rgb(255, 255, 255);">
+<header class="px-4 py-3 flex justify-between items-center topbar text-white flex-none">
 <a class="text-white" href="javascript:goBack()">
-<svg class="" fill="none" height="24" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" style="color: rgb(0, 0, 0);" viewbox="0 0 24 24" width="24">
+<svg class="" fill="none" height="24" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter" stroke-width="2" viewbox="0 0 24 24" width="24">
 <path d="M19 12H5M12 19l-7-7 7-7"></path>
 </svg>
 </a>
-<h1 class="text-lg font-bold tracking-tight" style="color: rgb(0, 0, 0);">我的通讯录</h1>
-<button class="w-8 h-8 flex items-center justify-center bg-white/20 hover:bg-white/30" onclick="openAddGroupModal()">
-<svg class="" fill="none" height="20" stroke="currentColor" stroke-width="2" style="color: rgb(0, 0, 0);" viewbox="0 0 24 24" width="20">
-<path d="M12 5v14M5 12h14"></path>
+<h1 class="text-lg font-bold tracking-tight">通讯录</h1>
+<div class="flex items-center gap-3">
+<button class="text-white flex items-center justify-center" onclick="showToast('扫一扫')" aria-label="扫一扫">
+<svg class="" fill="none" height="22" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24" width="22">
+<path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"></path>
+<path d="M4 12h16"></path>
 </svg>
 </button>
+<button class="text-white flex items-center justify-center" onclick="showToast('我的二维码')" aria-label="我的二维码">
+<svg class="" fill="none" height="22" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24" width="22">
+<rect height="6" width="6" x="4" y="4"></rect>
+<rect height="6" width="6" x="14" y="4"></rect>
+<rect height="6" width="6" x="4" y="14"></rect>
+<path d="M14 14h2v2h-2zM18 18h2v2h-2zM14 20h2M20 14h-2"></path>
+</svg>
+</button>
+</div>
 </header>
-<!-- 通讯录切换 -->
-<div class="px-4 pt-3 bg-white flex-none">
-<div class="flex border border-[#ec4899]">
-<button class="flex-1 py-2 text-sm font-bold bg-[#ec4899] text-white" onclick="switchTab('my_contacts.html')">我的通讯录</button>
-<button class="flex-1 py-2 text-sm font-bold text-[#ec4899]" onclick="switchTab('friend_contacts.html')">好友通讯录</button>
-</div>
-</div>
-<!-- Search Bar -->
-<div class="px-4 py-3 bg-white flex-none border-b border-gray-100">
-<div class="flex space-x-0">
-<div class="relative flex-1">
-<span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
-<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18">
+<!-- 搜索 + 全部/在线 -->
+<div class="px-4 py-3 bg-white flex-none flex items-center gap-3">
+<div class="flex-1 flex items-center h-9 px-3 gap-2" style="border:1px solid var(--brand-line); border-radius:9999px !important;">
+<svg fill="none" height="18" stroke="#8aa0a8" stroke-width="2" viewbox="0 0 24 24" width="18">
 <circle cx="11" cy="11" r="8"></circle>
 <path d="M21 21l-4.35-4.35"></path>
 </svg>
-</span>
-<input class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 focus:outline-none focus:border-pink-500 text-sm font-light" placeholder="搜索通讯录好友" type="text"/>
-</div>
-<button class="bg-[#ec4899] text-white px-5 py-2 text-sm font-bold hover:bg-[#db2777] transition-colors">搜索</button>
-</div>
-</div>
-<!-- Group List -->
-<main class="flex-1 overflow-y-auto bg-white hide-scrollbar" id="groupList">
-<!-- Group 1: 家庭通讯录 -->
-<div class="group-item border-b border-gray-100">
-<div class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" onclick="toggleGroup(this)">
-<div class="flex items-center space-x-2">
-<span class="arrow transition-transform duration-200">▼</span>
-<span class="font-bold text-sm">家庭通讯录（3）</span>
-</div>
-</div>
-<div class="group-content expanded">
-<div class="friend-cards">
-<!-- Card 1 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="1">
-<div class="flex items-start space-x-3">
-<img alt="Dad Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/c97a687cc231462cbf2a99babec71892.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">爸爸<img alt="男" class="user-vip-badge" src="assets/new_src/gender/male.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入爸爸房间 建设中')"/></h3>
-<p class="text-[12px] text-green-500 mt-0.5">在线</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(1, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(1)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-1">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">林建国</div>
-<div class="text-gray-500">出生:</div><div class="font-medium">1970年6月</div>
-<div class="text-gray-500">性别:</div><div class="font-medium">男</div>
-<div class="text-gray-500">民族:</div><div class="font-medium">汉族</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">工程师</div>
-<div class="text-gray-500">职业现状:</div><div class="font-medium">在职</div>
-<div class="text-gray-500">技能:</div><div class="font-medium">机械设计、项目管理</div>
-<div class="text-gray-500">特长:</div><div class="font-medium">技术攻关、团队管理</div>
-<div class="text-gray-500">爱好:</div><div class="font-medium">钓鱼、下棋</div>
-</div>
-</div>
-</div>
-<!-- Card 2 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="2">
-<div class="flex items-start space-x-3">
-<img alt="Mom Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/8a10396a0c69442684e2576251aff199.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">妈妈<img alt="女" class="user-vip-badge" src="assets/new_src/gender/female.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/教育培训类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入妈妈房间 建设中')"/></h3>
-<p class="text-[12px] text-green-500 mt-0.5">在线</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(2, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(2)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-2">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">周美华</div>
-<div class="text-gray-500">出生:</div><div class="font-medium">1972年9月</div>
-<div class="text-gray-500">性别:</div><div class="font-medium">女</div>
-<div class="text-gray-500">民族:</div><div class="font-medium">汉族</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">教师</div>
-<div class="text-gray-500">职业现状:</div><div class="font-medium">在职</div>
-<div class="text-gray-500">技能:</div><div class="font-medium">语文教学、班级管理</div>
-<div class="text-gray-500">特长:</div><div class="font-medium">沟通、耐心细致</div>
-<div class="text-gray-500">爱好:</div><div class="font-medium">养花、烹饪</div>
-</div>
-</div>
-</div>
-<!-- Card 3 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="3">
-<div class="flex items-start space-x-3">
-<img alt="Sister Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/19c90c009d3d4916b4f11beb43c81138.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">妹妹<img alt="女" class="user-vip-badge" src="assets/new_src/gender/female.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/教育培训类vip.jpg"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入妹妹房间 建设中')"/></h3>
-<p class="text-[12px] text-gray-400 mt-0.5">1小时前活跃</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(3, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(3)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-3">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">林小雨</div>
-<div class="text-gray-500">出生:</div><div class="font-medium">2003年11月</div>
-<div class="text-gray-500">性别:</div><div class="font-medium">女</div>
-<div class="text-gray-500">民族:</div><div class="font-medium">汉族</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">学生</div>
-<div class="text-gray-500">职业现状:</div><div class="font-medium">学生</div>
-<div class="text-gray-500">技能:</div><div class="font-medium">绘画、舞蹈</div>
-<div class="text-gray-500">特长:</div><div class="font-medium">创意表达、舞台表演</div>
-<div class="text-gray-500">爱好:</div><div class="font-medium">追星、动漫、音乐</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Group 2: 朋友通讯录 -->
-<div class="group-item border-b border-gray-100">
-<div class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" onclick="toggleGroup(this)">
-<div class="flex items-center space-x-2">
-<span class="arrow transition-transform duration-200">▼</span>
-<span class="font-bold text-sm">朋友通讯录（3）</span>
-</div>
-</div>
-<div class="group-content expanded">
-<div class="friend-cards">
-<!-- Card 4 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="4">
-<div class="flex items-start space-x-3">
-<img alt="Lin Xiao Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/30e168552fa64431bb1957acf54f930c.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">林晓<img alt="女" class="user-vip-badge" src="assets/new_src/gender/female.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入林晓房间 建设中')"/></h3>
-<p class="text-[12px] text-green-500 mt-0.5">在线</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(4, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(4)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-4">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">林晓</div>
-<div class="text-gray-500">出生:</div><div class="font-medium">1995年8月</div>
-<div class="text-gray-500">性别:</div><div class="font-medium">女</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">UI设计师</div>
-</div>
-</div>
-</div>
-<!-- Card 5 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="5">
-<div class="flex items-start space-x-3">
-<img alt="Zhang Ming Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/7b7db9d4b6994752ab5a67c9f05a2321.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">张明<img alt="男" class="user-vip-badge" src="assets/new_src/gender/male.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入张明房间 建设中')"/></h3>
-<p class="text-[12px] text-green-500 mt-0.5">在线</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(5, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(5)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-5">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">张明</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">软件开发</div>
-</div>
-</div>
-</div>
-<!-- Card 6 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="6">
-<div class="flex items-start space-x-3">
-<img alt="Wang Fang Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/6bdeef7e6e6049b6bb1369326734db9e.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">王芳<img alt="女" class="user-vip-badge" src="assets/new_src/gender/female.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/教育培训类vip.jpg"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入王芳房间 建设中')"/></h3>
-<p class="text-[12px] text-gray-400 mt-0.5">5分钟前活跃</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(6, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(6)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-6">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">王芳</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">教师</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Group 3: 公司通讯录 -->
-<div class="group-item border-b border-gray-100">
-<div class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" onclick="toggleGroup(this)">
-<div class="flex items-center space-x-2">
-<span class="arrow transition-transform duration-200">▼</span>
-<span class="font-bold text-sm">公司通讯录（2）</span>
-</div>
-</div>
-<div class="group-content expanded">
-<div class="friend-cards">
-<!-- Card 7 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="7">
-<div class="flex items-start space-x-3">
-<img alt="Zhao Qiang Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/6197b5c5c68846c19e5be7c7a19e0a1e.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">赵强<img alt="男" class="user-vip-badge" src="assets/new_src/gender/male.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入赵强房间 建设中')"/></h3>
-<p class="text-[12px] text-green-500 mt-0.5">在线</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(7, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(7)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-7">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">赵强</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">项目经理</div>
-</div>
-</div>
-</div>
-<!-- Card 8 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="8">
-<div class="flex items-start space-x-3">
-<img alt="Chen Jing Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/466f3eb048f6419aa6a77c3cf53030b1.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">陈静<img alt="女" class="user-vip-badge" src="assets/new_src/gender/female.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/技术服务类vip.jpg"/><img alt="房间未点亮" class="user-vip-badge grayscale cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入陈静房间 建设中')"/></h3>
-<p class="text-[12px] text-gray-400 mt-0.5">12分钟前活跃</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(8, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(8)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-8">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">陈静</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">会计</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Group 4: 校园通讯录 -->
-<div class="group-item border-b border-gray-100">
-<div class="group-header px-4 py-3 flex items-center justify-between cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" onclick="toggleGroup(this)">
-<div class="flex items-center space-x-2">
-<span class="arrow transition-transform duration-200">▶</span>
-<span class="font-bold text-sm">校园通讯录（1）</span>
-</div>
-</div>
-<div class="group-content">
-<div class="friend-cards">
-<!-- Card 9 -->
-<div class="p-4 border-b border-gray-50 friend-card" data-id="9">
-<div class="flex items-start space-x-3">
-<img alt="Liu Yang Avatar" class="w-10 h-10 !rounded-full object-cover flex-none" src="assets/packaged/f70ea17ad04741a7a9ba9a7612567113.jpg"/>
-<div class="flex-1">
-<h3 class="text-[14px] font-bold text-black">刘洋<img alt="男" class="user-vip-badge" src="assets/new_src/gender/male.png"/><img alt="个人VIP" class="user-vip-badge" src="assets/src_01/颜色vip/教育培训类vip.jpg"/><img alt="房间已点亮" class="user-vip-badge cursor-pointer" src="assets/new_src/雷达点亮房间图.jpg" onclick="event.stopPropagation(); showToast('进入刘洋房间 建设中')"/></h3>
-<p class="text-[12px] text-green-500 mt-0.5">在线</p>
-</div>
-<div class="flex space-x-2 flex-none">
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="toggleIDCard(9, this)">个人名片</button>
-<button class="px-2 py-1 text-[9px] border border-black font-bold hover:bg-gray-50" onclick="showResume(9)">个人简历</button>
-</div>
-</div>
-<div class="hidden mt-3 bg-gray-50 p-3 border border-gray-200" id="id-expand-9">
-<div class="grid grid-cols-2 gap-y-1.5 text-[11px]">
-<div class="text-gray-500">姓名:</div><div class="font-medium">刘洋</div>
-<div class="text-gray-500">职业:</div><div class="font-medium">研究生</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+<input class="flex-1 min-w-0 bg-transparent outline-none text-sm" id="contactSearch" oninput="filterContacts(this.value)" placeholder="搜索" type="text"/>
+</div>
+<button class="h-9 px-4 text-[13px] font-bold text-white flex-none" id="filter-all" onclick="setContactFilter('all')" style="background:var(--brand-strong); border-radius:9999px !important;">全部</button>
+<button class="h-9 px-4 text-[13px] font-bold flex-none" id="filter-online" onclick="setContactFilter('online')" style="border:1px solid var(--brand-line); color:var(--ink-700); border-radius:9999px !important;">在线</button>
+</div>
+<!-- Contact List -->
+<div class="flex-1 min-h-0 flex">
+<main class="flex-1 overflow-y-auto bg-white hide-scrollbar" id="contactList">
+<!-- 新的朋友 -->
+<div class="px-4 py-2 text-[12px]" style="color:var(--ink-500)">新的朋友</div>
+<div class="mx-4 mb-3 px-3 py-3 flex items-center gap-3" style="border:1px solid var(--brand-line); border-radius:8px !important;">
+<img alt="小鹿" class="w-10 h-10 object-cover" src="assets/avatars/member-05.jpg" style="border-radius:9999px !important;"/>
+<div class="flex-1 min-w-0">
+<div class="text-[14px] font-bold" style="color:var(--ink-900)">小鹿</div>
+<div class="text-[12px]" style="color:var(--ink-500)">请求加为好友</div>
+</div>
+<button class="h-8 px-4 text-[12px] font-bold" onclick="showToast('已拒绝')" style="border:1px solid var(--brand-line); color:var(--ink-700); border-radius:4px !important;">拒绝</button>
+<button class="h-8 px-4 text-[12px] font-bold text-white" onclick="showToast('已通过')" style="background:#3fc46a; border-radius:4px !important;">通过</button>
+</div>
+<!-- A -->
+<div class="contact-letter px-4 py-1.5 text-[12px]" style="color:var(--ink-500)">A</div>
+<div class="contact-row flex items-center gap-3 px-4 py-2.5" data-name="阿泽" data-online="1">
+<img alt="阿泽" class="w-10 h-10 object-cover" src="assets/avatars/member-01.jpg" style="border-radius:9999px !important;"/>
+<span class="flex-1 text-[15px]" style="color:var(--ink-900)">阿泽</span>
+<img alt="VIP" class="h-5 w-auto" src="assets/v2/vip/cat-tech.png"/>
+</div>
+<!-- B -->
+<div class="contact-letter px-4 py-1.5 text-[12px]" style="color:var(--ink-500)">B</div>
+<div class="contact-row flex items-center gap-3 px-4 py-2.5" data-name="白露" data-online="0">
+<img alt="白露" class="w-10 h-10 object-cover" src="assets/avatars/member-02.jpg" style="border-radius:9999px !important;"/>
+<span class="flex-1 text-[15px]" style="color:var(--ink-900)">白露</span>
+<img alt="VIP" class="h-5 w-auto" src="assets/v2/vip/cat-education.png"/>
+<img alt="等级" class="h-5 w-auto" src="assets/v2/icon/gear-badge.png"/>
+</div>
+<!-- C -->
+<div class="contact-letter px-4 py-1.5 text-[12px]" style="color:var(--ink-500)">C</div>
+<div class="contact-row flex items-center gap-3 px-4 py-2.5" data-name="陈默" data-online="1">
+<img alt="陈默" class="w-10 h-10 object-cover" src="assets/avatars/member-03.jpg" style="border-radius:9999px !important;"/>
+<span class="flex-1 text-[15px]" style="color:var(--ink-900)">陈默</span>
+<img alt="VIP" class="h-5 w-auto" src="assets/v2/vip/cat-entertainment.png"/>
+</div>
+<!-- L -->
+<div class="contact-letter px-4 py-1.5 text-[12px]" style="color:var(--ink-500)">L</div>
+<div class="contact-row flex items-center gap-3 px-4 py-2.5" data-name="林晓" data-online="1">
+<img alt="林晓" class="w-10 h-10 object-cover" src="assets/avatars/member-04.jpg" style="border-radius:9999px !important;"/>
+<span class="flex-1 text-[15px]" style="color:var(--ink-900)">林晓</span>
+<img alt="VIP" class="h-5 w-auto" src="assets/v2/vip/cat-charity.png"/>
+</div>
+<!-- Q -->
+<div class="contact-letter px-4 py-1.5 text-[12px]" style="color:var(--ink-500)">Q</div>
+<div class="contact-row flex items-center gap-3 px-4 py-2.5" data-name="七七" data-online="1">
+<img alt="七七" class="w-10 h-10 object-cover" src="assets/avatars/member-06.jpg" style="border-radius:9999px !important;"/>
+<span class="flex-1 text-[15px]" style="color:var(--ink-900)">七七</span>
+<img alt="VIP" class="h-5 w-auto" src="assets/v2/vip/cat-entertainment.png"/>
+<img alt="等级" class="h-5 w-auto" src="assets/v2/icon/gear-badge.png"/>
+</div>
+<!-- X -->
+<div class="contact-letter px-4 py-1.5 text-[12px]" style="color:var(--ink-500)">X</div>
+<div class="contact-row flex items-center gap-3 px-4 py-2.5" data-name="小鹿" data-online="1">
+<img alt="小鹿" class="w-10 h-10 object-cover" src="assets/avatars/member-05.jpg" style="border-radius:9999px !important;"/>
+<span class="flex-1 text-[15px]" style="color:var(--ink-900)">小鹿</span>
+<img alt="VIP" class="h-5 w-auto" src="assets/v2/vip/cat-tech.png"/>
+<img alt="等级" class="h-5 w-auto" src="assets/v2/icon/gear-badge.png"/>
+</div>
+<div class="contact-row flex items-center gap-3 px-4 py-2.5" data-name="星河" data-online="0">
+<img alt="星河" class="w-10 h-10 object-cover" src="assets/avatars/member-07.jpg" style="border-radius:9999px !important;"/>
+<span class="flex-1 text-[15px]" style="color:var(--ink-900)">星河</span>
+<img alt="VIP" class="h-5 w-auto" src="assets/v2/vip/cat-entertainment.png"/>
+</div>
+<!-- Z -->
+<div class="contact-letter px-4 py-1.5 text-[12px]" style="color:var(--ink-500)">Z</div>
+<div class="contact-row flex items-center gap-3 px-4 py-2.5" data-name="卓越红星" data-online="1">
+<img alt="卓越红星" class="w-10 h-10 object-cover" src="assets/avatars/member-08.jpg" style="border-radius:9999px !important;"/>
+<span class="flex-1 text-[15px]" style="color:var(--ink-900)">卓越红星</span>
+<img alt="VIP" class="h-5 w-auto" src="assets/v2/vip/cat-tech.png"/>
+<img alt="等级" class="h-5 w-auto" src="assets/v2/icon/gear-badge.png"/>
 </div>
 </main>
+<!-- A-Z 索引 -->
+<div class="w-6 flex-none flex flex-col items-center justify-center select-none" id="azIndex" style="color:var(--brand-deep); font-size:9px; line-height:1.4;">
+<span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span><span>U</span><span>V</span><span>W</span><span>X</span><span>Y</span><span>Z</span>
+</div>
+</div>
 <!-- Modals -->
 <!-- Add Group Modal -->
 <div class="fixed inset-0 z-50 flex items-center justify-center hidden" id="addGroupModal">
 <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeAddGroupModal()"></div>
 <div class="relative w-80 bg-white p-6 shadow-2xl">
 <h2 class="text-lg font-bold mb-4">添加分组</h2>
-<input class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-pink-500 text-sm mb-6" id="groupNameInput" placeholder="请输入分组名称，如：同学通讯录" type="text"/>
+<input class="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:border-[#4dd0e1] text-sm mb-6" id="groupNameInput" placeholder="请输入分组名称，如：同学通讯录" type="text"/>
 <div class="flex space-x-3">
 <button class="flex-1 py-2 bg-gray-200 text-gray-700 text-sm font-bold hover:bg-gray-300" onclick="closeAddGroupModal()">取消</button>
-<button class="flex-1 py-2 bg-[#ec4899] text-white text-sm font-bold hover:bg-[#db2777]" onclick="confirmAddGroup()">确认添加</button>
+<button class="flex-1 py-2 bg-[#26c6da] text-white text-sm font-bold hover:bg-[#00acc1]" onclick="confirmAddGroup()">确认添加</button>
 </div>
 </div>
 </div>
@@ -613,6 +435,45 @@
             
             closeAddGroupModal();
             showToast();
+        }
+
+        // 全部 / 在线 筛选
+        let contactFilterMode = 'all';
+
+        function applyContactFilter() {
+            const keyword = (document.getElementById('contactSearch').value || '').trim();
+            document.querySelectorAll('.contact-row').forEach(row => {
+                const onlineOk = contactFilterMode === 'all' || row.dataset.online === '1';
+                const nameOk = !keyword || (row.dataset.name || '').includes(keyword);
+                row.style.display = onlineOk && nameOk ? '' : 'none';
+            });
+            document.querySelectorAll('.contact-letter').forEach(letter => {
+                let next = letter.nextElementSibling;
+                let visible = false;
+                while (next && next.classList.contains('contact-row')) {
+                    if (next.style.display !== 'none') visible = true;
+                    next = next.nextElementSibling;
+                }
+                letter.style.display = visible ? '' : 'none';
+            });
+        }
+
+        function setContactFilter(mode) {
+            contactFilterMode = mode;
+            const on = mode === 'online';
+            const allBtn = document.getElementById('filter-all');
+            const onlineBtn = document.getElementById('filter-online');
+            allBtn.style.background = on ? '#fff' : 'var(--brand-strong)';
+            allBtn.style.color = on ? 'var(--ink-700)' : '#fff';
+            allBtn.style.border = on ? '1px solid var(--brand-line)' : '0';
+            onlineBtn.style.background = on ? 'var(--brand-strong)' : '#fff';
+            onlineBtn.style.color = on ? '#fff' : 'var(--ink-700)';
+            onlineBtn.style.border = on ? '0' : '1px solid var(--brand-line)';
+            applyContactFilter();
+        }
+
+        function filterContacts() {
+            applyContactFilter();
         }
 
         function showToast(msg) {
