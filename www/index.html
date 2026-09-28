@@ -48,22 +48,37 @@
             from {bottom: 100px; opacity: 1;}
             to {bottom: 0; opacity: 0;}
         }
+        .radar-wrap {
+            position: relative;
+            display: inline-flex;
+            transform: translateY(-14.5px);
+        }
         .nav-badge {
             position: absolute;
-            top: 2px;
-            right: calc(50% - 34px);
-            min-width: 16px;
-            height: 16px;
-            padding: 0 4px;
-            background: var(--gold);
-            color: #6b4a00;
+            top: -6.4px;
+            right: 3.6px;
+            min-width: 19px;
+            height: 14.5px;
+            padding: 0 3px;
+            background: #FFF849;
+            color: #000;
             font-size: 10px;
             font-weight: 700;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 0 1.5px #fff;
+        }
+        #nav-mask {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: calc(84px + var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+            background: rgba(23, 49, 58, .55);
+            z-index: 60;
+            display: none;
+            pointer-events: none;
         }
     </style>
 <style data-id="immersive-translate-input-injected-css"></style>
@@ -75,44 +90,118 @@
 <iframe class="w-full h-full border-none" id="content-frame" src="room_list.html"></iframe>
 </div>
 <!-- 底部导航栏 -->
-<nav class="h-[64px] bg-white border-t border-[#e6f2f4] flex items-center justify-between px-2 relative z-50" id="bottom-nav">
+<nav class="h-[64px] bg-white flex items-center justify-between px-2 relative z-50" id="bottom-nav">
 <!-- 房间 -->
-<button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('room_list.html', this)">
+<button class="nav-item flex items-center justify-center flex-1 h-full" data-url="room_list.html" onclick="switchTab('room_list.html', this)">
 <img class="nav-icon h-[24px] object-contain" data-normal="assets/src_01/icon/nav-icons-v2/normal_房间.png" data-active="assets/src_01/icon/nav-icons-v2/active_房间.png" src="assets/src_01/icon/nav-icons-v2/active_房间.png" alt="房间"/>
 </button>
 <!-- 空间 -->
-<button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('profile.html', this)">
+<button class="nav-item flex items-center justify-center flex-1 h-full" data-url="profile.html" onclick="switchTab('profile.html', this)">
 <img class="nav-icon h-[24px] object-contain" data-normal="assets/src_01/icon/nav-icons-v2/normal_空间.png" data-active="assets/src_01/icon/nav-icons-v2/active_空间.png" src="assets/src_01/icon/nav-icons-v2/normal_空间.png" alt="空间"/>
 </button>
 <!-- 雷达 -->
-<button class="nav-item flex items-center justify-center flex-1 h-full relative" onclick="switchTab('radar.html', this)">
-  <img class="nav-icon h-[46px] object-contain" data-normal="assets/src_01/icon/nav-icons-v2/normal_雷达.png" data-active="assets/src_01/icon/nav-icons-v2/active_雷达.png" src="assets/src_01/icon/nav-icons-v2/normal_雷达.png" alt="雷达"/>
-  <span class="nav-badge">10</span>
+<button class="nav-item flex items-center justify-center flex-1 h-full" data-url="radar.html" onclick="switchTab('radar.html', this)">
+  <span class="radar-wrap">
+    <img class="nav-icon h-[61px] object-contain" data-normal="assets/src_01/icon/nav-icons-v2/normal_雷达.png" data-active="assets/src_01/icon/nav-icons-v2/active_雷达.png" src="assets/src_01/icon/nav-icons-v2/normal_雷达.png" alt="雷达"/>
+    <span class="nav-badge">10</span>
+  </span>
 </button>
 <!-- TV -->
-<button class="nav-item flex items-center justify-center flex-1 h-full relative" onclick="switchTab('publish.html', this)">
+<button class="nav-item flex items-center justify-center flex-1 h-full relative" data-url="publish.html" onclick="switchTab('publish.html', this)">
 <img class="nav-icon h-[24px] object-contain" data-normal="assets/src_01/icon/nav-icons-v2/normal_TV.png" data-active="assets/src_01/icon/nav-icons-v2/active_TV.png" src="assets/src_01/icon/nav-icons-v2/normal_TV.png" alt="TV"/>
 </button>
 <!-- 我的 -->
-<button class="nav-item flex items-center justify-center flex-1 h-full" onclick="switchTab('profile_settings.html', this)">
+<button class="nav-item flex items-center justify-center flex-1 h-full" data-url="profile_settings.html" onclick="switchTab('profile_settings.html', this)">
 <img class="nav-icon h-[24px] object-contain" data-normal="assets/src_01/icon/nav-icons-v2/normal_我的.png" data-active="assets/src_01/icon/nav-icons-v2/active_我的.png" src="assets/src_01/icon/nav-icons-v2/normal_我的.png" alt="我的"/>
 </button>
 </nav>
+<div id="nav-mask"></div>
 <!-- Toast -->
 <div id="toast"></div>
 </div>
 <script>
-    function switchTab(url, el) {
-        document.getElementById('content-frame').src = url;
-        
+    const TAB_URLS = ['room_list.html', 'profile.html', 'radar.html', 'publish.html', 'profile_settings.html'];
+    let currentTabIndex = 0;
+
+    function setActiveNav(url) {
         document.querySelectorAll('.nav-item').forEach(item => {
             const img = item.querySelector('.nav-icon');
             if (img) img.src = img.dataset.normal;
         });
-        
-        const img = el.querySelector('.nav-icon');
-        if (img) img.src = img.dataset.active;
+        const active = document.querySelector('.nav-item[data-url="' + url + '"]');
+        if (active) {
+            const img = active.querySelector('.nav-icon');
+            if (img) img.src = img.dataset.active;
+        }
     }
+
+    function navigateTo(url) {
+        const idx = TAB_URLS.indexOf(url);
+        if (idx !== -1) currentTabIndex = idx;
+        const navMask = document.getElementById('nav-mask');
+        if (navMask) navMask.style.display = 'none';
+        document.getElementById('content-frame').src = url;
+        setActiveNav(TAB_URLS[currentTabIndex]);
+    }
+
+    function switchTab(url, el) {
+        navigateTo(url);
+    }
+
+    (function initSwipe() {
+        const frame = document.getElementById('content-frame');
+        const SWIPE_MIN_X = 55;
+        const SWIPE_MAX_MS = 700;
+
+        function inHorizontalScroller(node) {
+            while (node && node.nodeType === 1) {
+                const style = getComputedStyle(node);
+                if ((style.overflowX === 'auto' || style.overflowX === 'scroll') && node.scrollWidth > node.clientWidth + 8) {
+                    return true;
+                }
+                node = node.parentElement;
+            }
+            return false;
+        }
+
+        function bindSwipe(doc) {
+            if (!doc || doc.__swipeBound) return;
+            doc.__swipeBound = true;
+            let startX = 0, startY = 0, startAt = 0, tracking = false;
+
+            doc.addEventListener('touchstart', (e) => {
+                if (e.touches.length !== 1) { tracking = false; return; }
+                tracking = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                startAt = Date.now();
+            }, { passive: true });
+
+            doc.addEventListener('touchend', (e) => {
+                if (!tracking) return;
+                tracking = false;
+                const t = e.changedTouches[0];
+                const dx = t.clientX - startX;
+                const dy = t.clientY - startY;
+                if (Date.now() - startAt > SWIPE_MAX_MS) return;
+                if (Math.abs(dx) < SWIPE_MIN_X || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+                if (inHorizontalScroller(e.target)) return;
+                if (dx < 0) {
+                    navigateTo(TAB_URLS[Math.min(currentTabIndex + 1, TAB_URLS.length - 1)]);
+                } else {
+                    navigateTo(TAB_URLS[Math.max(currentTabIndex - 1, 0)]);
+                }
+            }, { passive: true });
+        }
+
+        function bindFrame() {
+            try { bindSwipe(frame.contentDocument); } catch (err) {}
+        }
+
+        frame.addEventListener('load', bindFrame);
+        bindFrame();
+        bindSwipe(document);
+    })();
 
     function showToast(msg) {
         const toast = document.getElementById('toast');
@@ -127,6 +216,13 @@
         if (e.data && e.data.type === 'setBottomNav') {
             const nav = document.getElementById('bottom-nav');
             if (nav) nav.style.display = e.data.visible ? '' : 'none';
+        }
+        if (e.data && e.data.type === 'closeAiVoice') {
+            navigateTo('radar.html');
+        }
+        if (e.data && e.data.type === 'dimBottomNav') {
+            const navMask = document.getElementById('nav-mask');
+            if (navMask) navMask.style.display = e.data.on ? 'block' : 'none';
         }
     });
 </script>

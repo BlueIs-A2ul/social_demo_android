@@ -1,928 +1,618 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>消息中心</title>
-    <script src="assets/vendor/tailwindcss.js"></script>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>信息中心 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
 <link href="assets/vendor/theme.css" rel="stylesheet"/>
-    <style>
-      body {
-        background-color: #f3f4f6;
+<script src="assets/vendor/nav.js"></script>
+<script>
+    (function () {
+        try {
+            if (window.parent !== window) {
+                window.parent.postMessage({ type: 'setBottomNav', visible: false }, '*')
+            }
+        } catch (e) {}
+    })();
+</script>
+<style>
+    :root {
+        --teal: #56C2CE;
+        --teal-line: #ABE1E8;
+        --teal-glow: rgba(171, 225, 232, 1);
+        --red-badge: #FF736B;
+        --green: #00DC6E;
+    }
+    * { box-sizing: border-box; }
+    body {
         margin: 0;
+        background: #f3f4f6;
+        font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         overflow: hidden;
-        font-family: -apple-system, sans-serif;
-      }
-      .app-container {
+    }
+    ::-webkit-scrollbar { display: none; }
+    button { font: inherit; border: 0; background: transparent; padding: 0; cursor: pointer; color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .app-container {
         width: 100%;
         height: 100dvh;
-        position: relative;
-        overflow: hidden;
         display: flex;
         flex-direction: column;
-        background: white;
+        background: #fff;
+        overflow: hidden;
         padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
         padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
-      }
-      ::-webkit-scrollbar {
-        display: none;
-      }
-      * {
-        border-radius: 0 !important;
-        box-sizing: border-box;
-      }
-      button,
-      input {
-        font: inherit;
-      }
-      button {
-        border: 0;
-        background: transparent;
-        padding: 0;
-        color: inherit;
-        cursor: pointer;
-      }
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-      .avatar {
-        border-radius: 9999px !important;
-        display: block;
-        object-fit: cover;
+    }
+    /* ===== 顶部青色栏 ===== */
+    .topbar {
         flex: none;
-        border: 1px solid #e6f9fc;
-        background: #f2fcfd;
-      }
-      .group-avatar {
-        width: 48px;
-        height: 48px;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        gap: 2px;
-        padding: 2px;
-        flex: none;
-        border: 1px solid #e5e7eb;
-        background: #f3f4f6;
-      }
-      .group-avatar img {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
-      }
-      .flex {
+        height: 44px;
+        background: var(--teal);
         display: flex;
-      }
-      .block {
-        display: block;
-      }
-      .hidden {
-        display: none;
-      }
-      .items-center {
         align-items: center;
-      }
-      .items-start {
-        align-items: flex-start;
-      }
-      .justify-center {
-        justify-content: center;
-      }
-      .justify-between {
-        justify-content: space-between;
-      }
-      .min-h-screen {
-        min-height: 100dvh;
-      }
-      .relative {
-        position: relative;
-      }
-      .absolute {
-        position: absolute;
-      }
-      .right-0 {
-        right: 0;
-      }
-      .top-0 {
-        top: 0;
-      }
-      .shrink-0 {
-        flex-shrink: 0;
-      }
-      .flex-1 {
-        flex: 1 1 0%;
-      }
-      .min-w-0 {
-        min-width: 0;
-      }
-      .gap-2 {
-        gap: 0.5rem;
-      }
-      .gap-3 {
-        gap: 0.75rem;
-      }
-      .p-1 {
-        padding: 0.25rem;
-      }
-      .p-3 {
-        padding: 0.75rem;
-      }
-      .p-4 {
-        padding: 1rem;
-      }
-      .px-2 {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-      }
-      .px-3 {
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-      }
-      .px-4 {
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-      .py-0\.5 {
-        padding-top: 0.125rem;
-        padding-bottom: 0.125rem;
-      }
-      .py-2 {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-      }
-      .mt-0\.5 {
-        margin-top: 0.125rem;
-      }
-      .mt-1 {
-        margin-top: 0.25rem;
-      }
-      .mb-2 {
-        margin-bottom: 0.5rem;
-      }
-      .w-1\.5 {
-        width: 0.375rem;
-      }
-      .h-1\.5 {
-        height: 0.375rem;
-      }
-      .w-8 {
-        width: 2rem;
-      }
-      .h-8 {
-        height: 2rem;
-      }
-      .w-10 {
-        width: 2.5rem;
-      }
-      .h-10 {
-        height: 2.5rem;
-      }
-      .w-12 {
-        width: 3rem;
-      }
-      .h-12 {
-        height: 3rem;
-      }
-      .h-11 {
-        height: 2.75rem;
-      }
-      .h-14 {
-        height: 3.5rem;
-      }
-      .w-full {
-        width: 100%;
-      }
-      .overflow-y-auto {
-        overflow-y: auto;
-      }
-      .overflow-hidden {
-        overflow: hidden;
-      }
-      .border {
-        border-width: 1px;
-        border-style: solid;
-      }
-      .border-b {
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-      }
-      .border-t {
-        border-top-width: 1px;
-        border-top-style: solid;
-      }
-      .border-gray-100 {
-        border-color: #f3f4f6;
-      }
-      .border-gray-200 {
-        border-color: #e5e7eb;
-      }
-      .border-gray-300 {
-        border-color: #d1d5db;
-      }
-      .border-[#4dd0e1] {
-        border-color: #26c6da;
-      }
-      .bg-white {
-        background-color: #fff;
-      }
-      .bg-gray-50 {
-        background-color: #f9fafb;
-      }
-      .bg-gray-100 {
-        background-color: #f3f4f6;
-      }
-      .bg-[#f2fcfd] {
-        background-color: #f2fcfd;
-      }
-      .bg-[#26c6da] {
-        background-color: #26c6da;
-      }
-      .bg-green-500 {
-        background-color: #22c55e;
-      }
-      .text-white {
+        padding: 0 6px;
         color: #fff;
-      }
-      .text-[#26c6da] {
-        color: #26c6da;
-      }
-      .text-gray-400 {
-        color: #9ca3af;
-      }
-      .text-gray-500 {
-        color: #6b7280;
-      }
-      .text-gray-600 {
-        color: #4b5563;
-      }
-      .text-gray-900 {
-        color: #111827;
-      }
-      .text-xs {
-        font-size: 0.75rem;
-        line-height: 1rem;
-      }
-      .text-sm {
-        font-size: 0.875rem;
-        line-height: 1.25rem;
-      }
-      .text-base {
-        font-size: 1rem;
-        line-height: 1.5rem;
-      }
-      .text-\[10px\] {
-        font-size: 10px;
-        line-height: 14px;
-      }
-      .text-\[11px\] {
-        font-size: 11px;
-        line-height: 15px;
-      }
-      .font-bold {
+    }
+    .topbar .icon-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+    }
+    .topbar h1 {
+        flex: 1;
+        margin: 0;
+        text-align: center;
+        font-size: 17px;
         font-weight: 700;
-      }
-      .leading-tight {
-        line-height: 1.25;
-      }
-      .leading-relaxed {
-        line-height: 1.625;
-      }
-      .truncate {
-        overflow: hidden;
-        text-overflow: ellipsis;
+        color: #fff;
         white-space: nowrap;
-      }
-      .text-left {
-        text-align: left;
-      }
-      .shadow-2xl {
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      }
-      .tab-active {
-        color: #26c6da;
-        border-bottom: 2px solid #26c6da;
-        font-weight: 700;
-      }
-      .panel {
-        display: none;
-      }
-      .panel.active {
-        display: block;
-      }
-      .category-children {
-        display: none;
-      }
-      .category.open .category-children {
-        display: block;
-      }
-      .category.open .chevron {
-        transform: rotate(90deg);
-      }
-      /* ====== 底部 Tab ====== */
-      .msg-tab {
-        color: var(--ink-500);
-        gap: 2px;
-      }
-      .msg-tab-text {
-        font-size: 10px;
-        line-height: 1.2;
-      }
-      .msg-tab.active {
-        color: var(--brand-deep);
-      }
-      .msg-tab.active .msg-tab-text {
-        font-weight: 700;
-      }
-      .msg-tab-badge {
-        position: absolute;
-        top: -5px;
-        right: -12px;
-        min-width: 15px;
-        height: 15px;
-        padding: 0 3px;
-        background: #ff4d4f;
-        color: #fff;
-        font-size: 10px;
-        font-weight: 700;
-        border-radius: 8px !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 0 0 1.5px #fff;
-      }
-      /* ====== 会话卡片 ====== */
-      main .panel > a,
-      .category-children > a {
-        margin: 8px 12px;
-        padding: 12px;
-        border: 1px solid var(--brand-line) !important;
-        border-radius: 8px !important;
+    }
+    .header-actions {
         display: flex;
         align-items: center;
         gap: 12px;
+        padding-right: 20px;
+        flex: none;
+    }
+    .header-actions .icon-btn { width: 26px; height: 26px; }
+    .header-actions.hidden { display: none; }
+
+    main { flex: 1; overflow-y: auto; position: relative; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ===== 会话卡片 ===== */
+    .chat-card {
+        display: flex;
+        align-items: center;
+        margin: 8px 13px 0;
+        height: 66px;
+        padding-left: 13px;
         background: #fff;
-        position: relative;
-      }
-      main .panel > a .avatar,
-      .category-children > a .avatar {
-        border-radius: 9999px !important;
-      }
-      .msg-row-badge {
+        border-radius: 6px;
+        box-shadow: 0 1px 6px var(--teal-glow);
+        cursor: pointer;
+    }
+    .chat-avatar { position: relative; width: 32px; height: 32px; flex: none; }
+    .chat-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 9999px;
+    }
+    .chat-avatar img.square { border-radius: 4px; }
+    .chat-badge {
         position: absolute;
-        left: 6px;
-        top: 6px;
+        top: -6px;
+        right: -6px;
         min-width: 16px;
         height: 16px;
-        padding: 0 4px;
-        background: #ff4d4f;
+        padding: 0 3px;
+        border-radius: 9999px;
+        background: var(--red-badge);
         color: #fff;
         font-size: 10px;
         font-weight: 700;
-        border-radius: 8px !important;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 0 0 1.5px #fff;
-        z-index: 2;
-      }
-    </style>
-  </head>
-  <body class="flex items-center justify-center min-h-screen">
-    <div class="app-container shadow-2xl">
-      <header class="p-4 flex items-center topbar shrink-0">
-        <button
-          aria-label="返回"
-          class="w-8 h-8 flex items-center justify-center text-white"
-          onclick="window.location.href='announcements.html'"
-        >
-          <svg
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="24"
-          >
-            <path d="m15 18-6-6 6-6"></path>
-          </svg>
+    }
+    .chat-info { flex: 1; min-width: 0; margin-left: 19px; padding-right: 12px; }
+    .chat-name { font-size: 16px; line-height: 22px; color: var(--teal); }
+    .chat-preview {
+        font-size: 13px;
+        line-height: 20px;
+        color: #B3B3B3;
+        margin-top: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ===== 通讯录 ===== */
+    .contacts-top {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 11px 0 10px;
+    }
+    .search-field {
+        flex: 1;
+        min-width: 0;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 6px 0 12px;
+        background: #fff;
+        border: 1px solid var(--teal-line);
+        border-radius: 30px;
+        box-shadow: 0 0 5px var(--teal-glow);
+    }
+    .search-field input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        font-size: 13px;
+        background: transparent;
+    }
+    .search-field img { width: 18px; height: 18px; flex: none; }
+    .pill {
+        height: 26px;
+        min-width: 60px;
+        padding: 0 14px;
+        border-radius: 100px;
+        font-size: 13px;
+        background: #fff;
+        border: 1px solid #E1E1E1;
+        color: #555;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+    }
+    .pill.selected { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+    .new-friends {
+        margin: 12px 10px 0;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 1px 5px var(--teal-glow);
+        padding: 7px 6px 14px;
+    }
+    .nf-title { font-size: 14px; line-height: 20px; color: #555; }
+    .nf-divider { height: 1px; background: #F2F2F2; margin-top: 5px; }
+    .nf-row { display: flex; align-items: center; margin-top: 13px; }
+    .nf-avatar { width: 33px; height: 33px; border-radius: 9999px; object-fit: cover; flex: none; }
+    .nf-name { font-size: 16px; color: var(--teal); margin-left: 8px; flex: none; }
+    .nf-desc { font-size: 13px; color: #999; margin-left: 10px; flex: 1; min-width: 0; }
+    .btn-reject,
+    .btn-accept {
+        width: 45px;
+        height: 22px;
+        border-radius: 5px;
+        font-size: 12px;
+        flex: none;
+        box-shadow: 0 4px 10px rgba(179, 179, 179, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-reject { background: #fff; color: #555; margin-right: 15px; }
+    .btn-accept { background: var(--green); color: #fff; margin-right: 6px; }
+
+    .contact-list { margin-top: 14px; }
+    .contact-row {
+        display: flex;
+        align-items: center;
+        height: 43px;
+        padding: 0 10px 0 24px;
+        border-bottom: 1px solid #F2F2F2;
+    }
+    .contact-avatar { width: 33px; height: 33px; border-radius: 9999px; object-fit: cover; flex: none; }
+    .contact-name { font-size: 16px; color: var(--teal); margin-left: 8px; width: 73px; flex: none; }
+    .contact-name.offline { color: #909090; }
+    .contact-badges { display: flex; align-items: center; gap: 3px; min-width: 0; }
+    .contact-badges img { width: 35px; height: 35px; object-fit: contain; display: block; flex: none; }
+
+    .az-index {
+        position: absolute;
+        right: 4px;
+        top: 62px;
+        width: 14px;
+        text-align: center;
+        font-family: '微软雅黑', -apple-system, sans-serif;
+        font-size: 12px;
+        line-height: 20px;
+        color: #555;
+        user-select: none;
+    }
+
+    /* ===== 底部 Tab：信息 / 群聊 / 通讯录 ===== */
+    .msg-tabs {
+        flex: none;
+        height: 58px;
+        background: #fff;
+        display: flex;
+        align-items: stretch;
+        box-shadow: 0 0 5px var(--teal-glow);
+        position: relative;
+        z-index: 5;
+    }
+    .msg-tab {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        color: #7f7f7f;
+        font-size: 12px;
+    }
+    .msg-tab.active { color: var(--teal); }
+    .tab-icon { position: relative; height: 26px; display: flex; align-items: center; justify-content: center; }
+    .tab-icon svg { display: block; }
+    .tab-badge {
+        position: absolute;
+        top: -5px;
+        right: -6px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 3px;
+        border-radius: 9999px;
+        background: var(--red-badge);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ===== 添加好友弹窗 ===== */
+    .add-friend-modal { position: fixed; inset: 0; z-index: 80; display: none; }
+    .add-friend-modal.open { display: block; }
+    .af-mask { position: absolute; inset: 0; background: rgba(47, 79, 79, .6); }
+    .af-panel {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 64px);
+        width: 266px;
+        height: 192px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 0 3px rgba(171, 225, 232, 1);
+    }
+    .af-title {
+        position: absolute;
+        left: 114px;
+        top: 9px;
+        width: 56px;
+        height: 20px;
+        font-size: 14px;
+        line-height: 20px;
+        color: #555;
+        white-space: nowrap;
+    }
+    .af-close {
+        position: absolute;
+        right: 6px;
+        top: 8px;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .af-close svg { display: block; }
+    .af-divider { position: absolute; left: 0; right: 0; top: 36px; height: 1px; background: #f2f2f2; }
+    .af-input {
+        position: absolute;
+        left: 25px;
+        top: 68px;
+        width: 216px;
+        height: 35px;
+        box-sizing: border-box;
+        padding: 0 2px;
+        border: 1px solid #f2f2f2;
+        border-radius: 4px;
+        background: #fff;
+        font-size: 14px;
+        color: #000;
+        outline: none;
+    }
+    .af-input::placeholder { font-size: 12px; color: #999; }
+    .af-input:focus { border-color: #abe1e8; }
+    .af-btn {
+        position: absolute;
+        left: 77px;
+        top: 138px;
+        width: 117px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        background: linear-gradient(100.608085046201deg, #7EDBE5 3%, #56C2CE 38%, #2E8A96 97%);
+        box-shadow: 0 4px 10px rgba(179, 179, 179, 1);
+        color: #fff;
+        font-size: 12px;
+    }
+</style>
+</head>
+<body>
+<div class="app-container">
+    <!-- 顶部栏 -->
+    <header class="topbar">
+        <button aria-label="返回" class="icon-btn" onclick="goBack('room_list.html')">
+            <svg width="9" height="17" viewBox="0 0 9 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.80578052719351 8.50370982382574 L 8.97338443919557 0.991619997177496 L 8.10342780198317 0.0797946369688453 L 0.0672535821171025 8.50426177111519 L 8.10342780198317 16.9277618170732 L 8.97338443919557 16.0159576720417 L 1.80578052719351 8.50370982382574 Z" fill="currentColor"/>
+            </svg>
         </button>
-        <h1 class="flex-1 text-center font-bold text-base text-white">信息中心</h1>
-        <div class="flex items-center gap-1">
-          <button
-            aria-label="搜索"
-            class="w-8 h-8 flex items-center justify-center text-white"
-            onclick="showSearch()"
-          >
-            <svg
-              fill="none"
-              height="21"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="21"
-            >
-              <circle cx="11" cy="11" r="7"></circle>
-              <path d="M20 20l-3.8-3.8"></path>
-            </svg>
-          </button>
-          <button
-            aria-label="添加好友"
-            class="w-8 h-8 flex items-center justify-center text-white"
-            onclick="showToast('添加好友')"
-          >
-            <svg
-              fill="none"
-              height="22"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="22"
-            >
-              <circle cx="9" cy="8" r="3.2"></circle>
-              <path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"></path>
-              <path d="M18 8v6M15 11h6"></path>
-            </svg>
-          </button>
+        <h1 id="pageTitle">信息中心</h1>
+        <div class="header-actions" id="actionsChat">
+            <button aria-label="搜索" class="icon-btn" onclick="showToast('搜索')">
+                <svg width="22" height="23" viewBox="0 0 22 23" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round">
+                    <circle cx="9.6" cy="9.6" r="7.4"></circle>
+                    <path d="M15.2 15.2 L20.4 20.4"></path>
+                </svg>
+            </button>
+            <button aria-label="添加好友" class="icon-btn" onclick="showAddFriendModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="10.5" cy="7.6" r="4"></circle>
+                    <path d="M3.6 20.4c0-3.6 3.1-6.2 6.9-6.2 1.3 0 2.5.3 3.6.8"></path>
+                    <path d="M17.6 13.6v6.8M14.2 17h6.8"></path>
+                </svg>
+            </button>
         </div>
-      </header>
-
-      <div
-        class="px-4 py-2 border-b border-gray-100 bg-white hidden"
-        id="searchBar"
-      >
-        <div class="h-11 border border-gray-300 flex items-center px-3 gap-2">
-          <svg
-            fill="none"
-            height="18"
-            stroke="#9ca3af"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="18"
-          >
-            <circle cx="11" cy="11" r="7"></circle>
-            <path d="M20 20l-3.8-3.8"></path>
-          </svg>
-          <input
-            class="flex-1 text-sm"
-            style="border: 0; outline: 0"
-            placeholder="搜索群、分类或联系人"
-          />
+        <div class="header-actions hidden" id="actionsContacts">
+            <button aria-label="扫一扫" class="icon-btn" onclick="showToast('扫一扫')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3a4a4a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3.5 8.5V5.2c0-.9.8-1.7 1.7-1.7h3.3"></path>
+                    <path d="M15.5 3.5h3.3c.9 0 1.7.8 1.7 1.7v3.3"></path>
+                    <path d="M20.5 15.5v3.3c0 .9-.8 1.7-1.7 1.7h-3.3"></path>
+                    <path d="M8.5 20.5H5.2c-.9 0-1.7-.8-1.7-1.7v-3.3"></path>
+                    <path d="M3.5 12h17"></path>
+                </svg>
+            </button>
+            <button aria-label="我的二维码" class="icon-btn" onclick="showToast('我的二维码')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#3a4a4a" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M3 3h7v7H3V3Zm2 2v3h3V5H5Z"></path>
+                    <path fill-rule="evenodd" d="M14 3h7v7h-7V3Zm2 2v3h3V5h-3Z"></path>
+                    <path fill-rule="evenodd" d="M3 14h7v7H3v-7Zm2 2v3h3v-3H5Z"></path>
+                    <path d="M14 14h3v3h-3zM18 14h3v3h-3zM14 18h3v3h-3zM18 18h3v3h-3z"></path>
+                </svg>
+            </button>
         </div>
-      </div>
+    </header>
 
-      <main class="flex-1 overflow-y-auto bg-white">
-        <section class="panel active" id="recentPanel">
-          <a
-            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
-            href="room_chat.html?from=message_center"
-          >
-            <img
-              class="avatar w-12 h-12"
-              alt="小鹿"
-              src="assets/v2/processed/精灵公主头像.png"
-            />
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between gap-2">
-                <span class="flex items-center gap-1.5 min-w-0">
-                  <span
-                    class="flex-none"
-                    style="
-                      display: inline-flex;
-                      align-items: center;
-                      justify-content: center;
-                      min-width: 16px;
-                      height: 16px;
-                      padding: 0 4px;
-                      background: #ff4d4f;
-                      color: #fff;
-                      font-size: 10px;
-                      font-weight: 700;
-                      border-radius: 9999px !important;
-                    "
-                    >1</span
-                  >
-                  <h2 class="text-sm font-bold text-gray-900 truncate">小鹿</h2>
-                </span>
-                <span class="text-[10px] text-gray-400">11:52</span>
-              </div>
-              <p class="text-xs text-gray-500 truncate mt-1">
-                Hi,看到你的简历，很感兴趣，希望能再深入了解一下
-              </p>
-            </div>
-          </a>
-        </section>
-        <section class="panel" id="groupPanel">
-          <div
-            class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400"
-          ></div>
-          <a
-            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
-            href="group_create.html"
-          >
-            <div
-              class="w-12 h-12 bg-[#f2fcfd] flex items-center justify-center shrink-0"
-            >
-              <svg
-                fill="none"
-                height="22"
-                stroke="#26c6da"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="22"
-              >
-                <path d="M12 5v14M5 12h14"></path>
-              </svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2">
-                <h2 class="text-sm font-bold text-gray-900 truncate">
-                  创建群组
-                </h2>
-                <span
-                  class="px-2 py-0.5 bg-[#f2fcfd] text-[#26c6da] text-[10px] font-bold"
-                  >新群组</span
-                >
-              </div>
-              <p class="text-xs text-gray-500 truncate mt-1">
-                和朋友、家人一起创建新的群聊
-              </p>
-            </div>
-          </a>
-          <a
-            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
-            href="group_chat.html"
-          >
-            <div class="group-avatar" aria-label="周末空间设计小组群头像">
-              <img alt="成员头像" src="assets/v2/processed/井上织姬头像.png" />
-              <img alt="成员头像" src="assets/v2/processed/明日香头像.png" />
-              <img alt="成员头像" src="assets/v2/processed/精灵公主头像.png" />
-              <img alt="成员头像" src="assets/v2/processed/碇真嗣头像.png" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2">
-                <h2 class="text-sm font-bold text-gray-900 truncate">
-                  周末空间设计小组
-                </h2>
-                <span
-                  class="px-2 py-0.5 bg-[#f2fcfd] text-[#26c6da] text-[10px] font-bold"
-                  >朋友群</span
-                >
-              </div>
-              <p class="text-xs text-gray-500 truncate mt-1">26 人</p>
-            </div>
-          </a>
-          <a
-            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
-            href="group_settings.html?from=message_center"
-          >
-            <div class="group-avatar" aria-label="家庭周末安排群头像">
-              <img alt="成员头像" src="assets/v2/processed/汉库克头像.png" />
-              <img alt="成员头像" src="assets/v2/processed/2B头像.png" />
-              <img alt="成员头像" src="assets/v2/processed/不知火舞头像.png" />
-              <img alt="成员头像" src="assets/v2/processed/春丽头像.png" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2">
-                <h2 class="text-sm font-bold text-gray-900 truncate">
-                  家庭周末安排
-                </h2>
-                <span
-                  class="px-2 py-0.5 bg-gray-50 text-gray-600 text-[10px] font-bold border border-gray-200"
-                  >家庭群</span
-                >
-              </div>
-              <p class="text-xs text-gray-500 truncate mt-1">8 人</p>
-            </div>
-          </a>
-          <a
-            class="p-4 border-b border-gray-100 flex items-center gap-3 text-left"
-            href="group_chat.html"
-          >
-            <div class="group-avatar" aria-label="小商品批发合作群群头像">
-              <img alt="成员头像" src="assets/v2/processed/纲手头像.png" />
-              <img alt="成员头像" src="assets/v2/processed/奥黛丽赫本头像.png" />
-              <img alt="成员头像" src="assets/v2/processed/蜡笔小新全家福.png" />
-              <img alt="成员头像" src="assets/v2/processed/汉库克坐姿.png" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2">
-                <h2 class="text-sm font-bold text-gray-900 truncate">
-                  小商品批发合作群
-                </h2>
-                <span
-                  class="px-2 py-0.5 bg-gray-50 text-gray-600 text-[10px] font-bold border border-gray-200"
-                  >业务群</span
-                >
-              </div>
-              <p class="text-xs text-gray-500 truncate mt-1">34 人</p>
-            </div>
-          </a>
+    <main id="mainArea">
+        <!-- 信息 -->
+        <section class="panel active" id="panelRecent">
+            <a class="chat-card" href="room_chat.html?from=message_center">
+                <div class="chat-avatar">
+                    <img alt="小鹿" src="assets/v2/processed/小鹿头像.png"/>
+                    <span class="chat-badge">1</span>
+                </div>
+                <div class="chat-info">
+                    <div class="chat-name">小鹿</div>
+                    <div class="chat-preview">Hi,看到你的简历，很感兴趣，希望能再深入</div>
+                </div>
+            </a>
         </section>
 
-        <section class="panel" id="categoryPanel">
-          <div
-            class="px-4 py-2 bg-gray-50 border-b border-gray-100 text-[11px] text-gray-400"
-          ></div>
-          <div class="category open border-b border-gray-100">
-            <button
-              class="w-full p-4 flex items-center justify-between text-left"
-              onclick="toggleCategory(this)"
-            >
-              <span>
-                <span class="block text-sm font-bold text-gray-900"
-                  >小商品批发类</span
-                >
-                <span class="block text-[11px] text-gray-400 mt-0.5"
-                  >5 个联系人 · 2 个业务群</span
-                >
-              </span>
-              <svg
-                class="chevron"
-                fill="none"
-                height="16"
-                stroke="currentColor"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="16"
-              >
-                <path d="M9 18l6-6-6-6"></path>
-              </svg>
-            </button>
-            <div class="category-children bg-gray-50">
-              <a
-                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
-                href="room_chat.html?from=message_center"
-              >
-                <img
-                  class="avatar w-10 h-10"
-                  alt="赛鹏程"
-                  src="assets/packaged/src/generated_avatars/avatar-06.png"
-                />
-                <span class="flex-1 min-w-0"
-                  ><span class="block text-sm font-bold text-gray-900 truncate"
-                    >眼镜店老板</span
-                  ><span class="block text-[11px] text-gray-400 truncate"
-                    >后天发出来</span
-                  ></span
-                >
-              </a>
-              <a
-                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
-                href="group_chat.html"
-              >
-                <img
-                  class="avatar w-10 h-10"
-                  alt="批发合作群"
-                  src="assets/packaged/src/generated_avatars/avatar-03.png"
-                />
-                <span class="flex-1 min-w-0"
-                  ><span class="block text-sm font-bold text-gray-900 truncate"
-                    >批发合作群</span
-                  ><span class="block text-[11px] text-gray-400 truncate"
-                    >34 人 · 报价和发货沟通</span
-                  ></span
-                >
-              </a>
+        <!-- 群聊 -->
+        <section class="panel" id="panelGroup">
+            <div class="chat-card">
+                <div class="chat-avatar">
+                    <img class="square" alt="小鹿" src="assets/v2/processed/蜡笔小新全家福.png"/>
+                    <span class="chat-badge">1</span>
+                </div>
+                <div class="chat-info">
+                    <div class="chat-name">小鹿</div>
+                    <div class="chat-preview">这次可以了</div>
+                </div>
             </div>
-          </div>
-          <div class="category border-b border-gray-100">
-            <button
-              class="w-full p-4 flex items-center justify-between text-left"
-              onclick="toggleCategory(this)"
-            >
-              <span>
-                <span class="block text-sm font-bold text-gray-900"
-                  >初中同学类</span
-                >
-                <span class="block text-[11px] text-gray-400 mt-0.5"
-                  >12 个联系人</span
-                >
-              </span>
-              <svg
-                class="chevron"
-                fill="none"
-                height="16"
-                stroke="currentColor"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="16"
-              >
-                <path d="M9 18l6-6-6-6"></path>
-              </svg>
-            </button>
-            <div class="category-children bg-gray-50">
-              <a
-                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
-                href="room_chat.html?from=message_center"
-              >
-                <img
-                  class="avatar w-10 h-10"
-                  alt="李鹏"
-                  src="assets/packaged/src/generated_avatars/avatar-08.png"
-                />
-                <span class="flex-1 min-w-0"
-                  ><span class="block text-sm font-bold text-gray-900 truncate"
-                    >李鹏同学</span
-                  ><span class="block text-[11px] text-gray-400 truncate"
-                    >还没回复，周五提醒</span
-                  ></span
-                >
-              </a>
-            </div>
-          </div>
-          <div class="category border-b border-gray-100">
-            <button
-              class="w-full p-4 flex items-center justify-between text-left"
-              onclick="toggleCategory(this)"
-            >
-              <span>
-                <span class="block text-sm font-bold text-gray-900"
-                  >大学同学类</span
-                >
-                <span class="block text-[11px] text-gray-400 mt-0.5"
-                  >18 个联系人 · 1 个群</span
-                >
-              </span>
-              <svg
-                class="chevron"
-                fill="none"
-                height="16"
-                stroke="currentColor"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="16"
-              >
-                <path d="M9 18l6-6-6-6"></path>
-              </svg>
-            </button>
-            <div class="category-children bg-gray-50">
-              <a
-                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
-                href="group_chat.html"
-              >
-                <img
-                  class="avatar w-10 h-10"
-                  alt="大学同学群"
-                  src="assets/packaged/src/generated_avatars/avatar-02.png"
-                />
-                <span class="flex-1 min-w-0"
-                  ><span class="block text-sm font-bold text-gray-900 truncate"
-                    >大学同学群</span
-                  ><span class="block text-[11px] text-gray-400 truncate"
-                    >聚会报名和房间链接</span
-                  ></span
-                >
-              </a>
-            </div>
-          </div>
-          <div class="category border-b border-gray-100">
-            <button
-              class="w-full p-4 flex items-center justify-between text-left"
-              onclick="toggleCategory(this)"
-            >
-              <span>
-                <span class="block text-sm font-bold text-gray-900"
-                  >社会朋友</span
-                >
-                <span class="block text-[11px] text-gray-400 mt-0.5"
-                  >15个联系人</span
-                >
-              </span>
-              <svg
-                class="chevron"
-                fill="none"
-                height="16"
-                stroke="currentColor"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="16"
-              >
-                <path d="M9 18l6-6-6-6"></path>
-              </svg>
-            </button>
-            <div class="category-children bg-gray-50">
-              <a
-                class="px-4 py-2 border-t border-gray-100 flex items-center gap-3"
-                href="room_chat.html?from=message_center"
-              >
-                <img
-                  class="avatar w-10 h-10"
-                  alt="邓猛"
-                  src="assets/packaged/src/generated_avatars/avatar-05.png"
-                />
-                <span class="flex-1 min-w-0"
-                  ><span class="block text-sm font-bold text-gray-900 truncate"
-                    >邓猛老车朋友</span
-                  ><span class="block text-[11px] text-gray-400 truncate"
-                    >老朋友，车友活动联系人</span
-                  ></span
-                >
-              </a>
-            </div>
-          </div>
         </section>
-      </main>
 
-      <!-- 底部 Tab：信息 / 群聊 / 通讯录 -->
-      <nav
-        class="h-[58px] flex-none bg-white border-t border-[#e6f2f4] flex items-stretch shrink-0"
-        id="msgBottomTabs"
-      >
-        <button
-          class="msg-tab active flex-1 flex flex-col items-center justify-center"
-          data-target="recentPanel"
-          onclick="switchPanel(this)"
-        >
-          <span class="relative flex">
-            <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22">
-              <path d="M20.5 11.6c0 4.2-3.8 7.6-8.5 7.6-.9 0-1.8-.1-2.6-.4L4.5 20.5l1-3.3A7.3 7.3 0 0 1 3.5 11.6C3.5 7.4 7.3 4 12 4s8.5 3.4 8.5 7.6Z"></path>
-              <path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"></path>
-            </svg>
-            <span class="msg-tab-badge">1</span>
-          </span>
-          <span class="msg-tab-text">信息</span>
+        <!-- 通讯录 -->
+        <section class="panel" id="panelContacts">
+            <div class="contacts-top">
+                <div class="search-field">
+                    <input type="text" placeholder=""/>
+                    <img alt="搜索" src="assets/v2/icon/search-teal.svg"/>
+                </div>
+                <button class="pill selected" onclick="selectPill(this)">全部</button>
+                <button class="pill" onclick="selectPill(this)">在线</button>
+            </div>
+
+            <div class="new-friends">
+                <div class="nf-title">新的朋友</div>
+                <div class="nf-divider"></div>
+                <div class="nf-row">
+                    <img class="nf-avatar" alt="小鹿" src="assets/v2/processed/精灵公主头像.png"/>
+                    <span class="nf-name">小鹿</span>
+                    <span class="nf-desc">请求加为好友</span>
+                    <button class="btn-reject" onclick="showToast('已拒绝')">拒绝</button>
+                    <button class="btn-accept" onclick="showToast('已通过')">通过</button>
+                </div>
+            </div>
+
+            <div class="contact-list">
+                <div class="contact-row">
+                    <img class="contact-avatar" alt="七七" src="assets/v2/processed/明日香头像.png"/>
+                    <span class="contact-name">七七</span>
+                    <div class="contact-badges">
+                        <img alt="VIP" src="assets/v2/processed/VIP气泡-粉色.png"/>
+                        <img alt="个人名片" src="assets/v2/card/idcard.png"/>
+                        <img alt="房间" src="assets/v2/processed/小房子气泡-橙色.png"/>
+                        <img alt="TV" src="assets/v2/processed/金色相机-水晶球.png"/>
+                    </div>
+                </div>
+                <div class="contact-row">
+                    <img class="contact-avatar" alt="小鹿" src="assets/v2/processed/精灵公主头像.png"/>
+                    <span class="contact-name">小鹿</span>
+                    <div class="contact-badges">
+                        <img alt="VIP" src="assets/v2/processed/VIP气泡-蓝色.png"/>
+                        <img alt="个人名片" src="assets/v2/card/idcard.png"/>
+                        <img alt="TV" src="assets/v2/processed/金色相机-水晶球.png"/>
+                    </div>
+                </div>
+                <div class="contact-row">
+                    <img class="contact-avatar" alt="卓越红星" src="assets/v2/processed/春丽头像.png"/>
+                    <span class="contact-name">卓越红星</span>
+                    <div class="contact-badges">
+                        <img alt="VIP" src="assets/v2/processed/VIP气泡-青绿色.png"/>
+                        <img alt="公司名片" src="assets/v2/card/company-idcard.png"/>
+                    </div>
+                </div>
+                <div class="contact-row">
+                    <img class="contact-avatar" alt="星河" src="assets/v2/processed/碇真嗣头像.png"/>
+                    <span class="contact-name offline">星河</span>
+                    <div class="contact-badges">
+                        <img alt="VIP" src="assets/v2/processed/VIP气泡-红色.png"/>
+                        <img alt="个人名片" src="assets/v2/card/idcard.png"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="az-index" id="azIndex"></div>
+        </section>
+    </main>
+
+    <!-- 底部 Tab -->
+    <nav class="msg-tabs">
+        <button class="msg-tab active" data-target="panelRecent" data-title="信息中心" data-actions="chat" onclick="switchPanel(this)">
+            <span class="tab-icon">
+                <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor" fill-rule="nonzero" d="M 24.9548870584239 12.5  C 24.9548870584239 19.3675165591033  19.3677819293478 24.9546216881793  12.5 25  L 1.17771314538043 25  C 0.757101307744565 24.9546216881793  0.371518342391305 24.7218919836957  0.175409731657608 24.3493121603261  C -0.0204471558215255 23.9773565782806  0.00612520959814566 23.5274659914445  0.244405995244565 23.18115234375  L 2.4955417798913 19.9059527853261  C 0.90995456861413 17.7675993546196  0.0453783118206522 15.1696246603261  0.0453783118206522 12.5  C 0.0453783118206522 5.63248344089674  5.63248344089674 0.0453783118206522  12.5 0.0453783118206522  C 19.3675165591033 0.0453783118206522  24.9548870584239 5.63248344089674  24.9548870584239 12.5  Z M 4.83690344769022 20.4982591711957  L 3.32986582880435 22.6902173913043  L 12.5 22.6902173913043  C 18.1186841881793 22.6902173913043  22.6902173913043 18.1186841881793  22.6902173913043 12.5  C 22.6902173913043 6.88131581182065  18.1186841881793 2.30978260869565  12.5 2.30978260869565  C 6.88131581182065 2.30978260869565  2.30978260869565 6.88131581182065  2.30978260869565 12.5  C 2.30978260869565 14.9225649626359  3.18099312160326 17.2740106997283  4.76339588994565 19.1199261209239  C 5.0972316576087 19.5097550101902  5.12774923573369 20.0752590013587  4.83690344769022 20.4982591711957  Z"/>
+                    <circle cx="8" cy="12.5" r="1.6" fill="currentColor"/>
+                    <circle cx="13.5" cy="12.5" r="1.6" fill="currentColor"/>
+                </svg>
+                <span class="tab-badge">1</span>
+            </span>
+            <span>信息</span>
         </button>
-        <button
-          class="msg-tab flex-1 flex flex-col items-center justify-center"
-          data-target="groupPanel"
-          onclick="switchPanel(this)"
-        >
-          <span class="relative flex">
-            <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22">
-              <circle cx="9" cy="8" r="3.2"></circle>
-              <path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"></path>
-              <path d="M16 5.6a3 3 0 0 1 0 5.4"></path>
-              <path d="M18.5 19c0-2.2-.9-3.9-2.3-5"></path>
-            </svg>
-            <span class="msg-tab-badge">1</span>
-          </span>
-          <span class="msg-tab-text">群聊</span>
+        <button class="msg-tab" data-target="panelGroup" data-title="群聊信息" data-actions="chat" onclick="switchPanel(this)">
+            <span class="tab-icon">
+                <svg width="29" height="26" viewBox="0 0 29 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor" fill-rule="nonzero" d="M 27.9726829268293 23.8394146341463 L 26.5740487804878 20.4593821229268 C 27.5064715356098 18.9441951219512 27.9726829268293 17.3124552936585 27.9726829268293 15.5641626107317 C 27.9726829268293 12.4172357814634 26.3409430985366 9.50341463414634 23.6602276331707 7.63856909658537 L 23.5436748058537 7.63856909658537 C 21.7953821229268 3.44266665756098 17.3663740019512 0.528845510243903 12.1214959258537 0.528845537560976 C 5.47798373073171 0.412292682926829 0 5.30751219512195 0 11.3682601717073 C 0 13.3496585365854 0.466211391219512 15.0979512195122 1.63173982829268 16.7296910478049 L 0.116552854634146 20.692487804878 C 0 21.0421463414634 0 21.5083577326829 0.349658536585366 21.8580162692683 C 0.466211391219512 22.2076748058537 0.815869927804878 22.3242276604878 1.16552846439024 22.3242276331707 L 1.39863414634146 22.3242276331707 L 6.7600650497561 21.2752520234146 C 7.22627644097561 21.5083577053659 7.69248780487805 21.62491056 8.15869919609756 21.7414634146341 C 10.2566504156098 24.0725203160976 13.403577244878 25.471154462439 16.7836097560976 25.471154462439 C 18.5319024390244 25.471154462439 20.1636422673171 25.1214959258537 21.6788292682927 24.5387317073171 L 26.5740487804878 25.471154462439 L 26.807154462439 25.471154462439 C 27.1568129990244 25.471154462439 27.5064715356098 25.3546016078049 27.7395772448781 25.0049430985366 C 27.9726829268293 24.6552845619512 28.0892357814634 24.1890731707317 27.9726829268293 23.8394146341463 Z M 7.45938212292683 18.9441951219512 L 6.87661787707317 18.9441951219512 L 6.64351219512195 18.9441951219512 L 2.91382114731707 19.643512195122 L 3.84624390243902 17.0793495843902 C 3.96279675707317 16.7296910478049 3.96279675707317 16.2634796565854 3.72969104780488 16.0303739746341 C 2.79726829268293 14.5151869736585 2.33105690146341 13 2.33105690146341 11.3682601717073 C 2.33105690146341 6.58959351414634 6.76006502243902 2.74334961170732 12.2380487804878 2.74334958439025 C 17.7160325385366 2.74334955707317 22.1450406595122 6.58959348682927 22.1450406595122 11.3682601717073 C 22.1450406595122 16.1469268565854 17.5994796839024 19.9931707317073 12.2380487804878 19.9931707317073 C 10.489756097561 19.9931707317073 8.85801626926829 19.643512195122 7.45938212292683 18.9441951219512 Z M 24.2429918790244 19.643512195122 C 24.1264390243902 19.9931707317073 24.1264390243902 20.3428292682927 24.2429918790244 20.692487804878 L 25.0588617795122 22.7904390243902 L 21.9119349502439 22.2076748058537 C 21.6788292682927 22.2076748058537 21.4457235590244 22.2076748058537 21.2126178770732 22.3242276331707 C 19.9305365853659 22.9069918517073 18.4153495843902 23.2566503882927 16.9001626107317 23.2566504156098 C 15.5015284643902 23.2566504156098 14.1028943180488 22.9069918790244 12.8208129990244 22.3242276331707 C 19.2312195121951 22.0911219512195 24.3595447063415 17.3124552663415 24.3595447063415 11.4848129990244 C 25.1754146341463 12.6503414634146 25.6416259980488 14.0489756097561 25.6416260253659 15.5641626107317 C 25.6416260253659 16.9627967570732 25.1754146341463 18.3614309034146 24.2429918790244 19.643512195122 Z"/>
+                    <circle cx="7.2" cy="12.9" r="1.7" fill="currentColor"/>
+                    <circle cx="12.2" cy="12.9" r="1.7" fill="currentColor"/>
+                    <circle cx="17.2" cy="12.9" r="1.7" fill="currentColor"/>
+                </svg>
+                <span class="tab-badge">1</span>
+            </span>
+            <span>群聊</span>
         </button>
-        <button
-          class="msg-tab flex-1 flex flex-col items-center justify-center"
-          data-target="categoryPanel"
-          onclick="window.location.href = 'my_contacts.html'"
-        >
-          <span class="relative flex">
-            <svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24" width="22">
-              <rect height="18" rx="2" width="15" x="5" y="3"></rect>
-              <path d="M5 8H3.5M5 12H3.5M5 16H3.5"></path>
-              <circle cx="12.5" cy="10" r="2.2"></circle>
-              <path d="M9 16.2c.8-1.6 2-2.4 3.5-2.4s2.7.8 3.5 2.4"></path>
-            </svg>
-            <span class="msg-tab-badge">1</span>
-          </span>
-          <span class="msg-tab-text">通讯录</span>
+        <button class="msg-tab" data-target="panelContacts" data-title="通讯录" data-actions="contacts" onclick="switchPanel(this)">
+            <span class="tab-icon">
+                <svg width="23" height="25" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor" fill-rule="nonzero" d="M 4.81416667480469 0  L 18.9375 0  C 20.6355329769873 0.000244879750348344  22.0270220072949 1.34784649745074  22.0816666748047 3.045  L 22 3.14666667480469  L 22 21.8533333251953  C 22.0835527339203 23.5513765771756  20.7363159024114 24.9432385616539  19.0391666748047 24.9983333251953  L 18.9370833251953 25  L 4.81291667480469 25  C 3.11472204227878 24.9999799985503  1.72298321194448 23.6523150562633  1.66833332519531 21.955  L 1.66666667480469 21.8533333251953  L 1.66833332519531 18.7533333251953  C 1.67666665039062 18.3516666503906  2.09541665039062 17.9083333251953  2.49708332519531 17.9170833251953  C 2.88041665039062 17.9254166503906  3.30208332519531 18.31375  3.33208332519531 18.6983333251953  L 3.33375 18.7533333251953  L 3.33375 21.1233333251953  C 3.33375 22.3941666503906  4.13041667480469 23.2966666503906  5.37833332519531 23.3408333251953  L 5.475 23  L 18.275 23  C 19.5458333251953 23.3425  20.3866666748047 22.4716666748047  20.4279166748047 21.2204166748047  L 20 21.1233333251953  L 20 3.84666667480469  C 20.4295833251953 2.57666667480469  19.62125 1.71583334960938  18.3741666748047 1.6725  L 18.275 2  L 5.475 2  C 4.20541667480469 1.67083332519531  3.37666667480469 2.49916665039063  3.335 3.7475  L 3.33375 3.84666667480469  L 3.33375 5.83333332519531  C 3.19416667480469 6.38583332519531  2.915 6.6625  2.49708332519531 6.6625  C 2.10208332519531 6.6625  1.83375 6.41583332519531  1.69208332519531 5.92291667480469  L 1.66833332519531 5.83333332519531  L 1.66833332519531 3.14666667480469  C 1.66811391689683 1.44862341365549  3.01535076280145 0.0567614254672589  4.7125 0.0016666748046875  L 4.81416667480469 0  Z M 9.90708332519531 6.48666667480469  C 11.7195833251953 5.28666667480469  14.1595833251953 5.78625  15.3570833251953 7.60125  C 16.5545833251953 9.41666667480469  16.05625 11.8604166748047  14.24375 13.0595833251953  C 16.4633333251953 13.8866666503906  18.0504166748047 15.9779166503906  18.3254166748047 18.3333333251953  L 18.3029166748047 18.4  C 18.2316666748047 18.5975  17.9845833496094 19.1645833251953  17.5070833251953 19.1645833251953  C 17.1216666503906 19.1645833251953  16.8416666503906 18.8875  16.6675 18.3333333251953  C 16.4570833251953 15.6991666503906  14.7683333251953 14.2175  12.0833333251953 14.2175  C 9.4 14.2175  7.7125 15.6991666748047  7.50083332519531 18.3333333251953  C 7.38833332519531 18.8875  7.10791665039062 19.1645833251953  6.66 19.1645833251953  C 5.98916667480469 19.1645833251953  5.83125 18.3333333251953  5.83333332519531 18.3333333251953  C 6.10916665039063 15.9783333251953  7.68833332519531 13.8858333251953  9.90791667480469 13.06  C 9.46544967697466 12.7671685431295  9.08675258095437 12.3879045408334  8.79458332519531 11.945  C 7.59666665039062 10.1295833251953  8.09541665039063 7.68583332519531  9.90791667480469 6.48666667480469  Z M 0.76375 15.4166666748047  L 3.81958332519531 15.4166666748047  C 4.24125 15.4166666748047  4.58333332519531 15.7895833496094  4.58333332519531 16.25  C 4.58333332519531 16.6883333251953  4.27291665039063 17.0475  3.87916667480469 17.0808333251953  L 3.81958332519531 17.0833333251953  L 0.76375 17.0833333251953  C 0.342083325195312 17.0833333251953  0 16.7104166748047  0 16.25  C 0 15.8116666748047  0.310416674804687 15.4525  0.704166674804687 15.4191666748047  L 0.76375 15.4166666748047  Z M 1.66666667480469 11.1691666748047  C 1.66666667480469 10.75375  2.155 10.41375  2.5 10.41375  C 2.82875 10.41375  3.2875 10.7220833251953  3.33 11.1104166748047  L 3.33333332519531 11.1691666748047  L 3.33333332519531 13.8308333251953  C 3.33333332519531 14.24625  2.845 14.5883333251953  2.5 14.5883333251953  C 2.17125 14.5883333251953  1.7125 14.2783333251953  1.67 13.8895833251953  L 1.66666667480469 13.8308333251953  L 1.66666667480469 11.1691666748047  Z M 14.5833333251953 9.79166667480469  C 14.5833333251953 8.29583334960937  13.5791666503906 7.21375  12.0833333251953 7.21375  C 10.5875 7.21375  9.58333332519531 8.29583332519531  9.58333332519531 9.79166667480469  C 9.58333332519531 11.2875  10.5875 12.335  12.0833333251953 12.335  C 13.5791666503906 12.335  14.5833333251953 11.2875  14.5833333251953 9.79166667480469  Z M 0.76375 7.5  L 3.81958332519531 7.5  C 4.24125 7.5  4.58333332519531 7.87291667480469  4.58333332519531 8.33333332519531  C 4.58333332519531 8.77166665039062  4.27291665039063 9.13083332519531  3.87916667480469 9.16416667480469  L 3.81958332519531 9.16666667480469  L 0.76375 9.16666667480469  C 0.342083325195312 9.16666667480469  0 8.79375  0 8.33333332519531  C 0 7.895  0.310416674804687 7.53583332519531  0.704166674804687 7.5025  L 0.76375 7.5  Z"/>
+                </svg>
+                <span class="tab-badge">1</span>
+            </span>
+            <span>通讯录</span>
         </button>
-      </nav>
+    </nav>
+</div>
+
+<!-- 添加好友弹窗 -->
+<div class="add-friend-modal" id="addFriendModal">
+    <div class="af-mask" onclick="hideAddFriendModal()"></div>
+    <div class="af-panel">
+        <div class="af-title">添加好友</div>
+        <button class="af-close" aria-label="关闭" onclick="hideAddFriendModal()">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="#d7d7d7" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 8 6.47101814516129 L 14.1159022177419 0.355115927419354 C 14.5381300403226 -0.0670866935483882 15.22265625 -0.0670866935483882 15.6448840725806 0.355115927419354 C 16.0670866935484 0.777343749999999 16.0670866935484 1.46186995967742 15.6448840725806 1.88409778225806 L 9.52895665322581 8 L 15.6448840725806 14.1159022177419 C 16.0670866935484 14.5381300403226 16.0670866935484 15.22265625 15.6448840725806 15.6448840725806 C 15.22265625 16.0670866935484 14.5381300403226 16.0670866935484 14.1159022177419 15.6448840725806 L 8 9.52895665322581 L 1.88409778225807 15.6449092741935 C 1.46186995967742 16.0671118951613 0.777343750000001 16.0671118951613 0.355115927419355 15.6449092741935 C -0.0670866935483864 15.2226814516129 -0.0670866935483864 14.5381552419355 0.355115927419355 14.1159274193548 L 6.47104334677419 8 L 0.355090725806452 1.88409778225807 C -0.0671118951612901 1.46186995967742 -0.0671118951612901 0.777343750000001 0.355090725806452 0.355115927419355 C 0.777318548387097 -0.0670866935483864 1.46184475806452 -0.0670866935483864 1.88407258064516 0.355115927419355 L 8 6.47104334677419 Z"/>
+            </svg>
+        </button>
+        <div class="af-divider"></div>
+        <input class="af-input" id="addFriendInput" type="text" placeholder="输入手机号或名称" onkeydown="if (event.key === 'Enter') searchAddFriend()"/>
+        <button class="af-btn" onclick="searchAddFriend()">查 找</button>
     </div>
+</div>
 
-    <script>
-      function switchPanel(button) {
-        document
-          .querySelectorAll('#msgBottomTabs .msg-tab')
-          .forEach(tab => tab.classList.remove('active'))
+<script>
+    (function buildIndex() {
+        const el = document.getElementById('azIndex')
+        if (!el) return
+        const letters = []
+        for (let i = 65; i <= 90; i++) letters.push(String.fromCharCode(i))
+        el.innerHTML = letters.map(l => '<div>' + l + '</div>').join('')
+    })()
+
+    function switchPanel(button) {
+        document.querySelectorAll('.msg-tab').forEach(tab => tab.classList.remove('active'))
         button.classList.add('active')
-        document
-          .querySelectorAll('.panel')
-          .forEach(panel => panel.classList.remove('active'))
+        document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'))
         document.getElementById(button.dataset.target).classList.add('active')
-      }
+        document.getElementById('pageTitle').textContent = button.dataset.title
+        const actions = button.dataset.actions
+        document.getElementById('actionsChat').classList.toggle('hidden', actions !== 'chat')
+        document.getElementById('actionsContacts').classList.toggle('hidden', actions !== 'contacts')
+        document.getElementById('mainArea').scrollTop = 0
+    }
 
-      function showToast(message) {
+    (function applyHash() {
+        const hash = (location.hash || '').replace('#', '')
+        const map = { group: 'panelGroup', contacts: 'panelContacts' }
+        const target = map[hash]
+        if (target) {
+            document.querySelector('.msg-tab[data-target="' + target + '"]').click()
+        }
+    })()
+
+    function selectPill(button) {
+        button.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'))
+        button.classList.add('selected')
+    }
+
+    function showToast(message) {
         let toast = document.getElementById('pageToast')
         if (!toast) {
-          toast = document.createElement('div')
-          toast.id = 'pageToast'
-          toast.style.cssText =
-            'position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;font-size:13px;padding:8px 16px;border-radius:6px;z-index:999;'
-          document.body.appendChild(toast)
+            toast = document.createElement('div')
+            toast.id = 'pageToast'
+            toast.style.cssText =
+                'position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;font-size:13px;padding:8px 16px;border-radius:6px;z-index:999;'
+            document.body.appendChild(toast)
         }
         toast.textContent = message
         toast.style.display = 'block'
         clearTimeout(toast._timer)
         toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
-      }
+    }
 
-      function toggleCategory(button) {
-        button.closest('.category').classList.toggle('open')
-      }
+    function showAddFriendModal() {
+        document.getElementById('addFriendModal').classList.add('open')
+    }
 
-      function showSearch() {
-        document.getElementById('searchBar').classList.toggle('hidden')
-      }
-    </script>
-  </body>
+    function hideAddFriendModal() {
+        document.getElementById('addFriendModal').classList.remove('open')
+        document.getElementById('addFriendInput').value = ''
+    }
+
+    function searchAddFriend() {
+        const value = document.getElementById('addFriendInput').value.trim()
+        if (!value) {
+            showToast('请输入手机号或名称')
+            return
+        }
+        hideAddFriendModal()
+        showToast('查找：' + value)
+    }
+
+    if (location.hash === '#addFriend') {
+        showAddFriendModal()
+    }
+</script>
+</body>
 </html>

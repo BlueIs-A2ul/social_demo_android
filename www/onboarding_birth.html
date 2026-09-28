@@ -6,7 +6,6 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>引导页 - 出生年份</title>
 <script src="assets/vendor/tailwindcss.js"></script>
-<script src="assets/vendor/iconify-icon.min.js"></script>
 <link href="assets/vendor/theme.css" rel="stylesheet"/>
 <style>
         body {
@@ -19,43 +18,32 @@
             padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
             padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
         }
-        .digit-box {
-            width: 56px;
+        .birth-input {
+            width: 264px;
             height: 64px;
             background-color: #ffffff;
             border: 2px solid #e2eef1;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
             font-size: 1.75rem;
             font-weight: 700;
             color: #17313a;
+            letter-spacing: 8px;
+            padding-left: 8px;
+            outline: none;
             transition: border-color 0.2s;
+            caret-color: var(--brand-strong);
         }
-        .digit-box.filled {
+        .birth-input::placeholder {
+            font-size: 15px;
+            font-weight: 400;
+            color: #9fb3b9;
+            letter-spacing: 0;
+        }
+        .birth-input:focus,
+        .birth-input.filled {
             border-color: var(--brand-strong);
         }
-        .digit-box.next {
-            border-color: var(--brand-line);
-        }
-    .key {
-    height: 52px;
-    background: #fff;
-    border: 1.5px solid var(--brand-line);
-    border-radius: 10px;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--ink-900);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.12s ease;
-}
-.key:active {
-    background: var(--brand-soft);
-}
     </style>
 </head>
 <body class="flex flex-col">
@@ -65,35 +53,26 @@
 <a class="text-[13px] text-[#9fb3b9] px-4 py-1.5 rounded-full bg-[#f2f7f8]" href="onboarding_interests.html">跳过</a>
 </div>
 <!-- 主内容区 -->
-<div class="flex-1 px-8 pt-10">
+<div class="flex-1 min-h-0 overflow-y-auto px-8 pt-10">
 <h1 class="text-[28px] font-bold title-brand leading-snug tracking-wide">
                 告诉我们<br/>你的出生年份
             </h1>
-<!-- 输入展示框 -->
-<div class="flex justify-center mt-10" aria-hidden="true">
-<div class="flex gap-3">
-<div class="digit-box next" id="digit-0"></div>
-<div class="digit-box" id="digit-1"></div>
-<div class="digit-box" id="digit-2"></div>
-<div class="digit-box" id="digit-3"></div>
+<!-- 年份输入（调用系统数字键盘） -->
+<div class="flex justify-center mt-10">
+<input
+  aria-label="出生年份"
+  autocomplete="off"
+  autofocus
+  class="birth-input"
+  enterkeyhint="done"
+  id="birth-input"
+  inputmode="numeric"
+  maxlength="4"
+  pattern="[0-9]*"
+  placeholder="请输入 4 位出生年份"
+  type="tel"
+/>
 </div>
-</div>
-<!-- 数字键盘 -->
-<div class="grid grid-cols-3 gap-3 mt-10 px-2">
-<button class="key" onclick="pressKey('1')">1</button>
-<button class="key" onclick="pressKey('2')">2</button>
-<button class="key" onclick="pressKey('3')">3</button>
-<button class="key" onclick="pressKey('4')">4</button>
-<button class="key" onclick="pressKey('5')">5</button>
-<button class="key" onclick="pressKey('6')">6</button>
-<button class="key" onclick="pressKey('7')">7</button>
-<button class="key" onclick="pressKey('8')">8</button>
-<button class="key" onclick="pressKey('9')">9</button>
-<button class="key" onclick="pressKey('#')">#</button>
-<button class="key" onclick="pressKey('0')">0</button>
-<button class="key" onclick="pressKey('del')">
-<iconify-icon class="text-[20px]" icon="solar:backspace-linear"></iconify-icon>
-</button>
 </div>
 <!-- 底部操作栏 -->
 <div class="px-8 py-6 flex items-center justify-center shrink-0">
@@ -102,34 +81,19 @@
         </button>
 </div>
 <script>
-        const digitBoxes = [
-            document.getElementById('digit-0'),
-            document.getElementById('digit-1'),
-            document.getElementById('digit-2'),
-            document.getElementById('digit-3'),
-        ]
+        const birthInput = document.getElementById('birth-input')
         const submitBtn = document.getElementById('submit-btn')
 
-        let digits = ''
-
-        function updateBoxes() {
-            for (let i = 0; i < 4; i++) {
-                const box = digitBoxes[i]
-                box.textContent = i < digits.length ? digits[i] : ''
-                box.classList.toggle('filled', i < digits.length)
-                box.classList.toggle('next', i === digits.length && digits.length < 4)
-            }
-            submitBtn.disabled = digits.length !== 4
+        function updateState() {
+            birthInput.value = birthInput.value.replace(/\D/g, '').slice(0, 4)
+            birthInput.classList.toggle('filled', birthInput.value.length > 0)
+            submitBtn.disabled = birthInput.value.length !== 4
         }
 
-        function pressKey(key) {
-            if (key === 'del') {
-                digits = digits.slice(0, -1)
-            } else if (digits.length < 4) {
-                digits += key
-            }
-            updateBoxes()
-        }
-
-        updateBoxes()
+        birthInput.addEventListener('input', updateState)
+        birthInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !submitBtn.disabled) submitBtn.click()
+        })
+        birthInput.focus()
+        updateState()
     </script>

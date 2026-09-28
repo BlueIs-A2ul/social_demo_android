@@ -1,997 +1,427 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 
-<html data-immersive-translate-page-theme="light" lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      content="width=device-width, initial-scale=1.0"
-      name="viewport"
-    />
-    <title>雷达探测 - 智能空间</title>
-    <script src="assets/vendor/tailwindcss.js"></script>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>雷达 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
 <link href="assets/vendor/theme.css" rel="stylesheet"/>
-    <script>
-      (function () {
-        try {
-          if (window.parent !== window) {
-            window.parent.postMessage({ type: 'setBottomNav', visible: true }, '*')
-          }
-        } catch (e) {}
-      })();
-    </script>
-    <script src="assets/vendor/iconify-icon.min.js"></script>
-    <script src="assets/vendor/safe-area.js"></script>
-    <style>
-      body {
+<script>window.parent.postMessage({ type: 'setBottomNav', visible: true }, '*')</script>
+<style>
+    * { box-sizing: border-box; }
+    body {
         margin: 0;
-        padding: 0;
-        font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-          Arial, sans-serif;
-        background-color: #f3f4f6;
+        background: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         overflow: hidden;
+    }
+    ::-webkit-scrollbar { display: none; }
+    button { font: inherit; border: 0; background: transparent; padding: 0; cursor: pointer; color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    .app-container {
         width: 100%;
         height: 100dvh;
-      }
-      .app-container {
-        width: 100%;
-        height: 100dvh;
-        background: white;
-        position: relative;
-        overflow: hidden;
         display: flex;
         flex-direction: column;
-      }
-      html:not(.in-frame) .app-container {
-        padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
-        padding-bottom: var(
-          --safe-area-inset-bottom,
-          env(safe-area-inset-bottom, 0px)
-        );
-      }
-      .map-container {
-        position: relative;
-        flex: 1;
-        background-color: #f0f2f5;
-        z-index: 1;
         overflow: hidden;
-      }
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .straight-edge {
-        border-radius: 6px;
-      }
-      .identity-content {
-        transition: all 0.3s ease;
-      }
-      .color-bar-container {
+        background: #fff;
+        padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+        padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+    }
+    /* ===== 地图区域 ===== */
+    .map-area {
+        flex: 1;
+        min-height: 0;
         position: relative;
-        width: 100%;
-        height: 40px;
-        background: linear-gradient(135deg, #4dd0e1 0%, #26c6da 100%);
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-      }
-      .arrow-icon {
+        overflow: hidden;
+        background: #e8e8e6;
+    }
+    .map-img {
         position: absolute;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 30px;
-        height: 30px;
-        object-fit: contain;
-        cursor: pointer;
-        transition: transform 0.3s ease;
-      }
-      #arrow-icon {
-        transform: translateY(-50%) rotate(180deg);
-      }
-      .ai-chat-container {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+        display: block;
+    }
+    /* 顶部：地区 / 范围 / 搜索 */
+    .map-top {
         position: absolute;
         top: 0;
         left: 0;
+        right: 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 16px 17px 0 16px;
+        z-index: 5;
+    }
+    .drop-wrap {
+        position: relative;
+        flex: none;
+        width: 63px;
+        height: 25px;
+    }
+    .drop-wrap select {
+        appearance: none;
+        -webkit-appearance: none;
         width: 100%;
         height: 100%;
-        background-image: url('assets/src_01/radar/扩大图片背景尺寸.jpeg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        display: flex;
-        flex-direction: column;
-        z-index: 60;
-        transform: translateY(100%);
-        transition: transform 0.3s ease, visibility 0.3s ease;
-        visibility: hidden;
-        pointer-events: none;
-      }
-      .ai-chat-container.open {
-        transform: translateY(0);
-        visibility: visible;
-        pointer-events: auto;
-      }
-      .ai-chat-header {
-        position: relative;
-        height: 40px;
-        background-image: url('assets/src_01/radar/彩色栏.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        border: 1px solid #abe1e8;
+        border-radius: 4px;
+        background: #e7f2f4;
+        color: #4c4c4c;
+        font-size: 14px;
+        padding: 0 16px 0 7px;
+        outline: none;
         cursor: pointer;
-      }
-      .ai-chat-header span {
-        color: #6b7280;
-        font-size: 14px;
-      }
-      .ai-chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .ai-message {
-        max-width: 80%;
-        padding: 12px 16px;
-        border-radius: 12px;
-        font-size: 14px;
-        line-height: 1.5;
-      }
-      .ai-message.user {
-        align-self: flex-end;
-        background-color: #26c6da;
-        color: white;
-        border-bottom-right-radius: 4px;
-      }
-      .ai-message.ai {
-        align-self: flex-start;
-        background-color: white;
-        color: black;
-        border-bottom-left-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-      .ai-thinking {
+    }
+    .drop-wrap .caret {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        display: block;
+    }
+    .search-btn {
+        margin-left: auto;
+        width: 24px;
+        height: 24px;
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 12px 16px;
-        background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        align-self: flex-start;
-      }
-      .thinking-dots {
-        display: flex;
-        gap: 4px;
-      }
-      .thinking-dots span {
-        width: 8px;
-        height: 8px;
-        background-color: #9ca3af;
-        border-radius: 50%;
-        animation: thinking 1.4s infinite ease-in-out;
-      }
-      .thinking-dots span:nth-child(1) { animation-delay: 0s; }
-      .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
-      .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
-      @keyframes thinking {
-        0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
-        40% { transform: scale(1); opacity: 1; }
-      }
-      .ai-input-container {
-        padding: 12px 16px;
-        background-color: rgba(255, 255, 255, 0.9);
-        border-top: 1px solid #e5e7eb;
-        display: flex;
-        gap: 8px;
-      }
-      .ai-input {
-        flex: 1;
-        padding: 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        font-size: 14px;
-        outline: none;
-      }
-      .ai-input:focus {
-        border-color: #26c6da;
-      }
-      .ai-send-btn {
-        padding: 12px 20px;
-        background-color: #26c6da;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-      .ai-send-btn:hover {
-        background-color: #00acc1;
-      }
-      .ai-send-btn:disabled {
-        background-color: #9ca3af;
-        cursor: not-allowed;
-      }
-      .user-vip-badge {
-        display: inline-block;
-        width: 18px;
-        height: auto;
-        margin-left: 4px;
-        vertical-align: -4px;
-      }
-
-      #toast {
-        position: fixed;
-        top: 50%;
+        justify-content: center;
+        flex: none;
+    }
+    /* 底部两个切换按钮 */
+    .map-tabs {
+        position: absolute;
         left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 12px 24px;
-        z-index: 1000;
-        display: none;
+        transform: translateX(-50%);
+        bottom: 16px;
+        display: flex;
+        z-index: 5;
+    }
+    .map-tab {
+        width: 74px;
+        height: 29px;
+        background: rgba(236, 236, 236, .42);
+        box-shadow: 0 4px 10px rgba(179, 179, 179, .6);
+        color: #555;
         font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .map-tab:first-child { border-radius: 5px 0 0 5px; }
+    .map-tab:last-child { border-radius: 0 5px 5px 0; }
+    .map-tab.selected {
+        background: rgba(30, 30, 30, .82);
+        color: #fff;
+        box-shadow: 0 1px 3px rgba(86, 194, 206, 1);
+    }
+    /* 吉祥物 */
+    .mascot-btn {
+        position: absolute;
+        right: 17px;
+        bottom: 54px;
+        width: 50px;
+        height: 53px;
+        z-index: 5;
+        display: block;
+    }
+    .mascot-btn img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* AI 语音上滑面板 */
+    .ai-sheet {
+        position: absolute;
+        inset: 0;
+        z-index: 80;
+        background: #fff;
+        transform: translateY(100%);
+        transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+        will-change: transform;
+    }
+    .ai-sheet.open { transform: translateY(0); }
+    .ai-sheet iframe { width: 100%; height: 100%; border: 0; display: block; }
+    /* ===== 附近推荐 ===== */
+    .sheet {
+        flex: none;
+        position: relative;
+        margin: 13px 11px 0;
+        background: #fff;
+        border-radius: 6px 6px 0 0;
+        box-shadow: 0 1px 5px rgba(171, 225, 232, 1);
+        padding-bottom: 4px;
+    }
+    .sheet-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 8px 0 12px;
+        height: 42px;
+        border-bottom: 1px solid #f2f2f2;
+    }
+    .sheet-title {
+        position: relative;
+        font-size: 15px;
+        color: #333;
+        font-weight: 600;
+    }
+    .gold-badge {
+        position: absolute;
+        top: -9px;
+        left: 26px;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        background: var(--gold);
+        color: #6b4a00;
+        font-size: 10px;
+        font-weight: 700;
         border-radius: 4px;
-      }
-
-      /* ====== 视觉精修：柔和圆角与层次（仅样式，不改布局/图片） ====== */
-      img.straight-edge {
-        border-radius: 9999px;
-      }
-      div.straight-edge.w-10 {
-        border-radius: 8px;
-      }
-      div.straight-edge.p-1 {
-        border-radius: 8px;
-      }
-      button.straight-edge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 1.5px #fff;
+    }
+    .more-link { font-size: 14px; color: #555; }
+    /* 人员行 */
+    .person-row {
+        display: flex;
+        align-items: center;
+        height: 51px;
+        padding: 0 8px 0 12px;
+        border-bottom: 1px solid #f2f2f2;
+    }
+    .person-row:last-child { border-bottom: 0; }
+    .person-avatar {
+        width: 35px;
+        height: 35px;
+        object-fit: cover;
+        flex: none;
         border-radius: 6px;
-        transition: all 0.15s ease;
-      }
-      button.straight-edge:active {
-        transform: scale(0.96);
-      }
-      div:has(> #radarSearchInput) {
-        border-radius: 8px;
-        transition:
-          border-color 0.2s ease,
-          box-shadow 0.2s ease;
-      }
-      div:has(> #radarSearchInput):focus-within {
-        border-color: #8fdde8;
-        box-shadow: 0 0 0 3px rgba(38, 198, 218, 0.08);
-      }
-      #radius-menu {
-        border-radius: 8px;
+    }
+    .person-info { width: 73px; flex: none; margin-left: 8px; min-width: 0; }
+    .person-name {
+        font-size: 16px;
+        line-height: 22px;
+        color: #56c2ce;
+        white-space: nowrap;
         overflow: hidden;
-        border: 1px solid #f3f4f6;
-        box-shadow: 0 8px 24px rgba(31, 23, 34, 0.12);
-      }
-      div.shadow-md.straight-edge {
-        box-shadow: 0 6px 20px rgba(31, 23, 34, 0.08);
-      }
-      #add-friend-modal > div {
-        border-radius: 8px;
-      }
-      #toast {
-        border-radius: 8px;
-      }
-    </style>
-    <style data-id="immersive-translate-input-injected-css"></style>
-  </head>
-  <body
-    class="bg-gray-100 flex items-center justify-center min-h-screen is-mb-ai-setting"
-  >
-    <div class="app-container relative shadow-2xl">
-      <!-- 地图容器 (占据上方主要空间) -->
-      <div class="map-container">
-        <img
-          alt="Radar map showing user locations"
-          class="w-full h-full object-cover"
-          src="assets/packaged/sq/雷达图背景.png"
-        />
-        <!-- 顶部 UI 容器 (仅保留状态栏和 Tab) -->
-        <div
-          class="absolute top-0 left-0 w-full p-4 z-50 flex flex-col gap-3 pointer-events-none"
-        >
-          <!-- 状态栏 & 操作 -->
-          <div class="flex justify-between items-center pointer-events-auto">
-            <div class="flex items-center gap-2">
-              <div
-                class="bg-white/90 backdrop-blur-md px-3 py-1.5 straight-edge shadow-sm flex items-center gap-1 cursor-pointer"
-              >
-                <span class="text-sm font-bold text-gray-800">新疆</span>
-                <iconify-icon
-                  class="text-gray-400 text-xs"
-                  icon="solar:alt-arrow-down-bold"
-                ></iconify-icon>
-              </div>
-              <!-- 半径选择器 -->
-              <div class="relative">
-                <div
-                  class="bg-white/90 backdrop-blur-md px-3 py-1.5 straight-edge shadow-sm flex items-center gap-1 cursor-pointer select-none"
-                  onclick="toggleRadiusMenu(event)"
-                >
-                  <span class="text-sm font-bold text-gray-800" id="radius-value"
-                    >5km</span
-                  >
-                  <iconify-icon
-                    class="text-gray-400 text-xs"
-                    icon="solar:alt-arrow-down-bold"
-                  ></iconify-icon>
-                </div>
-                <!-- 下拉菜单 -->
-                <div
-                  id="radius-menu"
-                  class="hidden absolute left-0 top-full mt-1 bg-white shadow-lg straight-edge z-50 min-w-[96px]"
-                >
-                  <div
-                    class="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
-                    onclick="selectRadius('2km', event)"
-                  >
-                    2km
-                  </div>
-                  <div
-                    class="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
-                    onclick="selectRadius('3km', event)"
-                  >
-                    3km
-                  </div>
-                  <div
-                    class="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
-                    onclick="selectRadius('5km', event)"
-                  >
-                    5km
-                  </div>
-                  <div
-                    class="px-3 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
-                    onclick="selectRadius('10km', event)"
-                  >
-                    10km
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="flex gap-2">
-              <div
-                class="w-10 h-10 bg-white/90 backdrop-blur-md straight-edge flex items-center justify-center shadow-sm cursor-pointer"
-                onclick="showToast('搜索好友')"
-              >
-                <iconify-icon
-                  class="text-gray-800 text-xl"
-                  icon="solar:magnifer-linear"
-                ></iconify-icon>
-              </div>
-              <div
-                class="w-10 h-10 bg-white/90 backdrop-blur-md straight-edge flex items-center justify-center shadow-sm cursor-pointer relative"
-                onclick="window.location.href = 'friend_flow.html'"
-              >
-                <iconify-icon
-                  class="text-gray-800 text-xl"
-                  icon="solar:user-plus-linear"
-                ></iconify-icon>
-                <span
-                  class="absolute -top-1 -right-1 w-4 h-4 bg-[#FF6B6B] text-white text-[10px] flex items-center justify-center"
-                  >3</span
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- 吉祥物 -->
-        <img
-          alt="吉祥物"
-          class="absolute right-4 bottom-6 w-[64px] h-auto z-40 pointer-events-none"
-          src="assets/v2/mascot/cream-spoon.png"
-        />
-      </div>
-      <!-- 彩色栏背景和箭头 -->
-      <div class="color-bar-container">
-        <img class="arrow-icon" id="arrow-icon" src="assets/src_01/icon/收起状态箭头-removebg-preview.png" alt="收起状态箭头" onclick="toggleAIChat()" />
-      </div>
-      <!-- AI对话页面 -->
-      <div class="ai-chat-container" id="ai-chat-container">
-        <div class="ai-chat-header" onclick="toggleAIChat()">
-          <img class="arrow-icon" src="assets/src_01/icon/展开状态箭头-removebg-preview.png" alt="展开状态箭头" />
-        </div>
-        <div class="ai-chat-messages" id="ai-chat-messages">
-          <div class="ai-message ai">
-            <span>你好！我是智能空间AI助手，有什么可以帮助你的吗？</span>
-          </div>
-        </div>
-        <div class="ai-input-container">
-          <input class="ai-input" id="ai-input" type="text" placeholder="输入消息..." onkeydown="handleAIInput(event)" />
-          <button class="ai-send-btn" id="ai-send-btn" onclick="sendAIMessage()">发送</button>
-        </div>
-      </div>
-      <!-- 底部内容容器 -->
-      <div
-        class="bg-white flex flex-col z-50 overflow-y-auto no-scrollbar max-h-[450px] border-t border-gray-100"
-      >
-        <!-- 分段 Tab -->
-        <div class="flex items-center gap-2 px-4 pt-3">
-          <button
-            class="relative h-8 px-4 rounded-full text-[13px] font-bold text-white"
-            style="background: var(--brand-strong)"
-          >
-            雷达扫描
-            <span
-              class="absolute -top-2 -right-2 min-w-[18px] h-[18px] px-1 rounded flex items-center justify-center text-[10px] font-bold"
-              style="background: var(--gold); color: #6b4a00; box-shadow: 0 0 0 1.5px #fff"
-              >11</span
-            >
-          </button>
-          <button
-            class="h-8 px-4 rounded-full text-[13px] font-medium"
-            style="color: var(--ink-700)"
-            onclick="window.location.href = 'radar_nearby.html'"
-          >
-            附近的人
-          </button>
-        </div>
-        <div class="px-4 pt-3 pb-1 flex items-center justify-between">
-          <span class="text-[15px] font-bold" style="color: var(--ink-900)"
-            >附近推荐</span
-          >
-          <a
-            class="text-[12px]"
-            style="color: var(--ink-500)"
-            href="radar_nearby.html"
-            >更多&gt;&gt;</a
-          >
-        </div>
-        <!-- 推荐用户区域 -->
-        <div class="pointer-events-auto flex flex-col">
-          <div
-            class="hidden px-4 py-2 border-b border-gray-100 flex justify-between items-center"
-            style="opacity: 1"
-          >
-            <span class="text-[14px] font-bold text-black">推荐用户</span>
-            <span class="text-[11px] text-gray-400">发现 2 位匹配好友</span>
-          </div>
-          <div class="overflow-y-auto no-scrollbar">
-            <!-- User 1: 小雨 -->
-            <div class="border-b border-gray-100 last:border-0">
-              <div
-                class="flex items-center px-4 py-3 cursor-pointer"
-                onclick="toggleIdentityCard(0)"
-              >
-                <img
-                  alt="Avatar of Xiao Yu"
-                  class="w-10 h-10 rounded-full object-cover bg-gray-100"
-                  src="assets/packaged/5fc72dacf46b4396bc02fd047935c43f.webp"
-                />
-                <div class="flex-1 ml-3">
-                  <div class="text-[14px] font-bold text-black">
-                    小雨<img
-                      alt="个人VIP2"
-                      class="user-vip-badge"
-                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
-                    />
-                    <img
-                      alt="等级"
-                      class="user-vip-badge"
-                      src="assets/v2/icon/gear-badge.png"
-                    />
-                    <img
-                      alt="房间已点亮"
-                      class="user-vip-badge cursor-pointer"
-                      src="assets/new_src/雷达点亮房间图.jpg"
-                      onclick="event.stopPropagation(); showToast('进入小雨房间 建设中')"
-                    />
-                  </div>
-                  <div class="text-[12px] mt-0.5">
-                    <span class="text-gray-400">距你 0.8km</span>
-                    <span class="text-[#10b981] ml-2">在线</span>
-                  </div>
-                </div>
-                <button
-                  class="flex-none px-3 py-1.5 rounded-full bg-[#26c6da] text-white text-[12px] font-bold"
-                  id="add-friend-btn-0"
-                  onclick="event.stopPropagation(); showAddFriendModal(0)"
-                >
-                  加好友
-                </button>
-              </div>
-              <!-- Identity Content 1 -->
-              <div
-                class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
-              >
-                <div class="text-[12px] text-gray-400 mb-2">
-                  个人名片编号: V2032
-                </div>
-                <div
-                  class="bg-white border border-gray-200 straight-edge overflow-hidden"
-                >
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      姓名
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      林小雨
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      出生
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      1999-03-12
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      性别
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      女
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      民族
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      汉族
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      职业
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      插画师
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      职业现状
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      在职
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      技能
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      手绘/板绘/水彩
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      特长
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      色彩搭配
-                    </div>
-                  </div>
-                  <div class="flex border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      爱好
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      看展/摄影/旅行
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- User 2: 星辰 -->
-            <div class="border-b border-gray-100 last:border-0">
-              <div
-                class="flex items-center px-4 py-3 cursor-pointer"
-                onclick="toggleIdentityCard(1)"
-              >
-                <img
-                  alt="Avatar of Xing Chen"
-                  class="w-10 h-10 rounded-full object-cover bg-gray-100"
-                  src="assets/packaged/0fb46cc23dbe469e949ecce4cfd9a77a.jpg"
-                />
-                <div class="flex-1 ml-3">
-                  <div class="text-[14px] font-bold text-black">
-                    星辰<img
-                      alt="个人VIP2"
-                      class="user-vip-badge"
-                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
-                    />
-                    <img
-                      alt="等级"
-                      class="user-vip-badge"
-                      src="assets/v2/icon/gear-badge.png"
-                    />
-                    <img
-                      alt="房间未点亮"
-                      class="user-vip-badge grayscale cursor-pointer"
-                      src="assets/new_src/雷达点亮房间图.jpg"
-                      onclick="event.stopPropagation(); showToast('进入星辰房间 建设中')"
-                    />
-                  </div>
-                  <div class="text-[12px] mt-0.5">
-                    <span class="text-gray-400">距你 1.2km</span>
-                    <span class="text-gray-400 ml-2">离线</span>
-                  </div>
-                </div>
-                <button
-                  class="flex-none px-3 py-1.5 rounded-full bg-[#26c6da] text-white text-[12px] font-bold"
-                  id="add-friend-btn-1"
-                  onclick="event.stopPropagation(); showAddFriendModal(1)"
-                >
-                  加好友
-                </button>
-              </div>
-              <!-- Identity Content 2 -->
-              <div
-                class="identity-content hidden bg-gray-50 px-4 py-4 border-t border-gray-100"
-              >
-                <div class="text-[12px] text-gray-400 mb-2">
-                  个人名片编号: V2033
-                </div>
-                <div
-                  class="bg-white border border-gray-200 straight-edge overflow-hidden"
-                >
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      姓名
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      陈星辰
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      出生
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      1997-08-25
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      性别
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      男
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      民族
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      汉族
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      职业
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      独立音乐人
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      职业现状
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      自由职业
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      技能
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      吉他/编曲/混音
-                    </div>
-                  </div>
-                  <div class="flex border-b border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      特长
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      即兴创作
-                    </div>
-                  </div>
-                  <div class="flex border-gray-100">
-                    <div
-                      class="w-[80px] px-3 py-2 bg-gray-50 text-gray-400 text-[11px] border-r border-gray-100"
-                    >
-                      爱好
-                    </div>
-                    <div class="flex-1 px-3 py-2 text-black text-[11px]">
-                      Livehouse/黑胶/咖啡
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 底部 Tab Bar -->
-      <!-- Add Friend Modal -->
-      <div
-        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 px-4"
-        id="add-friend-modal"
-      >
-        <div
-          class="bg-white w-full max-w-[300px] rounded-xl overflow-hidden shadow-2xl"
-        >
-          <div class="relative py-3 text-center text-[15px] font-bold text-black">
-            添加好友
-            <button
-              aria-label="关闭"
-              class="absolute right-3 top-2.5 text-gray-300"
-              onclick="closeAddFriendModal()"
-            >
-              <iconify-icon
-                class="text-[20px]"
-                icon="solar:close-circle-linear"
-              ></iconify-icon>
+        text-overflow: ellipsis;
+    }
+    .person-dist { font-size: 10px; line-height: 14px; color: #888; }
+    .person-badges { display: flex; align-items: center; gap: 3px; flex: none; }
+    .person-badges .badge-wrap { position: relative; width: 35px; height: 35px; flex: none; }
+    .person-badges .badge-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .person-badges .gold-badge.small {
+        top: auto;
+        left: auto;
+        right: -4px;
+        bottom: -2px;
+        box-shadow: 0 0 0 1.5px #fff;
+    }
+    .add-btn {
+        margin-left: auto;
+        width: 51px;
+        height: 23px;
+        flex: none;
+        background: #e1e1e1;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #6a6a6a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 160px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, .78);
+        color: #fff;
+        font-size: 13px;
+        padding: 8px 16px;
+        border-radius: 6px;
+        z-index: 999;
+        display: none;
+    }
+</style>
+</head>
+<body>
+<div class="app-container">
+    <!-- 地图 -->
+    <div class="map-area">
+        <img class="map-img" src="assets/v2/processed/雷达地图.png" alt="地图"/>
+
+        <div class="map-top">
+            <label class="drop-wrap">
+                <select id="regionSelect" onchange="showToast(this.value)">
+                    <option>新疆</option>
+                    <option>乌鲁木齐</option>
+                    <option>昌吉</option>
+                    <option>呼图壁</option>
+                    <option>石河子</option>
+                    <option>奎屯</option>
+                    <option>克拉玛依</option>
+                </select>
+                <svg class="caret" width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.5 0.5 L5 5 L9.5 0.5" fill="none" stroke="#4c4c4c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </label>
+            <label class="drop-wrap">
+                <select id="radiusSelect" onchange="showToast(this.value)">
+                    <option>5km</option>
+                    <option>10km</option>
+                    <option>20km</option>
+                    <option>50km</option>
+                </select>
+                <svg class="caret" width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.5 0.5 L5 5 L9.5 0.5" fill="none" stroke="#4c4c4c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </label>
+            <button class="search-btn" aria-label="搜索" onclick="showToast('搜索')">
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#7b7b7b" fill-rule="nonzero" d="M 10.085 18.318 C 5.374 18.318 1.551 14.561 1.551 9.933 C 1.551 5.297 5.374 1.534 10.085 1.534 C 14.796 1.534 18.619 5.297 18.619 9.933 C 18.619 14.568 14.796 18.318 10.085 18.318 Z M 19.988 16.687 L 16.914 13.617 C 17.796 12.406 18.317 10.915 18.317 9.32 C 18.317 4.873 14.619 1.258 10.085 1.258 C 5.541 1.258 1.853 4.873 1.853 9.32 C 1.853 13.76 5.541 17.375 10.085 17.375 C 11.704 17.375 13.216 16.888 14.488 16.062 L 17.57 19.14 C 17.899 19.463 18.312 19.622 18.732 19.622 C 19.17 19.622 19.605 19.448 19.93 19.104 C 20.576 18.415 20.601 17.362 19.988 16.687 Z"/>
+                </svg>
             </button>
-          </div>
-          <div class="px-4 pb-5">
-            <textarea
-              class="w-full h-20 p-3 rounded border text-[13px] focus:outline-none resize-none"
-              id="request-message"
-              placeholder="输入验证信息"
-              style="border-color: var(--brand-line)"
-            ></textarea>
-            <div class="mt-4 flex justify-center">
-              <button
-                class="btn-brand h-9 px-8 text-[14px]"
-                onclick="sendFriendRequest()"
-              >
-                发送
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
-      <div id="toast" style="display: none">查看星辰详情</div>
-      <script>
-        let currentOpenIndex = -1
-        let targetUserIndex = -1
 
-        function toggleRadiusMenu(e) {
-          e.stopPropagation()
-          const menu = document.getElementById('radius-menu')
-          menu.classList.toggle('hidden')
-        }
+        <div class="map-tabs">
+            <button class="map-tab" id="tabScan" onclick="selectMapTab('tabScan')">雷达扫描</button>
+            <button class="map-tab" id="tabNearby" onclick="selectMapTab('tabNearby')">附近的人</button>
+        </div>
 
-        function selectRadius(value, e) {
-          e.stopPropagation()
-          document.getElementById('radius-value').textContent = value
-          document.getElementById('radius-menu').classList.add('hidden')
-          showToast('已选择半径 ' + value)
-        }
-
-        document.addEventListener('click', function () {
-          const menu = document.getElementById('radius-menu')
-          if (menu && !menu.classList.contains('hidden')) {
-            menu.classList.add('hidden')
-          }
-        })
-
-        function showToast(msg) {
-          const toast = document.getElementById('toast')
-          toast.innerText = msg
-          toast.style.display = 'block'
-          setTimeout(() => {
-            toast.style.display = 'none'
-          }, 2000)
-        }
-
-        function handleRadarSearch() {
-          const keyword = document
-            .getElementById('radarSearchInput')
-            .value.trim()
-          if (!keyword) {
-            showToast('请输入搜索关键字')
-            return
-          }
-          window.location.href =
-            'radar_search.html?q=' + encodeURIComponent(keyword)
-        }
-
-        document
-          .getElementById('radarSearchInput')
-          .addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-              handleRadarSearch()
-            }
-          })
-
-        function toggleIdentityCard(index) {
-          const allContents = document.querySelectorAll('.identity-content')
-
-          if (currentOpenIndex === index) {
-            allContents[index].classList.add('hidden')
-            currentOpenIndex = -1
-            return
-          }
-
-          if (currentOpenIndex >= 0) {
-            allContents[currentOpenIndex].classList.add('hidden')
-          }
-
-          allContents[index].classList.remove('hidden')
-          currentOpenIndex = index
-        }
-
-        function showAddFriendModal(index) {
-          targetUserIndex = index
-          const modal = document.getElementById('add-friend-modal')
-          modal.classList.remove('hidden')
-          modal.classList.add('flex')
-          document.getElementById('request-message').value =
-            '你好，很高兴认识你！'
-          document.getElementById('request-message').focus()
-        }
-
-        function closeAddFriendModal() {
-          const modal = document.getElementById('add-friend-modal')
-          modal.classList.add('hidden')
-          modal.classList.remove('flex')
-        }
-
-        function sendFriendRequest() {
-          if (targetUserIndex === -1) return
-
-          const btn = document.getElementById(
-            `add-friend-btn-${targetUserIndex}`,
-          )
-          btn.textContent = '已申请'
-          btn.disabled = true
-          btn.classList.remove('bg-[#26c6da]')
-          btn.classList.add(
-            'bg-gray-300',
-            'text-gray-500',
-            'cursor-not-allowed',
-          )
-          btn.onclick = e => e.stopPropagation()
-
-          closeAddFriendModal()
-          showToast('申请已发送')
-          targetUserIndex = -1
-        }
-
-        let isAIChatExpanded = false
-        let isAIResponding = false
-
-        function toggleAIChat() {
-          const arrowIcon = document.getElementById('arrow-icon')
-          const aiChatContainer = document.getElementById('ai-chat-container')
-          
-          isAIChatExpanded = !isAIChatExpanded
-          
-          if (isAIChatExpanded) {
-            arrowIcon.src = 'assets/src_01/icon/展开状态箭头-removebg-preview.png'
-            arrowIcon.style.transform = 'translateY(-50%) rotate(0deg)'
-            aiChatContainer.classList.add('open')
-          } else {
-            arrowIcon.src = 'assets/src_01/icon/收起状态箭头-removebg-preview.png'
-            arrowIcon.style.transform = 'translateY(-50%) rotate(180deg)'
-            aiChatContainer.classList.remove('open')
-          }
-        }
-
-        function handleAIInput(event) {
-          if (event.key === 'Enter' && !isAIResponding) {
-            sendAIMessage()
-          }
-        }
-
-        function sendAIMessage() {
-          const input = document.getElementById('ai-input')
-          const message = input.value.trim()
-          
-          if (!message || isAIResponding) return
-          
-          isAIResponding = true
-          const sendBtn = document.getElementById('ai-send-btn')
-          sendBtn.disabled = true
-          
-          const messagesContainer = document.getElementById('ai-chat-messages')
-          
-          // 添加用户消息
-          const userMessage = document.createElement('div')
-          userMessage.className = 'ai-message user'
-          userMessage.innerHTML = `<span>${message}</span>`
-          messagesContainer.appendChild(userMessage)
-          
-          input.value = ''
-          
-          // 滚动到底部
-          messagesContainer.scrollTop = messagesContainer.scrollHeight
-          
-          // 添加thinking效果
-          const thinkingElement = document.createElement('div')
-          thinkingElement.className = 'ai-thinking'
-          thinkingElement.innerHTML = `
-            <div class="thinking-dots">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <span style="color: #6b7280; font-size: 14px;">思考中...</span>
-          `
-          messagesContainer.appendChild(thinkingElement)
-          messagesContainer.scrollTop = messagesContainer.scrollHeight
-          
-          // 模拟AI回复
-          setTimeout(() => {
-            // 移除thinking效果
-            messagesContainer.removeChild(thinkingElement)
-            
-            // 添加AI回复
-            const aiResponse = document.createElement('div')
-            aiResponse.className = 'ai-message ai'
-            messagesContainer.appendChild(aiResponse)
-            
-            // 模拟打字效果
-            const responseText = '感谢您的提问！目前AI功能正在开发中，敬请期待更多智能服务。'
-            let index = 0
-            
-            function typeWriter() {
-              if (index < responseText.length) {
-                aiResponse.innerHTML = `<span>${responseText.substring(0, index + 1)}</span>`
-                index++
-                setTimeout(typeWriter, 50)
-              } else {
-                isAIResponding = false
-                sendBtn.disabled = false
-              }
-            }
-            
-            typeWriter()
-          }, 1500)
-        }
-      </script>
+        <button class="mascot-btn" aria-label="AI 语音" onclick="openAiSheet()">
+            <img src="assets/v2/processed/奶油方块吉祥物.png" alt="AI 语音"/>
+        </button>
     </div>
-  </body>
+
+    <!-- 附近推荐 -->
+    <div class="sheet">
+        <div class="sheet-head">
+            <span class="sheet-title">
+                附近推荐
+                <span class="gold-badge">11</span>
+            </span>
+            <button class="more-link" onclick="showToast('更多')">更多&gt;&gt;</button>
+        </div>
+
+        <div class="person-row">
+            <img class="person-avatar" alt="美美" src="assets/v2/processed/汉库克坐姿.png"/>
+            <div class="person-info">
+                <div class="person-name">美美</div>
+                <div class="person-dist">距你1.54km</div>
+            </div>
+            <div class="person-badges">
+                <span class="badge-wrap"><img src="assets/v2/processed/VIP气泡-粉色.png" alt="VIP"/></span>
+                <span class="badge-wrap"><img src="assets/v2/card/idcard.png" alt="个人名片"/></span>
+                <span class="badge-wrap"><img src="assets/v2/processed/小房子气泡-橙色.png" alt="房间"/></span>
+                <span class="badge-wrap"><img src="assets/v2/processed/金色相机-水晶球.png" alt="TV"/></span>
+            </div>
+            <button class="add-btn" onclick="showAddFriendModal()">加好友</button>
+        </div>
+
+        <div class="person-row">
+            <img class="person-avatar" alt="心忧" src="assets/v2/processed/汉库克通缉令.png"/>
+            <div class="person-info">
+                <div class="person-name">心忧</div>
+                <div class="person-dist">距你2.0km</div>
+            </div>
+            <div class="person-badges">
+                <span class="badge-wrap"><img src="assets/v2/processed/VIP气泡-蓝色.png" alt="VIP"/></span>
+                <span class="badge-wrap"><img src="assets/v2/card/idcard.png" alt="个人名片"/></span>
+                <span class="badge-wrap"><img src="assets/v2/processed/金色相机-水晶球.png" alt="TV"/></span>
+            </div>
+            <button class="add-btn" onclick="showAddFriendModal()">加好友</button>
+        </div>
+
+        <div class="person-row">
+            <img class="person-avatar" alt="小慧" src="assets/v2/processed/汉库克头像.png"/>
+            <div class="person-info">
+                <div class="person-name">小慧</div>
+                <div class="person-dist">距你2.6km</div>
+            </div>
+            <div class="person-badges">
+                <span class="badge-wrap"><img src="assets/v2/processed/VIP气泡-青绿色.png" alt="VIP"/></span>
+                <span class="badge-wrap">
+                    <img src="assets/v2/card/company-idcard.png" alt="公司名片"/>
+                    <span class="gold-badge small">10</span>
+                </span>
+            </div>
+            <button class="add-btn" onclick="showAddFriendModal()">加好友</button>
+        </div>
+    </div>
+    <!-- AI 语音上滑面板 -->
+    <div class="ai-sheet" id="aiSheet">
+        <iframe id="aiSheetFrame" src="ai_voice.html" title="AI 语音"></iframe>
+    </div>
+</div>
+
+<!-- 添加好友弹窗 -->
+<div id="addFriendModal" class="fixed inset-0 z-[60] hidden">
+    <div class="modal-mask" style="position: absolute; inset: 0; background: rgba(129, 148, 148, .42)" onclick="hideAddFriendModal()"></div>
+    <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 77%; max-width: 300px; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, .18)">
+        <div class="flex items-center justify-center relative" style="height: 44px">
+            <span style="font-size: 15px; font-weight: 700; color: #555">添加好友</span>
+            <button aria-label="关闭" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border: 0; background: transparent; cursor: pointer" onclick="hideAddFriendModal()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9a9a9a" stroke-width="2.2" stroke-linecap="round">
+                    <path d="M6 6l12 12M18 6L6 18"></path>
+                </svg>
+            </button>
+        </div>
+        <div style="height: 1px; background: #eef4f6"></div>
+        <div style="padding: 16px 24px 0">
+            <textarea id="addFriendMessage" placeholder="输入验证信息" style="display: block; width: 100%; height: 75px; padding: 10px; box-sizing: border-box; border: 1px solid #f2f2f2; border-radius: 4px; background: #fff; font-size: 14px; color: var(--ink-900); outline: none; resize: none; font-family: inherit"></textarea>
+        </div>
+        <div class="flex items-center justify-center" style="padding: 20px 0 22px">
+            <button class="btn-send" style="min-width: 77px; height: 30px; padding: 0 16px; background: #a5e0ea; color: #fff; border: 0; border-radius: 6px; font-size: 14px; cursor: pointer" onclick="sendAddFriendRequest()">发送</button>
+        </div>
+    </div>
+</div>
+<div id="toast"></div>
+
+<script>
+    function selectMapTab(id) {
+        document.querySelectorAll('.map-tab').forEach(tab => tab.classList.remove('selected'))
+        document.getElementById(id).classList.add('selected')
+    }
+
+    function showAddFriendModal() {
+        document.getElementById('addFriendModal').classList.remove('hidden')
+        document.getElementById('addFriendMessage').value = ''
+    }
+
+    function hideAddFriendModal() {
+        document.getElementById('addFriendModal').classList.add('hidden')
+    }
+
+    function sendAddFriendRequest() {
+        hideAddFriendModal()
+        showToast('信息已发送')
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1600)
+    }
+
+    function openAiSheet() {
+        document.getElementById('aiSheet').classList.add('open')
+    }
+
+    function closeAiSheet() {
+        document.getElementById('aiSheet').classList.remove('open')
+    }
+
+    window.addEventListener('message', function (e) {
+        if (e.data && e.data.type === 'closeAiVoice') closeAiSheet()
+    })
+</script>
+</body>
 </html>

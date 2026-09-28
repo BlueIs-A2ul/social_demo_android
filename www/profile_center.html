@@ -8,10 +8,19 @@
 <script src="assets/vendor/tailwindcss.js"></script>
 <script src="assets/vendor/iconify-icon.min.js"></script>
 <link href="assets/vendor/theme.css" rel="stylesheet"/>
+<script>
+    (function () {
+        try {
+            if (window.parent !== window) {
+                window.parent.postMessage({ type: 'setBottomNav', visible: false }, '*')
+            }
+        } catch (e) {}
+    })();
+</script>
 <style>
         body {
             margin: 0;
-            background: var(--page-bg);
+            background: #fff;
             font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         ::-webkit-scrollbar { display: none; }
@@ -30,6 +39,14 @@
             color: #fff;
             font-weight: 700;
             border-color: var(--brand-strong);
+        }
+        .center-tab.disabled {
+            color: #c3c3c3;
+            border-color: #e8e8e8;
+            cursor: default;
+        }
+        .center-tab.disabled .tab-badge {
+            opacity: .45;
         }
         .tab-badge {
             position: absolute;
@@ -55,8 +72,8 @@
             color: var(--ink-900);
         }
         .id-table td {
-            border: 1px solid var(--ink-100);
-            padding: 10px 8px;
+            border: 1px solid #c6c6c6;
+            padding: 8px;
             vertical-align: middle;
         }
         .id-table .k {
@@ -104,37 +121,37 @@
                 <tr>
                     <td class="k" rowspan="3" style="width: 20%">照片</td>
                     <td class="k">姓名</td>
-                    <td class="v">雅柔</td>
+                    <td class="v"></td>
                     <td class="k">出生</td>
-                    <td class="v">1998年6月</td>
+                    <td class="v"></td>
                 </tr>
                 <tr>
                     <td class="k">性别</td>
-                    <td class="v">女</td>
+                    <td class="v"></td>
                     <td class="k">民族</td>
-                    <td class="v">汉族</td>
+                    <td class="v"></td>
                 </tr>
                 <tr>
                     <td class="k">职业</td>
-                    <td class="v">空间设计师</td>
+                    <td class="v"></td>
                     <td class="k">职业现状</td>
-                    <td class="v">在职</td>
+                    <td class="v"></td>
                 </tr>
                 <tr>
                     <td class="k">技能</td>
-                    <td class="v" colspan="4">3D 建模、空间设计、视觉传达</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
                 <tr>
                     <td class="k">特长</td>
-                    <td class="v" colspan="4">色彩搭配、灯光氛围</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
                 <tr>
                     <td class="k">爱好</td>
-                    <td class="v" colspan="4">摄影、旅行、咖啡</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
                 <tr>
                     <td class="k">自我评价</td>
-                    <td class="v" colspan="4">热爱生活，喜欢把空间变成有温度的地方。</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
             </table>
         </section>
@@ -145,52 +162,52 @@
             <table class="id-table">
                 <tr>
                     <td class="k">姓名</td>
-                    <td class="v">雅柔</td>
+                    <td class="v"></td>
                     <td class="k">性别</td>
-                    <td class="v">女</td>
+                    <td class="v"></td>
                     <td class="k" rowspan="3" style="width: 20%">照片</td>
                 </tr>
                 <tr>
                     <td class="k">出生</td>
-                    <td class="v">1998年6月</td>
+                    <td class="v"></td>
                     <td class="k">民族</td>
-                    <td class="v">汉族</td>
+                    <td class="v"></td>
                 </tr>
                 <tr>
                     <td class="k">职业</td>
-                    <td class="v">空间设计师</td>
+                    <td class="v"></td>
                     <td class="k">职业现状</td>
-                    <td class="v">在职</td>
+                    <td class="v"></td>
                 </tr>
                 <tr>
                     <td class="k" rowspan="2">上任单位名称</td>
-                    <td class="v" colspan="2" rowspan="2">星穹工坊文化传媒有限公司</td>
+                    <td class="v" colspan="2" rowspan="2"></td>
                     <td class="k">联系人</td>
-                    <td class="v">王经理</td>
+                    <td class="v"></td>
                 </tr>
                 <tr>
                     <td class="k">电话</td>
-                    <td class="v">13800000000</td>
+                    <td class="v"></td>
                 </tr>
                 <tr>
                     <td class="k">教育经历</td>
-                    <td class="v" colspan="4">四川美术学院 环境艺术设计 本科</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
                 <tr>
                     <td class="k">技能</td>
-                    <td class="v" colspan="4">3D 建模、空间设计、视觉传达</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
                 <tr>
                     <td class="k">特长</td>
-                    <td class="v" colspan="4">色彩搭配、灯光氛围</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
                 <tr>
                     <td class="k">爱好</td>
-                    <td class="v" colspan="4">摄影、旅行、咖啡</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
                 <tr>
                     <td class="k">自我评价</td>
-                    <td class="v" colspan="4">热爱生活，喜欢把空间变成有温度的地方。</td>
+                    <td class="v" colspan="4"></td>
                 </tr>
             </table>
         </section>
@@ -198,7 +215,15 @@
 </div>
 <div id="toast"></div>
 <script>
+    // 查看判断逻辑：带 uid 进入 = 查看他人资料；friend=0（未互加好友）时仅可看名片
+    const centerParams = new URLSearchParams(location.search)
+    const canViewResume = !centerParams.has('uid') || centerParams.get('friend') !== '0'
+
     function switchCenterTab(tab) {
+        if (tab === 'resume' && !canViewResume) {
+            showToast('互加好友后可查看简历')
+            return
+        }
         document.querySelectorAll('.center-tab').forEach(el => {
             el.classList.toggle('active', el.dataset.tab === tab)
         })
@@ -211,6 +236,12 @@
         toast.style.display = 'block'
         clearTimeout(toast._timer)
         toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+    if (!canViewResume) {
+        document.querySelector('.center-tab[data-tab="resume"]').classList.add('disabled')
+    }
+    if (location.hash === '#resume') {
+        switchCenterTab('resume')
     }
 </script>
 </body>

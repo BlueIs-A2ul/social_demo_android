@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>公司信息中心 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<script>
+    (function () {
+        try {
+            if (window.parent !== window) {
+                window.parent.postMessage({ type: 'setBottomNav', visible: false }, '*')
+            }
+        } catch (e) {}
+    })();
+</script>
+<style>
+        body {
+            margin: 0;
+            background: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        ::-webkit-scrollbar { display: none; }
+        .center-tab {
+            position: relative;
+            padding: 6px 14px;
+            font-size: 14px;
+            color: var(--ink-700);
+            background: #fff;
+            border: 1px solid var(--brand-line);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .center-tab.active {
+            background: var(--brand-strong);
+            color: #fff;
+            font-weight: 700;
+            border-color: var(--brand-strong);
+        }
+        .center-tab.disabled {
+            color: #c3c3c3;
+            border-color: #e8e8e8;
+            cursor: default;
+        }
+        .center-tab.disabled .tab-badge {
+            opacity: .45;
+        }
+        .tab-badge {
+            position: absolute;
+            top: -8px;
+            right: -6px;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            background: var(--gold);
+            color: #6b4a00;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .id-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            font-size: 13px;
+            color: var(--ink-900);
+            table-layout: fixed;
+        }
+        .id-table td {
+            border: 1px solid #c6c6c6;
+            padding: 8px 6px;
+            vertical-align: middle;
+            word-break: break-all;
+        }
+        .id-table .k {
+            text-align: center;
+            color: var(--ink-700);
+        }
+        .id-table .v {
+            color: var(--ink-900);
+        }
+        .id-table .k.narrow {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+        #toast {
+            position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78); color: #fff; font-size: 13px;
+            padding: 8px 16px; border-radius: 6px; z-index: 999; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="w-full h-[100dvh] overflow-hidden flex flex-col"
+     style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));">
+    <header class="flex-none topbar flex items-center" style="height: 48px; padding: 0 12px">
+        <button aria-label="返回" class="flex items-center justify-center text-white" style="width: 32px; height: 32px" onclick="history.back()">
+            <iconify-icon class="text-[22px]" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <h1 class="flex-1 text-center text-white" style="font-size: 17px; font-weight: 700">公司信息中心</h1>
+        <span style="width: 32px"></span>
+    </header>
+
+    <!-- Tab 切换 -->
+    <div class="flex-none flex items-center justify-center gap-3 bg-white" style="padding: 12px 0">
+        <button class="center-tab active" data-tab="idcard" onclick="switchCenterTab('idcard')">
+            公司名片
+        </button>
+        <button class="center-tab" data-tab="resume" onclick="switchCenterTab('resume')">
+            公司简历
+            <span class="tab-badge">3</span>
+        </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto" style="padding: 0 12px 24px">
+        <!-- 公司名片 -->
+        <section id="panel-idcard">
+            <div style="font-size: 13px; color: var(--brand-deep); padding: 6px 0 10px">名片编号：V0000002</div>
+            <table class="id-table">
+                <colgroup>
+                    <col style="width: 25.4%"/>
+                    <col style="width: 19.0%"/>
+                    <col style="width: 18.2%"/>
+                    <col style="width: 18.5%"/>
+                    <col style="width: 18.9%"/>
+                </colgroup>
+                <tr style="height: 68px">
+                    <td class="k" rowspan="2">公司图标</td>
+                    <td class="k">公司名称</td>
+                    <td class="v"></td>
+                    <td class="k">成立时间</td>
+                    <td class="v"></td>
+                </tr>
+                <tr style="height: 64px">
+                    <td class="k">法人名称</td>
+                    <td class="v"></td>
+                    <td class="k">主要成员</td>
+                    <td class="v"></td>
+                </tr>
+                <tr style="height: 189px">
+                    <td class="k">经营内容</td>
+                    <td class="v" colspan="4"></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- 公司简历 -->
+        <section id="panel-resume" class="hidden">
+            <div style="font-size: 13px; color: var(--brand-deep); padding: 6px 0 10px">简历编号：JL0000002</div>
+            <table class="id-table">
+                <colgroup>
+                    <col style="width: 12.3%"/>
+                    <col style="width: 35.9%"/>
+                    <col style="width: 14.4%"/>
+                    <col style="width: 37.4%"/>
+                </colgroup>
+                <tr style="height: 92px">
+                    <td class="k" colspan="2" rowspan="2">营业执照</td>
+                    <td class="k narrow">股东</td>
+                    <td class="v"></td>
+                </tr>
+                <tr style="height: 94px">
+                    <td class="k narrow">主要人员</td>
+                    <td class="v"></td>
+                </tr>
+                <tr style="height: 113px">
+                    <td class="k">公司简介</td>
+                    <td class="v" colspan="3"></td>
+                </tr>
+                <tr style="height: 113px">
+                    <td class="k">现状介绍</td>
+                    <td class="v" colspan="3"></td>
+                </tr>
+                <tr style="height: 113px">
+                    <td class="k">经营内容</td>
+                    <td class="v" colspan="3"></td>
+                </tr>
+                <tr style="height: 136px">
+                    <td class="k">短期需求计划</td>
+                    <td class="v" colspan="3"></td>
+                </tr>
+                <tr style="height: 113px">
+                    <td class="k">长期需求</td>
+                    <td class="v" colspan="3"></td>
+                </tr>
+            </table>
+        </section>
+    </div>
+</div>
+<div id="toast"></div>
+<script>
+    // 查看判断逻辑：带 uid 进入 = 查看他人资料；friend=0（未互加好友）时仅可看公司名片
+    const centerParams = new URLSearchParams(location.search)
+    const canViewResume = !centerParams.has('uid') || centerParams.get('friend') !== '0'
+
+    function switchCenterTab(tab) {
+        if (tab === 'resume' && !canViewResume) {
+            showToast('互加好友后可查看简历')
+            return
+        }
+        document.querySelectorAll('.center-tab').forEach(el => {
+            el.classList.toggle('active', el.dataset.tab === tab)
+        })
+        document.getElementById('panel-idcard').classList.toggle('hidden', tab !== 'idcard')
+        document.getElementById('panel-resume').classList.toggle('hidden', tab !== 'resume')
+    }
+    function showToast(message) {
+        const toast = document.getElementById('toast')
+        toast.textContent = message
+        toast.style.display = 'block'
+        clearTimeout(toast._timer)
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1800)
+    }
+    if (!canViewResume) {
+        document.querySelector('.center-tab[data-tab="resume"]').classList.add('disabled')
+    }
+    if (location.hash === '#resume') {
+        switchCenterTab('resume')
+    }
+</script>
+</body>
+</html>

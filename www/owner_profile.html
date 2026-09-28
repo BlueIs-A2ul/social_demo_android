@@ -101,9 +101,14 @@
 <span style="font-size: 12px; color: var(--ink-700); margin-top: 6px">信息栏</span>
 </div>
 </div>
-<button class="w-full text-left" style="padding: 10px 0 0; font-size: 13px; color: var(--brand-deep); background: #fff; border: 0" onclick="toggleIDCard()">
-查看个人名片 / 个人简历
+<div class="w-full flex items-center" style="padding: 10px 0 0; gap: 16px">
+<button class="text-left" style="font-size: 13px; color: var(--brand-deep); background: #fff; border: 0; padding: 0" id="toggleIDBtn" onclick="toggleIDCard()">
+查看个人名片
 </button>
+<button class="text-left" style="font-size: 13px; color: #c3c3c3; background: #fff; border: 0; padding: 0" onclick="showToast('互加好友后可查看简历')">
+查看个人简历
+</button>
+</div>
 </div>
 <!-- 个人名片展开区域 -->
 <div class="animate-fade-in bg-gray-100 p-3 border border-gray-200 hidden" id="idCardBox">
@@ -311,14 +316,10 @@
         
         if(isHidden) {
             box.classList.remove('hidden');
-            btn.textContent = '收起身份证';
-            btn.classList.replace('bg-white', 'bg-blue-500');
-            btn.classList.replace('text-blue-500', 'text-white');
+            btn.textContent = '收起个人名片';
         } else {
             box.classList.add('hidden');
-            btn.textContent = '个人名片';
-            btn.classList.replace('bg-blue-500', 'bg-white');
-            btn.classList.replace('text-white', 'text-blue-500');
+            btn.textContent = '查看个人名片';
         }
     }
 

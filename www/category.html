@@ -3,550 +3,302 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>商品空间</title>
+    <title>商城 - 智慧空间</title>
     <script src="assets/vendor/nav.js"></script>
-    <script src="assets/vendor/iconify-icon.min.js"></script>
     <link href="assets/vendor/theme.css" rel="stylesheet"/>
     <style>
-      * {
-        box-sizing: border-box;
-        border-radius: 0 !important;
-      }
-
+      * { box-sizing: border-box; }
       body {
         margin: 0;
-        min-height: 100dvh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #e5e7eb;
-        color: #111827;
-        font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei',
-          sans-serif;
+        background: #f5f5f5;
+        font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        overflow: hidden;
       }
-
-      button,
-      input {
-        font: inherit;
-      }
-
-      .phone {
+      ::-webkit-scrollbar { display: none; }
+      button { font: inherit; border: 0; background: transparent; padding: 0; cursor: pointer; color: inherit; }
+      a { color: inherit; text-decoration: none; }
+      .app-container {
         width: 100%;
         height: 100dvh;
-        position: relative;
-        overflow: hidden;
         display: flex;
         flex-direction: column;
-        background: #f8fafc;
+        overflow: hidden;
+        background: #fff;
         padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
         padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
       }
-
-      .app-header {
+      /* ===== 顶部栏 ===== */
+      .shop-header {
         flex: none;
+        height: 56px;
+        background: #fff;
         display: flex;
         align-items: center;
+        padding: 0 13px 0 14px;
         gap: 8px;
-        height: 56px;
-        padding: 9px 12px;
-        background: #ffffff;
-        border-bottom: 1px solid #f3f4f6;
-        z-index: 5;
       }
-
-      .icon-button {
-        width: 34px;
-        height: 34px;
+      .back-btn {
+        width: 28px;
+        height: 28px;
         flex: none;
-        border: 0;
-        background: transparent;
-        color: #111827;
-        display: inline-flex;
+        display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
       }
-
-      .page-title {
-        font-size: 16px;
-        font-weight: 600;
-        margin: 0;
-      }
-
+      .back-btn svg { display: block; }
       .search-field {
-        height: 36px;
         flex: 1;
+        min-width: 0;
+        height: 32px;
         display: flex;
         align-items: center;
-        gap: 7px;
-        padding: 0 10px;
-        background: #ffffff;
-        border: 1px solid #d1d5db;
+        padding: 0 8px 0 14px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 5px rgba(215, 215, 215, 1);
       }
-
       .search-field input {
-        width: 100%;
+        flex: 1;
+        min-width: 0;
         border: 0;
         outline: 0;
         background: transparent;
-        color: #111827;
-        font-size: 14px;
+        font-size: 13px;
+        color: #333;
       }
-
-      .search-field input::placeholder {
-        color: #9ca3af;
-      }
-
-      .main-container {
-        flex: 1;
+      .search-field input::placeholder { color: #d0d0d0; }
+      .search-field svg { flex: none; display: block; }
+      .orders-btn {
+        flex: none;
+        width: 48px;
         display: flex;
-        overflow: hidden;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        margin-left: 4px;
       }
-
-      .category-sidebar {
-        width: 100px;
-        flex: none;
-        overflow-y: auto;
-        background: #f3f4f6;
-        border-right: 1px solid #e5e7eb;
-      }
-
-      .category-sidebar::-webkit-scrollbar {
-        display: none;
-      }
-
-      .category-tab {
-        width: 100%;
-        min-height: 54px;
-        border: 0;
-        border-bottom: 1px solid #e5e7eb;
-        border-left: 3px solid transparent;
-        background: transparent;
-        color: #4b5563;
-        padding: 8px 8px;
-        text-align: center;
-        font-size: 13px;
-        line-height: 1.25;
-        cursor: pointer;
-      }
-
-      .category-tab.active {
-        border-left-color: #26c6da;
-        background: #ffffff;
-        color: #111827;
-        font-weight: 600;
-      }
-
-      .products-area {
-        flex: 1;
-        overflow-y: auto;
-        padding: 8px;
-        background: #f3f4f6;
-      }
-
-      .products-area::-webkit-scrollbar {
-        display: none;
-      }
-
-      .products-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-      }
-
-      .product-card {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        overflow: hidden;
-        cursor: pointer;
-      }
-
-      .product-card:active {
-        opacity: 0.8;
-      }
-
-      .product-image {
-        width: 100%;
-        aspect-ratio: 1;
-        overflow: hidden;
-        background: #f9fafb;
-      }
-
-      .product-image img {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: cover;
-      }
-
-      .product-title {
-        height: 32px;
-        padding: 4px 6px;
-        margin: 0;
+      .orders-btn svg { display: block; }
+      .orders-btn .orders-label {
         font-size: 12px;
-        line-height: 1.3;
-        color: #111827;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .empty-state {
-        grid-column: 1 / -1;
-        padding: 40px 0;
-        text-align: center;
-        color: #9ca3af;
-        font-size: 13px;
-      }
-
-      /* ====== 商城：顶栏链接 ====== */
-      .header-link {
-        flex: none;
-        font-size: 13px;
-        color: var(--ink-700);
-        text-decoration: none;
+        color: #6a6a6a;
+        line-height: 17px;
         white-space: nowrap;
       }
-
-      /* ====== 分类宫格 ====== */
-      .category-tiles {
+      .cart-btn {
+        flex: none;
+        width: 33px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 6px;
+      }
+      .cart-btn img { width: 33px; height: 32px; object-fit: contain; display: block; }
+      /* ===== 分类宫格 ===== */
+      .shop-tiles {
+        flex: none;
+        background: #fff;
+        padding: 4px 23px 10px;
+      }
+      .more-link {
+        text-align: right;
+        font-size: 12px;
+        color: #6b7280;
+        line-height: 20px;
+        cursor: pointer;
+      }
+      .tiles-row {
         display: flex;
         justify-content: space-between;
-        gap: 8px;
-        padding: 12px 14px;
-        background: #fff;
-        flex: none;
-        border-bottom: 1px solid #f3f4f6;
+        margin-top: 12px;
       }
       .tile {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 6px;
-        flex: 1;
-        cursor: pointer;
-        border: 0;
-        background: transparent;
+        gap: 4px;
       }
-      .tile .tile-icon {
-        width: 46px;
-        height: 46px;
-        border-radius: 9999px !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+      .tile img { width: 50px; height: 50px; object-fit: contain; display: block; }
       .tile .tile-label {
-        font-size: 11px;
-        color: var(--ink-700);
-      }
-
-      /* ====== 二级分类 ====== */
-      .sub-tabs {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        padding: 8px 14px;
-        background: #fff;
-        border-bottom: 1px solid #f3f4f6;
-        overflow-x: auto;
-        flex: none;
-      }
-      .sub-tabs:empty {
-        display: none;
-      }
-      .sub-tab {
-        position: relative;
         font-size: 13px;
-        color: var(--ink-500);
-        white-space: nowrap;
-        border: 0;
-        background: transparent;
-        padding: 4px 0;
+        color: #6b7280;
+        line-height: 20px;
+      }
+      /* ===== 商品列表 ===== */
+      .shop-products {
+        flex: 1;
+        overflow-y: auto;
+        background: #f5f5f5;
+        padding: 9px;
+      }
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 9px;
+      }
+      .product-card {
+        background: #fff;
+        border-radius: 6px;
+        overflow: hidden;
         cursor: pointer;
       }
-      .sub-tab.active {
-        color: var(--brand-deep);
-        font-weight: 700;
-        border-bottom: 2px solid var(--brand-strong);
+      .product-card:active { opacity: 0.85; }
+      .product-image {
+        width: 100%;
+        aspect-ratio: 178 / 187;
+        overflow: hidden;
+        background: #f5f5f5;
       }
-      .sub-tab .tab-badge {
-        position: absolute;
-        top: -6px;
-        right: -14px;
-        min-width: 15px;
-        height: 15px;
-        padding: 0 3px;
-        background: var(--gold);
-        color: #6b4a00;
-        font-size: 10px;
-        font-weight: 700;
-        border-radius: 4px !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .product-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .product-title {
+        margin: 7px 5px 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-
-      /* ====== 商品价格与销量 ====== */
       .product-foot {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 6px 10px 10px;
+        padding: 7px 10px 12px 5px;
       }
-      .product-price {
-        color: #ff4d4f;
-        font-size: 15px;
-        font-weight: 700;
+      .product-price { color: #ff552e; font-size: 10px; }
+      .product-price .price-num { font-size: 14px; font-weight: 600; }
+      .product-sold { font-size: 12px; color: #aaaaaa; }
+      .empty-state {
+        grid-column: 1 / -1;
+        padding: 40px 0;
+        text-align: center;
+        color: #aaaaaa;
+        font-size: 13px;
       }
-      .product-sold {
-        font-size: 11px;
-        color: var(--ink-500);
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 110px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, .78);
+        color: #fff;
+        font-size: 13px;
+        padding: 8px 16px;
+        border-radius: 6px;
+        z-index: 999;
+        display: none;
       }
     </style>
   </head>
   <body>
-    <div class="phone">
-      <header class="app-header">
-        <button class="icon-button" aria-label="返回" onclick="goBack('hot_products_virtual.html', {room_list: 'room_list.html', merchant_shop: 'merchant_shop.html'})">
-          <svg
-            width="25"
-            height="25"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M19 12H5"></path>
-            <path d="M12 19l-7-7 7-7"></path>
+    <div class="app-container">
+      <header class="shop-header">
+        <button class="back-btn" aria-label="返回" onclick="goBack('profile_settings.html', {profile_settings: 'profile_settings.html', profile: 'profile.html'})">
+          <svg width="18" height="18" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+            <path d="M185.3952 511.232l398.2336 398.2336-72.3968 72.448L40.6016 511.232 511.232 40.6016 583.68 112.9984z" fill="#333333"/>
           </svg>
         </button>
         <label class="search-field" aria-label="搜索商品">
-          <svg
-            width="17"
-            height="17"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#6b7280"
-            stroke-width="2.3"
-            stroke-linecap="round"
-          >
-            <circle cx="11" cy="11" r="7"></circle>
-            <path d="M20 20l-3.8-3.8"></path>
-          </svg>
           <input type="search" id="searchInput" placeholder="输入商品名称" />
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#e1e1e1" fill-rule="nonzero" d="M 8.5640625 15.5581875 C 4.56234375 15.5581875 1.31765625 12.36975 1.31765625 8.4375 C 1.31765625 4.4990625 4.56234375 1.3040625 8.5640625 1.3040625 C 12.56578125 1.3040625 15.81046875 4.4990625 15.81046875 8.4375 C 15.81046875 12.375 12.56578125 15.5581875 8.5640625 15.5581875 Z M 16.97709375 14.175 L 14.36578125 11.570625 C 15.1153125 10.5421875 15.5581875 9.275625 15.5581875 7.921875 C 15.5581875 4.1428125 12.41878125 1.0696875 8.5640625 1.0696875 C 4.70315625 1.0696875 1.5703125 4.1428125 1.5703125 7.921875 C 1.5703125 11.6953125 4.70315625 14.7684375 8.5640625 14.7684375 C 9.93890625 14.7684375 11.22234375 14.3540625 12.30234375 13.651875 L 14.91984375 16.25625 C 15.19921875 16.5309375 15.54984375 16.6659375 15.9065625 16.6659375 C 16.27828125 16.6659375 16.64765625 16.51875 16.92328125 16.22625 C 17.4721875 15.64125 17.49375 14.746875 16.97709375 14.175 Z"/>
+          </svg>
         </label>
-        <a class="header-link" href="history_favorites.html">我的订单</a>
-        <button class="icon-button" aria-label="购物车" onclick="showToast('购物车')">
-          <img src="assets/v2/icon/cart.png" alt="购物车" style="width: 26px; height: 26px; object-fit: contain" />
+        <a class="orders-btn" href="history_favorites.html">
+          <svg width="18" height="21" viewBox="0 0 18 21" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#9f9f9f" fill-rule="nonzero" d="M 14.2900402121375 0.266612682130858 L 3.24167612343547 0.266612682130858 C 1.6090147076457 0.266612682130858 0.28429593909818 1.58880371942476 0.28429593909818 3.21744158084252 L 0.28429593909818 17.3687584454194 C 0.28429593909818 18.9973963068371 1.6090147076457 20.3195873441311 3.24167612343547 20.3195873441311 L 14.2900402121375 20.3195873441311 C 15.9227016279272 20.3195873441311 17.2474203964747 18.9973963068371 17.2474203964747 17.3687584454194 L 17.2474203964747 3.21744158084252 C 17.2474203964747 1.58880371942476 15.9227016279272 0.266612682130858 14.2900402121375 0.266612682130858 Z M 13.103925935917 13.1320299170592 L 4.41600629387189 13.1320299170592 C 4.00267914992276 13.1320299170592 3.66843160628368 12.7977823734201 3.66843160628368 12.384455229471 C 3.66843160628368 11.9711280855219 4.00267914992276 11.6368805418828 4.41600629387189 11.6368805418828 L 13.103925935917 11.6368805418828 C 13.5172530798661 11.6368805418828 13.8515006235052 11.9711280855219 13.8515006235052 12.384455229471 C 13.8515006235052 12.7977823734201 13.5172530798661 13.1320299170592 13.103925935917 13.1320299170592 Z M 13.103925935917 9.26562087989625 L 4.41600629387189 9.26562087989625 C 4.00267914992276 9.26562087989625 3.66843160628368 8.93137333625717 3.66843160628368 8.51804619230804 C 3.66843160628368 8.1047190483589 4.00267914992276 7.77047150471983 4.41600629387189 7.77047150471983 L 13.103925935917 7.77047150471983 C 13.5172530798661 7.77047150471983 13.8515006235052 8.1047190483589 13.8515006235052 8.51804619230804 C 13.8515006235052 8.93137333625717 13.5172530798661 9.26562087989625 13.103925935917 9.26562087989625 Z M 13.103925935917 5.39921181873331 L 4.41600629387189 5.39921181873331 C 4.00267914992276 5.39921181873331 3.66843160628368 5.06496427509423 3.66843160628368 4.6516371311451 C 3.66843160628368 4.23830998719597 4.00267914992276 3.90406244355689 4.41600629387189 3.90406244355689 L 13.103925935917 3.90406244355689 C 13.5172530798661 3.90406244355689 13.8515006235052 4.23830998719597 13.8515006235052 4.6516371311451 C 13.8515006235052 5.06496427509423 13.5172530798661 5.39921181873331 13.103925935917 5.39921181873331 Z"/>
+          </svg>
+          <span class="orders-label">我的订单</span>
+        </a>
+        <button class="cart-btn" aria-label="购物车" onclick="showToast('购物车')">
+          <img src="assets/v2/processed/金色购物车.png" alt="购物车"/>
         </button>
       </header>
-      <!-- 分类宫格 -->
-      <div class="category-tiles" id="categoryTiles"></div>
-      <!-- 二级分类 -->
-      <div class="sub-tabs" id="subTabs"></div>
 
-      <main class="main-container">
-        <nav class="category-sidebar" id="categorySidebar" aria-label="商品分类"></nav>
-        <section class="products-area">
-          <div class="products-grid" id="productsGrid"></div>
-        </section>
+      <!-- 分类宫格 -->
+      <section class="shop-tiles">
+        <div class="more-link" onclick="showToast('更多分类')">更多&gt;&gt;</div>
+        <div class="tiles-row" id="tilesRow"></div>
+      </section>
+
+      <!-- 商品列表 -->
+      <main class="shop-products">
+        <div class="products-grid" id="productsGrid"></div>
       </main>
     </div>
+    <div id="toast"></div>
 
     <script>
-      const categoryGroups = [
-        {
-          category: '装修类',
-          children: ['住宅公寓', '复式 Loft', '庭院别墅', '商务写字楼', '店铺空间', '展厅空间', '直播间', '主题房间']
-        },
-        {
-          category: '家具类',
-          children: ['沙发组合', '床与床头柜', '书桌椅', '收纳柜架', '吧台套件', '茶几边桌', '餐桌椅', '展示货架']
-        },
-        {
-          category: '文具',
-          children: ['书桌套件', '文件架', '笔记本', '展示牌', '办公小物', '便签贴纸', '画板支架', '资料盒']
-        },
-        {
-          category: '装饰类',
-          children: ['墙画海报', '地毯', '窗帘', '绿植', '桌面摆件', '墙面挂件', '屏风隔断', '背景装饰']
-        },
-        {
-          category: '饰品类',
-          children: ['挂饰', '收藏摆件', '空间徽章', '节日饰品', '角色周边', '钥匙扣', '纪念牌', '氛围小物']
-        },
-        {
-          category: '灯具类',
-          children: ['吊灯', '台灯', '壁灯', '落地灯', '氛围灯带', '招牌灯箱', '舞台射灯', '智能灯组']
-        },
-        {
-          category: '文案类',
-          children: ['店铺介绍', '房间说明', '活动文案', '个性签名', '空间公告', '商品标题', '欢迎语', '互动引导']
-        }
+      const tiles = [
+        { name: '装修类', icon: 'assets/v2/processed/商城-装修类.png' },
+        { name: '家具类', icon: 'assets/v2/processed/商城-家具类.png' },
+        { name: '文具类', icon: 'assets/v2/processed/商城-文具类.png' },
+        { name: '装饰类', icon: 'assets/v2/processed/商城-装饰类.png' },
+        { name: '饰品类', icon: 'assets/v2/processed/商城-饰品类.png' }
       ];
 
       const products = [
-        { id: 1, title: '云上会客厅全景房型模板', image: 'assets/products/space-living-room.jpg', category: '装修类', price: 12.8, sold: 2230 },
-        { id: 2, title: '咖啡角氛围装饰组合', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类', price: 16.8, sold: 10000 },
-        { id: 3, title: '街角店铺门头空间', image: 'assets/products/space-shopfront.jpg', category: '装修类', price: 39.9, sold: 860 },
-        { id: 4, title: '沉浸式休闲房装修方案', image: 'assets/products/space-renovation.jpg', category: '装修类', price: 29.9, sold: 1520 },
-        { id: 5, title: '小型吧台家具套件', image: 'assets/products/space-furniture.jpg', category: '家具类', price: 128, sold: 320 },
-        { id: 6, title: '开业活动空间文案包', image: 'assets/products/space-lighting.jpg', category: '文案类', price: 9.9, sold: 4210 },
-        { id: 7, title: '现代简约客厅家具组合', image: 'assets/products/space-furniture.jpg', category: '家具类', price: 268, sold: 145 },
-        { id: 8, title: '直播间灯光布置方案', image: 'assets/products/space-lighting.jpg', category: '灯具类', price: 59.9, sold: 780 },
-        { id: 9, title: '国风雅居书房套装', image: 'assets/products/space-renovation.jpg', category: '装修类', price: 88, sold: 260 },
-        { id: 10, title: '商务办公桌椅组合', image: 'assets/products/space-furniture.jpg', category: '家具类', price: 199, sold: 190 },
-        { id: 11, title: '墙面装饰画精选集', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类', price: 45.9, sold: 1320 },
-        { id: 12, title: '氛围灯带套装', image: 'assets/products/space-lighting.jpg', category: '灯具类', price: 19.9, sold: 5600 },
-        { id: 13, title: '复式Loft空间模板', image: 'assets/products/space-living-room.jpg', category: '装修类', price: 68, sold: 430 },
-        { id: 14, title: '展示货架组合', image: 'assets/products/space-furniture.jpg', category: '家具类', price: 158, sold: 275 },
-        { id: 15, title: '店铺介绍文案模板', image: 'assets/products/space-lighting.jpg', category: '文案类', price: 6.9, sold: 8800 },
-        { id: 16, title: '温馨软装搭配方案', image: 'assets/products/space-renovation.jpg', category: '装修类', price: 25.9, sold: 1010 },
-        { id: 17, title: '桌面摆件精选', image: 'assets/products/space-cafe-decor.jpg', category: '装饰类', price: 15.8, sold: 2340 },
-        { id: 18, title: '智能灯组控制系统', image: 'assets/products/space-lighting.jpg', category: '灯具类', price: 299, sold: 88 }
+        {
+          title: '全自动折叠雨伞防晒加厚',
+          image: 'assets/v2/processed/商城商品-雨伞.png',
+          price: '12.80',
+          sold: '已售2230'
+        },
+        {
+          title: '前100名减10元-8件套',
+          image: 'assets/v2/processed/商城商品-修甲套装.png',
+          price: '16.80',
+          sold: '已售10000+'
+        }
       ];
 
-      let currentCategory = '装修类';
-      let currentChild = '';
       let searchKeyword = '';
 
-      const categorySidebar = document.getElementById('categorySidebar');
+      const tilesRow = document.getElementById('tilesRow');
       const productsGrid = document.getElementById('productsGrid');
       const searchInput = document.getElementById('searchInput');
-      const categoryTiles = document.getElementById('categoryTiles');
-      const subTabs = document.getElementById('subTabs');
-
-      const TILE_STYLE = {
-        '装修类': { bg: 'transparent', img: 'assets/v2/processed/T恤-青色1.png' },
-        '家具类': { bg: 'transparent', img: 'assets/v2/processed/沙发-1.png' },
-        '文具': { bg: 'transparent', img: 'assets/v2/processed/铅笔橡皮-1.png' },
-        '装饰类': { bg: 'transparent', img: 'assets/v2/processed/蝴蝶结-1.png' },
-        '饰品类': { bg: 'transparent', img: 'assets/v2/processed/宝箱-1.png' },
-        '灯具类': { bg: '#fffbe6', icon: 'solar:lamp-bold', color: '#e0b500' },
-        '文案类': { bg: '#eafaf1', icon: 'solar:document-text-bold', color: '#2ecc71' }
-      };
 
       function showToast(message) {
-        const el = document.createElement('div');
-        el.textContent = message;
-        el.style.cssText =
-          'position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;font-size:13px;padding:8px 16px;border-radius:6px;z-index:999;';
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 1600);
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.display = 'block';
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => (toast.style.display = 'none'), 1600);
       }
 
       function renderTiles() {
-        categoryTiles.innerHTML = categoryGroups
-          .slice(0, 5)
-          .map(g => {
-            const s = TILE_STYLE[g.category] || TILE_STYLE['装修类'];
-            const inner = s.img
-              ? `<img src="${s.img}" alt="${g.category}" style="width:30px;height:30px;object-fit:contain" />`
-              : `<iconify-icon style="font-size:24px" icon="${s.icon}"></iconify-icon>`;
-            return `<button class="tile" onclick="selectCategory('${g.category}')">
-              <span class="tile-icon" style="background:${s.bg}; color:${s.color || 'inherit'}">
-                ${inner}
-              </span>
-              <span class="tile-label">${g.category}</span>
-            </button>`;
-          })
+        tilesRow.innerHTML = tiles
+          .map(
+            tile => `<button class="tile" onclick="showToast('${tile.name}')">
+              <img src="${tile.icon}" alt="${tile.name}"/>
+              <span class="tile-label">${tile.name}</span>
+            </button>`
+          )
           .join('');
       }
-
-      function renderSubTabs() {
-        const group = categoryGroups.find(g => g.category === currentCategory);
-        if (!group) {
-          subTabs.innerHTML = '';
-          return;
-        }
-        subTabs.innerHTML = group.children
-          .map((child, index) => {
-            const count = index === 0 ? 12 : 0;
-            return `<button class="sub-tab${currentChild === child ? ' active' : ''}" onclick="selectChild('${child}')">
-              ${child}${count ? `<span class="tab-badge">${count}</span>` : ''}
-            </button>`;
-          })
-          .join('');
-      }
-
-      function selectCategory(category) {
-        currentCategory = category;
-        currentChild = '';
-        renderCategoryTabs();
-        renderSubTabs();
-        renderProducts();
-      }
-
-      function selectChild(child) {
-        currentChild = child;
-        renderSubTabs();
-        renderProducts();
-      }
-
-      function renderCategoryTabs() {
-        categorySidebar.innerHTML =
-          `<button class="category-tab${currentCategory === '全部' ? ' active' : ''}" data-category="全部">全部</button>` +
-          categoryGroups
-            .map(
-              (group, index) =>
-                `<button class="category-tab${group.category === currentCategory ? ' active' : ''}" data-category="${group.category}">${group.category}</button>`
-            )
-            .join('');
-      }
-
-      categorySidebar.addEventListener('click', event => {
-        const tab = event.target.closest('.category-tab');
-        if (!tab) return;
-        currentCategory = tab.dataset.category;
-        currentChild = '';
-        renderCategoryTabs();
-        renderSubTabs();
-        renderProducts();
-      });
 
       function renderProducts() {
-        let filteredProducts = products.filter(
-          p => currentCategory === '全部' || p.category === currentCategory
-        );
+        const list = searchKeyword
+          ? products.filter(p => p.title.toLowerCase().includes(searchKeyword.toLowerCase()))
+          : products;
 
-        if (currentChild) {
-          const matched = filteredProducts.filter(p =>
-            p.title.includes(currentChild.replace(/\s/g, ''))
-          );
-          if (matched.length) filteredProducts = matched;
-        }
-
-        if (searchKeyword) {
-          filteredProducts = filteredProducts.filter(p =>
-            p.title.toLowerCase().includes(searchKeyword.toLowerCase())
-          );
-        }
-
-        if (filteredProducts.length === 0) {
+        if (!list.length) {
           productsGrid.innerHTML = '<div class="empty-state">暂无相关商品</div>';
           return;
         }
 
-        productsGrid.innerHTML = filteredProducts
+        productsGrid.innerHTML = list
           .map(
-            product => `
-            <article class="product-card" data-id="${product.id}">
+            product => `<article class="product-card" onclick="showToast('${product.title}')">
               <div class="product-image">
-                <img src="${product.image}" alt="${product.title}" loading="lazy" />
+                <img src="${product.image}" alt="${product.title}" loading="lazy"/>
               </div>
               <h3 class="product-title">${product.title}</h3>
               <div class="product-foot">
-                <span class="product-price">¥${product.price.toFixed(2)}</span>
-                <span class="product-sold">已售${product.sold}</span>
+                <span class="product-price">￥<span class="price-num">${product.price}</span></span>
+                <span class="product-sold">${product.sold}</span>
               </div>
-            </article>
-          `
+            </article>`
           )
           .join('');
       }
@@ -557,8 +309,6 @@
       });
 
       renderTiles();
-      renderCategoryTabs();
-      renderSubTabs();
       renderProducts();
     </script>
   </body>

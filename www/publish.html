@@ -153,23 +153,22 @@
         margin-left: 2px;
         vertical-align: 2px;
       }
-      .publish-view-hidden {
-        display: none !important;
-      }
       body.publish-discover-mode #feed-grid {
         padding-top: 16px;
       }
-      .publish-discover-only {
+      body.publish-my-mode .publish-top-nav,
+      body.publish-my-mode #subTabs,
+      body.publish-my-mode #feed-grid {
+        display: none !important;
+      }
+      .publish-my-only {
         display: none;
       }
-      body.publish-discover-mode .publish-discover-only {
+      body.publish-my-mode .publish-my-only {
         display: block;
       }
 
       /* ====== 视觉精修：柔和圆角与按压反馈（仅样式，不改布局/图片） ====== */
-      .publish-home-only div.absolute img {
-        border-radius: 9999px;
-      }
       .publish-nav-tab.active::after {
         border-radius: 2px;
       }
@@ -187,15 +186,6 @@
       }
       #feed-grid span.absolute {
         border-radius: 6px;
-      }
-      #compose-modal .border-b button:last-child {
-        border-radius: 6px;
-      }
-      #compose-modal textarea {
-        border-radius: 8px;
-      }
-      #compose-grid .aspect-square {
-        border-radius: 8px;
       }
       /* ====== 二级 Tab（全部 / 图文 / 视频） ====== */
       .publish-sub-tabs {
@@ -230,23 +220,243 @@
         height: 2px;
         background: var(--brand-strong);
       }
-      /* ====== 我的内容分类 ====== */
-      .my-tab {
-        font-size: 13px;
-        color: var(--ink-500);
-        white-space: nowrap;
+      /* ====== TV-我：个人作品页（按原型 u0_state27） ====== */
+      .my-view {
+        position: relative;
+        width: 100%;
+        height: 754px;
+      }
+      .my-cover {
+        position: relative;
+        height: 154px;
+      }
+      .my-cover-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .my-back {
+        position: absolute;
+        left: 23px;
+        top: 40px;
+        width: 11px;
+        height: 18px;
+        padding: 0;
         border: 0;
         background: transparent;
       }
-      .my-tab.active {
-        color: var(--brand-deep);
-        font-weight: 700;
+      .my-back svg {
+        display: block;
       }
-      /* ====== 我的作品：三列网格 ====== */
-      #feed-grid.publish-grid-3 {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 3px;
-        padding: 0 0 40px;
+      .my-avatar {
+        position: absolute;
+        left: 20px;
+        top: 112px;
+        width: 84px;
+        height: 84px;
+        z-index: 4;
+      }
+      .my-avatar-img {
+        display: block;
+        width: 84px;
+        height: 84px;
+        border-radius: 9999px;
+        object-fit: cover;
+        background: #f7f7f7;
+      }
+      .my-avatar-badge {
+        position: absolute;
+        right: 5px;
+        bottom: 3px;
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+      }
+      .my-stats {
+        position: absolute;
+        left: 175px;
+        top: 154px;
+        display: flex;
+        gap: 21px;
+      }
+      .my-stat {
+        width: 32px;
+        text-align: center;
+        font-size: 16px;
+        color: #2d2d2d;
+        line-height: 22px;
+      }
+      .my-info {
+        position: absolute;
+        left: 29px;
+        top: 197px;
+      }
+      .my-name-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .my-name {
+        margin-top: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #000;
+        line-height: 22px;
+      }
+      .my-name-row img {
+        width: 25px;
+        height: 25px;
+        object-fit: contain;
+        flex: none;
+      }
+      .my-id {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #555;
+        line-height: 17px;
+      }
+      .my-intro {
+        margin-top: 3px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        color: #555;
+        line-height: 17px;
+        cursor: pointer;
+      }
+      .my-intro svg {
+        display: block;
+        flex: none;
+      }
+      .my-tabs {
+        position: absolute;
+        left: 18px;
+        top: 285px;
+        height: 44px;
+        display: flex;
+        align-items: flex-start;
+      }
+      .my-tab {
+        width: 68px;
+        height: 33px;
+        margin-top: 5px;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        font-size: 14px;
+        color: #333;
+        white-space: nowrap;
+      }
+      .my-tab.selected {
+        border-bottom-color: #56c2ce;
+      }
+      .my-grid {
+        position: absolute;
+        left: 12px;
+        top: 342px;
+        display: flex;
+        gap: 6px;
+      }
+      .my-grid-item {
+        position: relative;
+        height: 167px;
+        flex: none;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #f5f5f5;
+        cursor: pointer;
+      }
+      .my-grid-item:nth-child(1) {
+        width: 117px;
+      }
+      .my-grid-item:nth-child(2) {
+        width: 113px;
+      }
+      .my-grid-item:nth-child(3) {
+        width: 107px;
+      }
+      .my-grid-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .my-play {
+        position: absolute;
+        left: 6px;
+        bottom: 3px;
+        display: block;
+      }
+      .my-count {
+        position: absolute;
+        left: 22px;
+        bottom: 1px;
+        color: #fff;
+        font-size: 12px;
+        line-height: 17px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+      }
+      .my-empty {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 477px;
+        text-align: center;
+        font-size: 14px;
+        color: #333;
+      }
+      /* 商城「建设中」弹窗 */
+      .mall-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 150;
+        display: none;
+      }
+      .mall-modal.open { display: block; }
+      .mall-mask { position: absolute; inset: 0; background: rgba(23, 49, 58, .55); }
+      /* 套壳内：底部 20px 交给外层导航遮罩，避免与突起雷达图标区域叠加变暗 */
+      body.is-embedded .mall-mask {
+        background: linear-gradient(
+          to bottom,
+          rgba(23, 49, 58, .55) calc(100% - 20px),
+          rgba(23, 49, 58, 0) calc(100% - 20px)
+        );
+      }
+      .mall-panel {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 15%;
+        width: 228px;
+        height: 109px;
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 0 3px rgba(171, 225, 232, 1);
+      }
+      .mall-icon {
+        position: absolute;
+        left: 59px;
+        top: 39px;
+        width: 34px;
+        height: 30px;
+        display: block;
+      }
+      .mall-text {
+        position: absolute;
+        left: 106px;
+        top: 42px;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 25px;
+        color: #6B7280;
+        white-space: nowrap;
       }
     </style>
     <style data-id="immersive-translate-input-injected-css"></style>
@@ -255,7 +465,12 @@
     <!-- 顶部导航栏 -->
     <div class="publish-top-nav">
       <nav aria-label="内容频道" class="publish-nav-tabs">
-        <a class="publish-nav-tab" href="category.html">商城</a>
+        <a
+          class="publish-nav-tab"
+          href="javascript:void(0)"
+          onclick="openMallBuilding(event)"
+          >商城</a
+        >
         <a
           class="publish-nav-tab"
           href="javascript:void(0)"
@@ -294,216 +509,134 @@
         视频
       </button>
     </div>
-    <!-- 顶部封面区 -->
-    <div
-      class="publish-home-only relative w-full h-[150px] cursor-pointer shrink-0"
-      onclick="showToast('更换封面')"
-    >
-      <img
-        alt="Cover Image"
-        class="w-full h-full object-cover"
-        src="assets/packaged/2af44e70b7aa4347955a7f5fc0885652.jpg"
-      />
-    </div>
-    <!-- 用户信息区 -->
-    <div class="publish-home-only relative px-5 pt-2 pb-3 shrink-0">
-      <!-- 头像叠加 -->
-      <div
-        class="absolute -top-8 left-5 cursor-pointer"
-        onclick="showToast('我的主页')"
-      >
-        <img
-          alt="User Avatar"
-          class="w-[64px] h-[64px] border-2 border-white object-cover bg-gray-100"
-          style="border-radius: 9999px"
-          src="assets/v2/processed/井上织姬头像.png"
-        />
-      </div>
-      <div class="mt-10">
-        <div class="flex items-center">
-          <span class="text-xl font-bold text-black">雅柔</span>
+    <!-- 我的作品页（TV-我） -->
+    <div class="publish-my-only" id="myView">
+      <div class="my-view">
+        <div class="my-cover">
           <img
-            alt="个人VIP"
-            class="user-vip-badge"
-            src="assets/v2/vip/cat-entertainment.png"
+            alt="封面"
+            class="my-cover-img"
+            src="assets/v2/processed/我的主页-封面.png"
+          />
+          <button
+            aria-label="返回"
+            class="my-back"
+            onclick="switchPublishView('follow')"
+          >
+            <svg fill="none" height="18" viewBox="0 0 11 18" width="11" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 10.26 1.9863 L 3.2589 8.9865 L 10.2591 15.9867 L 8.9865 17.2602 L 0.7137 8.9865 L 8.9865 0.7137 L 10.26 1.9863 Z" fill="#ffffff" fill-rule="nonzero"/>
+            </svg>
+          </button>
+        </div>
+        <div class="my-avatar">
+          <img
+            alt="雅柔"
+            class="my-avatar-img"
+            src="assets/v2/processed/井上织姬头像.png"
           />
           <img
-            alt="等级"
-            class="user-vip-badge"
-            src="assets/v2/icon/gear-badge.png"
+            alt="女"
+            class="my-avatar-badge"
+            src="assets/v2/processed/女性符号球-粉色.png"
           />
         </div>
-        <p class="text-[12px] text-gray-400 mt-1">id:202609060012</p>
-        <div
-          class="mt-2 flex items-center gap-2 text-[13px] text-gray-500 cursor-pointer"
-          onclick="showToast('编辑介绍')"
-        >
-          添加介绍，让大家都来了解一下你
-          <svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14">
-            <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
-          </svg>
+        <div class="my-stats">
+          <div class="my-stat"><div>100</div><div>粉丝</div></div>
+          <div class="my-stat"><div>20</div><div>关注</div></div>
+          <div class="my-stat"><div>60</div><div>获赞</div></div>
         </div>
-        <div class="flex gap-6 mt-4">
-          <div class="text-center">
-            <div class="text-[16px] font-bold text-[#26c6da]">100</div>
-            <div class="text-[12px] text-gray-400">粉丝</div>
+        <div class="my-info">
+          <div class="my-name-row">
+            <span class="my-name">雅柔</span>
+            <img alt="VIP" src="assets/v2/processed/VIP气泡-粉色.png" />
+            <img alt="空间" src="assets/v2/processed/小房子气泡-橙色.png" />
           </div>
-          <div class="text-center">
-            <div class="text-[16px] font-bold text-[#26c6da]">20</div>
-            <div class="text-[12px] text-gray-400">关注</div>
-          </div>
-          <div class="text-center">
-            <div class="text-[16px] font-bold text-[#26c6da]">60</div>
-            <div class="text-[12px] text-gray-400">获赞</div>
+          <div class="my-id">id:202609060012</div>
+          <div class="my-intro" onclick="showToast('编辑介绍')">
+            <span>添加介绍，让大家都来了解一下你</span>
+            <svg height="15" viewBox="0 0 15 15" width="15" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 11.3035714285714 1.63928571428571 L 13.3714285714286 3.6 L 6.55714285714286 10.4464285714286 L 4.48928571428571 8.48571428571428 L 11.3035714285714 1.63928571428571 Z M 3 11.9892857142857 L 3.975 8.95714285714286 L 6.05357142857143 10.9178571428571 L 3 11.9892857142857 Z M 14.4642857142857 2.49642857142857 L 13.9285714285714 3.09642857142857 L 11.7857142857143 1.13571428571429 L 12.4178571428571 0.503571428571428 C 12.918693641116 0.0260199920097831 13.706306358884 0.0260199920097846 14.2071428571429 0.503571428571428 L 14.4642857142857 0.75 C 14.7019923170125 0.978296217603958 14.8363547276368 1.29363335187227 14.8363547276368 1.62321428571429 C 14.8363547276368 1.9527952195563 14.7019923170125 2.26813235382461 14.4642857142857 2.49642857142857 Z M 14.9892857142857 13.0071428571429 C 14.9834285796629 14.1053322115936 14.0946179258793 14.9941428653772 12.9964285714286 15 L 2.00357142857143 15 C 0.897029483374731 15 0 14.1029705166253 0 12.9964285714286 L 0 2.00357142857143 C 0 0.897029483374731 0.897029483374731 0 2.00357142857143 0 L 9.25714285714286 0 C 9.39324159906545 0 9.50357142857143 0.110329829505983 9.50357142857143 0.246428571428572 L 9.50357142857143 0.749999999999999 C 9.50357142857143 0.421428571428573 9.50357142857143 1.07857142857143 9.50357142857143 0.750000000000001 C 9.50357142857143 0.886098741922589 9.39324159906545 0.996428571428572 9.25714285714286 0.996428571428572 L 2.49642857142857 0.996428571428572 C 1.66800144668238 0.996428571428572 0.996428571428572 1.66800144668238 0.996428571428572 2.49642857142857 L 0.996428571428572 12.4928571428571 C 0.996428571428572 13.3212842676033 1.66800144668238 13.9928571428571 2.49642857142857 13.9928571428571 L 12.4928571428571 13.9928571428571 C 13.3212842676033 13.9928571428571 13.9928571428571 13.3212842676033 13.9928571428571 12.4928571428571 L 13.9928571428571 5.75357142857143 C 13.9928571428571 5.61747268664884 14.1031869723631 5.50714285714286 14.2392857142857 5.50714285714286 L 14.7428571428571 5.50714285714286 C 14.8789558847797 5.50714285714286 14.9892857142857 5.61747268664884 14.9892857142857 5.75357142857143 L 14.9892857142857 13.0071428571429 Z" fill="#777777" fill-rule="nonzero"/>
+            </svg>
           </div>
         </div>
+        <div class="my-tabs">
+          <button class="my-tab" onclick="setMyViewTab(this, 0)">作品（3）</button>
+          <button class="my-tab" onclick="setMyViewTab(this, 1)">草稿（0）</button>
+          <button class="my-tab" onclick="setMyViewTab(this, 2)">私密（0）</button>
+          <button class="my-tab" onclick="setMyViewTab(this, 3)">收藏（0）</button>
+          <button class="my-tab" onclick="setMyViewTab(this, 4)">点赞（0）</button>
+        </div>
+        <div class="my-grid" id="myGrid">
+          <div
+            class="my-grid-item"
+            onclick="window.location.href = 'publish_post_detail.html?index=0'"
+          >
+            <img
+              alt="作品"
+              class="my-grid-img"
+              src="assets/v2/processed/我的作品-泳池.png"
+            />
+            <svg class="my-play" height="12" viewBox="0 0 12 12" width="12" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 6 11.25 C 8.89949493661167 11.25 11.25 8.89949493661167 11.25 6 C 11.25 3.10050506338833 8.89949493661167 0.75 6 0.75 C 3.10050506338833 0.75 0.75 3.10050506338833 0.75 6 C 0.75 8.89949493661167 3.10050506338833 11.25 6 11.25 Z M 6 12 C 2.68629150101524 12 0 9.31370849898476 0 6 C 0 2.68629150101524 2.68629150101524 0 6 0 C 9.31370849898476 0 12 2.68629150101524 12 6 C 12 9.31370849898476 9.31370849898476 12 6 12 Z" fill="#ffffff" fill-rule="nonzero"/>
+              <path d="M 2.99435483870968 1.98611111111111 L 0.806451612903226 0.808333333333333 L 0.806451612903226 3.16388888888889 L 2.99435483870968 1.98611111111111 Z M 3.64032258064516 2.45694444444444 L 0.987096774193549 3.88541666666667 C 0.884560086785695 3.94060151358721 0.766077462752397 3.96986246436651 0.645161210461262 3.96986246436651 C 0.288973824042204 3.96986246436651 0.000177226070700125 3.72130021144944 0 3.41458333333333 L 0 0.557638888888889 C 0.000177226070700125 0.250922010772779 0.288973824042204 0.0023597578557073 0.645161210461262 0.0023597578557073 C 0.766077462752397 0.0023597578557073 0.884560086785695 0.0316207086350088 0.987096774193548 0.0868055555555556 L 3.64032258064516 1.51527777777778 C 3.82866220385105 1.61685312809122 3.94303522985464 1.79474669552991 3.94303522985464 1.98611111111111 C 3.94303522985464 2.17747552669232 3.82866220385105 2.35536909413101 3.64032258064516 2.45694444444444 Z" fill="#ffffff" fill-rule="nonzero" transform="translate(4 4)"/>
+            </svg>
+            <span class="my-count">620</span>
+          </div>
+          <div
+            class="my-grid-item"
+            onclick="window.location.href = 'publish_post_detail.html?index=1'"
+          >
+            <img
+              alt="作品"
+              class="my-grid-img"
+              src="assets/v2/processed/我的作品-教室.png"
+            />
+            <svg class="my-play" height="12" viewBox="0 0 12 12" width="12" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 6 11.25 C 8.89949493661167 11.25 11.25 8.89949493661167 11.25 6 C 11.25 3.10050506338833 8.89949493661167 0.75 6 0.75 C 3.10050506338833 0.75 0.75 3.10050506338833 0.75 6 C 0.75 8.89949493661167 3.10050506338833 11.25 6 11.25 Z M 6 12 C 2.68629150101524 12 0 9.31370849898476 0 6 C 0 2.68629150101524 2.68629150101524 0 6 0 C 9.31370849898476 0 12 2.68629150101524 12 6 C 12 9.31370849898476 9.31370849898476 12 6 12 Z" fill="#ffffff" fill-rule="nonzero"/>
+              <path d="M 2.99435483870968 1.98611111111111 L 0.806451612903226 0.808333333333333 L 0.806451612903226 3.16388888888889 L 2.99435483870968 1.98611111111111 Z M 3.64032258064516 2.45694444444444 L 0.987096774193549 3.88541666666667 C 0.884560086785695 3.94060151358721 0.766077462752397 3.96986246436651 0.645161210461262 3.96986246436651 C 0.288973824042204 3.96986246436651 0.000177226070700125 3.72130021144944 0 3.41458333333333 L 0 0.557638888888889 C 0.000177226070700125 0.250922010772779 0.288973824042204 0.0023597578557073 0.645161210461262 0.0023597578557073 C 0.766077462752397 0.0023597578557073 0.884560086785695 0.0316207086350088 0.987096774193548 0.0868055555555556 L 3.64032258064516 1.51527777777778 C 3.82866220385105 1.61685312809122 3.94303522985464 1.79474669552991 3.94303522985464 1.98611111111111 C 3.94303522985464 2.17747552669232 3.82866220385105 2.35536909413101 3.64032258064516 2.45694444444444 Z" fill="#ffffff" fill-rule="nonzero" transform="translate(4 4)"/>
+            </svg>
+            <span class="my-count">360</span>
+          </div>
+          <div
+            class="my-grid-item"
+            onclick="window.location.href = 'publish_post_detail.html?index=2'"
+          >
+            <img
+              alt="作品"
+              class="my-grid-img"
+              src="assets/v2/processed/我的作品-窗前.png"
+            />
+            <svg class="my-play" height="12" viewBox="0 0 12 12" width="12" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 6 11.25 C 8.89949493661167 11.25 11.25 8.89949493661167 11.25 6 C 11.25 3.10050506338833 8.89949493661167 0.75 6 0.75 C 3.10050506338833 0.75 0.75 3.10050506338833 0.75 6 C 0.75 8.89949493661167 3.10050506338833 11.25 6 11.25 Z M 6 12 C 2.68629150101524 12 0 9.31370849898476 0 6 C 0 2.68629150101524 2.68629150101524 0 6 0 C 9.31370849898476 0 12 2.68629150101524 12 6 C 12 9.31370849898476 9.31370849898476 12 6 12 Z" fill="#ffffff" fill-rule="nonzero"/>
+              <path d="M 2.99435483870968 1.98611111111111 L 0.806451612903226 0.808333333333333 L 0.806451612903226 3.16388888888889 L 2.99435483870968 1.98611111111111 Z M 3.64032258064516 2.45694444444444 L 0.987096774193549 3.88541666666667 C 0.884560086785695 3.94060151358721 0.766077462752397 3.96986246436651 0.645161210461262 3.96986246436651 C 0.288973824042204 3.96986246436651 0.000177226070700125 3.72130021144944 0 3.41458333333333 L 0 0.557638888888889 C 0.000177226070700125 0.250922010772779 0.288973824042204 0.0023597578557073 0.645161210461262 0.0023597578557073 C 0.766077462752397 0.0023597578557073 0.884560086785695 0.0316207086350088 0.987096774193548 0.0868055555555556 L 3.64032258064516 1.51527777777778 C 3.82866220385105 1.61685312809122 3.94303522985464 1.79474669552991 3.94303522985464 1.98611111111111 C 3.94303522985464 2.17747552669232 3.82866220385105 2.35536909413101 3.64032258064516 2.45694444444444 Z" fill="#ffffff" fill-rule="nonzero" transform="translate(4 4)"/>
+            </svg>
+            <span class="my-count">550</span>
+          </div>
+        </div>
+        <div class="my-empty" id="myEmpty" style="display: none">~暂无内容~</div>
       </div>
-    </div>
-    <div class="publish-home-only h-1 bg-gray-50 w-full shrink-0"></div>
-    <!-- 我的内容分类 -->
-    <div
-      class="publish-home-only px-5 py-3 flex items-center gap-5 overflow-x-auto no-scrollbar shrink-0 border-b border-gray-100"
-    >
-      <button class="my-tab active" onclick="setMyTab(this)">作品（3）</button>
-      <button class="my-tab" onclick="setMyTab(this)">草稿（0）</button>
-      <button class="my-tab" onclick="setMyTab(this)">私密（0）</button>
-      <button class="my-tab" onclick="setMyTab(this)">收藏（0）</button>
-      <button class="my-tab" onclick="setMyTab(this)">点赞（0）</button>
     </div>
     <!-- 两列瀑布流网格 -->
     <div
       class="grid grid-cols-2 gap-x-[10px] gap-y-4 px-5 pb-10"
       id="feed-grid"
     ></div>
-    <!-- 发布入口 -->
-    <button
-      aria-label="发布"
-      class="fixed right-4 z-[100] flex items-center justify-center bg-[#26c6da] text-white"
-      style="bottom: calc(var(--safe-area-inset-bottom, 0px) + 84px); width: 48px; height: 48px; border-radius: 9999px; box-shadow: 0 6px 18px rgba(38, 198, 218, .45); border: 0;"
-      onclick="openPublishSheet()"
-    >
-      <svg
-        fill="none"
-        height="24"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-width="2.4"
-        viewbox="0 0 24 24"
-        width="24"
-      >
-        <path d="M12 5v14M5 12h14"></path>
-      </svg>
-    </button>
-    <!-- 发布选项弹窗 -->
-    <div
-      class="fixed inset-0 bg-black/50 z-[110] opacity-0 transition-opacity duration-300 hidden"
-      id="publish-overlay"
-      onclick="closePublishSheet()"
-    ></div>
-    <div
-      class="fixed bottom-0 left-0 w-full bg-white z-[120] transform transition-transform duration-300 translate-y-full"
-      id="publish-sheet"
-      style="padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
-    >
-      <div class="flex flex-col">
-        <button
-          class="w-full py-4 text-base font-bold text-black active:bg-gray-50"
-          onclick="selectPublishOption('album')"
-        >
-          从相册选择
-        </button>
-        <button
-          class="w-full py-3 border-t border-gray-100 active:bg-gray-50"
-          onclick="selectPublishOption('camera')"
-        >
-          <span class="block text-base font-bold text-black">相机</span>
-          <span class="block text-xs text-gray-400 mt-0.5">拍摄与直播</span>
-        </button>
-        <button
-          class="w-full py-4 text-base font-bold text-black border-t border-gray-100 active:bg-gray-50"
-          onclick="selectPublishOption('text')"
-        >
-          写文字
-        </button>
-        <button
-          class="w-full py-4 text-base font-bold text-black border-t border-gray-100 active:bg-gray-50"
-          onclick="window.location.href = 'ai_voice.html'"
-        >
-          AI 语音助手
-        </button>
-      </div>
-      <div class="h-1.5 bg-gray-100"></div>
-      <button
-        class="w-full py-3 text-sm text-gray-500 active:bg-gray-50"
-        onclick="closePublishSheet()"
-      >
-        取消
-      </button>
-    </div>
-    <!-- 相册选择输入（隐藏） -->
-    <input
-      accept="image/*"
-      class="hidden"
-      id="album-input"
-      multiple=""
-      type="file"
-    />
-    <!-- 发布编辑弹窗 -->
-    <div
-      class="fixed inset-0 bg-black/50 z-[130] opacity-0 transition-opacity duration-300 hidden"
-      id="compose-overlay"
-      onclick="closeCompose()"
-    ></div>
-    <div
-      class="fixed bottom-0 left-0 w-full bg-white z-[140] transform transition-transform duration-300 translate-y-full flex flex-col"
-      id="compose-modal"
-      style="max-height: 92dvh; padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
-    >
-      <!-- 顶部栏 -->
-      <div
-        class="h-12 shrink-0 flex items-center justify-between px-4 border-b border-gray-100"
-      >
-        <button
-          class="text-sm text-gray-500 active:text-gray-800"
-          onclick="closeCompose()"
-        >
-          取消
-        </button>
-        <span class="text-base font-bold text-black">发布动态</span>
-        <button
-          class="text-sm font-bold text-white bg-[#26c6da] px-4 py-1.5 active:opacity-80"
-          onclick="publishCompose()"
-        >
-          发布
-        </button>
-      </div>
-      <!-- 滚动内容 -->
-      <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar">
-        <!-- 图片九宫格 -->
-        <div
-          class="grid grid-cols-3 gap-2 p-4"
-          id="compose-grid"
-        ></div>
-        <!-- 文字输入 -->
-        <div class="px-4 pb-4">
-          <textarea
-            class="w-full h-28 bg-gray-50 p-3 text-sm outline-none resize-none"
-            id="compose-text"
-            maxlength="500"
-            placeholder="说点什么..."
-          ></textarea>
-          <div class="text-right text-xs text-gray-400 mt-1">
-            <span id="compose-count">0</span>/500
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Toast -->
     <div
       class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-4 py-2 rounded-full opacity-0 pointer-events-none transition-opacity duration-300 z-[200]"
       id="toast"
     ></div>
+    <!-- 商城「建设中」弹窗 -->
+    <div class="mall-modal" id="mallBuildingModal">
+      <div class="mall-mask" onclick="closeMallBuilding()"></div>
+      <div class="mall-panel">
+        <img alt="建设中" class="mall-icon" src="assets/v2/icon/建设中-工人.svg"/>
+        <div class="mall-text">建设中...</div>
+      </div>
+    </div>
     <script>
+      if (window.self !== window.top) document.body.classList.add('is-embedded')
+
       // ===== 帖子数据（index 对应 publish_post_detail.html 的 feedData） =====
       const POSTS = [
         { index: 0, title: '中医：真正能让气血恢复的方式只有两种', img: 'assets/src_01/分享样例/966C4524685A0374B01D5616402D6C9A.jpg' },
@@ -524,7 +657,6 @@
 
       // 各频道展示的帖子集合与顺序（index 不重复出现即内容不同）
       const VIEW_FEEDS = {
-        home: [0, 1, 2, 3, 4, 5, 6], // 我的作品
         follow: [7, 0, 10, 5, 13, 6], // 关注的人近期发布
         discover: [10, 2, 12, 7, 1, 13, 4, 9, 0, 11, 5, 8, 6, 3], // 全部推荐
         nearby: [6, 10, 11, 8, 4, 9, 2], // 同城热帖
@@ -548,16 +680,13 @@
       const VIEW_AUTHOR_ORDER = {
         follow: [0, 1, 2, 3],
         discover: [4, 1, 5, 6],
-        nearby: [4, 1, 5, 6],
-        home: []
+        nearby: [4, 1, 5, 6]
       }
 
       function renderFeed(view) {
         const feedGrid = document.getElementById('feed-grid')
         const ids = VIEW_FEEDS[view] || VIEW_FEEDS.follow
-        const isHome = view === 'home'
         const order = VIEW_AUTHOR_ORDER[view] || VIEW_AUTHOR_ORDER.follow
-        feedGrid.classList.toggle('publish-grid-3', isHome)
         feedGrid.innerHTML = ids
           .map((i, n) => {
             const p = POSTS[i]
@@ -567,17 +696,16 @@
             const overlay = isVideo
               ? '<span class="absolute right-1.5 bottom-1.5 px-1 bg-black/45 text-white text-[10px]">▶ 0:23</span>'
               : ''
-            const footer = isHome
-              ? ''
-              : '<div class="flex items-center justify-between mt-1.5">' +
-                '<span class="flex items-center gap-1.5 min-w-0">' +
-                '<img class="w-5 h-5 object-cover flex-none" style="border-radius:9999px" src="' + a.avatar + '" alt="" />' +
-                '<span class="text-[12px] text-gray-700 truncate">' + a.name + '</span>' +
-                '</span>' +
-                '<span class="flex items-center gap-1 text-[12px] text-gray-500 flex-none">' +
-                HEART_SVG + likes +
-                '</span>' +
-                '</div>'
+            const footer =
+              '<div class="flex items-center justify-between mt-1.5">' +
+              '<span class="flex items-center gap-1.5 min-w-0">' +
+              '<img class="w-5 h-5 object-cover flex-none" style="border-radius:9999px" src="' + a.avatar + '" alt="" />' +
+              '<span class="text-[12px] text-gray-700 truncate">' + a.name + '</span>' +
+              '</span>' +
+              '<span class="flex items-center gap-1 text-[12px] text-gray-500 flex-none">' +
+              HEART_SVG + likes +
+              '</span>' +
+              '</div>'
             return `<div class="cursor-pointer group" onclick="window.location.href='publish_post_detail.html?index=${p.index}'">
           <div class="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
             <img
@@ -601,26 +729,16 @@
         showToast('筛选：' + el.textContent.trim())
       }
 
-      function setMyTab(el) {
-        document
-          .querySelectorAll('.my-tab')
-          .forEach(t => t.classList.remove('active'))
-        el.classList.add('active')
-      }
+      const PUBLISH_VIEW_TAB = { home: 1, follow: 2, discover: 3, nearby: 4 }
 
       function switchPublishView(view, event) {
         if (event) event.preventDefault()
-        // "发现"/"我"为内部视图切换：已处于发现模式时点击"发现"返回主页视图
-        const isDiscover = view === 'discover' || view === 'follow' || view === 'nearby'
+        // 「我」为个人作品页，其余为内容发现模式
+        const isMy = view === 'home'
+        const isDiscover = !isMy
 
         document.body.classList.toggle('publish-discover-mode', isDiscover)
-        document.querySelectorAll('.publish-home-only').forEach(section => {
-          section.classList.toggle('publish-view-hidden', isDiscover)
-        })
-        const subTabs = document.getElementById('subTabs')
-        if (subTabs) {
-          subTabs.classList.toggle('publish-view-hidden', view === 'home')
-        }
+        document.body.classList.toggle('publish-my-mode', isMy)
 
         // 先移除所有导航标签的active状态
         document.querySelectorAll('.publish-nav-tab').forEach(tab => {
@@ -628,21 +746,81 @@
         })
 
         // 如果有event.target，只在当前点击的按钮上添加active状态
+        let activated = false
         if (event && event.target) {
           const clickedTab = event.target.closest('.publish-nav-tab')
           if (clickedTab) {
             clickedTab.classList.add('active')
+            activated = true
           }
+        }
+        if (!activated) {
+          const tabs = document.querySelectorAll('.publish-nav-tab')
+          const idx = PUBLISH_VIEW_TAB[view]
+          if (tabs[idx]) tabs[idx].classList.add('active')
         }
 
         // 不同频道渲染各自的内容与顺序
-        renderFeed(view)
+        if (!isMy) renderFeed(view)
+
+        history.replaceState(
+          null,
+          '',
+          isMy ? '#me' : location.pathname + location.search
+        )
 
         window.scrollTo(0, 0)
       }
 
-      // 初始渲染「关注」频道（与目标稿一致）
-      switchPublishView('follow')
+      // 初始渲染「关注」频道（与目标稿一致）；支持 #me 直达个人作品页
+      switchPublishView(location.hash === '#me' ? 'home' : 'follow')
+
+      // ===== 商城「建设中」弹窗（TV 商城暂不开放，2 秒后自动关闭） =====
+      let mallPrevTab = null
+      let mallAutoTimer = null
+
+      function openMallBuilding(event) {
+        if (event) event.preventDefault()
+        mallPrevTab = document.querySelector('.publish-nav-tab.active')
+        document.querySelectorAll('.publish-nav-tab').forEach(tab => {
+          tab.classList.remove('active')
+        })
+        if (event && event.target) {
+          const clickedTab = event.target.closest('.publish-nav-tab')
+          if (clickedTab) clickedTab.classList.add('active')
+        }
+        document.getElementById('mallBuildingModal').classList.add('open')
+        document.body.classList.add('modal-open')
+        if (window.self !== window.top) {
+          window.parent.postMessage({ type: 'dimBottomNav', on: true }, '*')
+        }
+        clearTimeout(mallAutoTimer)
+        mallAutoTimer = setTimeout(closeMallBuilding, 2000)
+      }
+
+      function closeMallBuilding() {
+        clearTimeout(mallAutoTimer)
+        document.getElementById('mallBuildingModal').classList.remove('open')
+        document
+          .querySelectorAll('.publish-nav-tab')
+          .forEach(tab => tab.classList.remove('active'))
+        if (mallPrevTab) mallPrevTab.classList.add('active')
+        document.body.classList.remove('modal-open')
+        if (window.self !== window.top) {
+          window.parent.postMessage({ type: 'dimBottomNav', on: false }, '*')
+        }
+      }
+
+      function setMyViewTab(el, index) {
+        document
+          .querySelectorAll('.my-tab')
+          .forEach(t => t.classList.remove('selected'))
+        el.classList.add('selected')
+        const grid = document.getElementById('myGrid')
+        const empty = document.getElementById('myEmpty')
+        if (grid) grid.style.display = index === 0 ? 'flex' : 'none'
+        if (empty) empty.style.display = index === 0 ? 'none' : 'block'
+      }
 
       function showToast(msg) {
         const toast = document.getElementById('toast')
@@ -652,133 +830,6 @@
           toast.classList.remove('opacity-100')
         }, 2000)
       }
-
-      // 发布选项弹窗
-      function openPublishSheet() {
-        document.getElementById('publish-overlay').classList.remove('hidden')
-        setTimeout(() => {
-          document
-            .getElementById('publish-overlay')
-            .classList.add('opacity-100')
-          document
-            .getElementById('publish-sheet')
-            .classList.remove('translate-y-full')
-        }, 10)
-        document.body.classList.add('modal-open')
-      }
-
-      function closePublishSheet() {
-        document
-          .getElementById('publish-overlay')
-          .classList.remove('opacity-100')
-        document
-          .getElementById('publish-sheet')
-          .classList.add('translate-y-full')
-        setTimeout(() => {
-          document.getElementById('publish-overlay').classList.add('hidden')
-        }, 300)
-        document.body.classList.remove('modal-open')
-      }
-
-      function selectPublishOption(type) {
-        closePublishSheet()
-        if (type === 'album') {
-          document.getElementById('album-input').click()
-          return
-        }
-        const toastMap = {
-          camera: '相机拍摄功能将在正式版开放',
-          text: '写文字功能将在正式版开放',
-        }
-        showToast(toastMap[type])
-      }
-
-      // ===== 相册选择与发布编辑 =====
-      const MAX_IMAGES = 9
-      let selectedImages = [] // { file, url }
-
-      const albumInput = document.getElementById('album-input')
-      albumInput.addEventListener('change', () => {
-        const files = Array.from(albumInput.files || []).filter(f =>
-          f.type.startsWith('image/')
-        )
-        if (files.length === 0) return
-        const remaining = MAX_IMAGES - selectedImages.length
-        if (files.length > remaining) {
-          showToast(`最多选择 ${MAX_IMAGES} 张图片`)
-          files.length = remaining
-        }
-        files.forEach(file => {
-          selectedImages.push({ file, url: URL.createObjectURL(file) })
-        })
-        albumInput.value = ''
-        renderComposeGrid()
-        openCompose()
-      })
-
-      function openCompose() {
-        document.getElementById('compose-overlay').classList.remove('hidden')
-        setTimeout(() => {
-          document.getElementById('compose-overlay').classList.add('opacity-100')
-          document.getElementById('compose-modal').classList.remove('translate-y-full')
-        }, 10)
-        document.body.classList.add('modal-open')
-      }
-
-      function closeCompose() {
-        document.getElementById('compose-overlay').classList.remove('opacity-100')
-        document.getElementById('compose-modal').classList.add('translate-y-full')
-        setTimeout(() => {
-          document.getElementById('compose-overlay').classList.add('hidden')
-        }, 300)
-        document.body.classList.remove('modal-open')
-      }
-
-      function renderComposeGrid() {
-        const grid = document.getElementById('compose-grid')
-        grid.innerHTML = selectedImages
-          .map(
-            (img, i) => `
-          <div class="relative aspect-square bg-gray-100 overflow-hidden">
-            <img alt="已选图片" class="w-full h-full object-cover" src="${img.url}" />
-            <button class="absolute top-1 right-1 w-5 h-5 bg-black/60 text-white text-xs flex items-center justify-center active:bg-black/80" onclick="removeSelectedImage(${i})">✕</button>
-          </div>`
-          )
-          .join('')
-        if (selectedImages.length < MAX_IMAGES) {
-          grid.insertAdjacentHTML(
-            'beforeend',
-            `<div class="aspect-square border border-dashed border-gray-300 flex items-center justify-center text-2xl text-gray-400 cursor-pointer active:bg-gray-50" onclick="document.getElementById('album-input').click()">+</div>`
-          )
-        }
-      }
-
-      function removeSelectedImage(index) {
-        URL.revokeObjectURL(selectedImages[index].url)
-        selectedImages.splice(index, 1)
-        renderComposeGrid()
-      }
-
-      function publishCompose() {
-        const text = document.getElementById('compose-text').value.trim()
-        if (selectedImages.length === 0 && !text) {
-          showToast('请添加图片或文字')
-          return
-        }
-        selectedImages.forEach(img => URL.revokeObjectURL(img.url))
-        selectedImages = []
-        document.getElementById('compose-text').value = ''
-        document.getElementById('compose-count').innerText = '0'
-        closeCompose()
-        showToast('发布成功')
-      }
-
-      document
-        .getElementById('compose-text')
-        .addEventListener('input', e => {
-          document.getElementById('compose-count').innerText =
-            e.target.value.length
-        })
     </script>
   </body>
 </html>

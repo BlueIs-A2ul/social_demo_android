@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>他人房间 - 智慧空间</title>
+<script src="assets/vendor/tailwindcss.js"></script>
+<script src="assets/vendor/iconify-icon.min.js"></script>
+<link href="assets/vendor/theme.css" rel="stylesheet"/>
+<script src="assets/vendor/safe-area.js"></script>
+<script>
+    (function () {
+        try {
+            if (window.parent !== window) {
+                window.parent.postMessage({ type: 'setBottomNav', visible: false }, '*')
+            }
+        } catch (e) {}
+    })();
+</script>
+<style>
+        body {
+            margin: 0;
+            background: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--ink-900);
+        }
+        ::-webkit-scrollbar { display: none; }
+
+        .soft-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ====== 顶栏 ====== */
+        .back-btn {
+            flex-shrink: 0;
+            width: 26px;
+            height: 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            background: transparent;
+            color: var(--ink-700);
+            cursor: pointer;
+        }
+        .owner-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 9999px;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, .85);
+        }
+        .owner-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ink-900);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .owner-badge {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .owner-rooms {
+            font-size: 12px;
+            color: var(--ink-900);
+        }
+        .btn-add-friend {
+            flex-shrink: 0;
+            height: 24px;
+            padding: 0 10px;
+            border: 0;
+            border-radius: 6px;
+            background: #f4813f;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-add-friend:active { filter: brightness(.96); }
+        .icon-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            background: #ff4d4f;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 2px #fff;
+        }
+
+        /* ====== 搜索条 ====== */
+        .search-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            border-radius: 15px;
+            padding: 0 12px;
+            height: 32px;
+            min-width: 0;
+            box-shadow: 0 0 5px rgba(215, 215, 215, .9);
+            transition: box-shadow .15s ease;
+        }
+        .search-wrap:focus-within {
+            box-shadow: 0 0 0 2px var(--brand-line);
+        }
+        .search-wrap input {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: 0;
+            outline: none;
+            font-size: 14px;
+            color: var(--ink-900);
+        }
+        .search-wrap input::placeholder { color: var(--ink-500); }
+
+        /* ====== 房间网格 ====== */
+        .room-item {
+            transition: background-color .15s ease;
+        }
+        .room-item:active {
+            background: rgba(230, 249, 252, .55);
+        }
+        .room-name {
+            font-size: 14px;
+            color: #393939;
+            font-weight: 400;
+        }
+
+        /* ====== 添加好友弹窗 ====== */
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(31, 23, 34, .42);
+            z-index: 50;
+        }
+        .btn-send {
+            width: 77px;
+            height: 30px;
+            border: 0;
+            border-radius: 6px;
+            background: #a5e0ea;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(179, 179, 179, .7);
+            cursor: pointer;
+        }
+        .btn-send:active { filter: brightness(.97); }
+
+        /* ====== Toast ====== */
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background: rgba(31, 23, 34, .78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #fff;
+            text-align: center;
+            padding: 12px 20px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 0 12px 32px rgba(31, 23, 34, .18);
+        }
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        @keyframes fadein {
+            from { opacity: 0; transform: translate(-50%, -45%); }
+            to   { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        @keyframes fadeout {
+            from { opacity: 1; transform: translate(-50%, -50%); }
+            to   { opacity: 0; transform: translate(-50%, -45%); }
+        }
+    </style>
+</head>
+<body>
+<div
+    class="w-full min-h-[100dvh] flex flex-col"
+    style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
+>
+    <!-- 顶部房主信息条 -->
+    <div class="flex-none topbar flex items-center" style="padding: 12px 14px 14px; gap: 10px">
+        <button class="back-btn" aria-label="返回" onclick="history.back()">
+            <iconify-icon style="font-size: 22px" icon="solar:alt-arrow-left-linear"></iconify-icon>
+        </button>
+        <img class="owner-avatar" id="ownerAvatar" alt="房主头像" src="assets/v2/processed/精灵公主头像.png"/>
+        <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-1.5 min-w-0">
+                <span class="owner-name" id="ownerName">小鹿的房间</span>
+                <img alt="个人VIP" class="owner-badge" src="assets/v2/vip/cat-entertainment.png"/>
+                <img alt="空间" class="owner-badge" src="assets/v2/processed/小房子气泡-橙色.png"/>
+                <img alt="个人名片" class="owner-badge" src="assets/v2/card/idcard.png"/>
+                <img alt="TV" class="owner-badge" src="assets/v2/processed/金色相机-水晶球.png"/>
+            </div>
+            <div class="flex items-center gap-2" style="margin-top: 4px">
+                <span class="owner-rooms">5个空间</span>
+                <button class="btn-add-friend" onclick="showAddFriendModal()">加好友</button>
+            </div>
+        </div>
+        <div class="relative flex-shrink-0 cursor-pointer" onclick="window.location.href='message_center.html?from=owner_room'">
+            <img class="w-8 h-8 object-contain" src="assets/v2/icon/wechat.png" alt="微信"/>
+            <div class="icon-badge">1</div>
+        </div>
+    </div>
+
+    <!-- 房间卡片 -->
+    <div class="flex-none soft-card mx-5 mt-2 overflow-hidden">
+        <div class="px-4 py-3">
+            <div class="search-wrap">
+                <input id="roomSearchInput" type="search" placeholder="输入房间名称" oninput="filterRooms(this.value)"/>
+                <iconify-icon style="color: #c9c9c9; font-size: 16px; flex-shrink: 0;" icon="solar:magnifer-linear"></iconify-icon>
+            </div>
+        </div>
+        <div class="grid grid-cols-4 content-start">
+            <div class="room-item p-2 flex flex-col items-center cursor-pointer" onclick="showToast('建设中')">
+                <div class="w-full aspect-square mb-2 overflow-hidden bg-white" style="border-radius: 10px">
+                    <img class="w-full h-full object-cover" src="assets/v2/processed/玛丽莲梦露头像.png" alt="我的房间"/>
+                </div>
+                <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">我的房间</span>
+            </div>
+            <div class="room-item p-2 flex flex-col items-center cursor-pointer" onclick="showToast('建设中')">
+                <div class="w-full aspect-square mb-2 overflow-hidden bg-white" style="border-radius: 10px">
+                    <img class="w-full h-full object-cover" src="assets/v2/processed/娜美通缉令.png" alt="娜美的房间"/>
+                </div>
+                <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">娜美的房间</span>
+            </div>
+            <div class="room-item p-2 flex flex-col items-center cursor-pointer" onclick="showToast('建设中')">
+                <div class="w-full aspect-square mb-2 overflow-hidden bg-white" style="border-radius: 10px">
+                    <img class="w-full h-full object-cover" src="assets/v2/processed/电影摄影机-银色.png" alt="直播间"/>
+                </div>
+                <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">直播间</span>
+            </div>
+            <div class="room-item p-2 flex flex-col items-center cursor-pointer" onclick="showToast('建设中')">
+                <div class="w-full aspect-square mb-2 overflow-hidden bg-white" style="border-radius: 10px">
+                    <img class="w-full h-full object-cover" src="assets/v2/processed/麦克风耳机-金色.png" alt="我的播客"/>
+                </div>
+                <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">我的播客</span>
+            </div>
+            <div class="room-item p-2 flex flex-col items-center cursor-pointer" onclick="location.href='info_board.html'">
+                <div class="w-full aspect-square mb-2 overflow-hidden bg-white" style="border-radius: 10px">
+                    <img class="w-full h-full object-cover" src="assets/v2/icon/info-board.png" alt="信息栏"/>
+                </div>
+                <span class="room-name whitespace-nowrap overflow-hidden text-ellipsis w-full text-center">信息栏</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加好友弹窗 -->
+    <div id="addFriendModal" class="fixed inset-0 z-[70] hidden">
+        <div class="modal-mask" style="background: rgba(129, 148, 148, .42)" onclick="hideAddFriendModal()"></div>
+        <div
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white"
+            style="width: 71%; max-width: 300px; border-radius: 6px; overflow: hidden; z-index: 71; box-shadow: 0 0 6px rgba(171, 225, 232, .9);"
+        >
+            <div class="relative flex items-center justify-center" style="height: 44px">
+                <span style="font-size: 15px; color: #555555">添加好友</span>
+                <button
+                    aria-label="关闭"
+                    class="absolute flex items-center justify-center"
+                    style="right: 10px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border: 0; background: transparent; color: #c0c0c0; cursor: pointer"
+                    onclick="hideAddFriendModal()"
+                >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                        <path d="M6 6l12 12M18 6L6 18"></path>
+                    </svg>
+                </button>
+            </div>
+            <div style="height: 1px; background: #eef4f6"></div>
+            <div style="padding: 16px 24px 0">
+                <textarea
+                    id="addFriendMessage"
+                    placeholder="输入验证信息"
+                    style="display: block; width: 100%; height: 75px; padding: 10px; box-sizing: border-box; border: 1px solid #f2f2f2; border-radius: 4px; background: #fff; font-size: 14px; color: var(--ink-900); outline: none; resize: none; font-family: inherit"
+                ></textarea>
+            </div>
+            <div class="flex items-center justify-center" style="padding: 20px 0 22px">
+                <button class="btn-send" onclick="sendAddFriendRequest()">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="" id="toast"></div>
+</div>
+
+<script>
+    const OWNERS = {
+        xiaolu: { name: '小鹿的房间', avatar: 'assets/v2/processed/精灵公主头像.png' },
+        wenzhuo: { name: '文卓的房间', avatar: 'assets/v2/processed/文卓头像.png' },
+        xinghe: { name: '星河的房间', avatar: 'assets/v2/processed/碇真嗣头像.png' },
+        qiqi: { name: '七七的房间', avatar: 'assets/v2/processed/明日香头像.png' },
+    }
+
+    function applyOwner() {
+        const key = new URLSearchParams(location.search).get('u')
+        const owner = OWNERS[key]
+        if (!owner) return
+        document.getElementById('ownerName').textContent = owner.name
+        document.getElementById('ownerAvatar').src = owner.avatar
+    }
+
+    function filterRooms(keyword) {
+        const text = (keyword || '').trim().toLowerCase()
+        document.querySelectorAll('.room-item').forEach((item) => {
+            const name = (item.textContent || '').trim().toLowerCase()
+            item.classList.toggle('hidden', text !== '' && !name.includes(text))
+        })
+    }
+
+    function showAddFriendModal() {
+        document.getElementById('addFriendModal').classList.remove('hidden')
+    }
+
+    function hideAddFriendModal() {
+        document.getElementById('addFriendModal').classList.add('hidden')
+        const msg = document.getElementById('addFriendMessage')
+        if (msg) msg.value = ''
+    }
+
+    function sendAddFriendRequest() {
+        hideAddFriendModal()
+        showToast('信息已发送')
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast')
+        toast.innerText = msg
+        toast.className = 'show'
+        setTimeout(() => {
+            toast.className = toast.className.replace('show', '')
+        }, 3000)
+    }
+
+    applyOwner()
+
+    if (location.hash === '#addFriend') {
+        showAddFriendModal()
+    }
+</script>
+</body>
+</html>
