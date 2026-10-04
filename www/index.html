@@ -203,6 +203,49 @@
         bindSwipe(document);
     })();
 
+    // ===== 返回逻辑：iframe 内有历史则逐页返回；到根页后由原生回桌面 =====
+    let frameDepth = 0
+    ;(function trackFrameDepth() {
+        const frame = document.getElementById('content-frame')
+        function onFrameLoad() {
+            try {
+                let type = 'navigate'
+                const entries = frame.contentWindow.performance.getEntriesByType('navigation')
+                if (entries && entries[0]) {
+                    type = entries[0].type
+                } else if (frame.contentWindow.performance.navigation) {
+                    const t = frame.contentWindow.performance.navigation.type
+                    type = t === 2 ? 'back_forward' : t === 1 ? 'reload' : 'navigate'
+                }
+                if (type === 'back_forward') {
+                    frameDepth = Math.max(0, frameDepth - 1)
+                } else if (type !== 'reload') {
+                    frameDepth += 1
+                }
+                frame.contentWindow.addEventListener('pageshow', (e) => {
+                    if (e.persisted) frameDepth = Math.max(0, frameDepth - 1)
+                })
+            } catch (err) {
+                frameDepth += 1
+            }
+        }
+        frame.addEventListener('load', onFrameLoad)
+    })()
+
+    window.__appBack = function () {
+        const frame = document.getElementById('content-frame')
+        if (!frame || !frame.contentWindow) return 'root'
+        if (frameDepth > 1) {
+            try {
+                frame.contentWindow.history.back()
+            } catch (err) {
+                return 'root'
+            }
+            return 'go'
+        }
+        return 'root'
+    }
+
     function showToast(msg) {
         const toast = document.getElementById('toast');
         toast.innerText = msg;

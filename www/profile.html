@@ -738,7 +738,7 @@
   <body>
     <div
       id="app-root"
-      class="w-full h-[100dvh] overflow-hidden flex flex-col relative"
+      class="w-full min-h-[100dvh] flex flex-col relative"
       data-safe-root
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
@@ -759,7 +759,7 @@
               icon="solar:magnifer-linear"
             ></iconify-icon>
           </label>
-          <div class="hh-msg" onclick="window.location.href='message_center.html'">
+          <div class="hh-msg" onclick="window.location.href='message_center.html?from=profile'">
             <img alt="消息" src="assets/v2/processed/聊天气泡-金色.png" />
             <span class="badge-square">5</span>
             <span class="badge-round">1</span>
@@ -1090,7 +1090,7 @@
         phone: '138****0000',
         evaluation: '热爱空间设计，擅长用光影与材质营造沉浸式社交空间',
         avatar:
-          'assets/packaged/45c974594ffb45d480a2d4bd1533e917.png',
+          'assets/packaged/d51ada3793fa4999ba92c028ae4313f7.png',
       }
 
       let userProfile = defaultUserProfile
@@ -1375,35 +1375,43 @@
       const communityNewsData = [
         {
           id: 'cn_1',
-          title: '什么是焦虑?',
-          image: 'assets/src_01/简讯样例/企鹅.jpg',
-          source: '网络丨铭哲',
+          title: '心事如简，落笔是你',
+          image: 'assets/v2/news/柳岸湖光.png',
+          source: '网络丨佚名',
           time: '2小时前',
-          body: '没有力气再往前走，也没有余地往后退，原地踏步又心有不甘，这就是所谓的焦虑。',
+          body: '世间千般心事，落笔只写你一人。',
+          likes: 120,
+          stars: 80,
         },
         {
           id: 'cn_2',
-          title: '余秋雨笔下的「成熟」',
-          image: 'assets/src_01/简讯样例/麦穗.jpg',
-          source: '山居笔记丨Pamela',
+          title: '山水无言，最抚人心',
+          image: 'assets/v2/news/漓江山水.png',
+          source: '网络丨佚名',
           time: '5小时前',
-          body: '在余秋雨的「山居笔记」散文集中，有这么一句话：成熟是一种明亮而不刺眼的光辉；一种圆润而不腻耳的声响；一种不再需要对别人察言观色的从容；一种终于停止向周围申诉求告的大气；一种不理会喧闹的微笑；一种洗刷了偏激的淡漠；一种无需声张的厚实；一种能够看得很远却并不陡峭的高度。',
+          body: '看山心静，看水心宽，山水无言，却最抚人心。',
+          likes: 610,
+          stars: 160,
         },
         {
           id: 'cn_3',
-          title: '去北京还可以这样玩',
-          image: 'assets/src_01/简讯样例/故宫角楼.jpg',
-          source: '网络丨大王',
+          title: '秋深处，念无声',
+          image: 'assets/v2/news/胡杨秋色.png',
+          source: '网络丨佚名',
           time: '昨天',
-          body: '去北京游玩，如果你要爬长城，最好不要去八达岭，抬头低头都是人。建议去慕田峪长城，门票40元，人少景美，还能坐滑道下山。如果是逛胡同，千万不要去南锣鼓巷，那儿就是一条商业街。不妨去什刹海，坐在三轮车上穿梭在大小胡同中感受老北京的烟火气。如果要尝尝北京的本地美食，千万打住，不要轻易尝试北京的豆汁，"一喝一个不吱声"。可以去护国寺的小吃街和牛街，那儿有不少地道北京小吃。还有，如果不想在故宫感受人挤人的"盛况"，但又想感受一番皇家气派，可以去景山公园，站在万春亭就能俯瞰故宫全景，只需要花费2元的门票钱。',
+          body: '一叶知秋深，一念到黄昏。',
+          likes: 120,
+          stars: 80,
         },
         {
           id: 'cn_4',
-          title: '文章产生「代入感」的几个技巧',
-          image: 'assets/src_01/简讯样例/书桌静物.jpg',
-          source: '网络丨星月',
+          title: '最深的孤独，不是身边无',
+          image: 'assets/v2/news/漓江山水.png',
+          source: '网络丨佚名',
           time: '2天前',
-          body: '一、开头用一个大多数人会经常遇到的小场景；二、用具体化的描写代替形容；三、多举例而少讲道理；四、用倒叙的方式制造悬念；五、多用短句来提高阅读快感；六、删除重复表达以及可有可无的字；七、抛出固有的观念后话锋一转戳中人心。',
+          body: '最深的孤独，不是身边无人，而是无人懂你。',
+          likes: 610,
+          stars: 160,
         },
       ]
 
@@ -1423,8 +1431,8 @@
             '<div class="news-card-body">' +
             '<div class="news-card-title">' + item.title + '</div>' +
             '<div class="news-card-meta">' +
-            '<span><iconify-icon icon="solar:heart-linear"></iconify-icon>120</span>' +
-            '<span><iconify-icon icon="solar:star-linear"></iconify-icon>80</span>' +
+            '<span><iconify-icon icon="solar:heart-linear"></iconify-icon>' + item.likes + '</span>' +
+            '<span><iconify-icon icon="solar:star-linear"></iconify-icon>' + item.stars + '</span>' +
             '</div></div>'
           card.addEventListener('click', () => openCommunityNews(item))
           newsList.appendChild(card)

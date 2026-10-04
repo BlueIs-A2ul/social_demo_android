@@ -15,7 +15,9 @@
 | `android\` | 原生 Android 工程（Capacitor 生成） |
 | `android\app\src\main\res\values-v23\styles.xml` | 状态栏 / 导航栏配色（白底 + 深色图标） |
 | `android\app\src\main\res\values-v27\styles.xml` | 刘海 / 挖孔屏适配、手势条深色图标 |
-| `android\app\build\outputs\apk\debug\app-debug.apk` | 构建产物 / 交付 APK |
+| `android\app\build\outputs\apk\release\app-release.apk` | 构建产物 / 交付 APK（约 18MB） |
+| `scripts\audit-assets.js` | 素材引用审计：找出 `www\assets` 中无人引用的图片 |
+| `scripts\optimize-images.js` | 图片批量瘦身：尺寸封顶 + PNG 量化 / JPEG mozjpeg |
 | `.git`（git 仓库） | 版本管理，见第七节 |
 
 **编辑代码改 `www\`，改完必须 `cap sync` 再打包，否则不生效。**
@@ -52,30 +54,34 @@ Android 构建工具（AGP）**不允许在含中文的路径下编译**。
 ```powershell
 # 1. 改页面
 #   编辑 www\ 下的 html / assets（www 是源码真源，无需从别处同步）
+#   新增/替换图片后，建议先跑第八节的素材瘦身流程
 
 # 2. 同步到 Android 工程（改完必做）
 cd D:\android-demo
 npx cap sync android
 
-# 3. 构建（PowerShell）
+# 3. 构建发布包（PowerShell）
 $env:JAVA_HOME = "C:\Android\jdk\jdk-21.0.12+8"
 $env:ANDROID_HOME = "C:\Android\Sdk"
 $env:ANDROID_SDK_ROOT = "C:\Android\Sdk"
 cd D:\android-demo\android
-.\gradlew.bat assembleDebug
+.\gradlew.bat assembleRelease
 
 # 4. 交付物就在本目录内，直接取用即可
-#   android\app\build\outputs\apk\debug\app-debug.apk（约 93.6MB，随 www\assets 素材量变化）
+#   android\app\build\outputs\apk\release\app-release.apk（当前约 18.2MB）
 ```
 
-成功后提示 `BUILD SUCCESSFUL`。APK 体积随打包素材变化：早期约 28.6MB，加入 `www\assets\new_src` 素材后约 93.6MB。
+- release 已开启 **R8 混淆 + 资源压缩**（`android\app\build.gradle`），dex 从 debug 的 8.1MB 降到 0.7MB。
+- release 签名复用本机 **debug keystore**（`C:\Users\17383\.android\debug.keystore`，口令 `android`），因此可以和既有 debug 安装包互相覆盖升级；仅用于演示交付。
+- 体积历史：早期 debug 包 165.9MB（素材未优化）→ 素材审计/去重/重压缩后 release 包 **18.2MB**（assets 18MB + dex 0.7MB + res 0.6MB）。
+- 调试时仍可用 `.\gradlew.bat assembleDebug`（产物在 `apk\debug\app-debug.apk`）。
 
 ### 装机测试（两种方式）
 - **直接传文件**：把 APK 通过微信/数据线发给手机，点开允许"未知来源应用"后安装。
 - **USB 调试**：手机开「开发者选项→USB 调试」，连电脑后：
   ```powershell
   & "C:\Android\Sdk\platform-tools\adb.exe" devices   # 确认手机在线
-  & "C:\Android\Sdk\platform-tools\adb.exe" install -r "D:\android-demo\android\app\build\outputs\apk\debug\app-debug.apk"
+  & "C:\Android\Sdk\platform-tools\adb.exe" install -r "D:\android-demo\android\app\build\outputs\apk\release\app-release.apk"
   ```
 
 ---
@@ -90,6 +96,7 @@ cd D:\android-demo\android
 | 横竖屏 / 权限 | `android\app\src\main\AndroidManifest.xml`（当前锁竖屏） |
 | 状态栏 / 全面屏 | 原生：`res\values-v23`（白底深色图标）、`res\values-v27`（挖孔屏适配）；页面：`www\*.html` 根容器已带 safe-area padding，真机验证即可 |
 | 版本号 / 版本名 | `android\app\build.gradle` 的 `versionCode` / `versionName` |
+| 图片素材 / 包体积 | 新增图片后跑第八节的审计 + 瘦身脚本，再 `cap sync` 打包 |
 
 **启动页配置键是 `server.appStartPath`（不是 startPath），否则不生效：**
 ```json
@@ -139,17 +146,18 @@ cd D:\android-demo\android
    ```
    **写入时必须是无 BOM 的 UTF-8**：用 PowerShell `[System.IO.File]::WriteAllText(path, $content, (New-Object System.Text.UTF8Encoding($false)))` 写，否则 Gradle 报 `Unexpected character: '' @ line 1` 编译失败。
 4. **编译 SDK 版本**：本机只有 android-35，工程已把 `compileSdk/targetSdk` 降到 35，Capacitor 8 代码向下兼容可用，**不要改回 36**（环境里没有该平台）。
-5. **演示机需要联网**：页面图片走 modao.cc 外网 CDN，未全量本地化。
+5. **图片素材全部本地化**：页面图片均在 `www\assets` 内，可离线演示；新增素材请按第八节做瘦身与引用审计。
 6. **Capacitor 版本**：装了 @capacitor/* 8.4.2，需要 JDK 21（机器上另一套 JDK 17 不够用）。
+7. **release 体积异常变大** → 多半是新增了未压缩的大图。先跑 `node scripts\audit-assets.js` 与 `node scripts\optimize-images.js --apply`，再 `cap sync` 重新打包。
 
 ---
 
 ## 六、每次构建的固定步骤速查
 
 ```
-改 www  →  npx cap sync android
-→ 设 JAVA_HOME/ANDROID_HOME  →  cd android → .\gradlew.bat assembleDebug
-→ 交付物 = android\app\build\outputs\apk\debug\app-debug.apk
+改 www  →  （有新图先跑第八节瘦身）  →  npx cap sync android
+→ 设 JAVA_HOME/ANDROID_HOME  →  cd android → .\gradlew.bat assembleRelease
+→ 交付物 = android\app\build\outputs\apk\release\app-release.apk（约 18MB）
 ```
 
 ---
@@ -171,3 +179,26 @@ git log --oneline         # 查看历史
 - `chore: ...` 构建 / 杂项，如 `chore: baseline snapshot before ...`
 
 **约定**：大改动前先提交一次当前状态作为基线，再单独提交改动，便于随时回滚。
+
+---
+
+## 八、图片素材与包体积优化
+
+素材是包体积的绝对大头（优化前图片 161.9MB、debug APK 165.9MB）。新增或替换图片后按下面两步处理，当前 assets 约 17MB、release APK 约 18.2MB：
+
+```powershell
+cd D:\android-demo
+
+# 1. 引用审计：列出 www\assets 中没有被任何 html/js/css 引用的文件
+#    （按 完整路径 / 文件名 / 文件名主干 三级匹配，并识别动态拼接前缀）
+node scripts\audit-assets.js
+
+# 2. 图片瘦身：先 dry-run 看预计收益，确认后 --apply 写回
+node scripts\optimize-images.js
+node scripts\optimize-images.js --apply
+```
+
+- 瘦身规则（`scripts\optimize-images.js`）：PNG 调色板量化 q85 + 压缩级别 9、JPEG mozjpeg q82、WebP q82；尺寸封顶——`icon/card/coin/vip/mascot/gender` 等目录 512px，全屏背景（启动页背景、雷达地图、主页封面等）2048px，其余 1600px；优化后反而变大的文件自动跳过。
+- **保持原文件名与扩展名**，不用改任何 HTML/JS 引用，零页面改动。
+- 删除"无用素材"前先人工复核审计结果（防止动态拼接路径被误判）；删除后跑一遍全页面检查破图（浏览器控制台 `document.images` 或逐页截图）。
+- 处理过的素材原图都在 git 历史里，可随时回滚单个文件；Windows 下若偶发文件覆写失败，脚本已用"临时文件 + 替换"兜底。

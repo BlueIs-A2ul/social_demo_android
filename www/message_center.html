@@ -286,7 +286,7 @@
         transform: translateX(-50%);
         top: calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 64px);
         width: 266px;
-        height: 192px;
+        height: 248px;
         background: #fff;
         border-radius: 6px;
         box-shadow: 0 0 3px rgba(171, 225, 232, 1);
@@ -346,6 +346,121 @@
         color: #fff;
         font-size: 12px;
     }
+    /* ===== 添加好友：扫一扫入口 ===== */
+    .af-divider-scan { position: absolute; left: 0; right: 0; top: 188px; height: 1px; background: #f2f2f2; }
+    .af-scan {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 189px;
+        height: 59px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 0;
+        background: transparent;
+        color: #2e8a96;
+        font-size: 13px;
+        cursor: pointer;
+    }
+    .af-scan svg { display: block; flex: none; }
+
+    /* ===== 模拟扫码 ===== */
+    .scan-modal { position: fixed; inset: 0; z-index: 120; display: none; background: radial-gradient(circle at 50% 42%, #1d3036 0%, #10181b 68%); }
+    .scan-modal.open { display: block; }
+    .scan-topbar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .scan-title { color: #fff; font-size: 16px; font-weight: 600; }
+    .scan-close {
+        position: absolute;
+        left: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+    }
+    .scan-stage {
+        position: absolute;
+        left: 50%;
+        top: 44%;
+        width: 232px;
+        height: 232px;
+        transform: translate(-50%, -50%);
+    }
+    .scan-frame i { position: absolute; width: 28px; height: 28px; border: 3px solid #7edbe5; }
+    .scan-frame i:nth-child(1) { left: 0; top: 0; border-right: 0; border-bottom: 0; border-radius: 8px 0 0 0; }
+    .scan-frame i:nth-child(2) { right: 0; top: 0; border-left: 0; border-bottom: 0; border-radius: 0 8px 0 0; }
+    .scan-frame i:nth-child(3) { left: 0; bottom: 0; border-right: 0; border-top: 0; border-radius: 0 0 0 8px; }
+    .scan-frame i:nth-child(4) { right: 0; bottom: 0; border-left: 0; border-top: 0; border-radius: 0 0 8px 0; }
+    .scan-line {
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 4px;
+        height: 2px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, rgba(126, 219, 229, 0), #7edbe5 50%, rgba(126, 219, 229, 0));
+        box-shadow: 0 0 14px rgba(126, 219, 229, .85);
+        animation: scan-move 1.6s ease-in-out infinite alternate;
+    }
+    @keyframes scan-move {
+        from { transform: translateY(0); }
+        to { transform: translateY(222px); }
+    }
+    .scan-success {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+    }
+    .scan-modal.done .scan-line { display: none; }
+    .scan-modal.done .scan-success { display: flex; }
+    .scan-success-circle {
+        width: 58px;
+        height: 58px;
+        border-radius: 9999px;
+        background: #4dd0e1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: scan-pop .28s ease-out;
+    }
+    @keyframes scan-pop {
+        from { transform: scale(.5); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+    .scan-hint {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(44% + 140px);
+        text-align: center;
+        color: rgba(255, 255, 255, .72);
+        font-size: 13px;
+        line-height: 1.6;
+    }
 </style>
 </head>
 <body>
@@ -374,7 +489,7 @@
             </button>
         </div>
         <div class="header-actions hidden" id="actionsContacts">
-            <button aria-label="扫一扫" class="icon-btn" onclick="showToast('扫一扫')">
+            <button aria-label="扫一扫" class="icon-btn" onclick="startQrScan()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3a4a4a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3.5 8.5V5.2c0-.9.8-1.7 1.7-1.7h3.3"></path>
                     <path d="M15.5 3.5h3.3c.9 0 1.7.8 1.7 1.7v3.3"></path>
@@ -451,7 +566,7 @@
                     <img class="contact-avatar" alt="七七" src="assets/v2/processed/明日香头像.png"/>
                     <span class="contact-name">七七</span>
                     <div class="contact-badges">
-                        <img alt="VIP" src="assets/v2/processed/VIP气泡-粉色.png"/>
+                        <img alt="VIP" src="assets/v2/vip/cat-entertainment.png"/>
                         <img alt="个人名片" src="assets/v2/card/idcard.png"/>
                         <img alt="房间" src="assets/v2/processed/小房子气泡-橙色.png"/>
                         <img alt="TV" src="assets/v2/processed/金色相机-水晶球.png"/>
@@ -461,7 +576,7 @@
                     <img class="contact-avatar" alt="小鹿" src="assets/v2/processed/精灵公主头像.png"/>
                     <span class="contact-name">小鹿</span>
                     <div class="contact-badges">
-                        <img alt="VIP" src="assets/v2/processed/VIP气泡-蓝色.png"/>
+                        <img alt="VIP" src="assets/v2/vip/cat-tech.png"/>
                         <img alt="个人名片" src="assets/v2/card/idcard.png"/>
                         <img alt="TV" src="assets/v2/processed/金色相机-水晶球.png"/>
                     </div>
@@ -470,7 +585,7 @@
                     <img class="contact-avatar" alt="卓越红星" src="assets/v2/processed/春丽头像.png"/>
                     <span class="contact-name">卓越红星</span>
                     <div class="contact-badges">
-                        <img alt="VIP" src="assets/v2/processed/VIP气泡-青绿色.png"/>
+                        <img alt="VIP" src="assets/v2/vip/cat-education.png"/>
                         <img alt="公司名片" src="assets/v2/card/company-idcard.png"/>
                     </div>
                 </div>
@@ -478,7 +593,7 @@
                     <img class="contact-avatar" alt="星河" src="assets/v2/processed/碇真嗣头像.png"/>
                     <span class="contact-name offline">星河</span>
                     <div class="contact-badges">
-                        <img alt="VIP" src="assets/v2/processed/VIP气泡-红色.png"/>
+                        <img alt="VIP" src="assets/v2/vip/cat-charity.png"/>
                         <img alt="个人名片" src="assets/v2/card/idcard.png"/>
                     </div>
                 </div>
@@ -538,7 +653,43 @@
         <div class="af-divider"></div>
         <input class="af-input" id="addFriendInput" type="text" placeholder="输入手机号或名称" onkeydown="if (event.key === 'Enter') searchAddFriend()"/>
         <button class="af-btn" onclick="searchAddFriend()">查 找</button>
+        <div class="af-divider-scan"></div>
+        <button class="af-scan" onclick="startQrScan()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2e8a96" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.5 8.5V5.2c0-.9.8-1.7 1.7-1.7h3.3"></path>
+                <path d="M15.5 3.5h3.3c.9 0 1.7.8 1.7 1.7v3.3"></path>
+                <path d="M20.5 15.5v3.3c0 .9-.8 1.7-1.7 1.7h-3.3"></path>
+                <path d="M8.5 20.5H5.2c-.9 0-1.7-.8-1.7-1.7v-3.3"></path>
+                <path d="M3.5 12h17"></path>
+            </svg>
+            <span>扫一扫，扫描二维码添加好友</span>
+        </button>
     </div>
+</div>
+
+<!-- 模拟扫码 -->
+<div class="scan-modal" id="scanModal">
+    <div class="scan-topbar">
+        <button aria-label="关闭" class="scan-close" onclick="closeQrScan()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
+        </button>
+        <span class="scan-title">扫一扫</span>
+    </div>
+    <div class="scan-stage">
+        <div class="scan-frame"><i></i><i></i><i></i><i></i></div>
+        <div class="scan-line"></div>
+        <div class="scan-success">
+            <span class="scan-success-circle">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.5 12.5l5 5 10-11"></path>
+                </svg>
+            </span>
+            <span>扫描成功</span>
+        </div>
+    </div>
+    <div class="scan-hint">将二维码放入框内，即可自动扫描</div>
 </div>
 
 <script>
@@ -608,6 +759,28 @@
         }
         hideAddFriendModal()
         showToast('查找：' + value)
+    }
+
+    let qrScanTimer = null
+    let qrDoneTimer = null
+
+    function startQrScan() {
+        hideAddFriendModal()
+        const modal = document.getElementById('scanModal')
+        modal.classList.add('open')
+        modal.classList.remove('done')
+        clearTimeout(qrScanTimer)
+        clearTimeout(qrDoneTimer)
+        qrScanTimer = setTimeout(function () {
+            modal.classList.add('done')
+            qrDoneTimer = setTimeout(closeQrScan, 1200)
+        }, 2000)
+    }
+
+    function closeQrScan() {
+        clearTimeout(qrScanTimer)
+        clearTimeout(qrDoneTimer)
+        document.getElementById('scanModal').classList.remove('open', 'done')
     }
 
     if (location.hash === '#addFriend') {

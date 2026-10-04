@@ -7,6 +7,7 @@
 <title>雷达 - 智慧空间</title>
 <script src="assets/vendor/tailwindcss.js"></script>
 <link href="assets/vendor/theme.css" rel="stylesheet"/>
+<script src="assets/vendor/iconify-icon.min.js"></script>
 <script>window.parent.postMessage({ type: 'setBottomNav', visible: true }, '*')</script>
 <style>
     * { box-sizing: border-box; }
@@ -53,15 +54,15 @@
         right: 0;
         display: flex;
         align-items: flex-start;
-        gap: 6px;
-        padding: 16px 17px 0 16px;
+        gap: 8px;
+        padding: 20px 17px 0 16px;
         z-index: 5;
     }
     .drop-wrap {
         position: relative;
         flex: none;
-        width: 63px;
-        height: 25px;
+        width: 78px;
+        height: 32px;
     }
     .drop-wrap select {
         appearance: none;
@@ -69,26 +70,77 @@
         width: 100%;
         height: 100%;
         border: 1px solid #abe1e8;
-        border-radius: 4px;
+        border-radius: 5px;
         background: #e7f2f4;
         color: #4c4c4c;
-        font-size: 14px;
-        padding: 0 16px 0 7px;
+        font-size: 15px;
+        padding: 0 20px 0 9px;
         outline: none;
         cursor: pointer;
     }
     .drop-wrap .caret {
         position: absolute;
-        right: 4px;
+        right: 6px;
         top: 50%;
         transform: translateY(-50%);
         pointer-events: none;
         display: block;
+        width: 11px;
+        height: 7px;
     }
     .search-btn {
         margin-left: auto;
-        width: 24px;
-        height: 24px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+    }
+    .search-btn svg { width: 27px; height: 27px; }
+    /* 地图中央搜索框（点右上角放大镜展开/收起） */
+    .map-search {
+        position: absolute;
+        top: 68px;
+        left: 50%;
+        width: 50%;
+        max-width: 300px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px 0 18px;
+        background: #fff;
+        border: 1px solid #abe1e8;
+        border-radius: 19px;
+        box-shadow: 0 2px 8px rgba(171, 225, 232, .8);
+        z-index: 4;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translate(-50%, -10px);
+        transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+    }
+    .map-search.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translate(-50%, 0);
+        transition-delay: 0s, 0s, 0s;
+    }
+    .map-search input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font-size: 15px;
+        color: #333;
+    }
+    .map-search input::placeholder { color: #9a9a9a; }
+    .map-search .s-icon {
+        width: 22px;
+        height: 22px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -282,10 +334,17 @@
                     <path d="M0.5 0.5 L5 5 L9.5 0.5" fill="none" stroke="#4c4c4c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </label>
-            <button class="search-btn" aria-label="搜索" onclick="showToast('搜索')">
+            <button class="search-btn" aria-label="搜索" onclick="toggleMapSearch()">
                 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#7b7b7b" fill-rule="nonzero" d="M 10.085 18.318 C 5.374 18.318 1.551 14.561 1.551 9.933 C 1.551 5.297 5.374 1.534 10.085 1.534 C 14.796 1.534 18.619 5.297 18.619 9.933 C 18.619 14.568 14.796 18.318 10.085 18.318 Z M 19.988 16.687 L 16.914 13.617 C 17.796 12.406 18.317 10.915 18.317 9.32 C 18.317 4.873 14.619 1.258 10.085 1.258 C 5.541 1.258 1.853 4.873 1.853 9.32 C 1.853 13.76 5.541 17.375 10.085 17.375 C 11.704 17.375 13.216 16.888 14.488 16.062 L 17.57 19.14 C 17.899 19.463 18.312 19.622 18.732 19.622 C 19.17 19.622 19.605 19.448 19.93 19.104 C 20.576 18.415 20.601 17.362 19.988 16.687 Z"/>
                 </svg>
+            </button>
+        </div>
+
+        <div class="map-search" id="mapSearch">
+            <input id="mapSearchInput" type="text" placeholder="搜索关键字" enterkeyhint="search" onkeydown="if (event.key === 'Enter') submitMapSearch()"/>
+            <button class="s-icon" aria-label="搜索" onclick="submitMapSearch()">
+                <iconify-icon icon="solar:magnifer-linear" style="color: #abe1e8; font-size: 20px"></iconify-icon>
             </button>
         </div>
 
@@ -316,7 +375,7 @@
                 <div class="person-dist">距你1.54km</div>
             </div>
             <div class="person-badges">
-                <span class="badge-wrap"><img src="assets/v2/processed/VIP气泡-粉色.png" alt="VIP"/></span>
+                <span class="badge-wrap"><img src="assets/v2/vip/cat-entertainment.png" alt="VIP"/></span>
                 <span class="badge-wrap"><img src="assets/v2/card/idcard.png" alt="个人名片"/></span>
                 <span class="badge-wrap"><img src="assets/v2/processed/小房子气泡-橙色.png" alt="房间"/></span>
                 <span class="badge-wrap"><img src="assets/v2/processed/金色相机-水晶球.png" alt="TV"/></span>
@@ -331,7 +390,7 @@
                 <div class="person-dist">距你2.0km</div>
             </div>
             <div class="person-badges">
-                <span class="badge-wrap"><img src="assets/v2/processed/VIP气泡-蓝色.png" alt="VIP"/></span>
+                <span class="badge-wrap"><img src="assets/v2/vip/cat-tech.png" alt="VIP"/></span>
                 <span class="badge-wrap"><img src="assets/v2/card/idcard.png" alt="个人名片"/></span>
                 <span class="badge-wrap"><img src="assets/v2/processed/金色相机-水晶球.png" alt="TV"/></span>
             </div>
@@ -345,7 +404,7 @@
                 <div class="person-dist">距你2.6km</div>
             </div>
             <div class="person-badges">
-                <span class="badge-wrap"><img src="assets/v2/processed/VIP气泡-青绿色.png" alt="VIP"/></span>
+                <span class="badge-wrap"><img src="assets/v2/vip/cat-education.png" alt="VIP"/></span>
                 <span class="badge-wrap">
                     <img src="assets/v2/card/company-idcard.png" alt="公司名片"/>
                     <span class="gold-badge small">10</span>
@@ -389,6 +448,25 @@
         document.getElementById(id).classList.add('selected')
     }
 
+    function toggleMapSearch() {
+        const wrap = document.getElementById('mapSearch')
+        const input = document.getElementById('mapSearchInput')
+        const show = !wrap.classList.contains('show')
+        wrap.classList.toggle('show', show)
+        if (show) {
+            requestAnimationFrame(function () { input.focus() })
+        } else {
+            input.value = ''
+            input.blur()
+        }
+    }
+
+    function submitMapSearch() {
+        const input = document.getElementById('mapSearchInput')
+        const text = (input.value || '').trim()
+        showToast(text ? '搜索：' + text : '请输入搜索关键字')
+    }
+
     function showAddFriendModal() {
         document.getElementById('addFriendModal').classList.remove('hidden')
         document.getElementById('addFriendMessage').value = ''
@@ -417,6 +495,8 @@
 
     function closeAiSheet() {
         document.getElementById('aiSheet').classList.remove('open')
+        const frame = document.getElementById('aiSheetFrame')
+        if (frame && frame.contentWindow) frame.contentWindow.postMessage({ type: 'blurAiInput' }, '*')
     }
 
     window.addEventListener('message', function (e) {

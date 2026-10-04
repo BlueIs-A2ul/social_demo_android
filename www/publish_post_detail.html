@@ -5,6 +5,8 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>动态详情 - 智能空间</title>
     <script src="assets/vendor/tailwindcss.js"></script>
+    <script src="assets/vendor/iconify-icon.min.js"></script>
+    <link href="assets/vendor/theme.css" rel="stylesheet" />
     <script>
       (function () {
         try {
@@ -18,32 +20,149 @@
     <script src="assets/vendor/safe-area.js"></script>
     <style>
       body {
-        background-color: white;
+        background-color: #fff;
         font-family:
-          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-          Arial, sans-serif;
+          -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Segoe UI',
+          Roboto, Helvetica, Arial, sans-serif;
         margin: 0;
         padding: 0;
-        color: #333;
+        color: var(--ink-900, #17313a);
       }
       ::-webkit-scrollbar {
         display: none;
       }
-      .user-vip-badge {
-        display: inline-block;
-        width: 20px;
-        height: auto;
-        margin-left: 4px;
-        vertical-align: -4px;
+      .detail-topbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 12px 6px 6px;
+        background: #fff;
       }
-      .user-vip-badge-sm {
-        width: 15px;
-        margin-left: 3px;
-        vertical-align: -3px;
+      .detail-back {
+        width: 34px;
+        height: 34px;
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        color: var(--ink-900, #17313a);
+      }
+      .detail-author-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 9999px;
+        object-fit: cover;
+        flex: none;
+        background: #f2f4f5;
+      }
+      .detail-author-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink-900, #17313a);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .follow-btn {
+        flex: none;
+        margin-left: 4px;
+        padding: 3px 14px;
+        border-radius: 9999px;
+        border: 2px solid #fff;
+        background: var(--brand, #4dd0e1);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.4;
+        cursor: pointer;
+        box-shadow:
+          0 0 0 2px var(--brand-line, #b8e9f0),
+          0 2px 6px rgba(38, 198, 218, 0.35);
+      }
+      .follow-btn.followed {
+        background: var(--ink-100, #eef4f6);
+        color: var(--ink-500, #8aa0a8);
+        box-shadow: none;
+      }
+      .detail-hero {
+        display: block;
+        width: 100%;
+        background: #f5f9fa;
+      }
+      .detail-content {
+        padding: 14px 16px 0;
+      }
+      .detail-title {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.55;
+        color: var(--ink-900, #17313a);
+      }
+      .detail-body {
+        margin: 10px 0 0;
+        font-size: 15px;
+        line-height: 1.8;
+        color: var(--ink-900, #17313a);
+        white-space: pre-line;
+      }
+      .comments-head {
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink-900, #17313a);
+      }
+      .detail-bottom {
+        flex: none;
+        background: #fff;
+        border-top: 1px solid var(--ink-100, #eef4f6);
+      }
+      .comment-input-wrap {
+        padding: 10px 16px 8px;
+      }
+      .comment-input {
+        box-sizing: border-box;
+        width: 100%;
+        border: 0;
+        outline: none;
+        border-radius: 9999px;
+        background: #f2f4f5;
+        padding: 10px 18px;
+        font-size: 14px;
+        color: var(--ink-900, #17313a);
+      }
+      .comment-input::placeholder {
+        color: var(--ink-500, #8aa0a8);
+      }
+      .detail-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 4px 0 12px;
+      }
+      .detail-bar button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--ink-700, #3f5b64);
+        background: transparent;
+        border: 0;
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+      .detail-bar button.active {
+        color: var(--brand-deep, #00acc1);
+      }
+      .detail-bar iconify-icon {
+        font-size: 21px;
       }
       #toast {
         position: fixed;
-        bottom: 80px;
+        bottom: 120px;
         left: 50%;
         transform: translateX(-50%);
         background: rgba(0, 0, 0, 0.8);
@@ -68,240 +187,65 @@
       data-safe-root
       style="padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px)); padding-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));"
     >
-      <!-- 顶部标题栏 -->
-      <div
-        class="flex-none bg-white px-4 pt-6 pb-2 flex items-center justify-center border-b border-gray-100 relative"
-      >
-        <button
-          class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full active:bg-gray-100"
-          onclick="window.location.href='publish.html'"
-        >
-          <svg
-            class="w-6 h-6 text-gray-700"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
+      <!-- 顶栏：返回 + 作者 + 关注 -->
+      <header class="flex-none detail-topbar">
+        <button aria-label="返回" class="detail-back" onclick="goBack()">
+          <iconify-icon
+            icon="solar:alt-arrow-left-linear"
+            style="font-size: 23px"
+          ></iconify-icon>
         </button>
-        <h1 class="text-base font-bold text-black">动态详情</h1>
-      </div>
+        <img
+          alt="作者头像"
+          class="detail-author-avatar"
+          id="detail-author-avatar"
+          src="assets/v2/processed/碇真嗣头像.png"
+        />
+        <span class="detail-author-name" id="detail-author">谢锋FM</span>
+        <button class="follow-btn" id="follow-btn" onclick="toggleFollow()">
+          关注
+        </button>
+      </header>
 
       <!-- 内容区 -->
-      <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar pb-[88px]">
-        <!-- ① 大图 -->
-        <div id="detail-images"></div>
-        <!-- ② 标题/简介区 -->
-        <div class="p-4 border-b border-gray-100">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <img
-                alt="头像"
-                class="w-6 h-6 rounded-full object-cover"
-                id="detail-author-avatar"
-                src="assets/packaged/7324caaa7daa41839e6f4b764cde141f.jpg"
-              />
-              <span class="text-sm font-bold text-black" id="detail-author"
-                >约翰逊<img
-                  alt="个人VIP2"
-                  class="user-vip-badge user-vip-badge-sm"
-                  src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
-              /></span>
-            </div>
-            <span class="text-xs text-gray-400" id="detail-time">2小时前</span>
-          </div>
-          <h2 class="text-base font-bold text-black mt-3" id="detail-title">
-            春日花园
-          </h2>
-          <p class="text-[13px] text-gray-400 mt-1" id="detail-desc">
-            一个藏在巷子里的温馨咖啡小店，午后阳光洒进来特别治愈。
-          </p>
+      <div class="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+        <img
+          alt="动态图片"
+          class="detail-hero"
+          id="detail-image"
+          src="assets/src_01/分享样例/966C4524685A0374B01D5616402D6C9A.jpg"
+        />
+        <div class="detail-content">
+          <h1 class="detail-title" id="detail-title">标题</h1>
+          <p class="detail-body" id="detail-body">正文</p>
         </div>
-        <!-- ③ 正文区 -->
-        <div class="p-4">
-          <p class="text-sm text-black leading-[1.8]" id="detail-body">
-            周末终于打卡了这家种草已久的咖啡店！店面不大但每个角落都很用心，老板是个很nice的人，推荐了他们家的手冲和提拉米苏。坐在窗边看着街景，喝着咖啡，感觉整个下午都慢下来了。下次还会再来～
-          </p>
-          <div class="mt-4 text-[12px] leading-[1.8]" id="detail-tags">
-            <span class="text-[12px] text-[#26c6da] cursor-pointer"
-              >#咖啡探店</span
-            >
-            <span class="text-[12px] text-[#26c6da] cursor-pointer"
-              >#周末日常</span
-            >
-            <span class="text-[12px] text-[#26c6da] cursor-pointer">#治愈系</span>
-          </div>
-        </div>
-        <!-- ④ 评论列表 -->
-        <div class="p-4 mt-2">
-          <h3 class="text-sm font-bold text-black mb-4">评论 12</h3>
-          <div class="space-y-4">
-            <div class="flex gap-2 border-b border-gray-50 pb-3">
-              <img
-                alt="头像"
-                class="w-5 h-5 rounded-full"
-                src="assets/packaged/8c34ed16529049609cc0396f36b40e41.jpg"
-              />
-              <div class="flex-1">
-                <div class="flex justify-between items-center">
-                  <span class="text-[12px] font-bold text-black"
-                    >小云<img
-                      alt="个人VIP2"
-                      class="user-vip-badge user-vip-badge-sm"
-                      src="assets/src_01/颜色vip/技术服务类vip.jpg"
-                  /></span>
-                  <span class="text-[10px] text-gray-400">刚刚</span>
-                </div>
-                <p class="text-[12px] text-gray-500 mt-0.5">
-                  这家店我也去过！提拉米苏真的绝了 👍
-                </p>
-              </div>
-            </div>
-            <div class="flex gap-2 border-b border-gray-50 pb-3">
-              <img
-                alt="头像"
-                class="w-5 h-5 rounded-full"
-                src="assets/packaged/861da2ed40c44c45b74fe46ffe08460b.jpg"
-              />
-              <div class="flex-1">
-                <div class="flex justify-between items-center">
-                  <span class="text-[12px] font-bold text-black"
-                    >七七<img
-                      alt="个人VIP2"
-                      class="user-vip-badge user-vip-badge-sm"
-                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
-                  /></span>
-                  <span class="text-[10px] text-gray-400">1小时前</span>
-                </div>
-                <p class="text-[12px] text-gray-500 mt-0.5">
-                  求地址！看起来好棒
-                </p>
-              </div>
-            </div>
-            <div class="flex gap-2 border-b border-gray-50 pb-3">
-              <img
-                alt="头像"
-                class="w-5 h-5 rounded-full"
-                src="assets/packaged/7324caaa7daa41839e6f4b764cde141f.jpg"
-              />
-              <div class="flex-1">
-                <div class="flex justify-between items-center">
-                  <span class="text-[12px] font-bold text-black"
-                    >小鹿<img
-                      alt="个人VIP2"
-                      class="user-vip-badge user-vip-badge-sm"
-                      src="assets/src_01/颜色vip/文化娱乐类vip.jpg"
-                  /></span>
-                  <span class="text-[10px] text-gray-400">2小时前</span>
-                </div>
-                <p class="text-[12px] text-gray-500 mt-0.5">
-                  咖啡控表示很心动
-                </p>
-              </div>
-            </div>
-            <div class="flex gap-2 border-b border-gray-50 pb-3">
-              <img
-                alt="头像"
-                class="w-5 h-5 rounded-full"
-                src="assets/packaged/8c34ed16529049609cc0396f36b40e41.jpg"
-              />
-              <div class="flex-1">
-                <div class="flex justify-between items-center">
-                  <span class="text-[12px] font-bold text-black"
-                    >星河<img
-                      alt="个人VIP2"
-                      class="user-vip-badge user-vip-badge-sm"
-                      src="assets/src_01/颜色vip/技术服务类vip.jpg"
-                  /></span>
-                  <span class="text-[10px] text-gray-400">3小时前</span>
-                </div>
-                <p class="text-[12px] text-gray-500 mt-0.5">周末去打卡</p>
-              </div>
-            </div>
-            <div class="flex gap-2 pb-3">
-              <img
-                alt="头像"
-                class="w-5 h-5 rounded-full"
-                src="assets/packaged/6a3b2cb986b949e497a31d8c340bfe69.jpg"
-              />
-              <div class="flex-1">
-                <div class="flex justify-between items-center">
-                  <span class="text-[12px] font-bold text-black"
-                    >阿森<img
-                      alt="个人VIP2"
-                      class="user-vip-badge user-vip-badge-sm"
-                      src="assets/src_01/颜色vip/公益活动类vip.jpg"
-                  /></span>
-                  <span class="text-[10px] text-gray-400">4小时前</span>
-                </div>
-                <p class="text-[12px] text-gray-500 mt-0.5">
-                  环境也太好了吧
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="comments-head" id="comments-head">共 0 条评论</div>
       </div>
 
-      <!-- ⑤ 底部固定：点赞/收藏/分享 + 评论输入框 -->
-      <div
-        class="flex-none px-4 py-3 bg-white border-t border-gray-100 flex items-center gap-3"
-        style="padding-bottom: max(0.75rem, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));"
-      >
-        <button
-          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform shrink-0"
-          id="detail-like-btn"
-          onclick="toggleDetailLike()"
-        >
-          <img
-            alt="点赞"
-            class="w-5 h-5 object-contain"
-            id="detail-like-icon"
-            src="assets/src_01/icon/互动/点赞.png"
+      <!-- 底部固定：评论输入框 + 点赞/收藏/评论 -->
+      <div class="detail-bottom">
+        <div class="comment-input-wrap">
+          <input
+            class="comment-input"
+            placeholder="写下要说点什么吧"
+            type="text"
+            id="comment-input"
           />
-          <span class="text-[11px]" id="detail-like-count">12</span>
-        </button>
-        <button
-          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform shrink-0"
-          id="detail-fav-btn"
-          onclick="toggleDetailFavorite()"
-        >
-          <img
-            alt="收藏"
-            class="w-5 h-5 object-contain"
-            id="detail-fav-icon"
-            src="assets/src_01/icon/互动/收藏.png"
-          />
-        </button>
-        <button
-          class="flex items-center gap-1 text-gray-500 active:scale-95 transition-transform shrink-0"
-          id="detail-share-btn"
-          onclick="showToast('链接已复制')"
-        >
-          <img
-            alt="分享"
-            class="w-5 h-5 object-contain"
-            src="assets/src_01/icon/互动/分享.png"
-          />
-        </button>
-        <input
-          class="flex-1 bg-gray-100 rounded-none px-4 py-2 text-sm outline-none min-w-0"
-          placeholder="说点什么..."
-          type="text"
-          id="comment-input"
-        />
-        <button
-          class="bg-[#26c6da] text-white px-4 py-2 text-sm font-medium shrink-0"
-          onclick="showToast('评论已发布')"
-        >
-          发布
-        </button>
+        </div>
+        <div class="detail-bar">
+          <button id="detail-like-btn" onclick="toggleDetailLike()">
+            <iconify-icon id="detail-like-icon" icon="solar:heart-linear"></iconify-icon>
+            <span id="detail-like-count">260</span>
+          </button>
+          <button id="detail-star-btn" onclick="toggleDetailStar()">
+            <iconify-icon id="detail-star-icon" icon="solar:star-linear"></iconify-icon>
+            <span id="detail-star-count">320</span>
+          </button>
+          <button onclick="focusComment()">
+            <iconify-icon icon="solar:chat-round-linear"></iconify-icon>
+            <span>180</span>
+          </button>
+        </div>
       </div>
 
       <!-- Toast -->
@@ -371,7 +315,7 @@
           img: 'assets/src_01/分享样例/03C97DD74948F540243370B20E16156B.jpg',
           author:
             '阿森<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/公益活动类vip.jpg" />',
-          authorAvatar: 'assets/packaged/sq/修改图片形状 (1).png',
+          authorAvatar: 'assets/packaged/a360e987b470405b93134ddbf8e0e7c2.png',
           time: '07-28',
           desc: '给你3亿在无人森林待3年，六选三！',
           body: '给你3亿在无人深林待三年，六选三你会怎么选？①冲锋枪无限弹药 ②忠诚于你的狼狗 ③400人特种兵 ④无限续航越野房车 ⑤无限供应泡面 ⑥性感御姐迷恋你→评论区已经吵疯了，说说你的组合思路！#请做出你的选择',
@@ -385,7 +329,7 @@
           img: 'assets/src_01/分享样例/05823C55FFF4D2081DC3D173711C04F0.jpg',
           author:
             '东林<img alt="个人VIP" class="user-vip-badge user-vip-badge-sm" src="assets/src_01/颜色vip/技术服务类vip.jpg" />',
-          authorAvatar: 'assets/packaged/sq/修改图片形状 (1).png',
+          authorAvatar: 'assets/packaged/a360e987b470405b93134ddbf8e0e7c2.png',
           time: '08-06 江苏',
           desc: '一图看懂整个英语语法体系表。',
           body: '①26个字母大小写；②20个疑问代词——问什么用what、问原因用why、问哪里用where、问哪个用which、问多久用how long/how soon/how often；③英语16时态从一般现在时do到过去将来完成进行时would have been doing 全梳理；④英语常用缩略词 I am=I\'m、can not=can\'t 等。初中英语怎么学再也不迷路，建议收藏打印！',
@@ -510,14 +454,22 @@
 
       const detailDefaults = {
         authorAvatar: document.getElementById('detail-author-avatar').src,
-        author: document.getElementById('detail-author').innerHTML,
-        time: document.getElementById('detail-time').innerHTML,
-        desc: document.getElementById('detail-desc').innerHTML,
-        body: document.getElementById('detail-body').innerHTML,
-        tags: document.getElementById('detail-tags').innerHTML,
+        author: document.getElementById('detail-author').innerText,
       }
 
       let currentDetailIndex = -1
+      let currentAuthor = ''
+
+      const baseLikes = 260
+      const baseStars = 320
+
+      function goBack() {
+        if (window.history.length > 1) {
+          window.history.back()
+        } else {
+          window.location.href = 'publish.html'
+        }
+      }
 
       function renderDetail(index) {
         const data = feedData[index]
@@ -530,38 +482,33 @@
         }
         currentDetailIndex = index
 
-        const isSeries = Array.isArray(data.images) && data.images.length > 0
-        const images = isSeries ? data.images : [data.img]
-        document.getElementById('detail-images').innerHTML = images
-          .map(src =>
-            isSeries
-              ? `<img alt="动态图片" class="w-full block bg-gray-50" src="${src}" />`
-              : `<img alt="动态图片" class="w-full h-[280px] object-contain bg-gray-50 block" src="${src}" />`,
-          )
-          .join('')
+        const params = new URLSearchParams(window.location.search)
+        const paramAuthor = params.get('author')
+        const paramAvatar = params.get('avatar')
+        const nameEl = document.getElementById('detail-author')
+        const avatarEl = document.getElementById('detail-author-avatar')
 
+        if (paramAuthor) {
+          currentAuthor = paramAuthor
+        } else {
+          const tmp = document.createElement('div')
+          tmp.innerHTML = data.author || ''
+          currentAuthor = (tmp.textContent || '').trim() || detailDefaults.author
+        }
+        nameEl.innerText = currentAuthor
+        avatarEl.src =
+          paramAvatar || data.authorAvatar || detailDefaults.authorAvatar
+
+        document.title = data.title + ' - 智能空间'
+        document.getElementById('detail-image').src = data.img
         document.getElementById('detail-title').innerText = data.title
-        document.getElementById('detail-author-avatar').src =
-          data.authorAvatar || detailDefaults.authorAvatar
-        document.getElementById('detail-author').innerHTML =
-          data.author || detailDefaults.author
-        document.getElementById('detail-time').innerHTML =
-          data.time || detailDefaults.time
-        document.getElementById('detail-desc').innerHTML =
-          data.desc || detailDefaults.desc
-        document.getElementById('detail-body').innerHTML =
-          data.body || detailDefaults.body
-        document.getElementById('detail-tags').innerHTML = data.tags
-          ? data.tags
-              .map(
-                t =>
-                  `<span class="text-[12px] text-[#26c6da] cursor-pointer">#${t}</span>`,
-              )
-              .join(' ')
-          : detailDefaults.tags
+        document.getElementById('detail-body').innerText = data.body || ''
 
+        document.getElementById('follow-btn').style.display =
+          currentAuthor === '雅柔' ? 'none' : ''
+        updateFollowBtn()
         updateDetailLike()
-        updateDetailFavBtn()
+        updateDetailStar()
 
         if (window.HistoryFavorites) {
           window.HistoryFavorites.addHistory({
@@ -571,8 +518,8 @@
               title: data.title,
               img: data.img,
               images: data.images,
-              author: data.author,
-              authorAvatar: data.authorAvatar,
+              author: currentAuthor,
+              authorAvatar: avatarEl.src,
               time: data.time,
               desc: data.desc,
               body: data.body,
@@ -582,44 +529,71 @@
         }
       }
 
-      const detailLikeBase = 12
+      function updateFollowBtn() {
+        const btn = document.getElementById('follow-btn')
+        if (!currentAuthor || currentAuthor === '雅柔') {
+          btn.style.display = 'none'
+          return
+        }
+        const followed =
+          localStorage.getItem('postFollow_' + currentAuthor) === '1'
+        btn.classList.toggle('followed', followed)
+        btn.textContent = followed ? '已关注' : '关注'
+      }
+
+      function toggleFollow() {
+        if (!currentAuthor || currentAuthor === '雅柔') return
+        const key = 'postFollow_' + currentAuthor
+        const followed = localStorage.getItem(key) === '1'
+        localStorage.setItem(key, followed ? '0' : '1')
+        updateFollowBtn()
+        showToast(followed ? '已取消关注' : '已关注')
+      }
 
       function updateDetailLike() {
         if (currentDetailIndex < 0) return
-        const liked = localStorage.getItem('detailLike_' + currentDetailIndex) === '1'
-        const icon = document.getElementById('detail-like-icon')
-        const count = document.getElementById('detail-like-count')
-        icon.src = liked
-          ? 'assets/src_01/icon/互动/点赞-active.png'
-          : 'assets/src_01/icon/互动/点赞.png'
-        count.textContent = detailLikeBase + (liked ? 1 : 0)
+        const liked =
+          localStorage.getItem('postLike_' + currentDetailIndex) === '1'
+        document.getElementById('detail-like-btn').classList.toggle('active', liked)
+        document
+          .getElementById('detail-like-icon')
+          .setAttribute('icon', liked ? 'solar:heart-bold' : 'solar:heart-linear')
+        document.getElementById('detail-like-count').textContent =
+          baseLikes + (liked ? 1 : 0)
       }
 
       function toggleDetailLike() {
         if (currentDetailIndex < 0) return
-        const key = 'detailLike_' + currentDetailIndex
+        const key = 'postLike_' + currentDetailIndex
         const liked = localStorage.getItem(key) === '1'
         localStorage.setItem(key, liked ? '0' : '1')
         updateDetailLike()
         showToast(liked ? '已取消点赞' : '已点赞')
       }
 
-      function updateDetailFavBtn() {
+      function updateDetailStar() {
         if (currentDetailIndex < 0) return
-        const fav = localStorage.getItem('detailFav_' + currentDetailIndex) === '1'
-        const icon = document.getElementById('detail-fav-icon')
-        icon.src = fav
-          ? 'assets/src_01/icon/互动/收藏-active.png'
-          : 'assets/src_01/icon/互动/收藏.png'
+        const starred =
+          localStorage.getItem('postStar_' + currentDetailIndex) === '1'
+        document.getElementById('detail-star-btn').classList.toggle('active', starred)
+        document
+          .getElementById('detail-star-icon')
+          .setAttribute('icon', starred ? 'solar:star-bold' : 'solar:star-linear')
+        document.getElementById('detail-star-count').textContent =
+          baseStars + (starred ? 1 : 0)
       }
 
-      function toggleDetailFavorite() {
+      function toggleDetailStar() {
         if (currentDetailIndex < 0) return
-        const key = 'detailFav_' + currentDetailIndex
-        const fav = localStorage.getItem(key) === '1'
-        localStorage.setItem(key, fav ? '0' : '1')
-        updateDetailFavBtn()
-        showToast(fav ? '已取消收藏' : '已收藏')
+        const key = 'postStar_' + currentDetailIndex
+        const starred = localStorage.getItem(key) === '1'
+        localStorage.setItem(key, starred ? '0' : '1')
+        updateDetailStar()
+        showToast(starred ? '已取消收藏' : '已收藏')
+      }
+
+      function focusComment() {
+        document.getElementById('comment-input').focus()
       }
 
       function showToast(msg) {
@@ -634,7 +608,10 @@
       document
         .getElementById('comment-input')
         .addEventListener('keydown', e => {
-          if (e.key === 'Enter') showToast('评论已发布')
+          if (e.key === 'Enter') {
+            showToast('评论已发布')
+            e.target.value = ''
+          }
         })
 
       const index = parseInt(

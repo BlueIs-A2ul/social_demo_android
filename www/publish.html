@@ -537,7 +537,7 @@
           <img
             alt="女"
             class="my-avatar-badge"
-            src="assets/v2/processed/女性符号球-粉色.png"
+            src="assets/v2/icon/gender-female.png"
           />
         </div>
         <div class="my-stats">
@@ -548,7 +548,7 @@
         <div class="my-info">
           <div class="my-name-row">
             <span class="my-name">雅柔</span>
-            <img alt="VIP" src="assets/v2/processed/VIP气泡-粉色.png" />
+            <img alt="VIP" src="assets/v2/vip/cat-entertainment.png" />
             <img alt="空间" src="assets/v2/processed/小房子气泡-橙色.png" />
           </div>
           <div class="my-id">id:202609060012</div>
@@ -569,7 +569,7 @@
         <div class="my-grid" id="myGrid">
           <div
             class="my-grid-item"
-            onclick="window.location.href = 'publish_post_detail.html?index=0'"
+            onclick="showToast('敬请期待')"
           >
             <img
               alt="作品"
@@ -584,7 +584,7 @@
           </div>
           <div
             class="my-grid-item"
-            onclick="window.location.href = 'publish_post_detail.html?index=1'"
+            onclick="showToast('敬请期待')"
           >
             <img
               alt="作品"
@@ -599,7 +599,7 @@
           </div>
           <div
             class="my-grid-item"
-            onclick="window.location.href = 'publish_post_detail.html?index=2'"
+            onclick="showToast('敬请期待')"
           >
             <img
               alt="作品"
@@ -706,7 +706,7 @@
               HEART_SVG + likes +
               '</span>' +
               '</div>'
-            return `<div class="cursor-pointer group" onclick="window.location.href='publish_post_detail.html?index=${p.index}'">
+            return `<div class="cursor-pointer group" onclick="window.location.href='publish_post_detail.html?index=${p.index}&author=${encodeURIComponent(a.name)}&avatar=${encodeURIComponent(a.avatar)}'">
           <div class="relative w-full aspect-[3/4] bg-gray-50 overflow-hidden">
             <img
               alt="${p.title}"
