@@ -91,6 +91,7 @@ cd D:\android-demo\android
 | 想改什么 | 改哪里 |
 |---|---|
 | 页面内容 / 跳转 | `www\*.html`（改后 `cap sync`） |
+| 返回键 / 返回按钮逻辑 | `www\assets\vendor\back.js`（浮层注册 / 本地返回）、`www\index.html`（主壳 tabStack 状态机）、`MainActivity.java`（原生中继）；新增浮层时用 `BackLayers.register({ isOpen, close })` 注册 |
 | 应用名 / 包名 / 启动页 | `capacitor.config.json` |
 | 桌面图标 / 闪屏 | `android\app\src\main\res\mipmap-*\ic_launcher*.png`、`drawable\splash.png` |
 | 横竖屏 / 权限 | `android\app\src\main\AndroidManifest.xml`（当前锁竖屏） |
@@ -149,6 +150,7 @@ cd D:\android-demo\android
 5. **图片素材全部本地化**：页面图片均在 `www\assets` 内，可离线演示；新增素材请按第八节做瘦身与引用审计。
 6. **Capacitor 版本**：装了 @capacitor/* 8.4.2，需要 JDK 21（机器上另一套 JDK 17 不够用）。
 7. **release 体积异常变大** → 多半是新增了未压缩的大图。先跑 `node scripts\audit-assets.js` 与 `node scripts\optimize-images.js --apply`，再 `cap sync` 重新打包。
+8. **返回键行为异常** → 检查三处是否同步：页内是否引入 `back.js`（index.html 除外）、主壳 `index.html` 的 `tabStack` 是否被绕过（勿再用 `frame.src = url` 切 Tab，必须走 `navigateTo` 的 `location.replace`）、新增浮层是否漏注册 `BackLayers.register`。`npm test` 会静态巡检这些点。
 
 ---
 
