@@ -762,5 +762,9 @@
     </script>
   
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return !document.getElementById('infoBar-detail-modal').classList.contains('hidden'); }, close: closeInfoBarDetail });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('news-detail-modal').classList.contains('hidden'); }, close: closeNewsDetail });
+</script>
 </body>
 </html>

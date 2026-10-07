@@ -706,15 +706,16 @@
         drawer.setAttribute('aria-hidden', 'false')
       })
 
-      document.getElementById('drawerClose').addEventListener('click', () => {
+      function closeCategoryDrawer() {
         drawer.classList.remove('open')
         drawer.setAttribute('aria-hidden', 'true')
-      })
+      }
+
+      document.getElementById('drawerClose').addEventListener('click', closeCategoryDrawer)
 
       drawer.addEventListener('click', event => {
         if (event.target === drawer) {
-          drawer.classList.remove('open')
-          drawer.setAttribute('aria-hidden', 'true')
+          closeCategoryDrawer()
         }
       })
 
@@ -723,5 +724,8 @@
     </script>
   
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return document.getElementById('categoryDrawer').classList.contains('open'); }, close: closeCategoryDrawer });
+</script>
 </body>
 </html>

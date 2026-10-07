@@ -422,5 +422,8 @@
     </script>
   
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return !document.getElementById('resumeModal').classList.contains('hidden'); }, close: closeResumeModal });
+</script>
 </body>
 </html>

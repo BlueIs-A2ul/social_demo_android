@@ -296,4 +296,7 @@
         }
     </script>
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return !document.getElementById('productModal').classList.contains('hidden'); }, close: closeModal });
+</script>
 </body></html>
