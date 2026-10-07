@@ -358,4 +358,8 @@
     document.addEventListener('DOMContentLoaded', initPosts);
 </script>
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return !document.getElementById('postModal').classList.contains('hidden'); }, close: closePostModal });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('friendModal').classList.contains('hidden'); }, close: closeAddFriendModal });
+</script>
 </body></html>

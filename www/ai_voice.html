@@ -308,5 +308,11 @@
     }
 </script>
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({
+        isOpen: function () { return document.getElementById('plusGrid').classList.contains('open'); },
+        close: function () { document.getElementById('plusGrid').classList.remove('open'); }
+    });
+</script>
 </body>
 </html>

@@ -363,5 +363,8 @@
     }
 </script>
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return !document.getElementById('addFriendModal').classList.contains('hidden'); }, close: hideAddFriendModal });
+</script>
 </body>
 </html>

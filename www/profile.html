@@ -1627,5 +1627,11 @@
     </script>
   
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return document.getElementById('roomActionMenu').classList.contains('show'); }, close: closeRoomProfileMenu });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('communityNewsModal').classList.contains('hidden'); }, close: closeCommunityNewsModal });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('resumeModal').classList.contains('hidden'); }, close: closeResumeModal });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('idCardModal').classList.contains('hidden'); }, close: closeIDCardModal });
+</script>
 </body>
 </html>

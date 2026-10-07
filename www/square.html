@@ -964,7 +964,7 @@
       </div>
       <!-- 6. 转发编辑弹窗 -->
       <div
-        class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[70] items-center justify-center flex"
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[70] items-center justify-center flex hidden"
         id="forward-modal"
       >
         <div class="bg-white w-[calc(100%-32px)] max-w-[340px] shadow-2xl animate-scale-in">
@@ -1152,7 +1152,7 @@
       <div
         class="fixed inset-0 bg-black z-[100] items-center justify-center flex hidden"
         id="image-viewer"
-        onclick="this.classList.add('hidden')"
+        onclick="closeImageViewer()"
       >
         <img
           class="max-w-full max-h-full object-contain"
@@ -1500,6 +1500,10 @@
         viewer.classList.add('flex')
       }
 
+      function closeImageViewer() {
+        document.getElementById('image-viewer').classList.add('hidden')
+      }
+
       // 分享面板逻辑
       let activePostId = null
       function openSharePanel(id) {
@@ -1585,5 +1589,11 @@
     </script>
   
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return !document.getElementById('share-overlay').classList.contains('hidden'); }, close: closeSharePanel });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('comment-drawer').classList.contains('translate-y-full'); }, close: closeCommentDrawer });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('forward-modal').classList.contains('hidden'); }, close: closeForwardModal });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('image-viewer').classList.contains('hidden'); }, close: closeImageViewer });
+</script>
 </body>
 </html>

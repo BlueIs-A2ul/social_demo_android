@@ -500,5 +500,20 @@
     })
 </script>
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return document.getElementById('mapSearch').classList.contains('show'); }, close: toggleMapSearch });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('addFriendModal').classList.contains('hidden'); }, close: hideAddFriendModal });
+    BackLayers.register({
+        isOpen: function () { return document.getElementById('aiSheet').classList.contains('open'); },
+        close: function () {
+            var frame = document.getElementById('aiSheetFrame');
+            try {
+                if (frame && frame.contentWindow && typeof frame.contentWindow.__backOverlayClose === 'function'
+                    && frame.contentWindow.__backOverlayClose()) return;
+            } catch (err) {}
+            closeAiSheet();
+        }
+    });
+</script>
 </body>
 </html>

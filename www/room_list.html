@@ -1518,5 +1518,12 @@
     </script>
   
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return !document.getElementById('infoBarModal').classList.contains('hidden'); }, close: closeInfoBarModal });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('newsDetailModal').classList.contains('hidden'); }, close: closeNewsDetailModal });
+    BackLayers.register({ isOpen: function () { return document.getElementById('buildingModal').classList.contains('open'); }, close: closeBuildingModal });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('createRoomModal').classList.contains('hidden'); }, close: hideCreateRoomModal });
+    BackLayers.register({ isOpen: function () { return !document.getElementById('addFriendModal').classList.contains('hidden'); }, close: hideAddFriendModal });
+</script>
 </body>
 </html>

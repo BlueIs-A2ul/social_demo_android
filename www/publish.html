@@ -833,5 +833,8 @@
     </script>
   
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return document.getElementById('mallBuildingModal').classList.contains('open'); }, close: closeMallBuilding });
+</script>
 </body>
 </html>

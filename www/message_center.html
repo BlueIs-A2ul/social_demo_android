@@ -766,5 +766,9 @@
     }
 </script>
 <script src="assets/vendor/back.js"></script>
+<script>
+    BackLayers.register({ isOpen: function () { return document.getElementById('addFriendModal').classList.contains('open'); }, close: hideAddFriendModal });
+    BackLayers.register({ isOpen: function () { return document.getElementById('scanModal').classList.contains('open'); }, close: closeQrScan });
+</script>
 </body>
 </html>
