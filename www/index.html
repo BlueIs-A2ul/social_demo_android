@@ -137,10 +137,17 @@
     function navigateTo(url) {
         const idx = TAB_URLS.indexOf(url);
         if (idx !== -1) currentTabIndex = idx;
+        currentTab = TAB_URLS[currentTabIndex];
         const navMask = document.getElementById('nav-mask');
         if (navMask) navMask.style.display = 'none';
-        document.getElementById('content-frame').src = url;
-        setActiveNav(TAB_URLS[currentTabIndex]);
+        const frame = document.getElementById('content-frame');
+        try {
+            frame.contentWindow.location.replace(url);
+        } catch (err) {
+            frame.src = url;
+        }
+        setActiveNav(currentTab);
+        tabStack = [url];
     }
 
     function switchTab(url, el) {
@@ -202,48 +209,130 @@
         bindSwipe(document);
     })();
 
-    // ===== 返回逻辑：iframe 内有历史则逐页返回；到根页后由原生回桌面 =====
-    let frameDepth = 0
-    ;(function trackFrameDepth() {
-        const frame = document.getElementById('content-frame')
-        function onFrameLoad() {
-            try {
-                let type = 'navigate'
-                const entries = frame.contentWindow.performance.getEntriesByType('navigation')
-                if (entries && entries[0]) {
-                    type = entries[0].type
-                } else if (frame.contentWindow.performance.navigation) {
-                    const t = frame.contentWindow.performance.navigation.type
-                    type = t === 2 ? 'back_forward' : t === 1 ? 'reload' : 'navigate'
-                }
-                if (type === 'back_forward') {
-                    frameDepth = Math.max(0, frameDepth - 1)
-                } else if (type !== 'reload') {
-                    frameDepth += 1
-                }
-                frame.contentWindow.addEventListener('pageshow', (e) => {
-                    if (e.persisted) frameDepth = Math.max(0, frameDepth - 1)
-                })
-            } catch (err) {
-                frameDepth += 1
-            }
-        }
-        frame.addEventListener('load', onFrameLoad)
-    })()
+    // ===== 返回逻辑：浮层优先 → 子页回退 → 非房间Tab归位 → 房间Tab双击退出 =====
+    let currentTab = TAB_URLS[0];
+    let tabStack = [TAB_URLS[0]];
+    let exitAt = 0;
 
-    window.__appBack = function () {
-        const frame = document.getElementById('content-frame')
-        if (!frame || !frame.contentWindow) return 'root'
-        if (frameDepth > 1) {
-            try {
-                frame.contentWindow.history.back()
-            } catch (err) {
-                return 'root'
-            }
-            return 'go'
-        }
-        return 'root'
+    function frameWin() {
+        try { return document.getElementById('content-frame').contentWindow; } catch (err) { return null; }
     }
+
+    function frameUrl(win) {
+        try { return win.location.pathname + win.location.search; } catch (err) { return ''; }
+    }
+
+    function tabFromUrl(url) {
+        if (!url) return '';
+        const path = url.split('?')[0];
+        for (let i = 0; i < TAB_URLS.length; i++) {
+            if (path === TAB_URLS[i] || path.endsWith('/' + TAB_URLS[i])) return TAB_URLS[i];
+        }
+        return '';
+    }
+
+    // 历史回退后的栈校正：截断到匹配项，找不到则退一层（自愈）
+    function applyBackForward(url) {
+        const idx = tabStack.lastIndexOf(url);
+        if (idx >= 0) {
+            tabStack = tabStack.slice(0, idx + 1);
+        } else if (tabStack.length > 1) {
+            tabStack.pop();
+        }
+        const tab = tabFromUrl(url);
+        if (tab) {
+            currentTab = tab;
+            setActiveNav(tab);
+        }
+    }
+
+    function onFrameLoad() {
+        const win = frameWin();
+        if (!win) return;
+        const url = frameUrl(win);
+        let type = 'navigate';
+        try {
+            const entries = win.performance.getEntriesByType('navigation');
+            if (entries && entries[0] && entries[0].type) {
+                type = entries[0].type;
+            } else if (win.performance.navigation) {
+                const t = win.performance.navigation.type;
+                type = t === 2 ? 'back_forward' : t === 1 ? 'reload' : 'navigate';
+            }
+        } catch (err) {}
+
+        if (!win.__backTrackBound) {
+            win.__backTrackBound = true;
+            win.addEventListener('pageshow', function (e) {
+                if (e.persisted) applyBackForward(frameUrl(win));
+            });
+        }
+
+        if (type === 'reload') return;
+        if (type === 'back_forward') {
+            applyBackForward(url);
+            return;
+        }
+
+        const tab = tabFromUrl(url);
+        if (tab) {
+            currentTab = tab;
+            tabStack = [url];
+            setActiveNav(tab);
+            return;
+        }
+        if (tabStack[tabStack.length - 1] !== url) tabStack.push(url);
+    }
+
+    window.appBack = function () {
+        const win = frameWin();
+        if (!win) return 'exit';
+
+        // L1：优先关闭 iframe 内最上层浮层
+        try {
+            if (typeof win.__backOverlayClose === 'function' && win.__backOverlayClose()) {
+                exitAt = 0;
+                return 'handled';
+            }
+        } catch (err) {}
+
+        // L1.5：页面自定义返回流程
+        try {
+            if (typeof win.__pageCustomBack === 'function' && win.__pageCustomBack()) {
+                exitAt = 0;
+                return 'handled';
+            }
+        } catch (err) {}
+
+        // L2：子页回退一层
+        if (tabStack.length > 1) {
+            try {
+                win.history.back();
+                exitAt = 0;
+                return 'handled';
+            } catch (err) {}
+        }
+
+        // L3：非"房间"Tab 归位到房间
+        if (currentTab !== TAB_URLS[0]) {
+            navigateTo(TAB_URLS[0]);
+            exitAt = 0;
+            return 'handled';
+        }
+
+        // L4：房间 Tab 双击退出
+        const now = Date.now();
+        if (now < exitAt) {
+            exitAt = 0;
+            return 'exit';
+        }
+        exitAt = now + 2000;
+        showToast('再按一次退出应用');
+        return 'handled';
+    };
+    window.__appBack = window.appBack;
+
+    document.getElementById('content-frame').addEventListener('load', onFrameLoad);
 
     function showToast(msg) {
         const toast = document.getElementById('toast');
