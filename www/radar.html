@@ -97,7 +97,7 @@
         justify-content: center;
         flex: none;
     }
-    .search-btn svg { width: 27px; height: 27px; }
+    .search-btn img { width: 27px; height: 27px; display: block; }
     /* 地图中央搜索框（点右上角放大镜展开/收起） */
     .map-search {
         position: absolute;
@@ -335,9 +335,7 @@
                 </svg>
             </label>
             <button class="search-btn" aria-label="搜索" onclick="toggleMapSearch()">
-                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#7b7b7b" fill-rule="nonzero" d="M 10.085 18.318 C 5.374 18.318 1.551 14.561 1.551 9.933 C 1.551 5.297 5.374 1.534 10.085 1.534 C 14.796 1.534 18.619 5.297 18.619 9.933 C 18.619 14.568 14.796 18.318 10.085 18.318 Z M 19.988 16.687 L 16.914 13.617 C 17.796 12.406 18.317 10.915 18.317 9.32 C 18.317 4.873 14.619 1.258 10.085 1.258 C 5.541 1.258 1.853 4.873 1.853 9.32 C 1.853 13.76 5.541 17.375 10.085 17.375 C 11.704 17.375 13.216 16.888 14.488 16.062 L 17.57 19.14 C 17.899 19.463 18.312 19.622 18.732 19.622 C 19.17 19.622 19.605 19.448 19.93 19.104 C 20.576 18.415 20.601 17.362 19.988 16.687 Z"/>
-                </svg>
+                <img src="assets/v2/processed/放大镜-金色.png" alt="搜索"/>
             </button>
         </div>
 
@@ -363,7 +361,6 @@
         <div class="sheet-head">
             <span class="sheet-title">
                 附近推荐
-                <span class="gold-badge">11</span>
             </span>
             <button class="more-link" onclick="showToast('更多')">更多&gt;&gt;</button>
         </div>
@@ -407,7 +404,6 @@
                 <span class="badge-wrap"><img src="assets/v2/vip/cat-education.png" alt="VIP"/></span>
                 <span class="badge-wrap">
                     <img src="assets/v2/card/company-idcard.png" alt="公司名片"/>
-                    <span class="gold-badge small">10</span>
                 </span>
             </div>
             <button class="add-btn" onclick="showAddFriendModal()">加好友</button>
