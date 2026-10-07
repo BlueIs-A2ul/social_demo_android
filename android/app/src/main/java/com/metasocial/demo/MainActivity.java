@@ -20,22 +20,19 @@ public class MainActivity extends BridgeActivity {
                     return;
                 }
 
-                String url = webView.getUrl();
-                if (url != null && url.contains("index.html")) {
-                    // 主页壳：由网页侧决定——iframe 内有历史则逐页返回，回到根页则回桌面
-                    String js =
-                        "(function(){try{return (window.__appBack&&window.__appBack())||'root';}" +
-                        "catch(e){return 'root';}})()";
-                    webView.evaluateJavascript(js, result -> {
-                        if (result == null || result.contains("root")) {
-                            moveTaskToBack(true);
-                        }
-                    });
-                } else if (webView.canGoBack()) {
-                    webView.goBack();
-                } else {
-                    moveTaskToBack(true);
-                }
+                // 所有返回行为统一由网页侧 back.js / 主壳 BackManager 判定：
+                // 'handled' = 已处理；'exit' = 请求最小化到桌面
+                String js = "(function(){try{return (window.__appBack&&window.__appBack())||'exit';}catch(e){return 'exit';}})()";
+                webView.evaluateJavascript(js, result -> {
+                    if (result == null) {
+                        moveTaskToBack(true);
+                        return;
+                    }
+                    String value = result.replace("\"", "").trim();
+                    if (value.equals("exit")) {
+                        moveTaskToBack(true);
+                    }
+                });
             }
         });
     }
