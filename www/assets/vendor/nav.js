@@ -27,38 +27,16 @@
 })();
 
 /**
- * 返回上一页，根据from参数判定
- * @param {string} defaultPage - 默认返回页面
- * @param {Object} customMap - 自定义映射（可选）
+ * 返回上一页（已统一为 back.js 的 appBack 逻辑，保留签名以兼容旧调用点）
+ * @param {string} defaultPage - 已废弃，仅兼容旧调用
+ * @param {Object} customMap - 已废弃，仅兼容旧调用
  */
-function goBack(defaultPage = 'index.html', customMap = {}) {
-    const params = new URLSearchParams(window.location.search);
-    const from = params.get('from');
-    const back = params.get('back');
-    const base = customMap[from] || (from ? from + '.html' : '');
-    // 来源页若也有自己的来源(back)，返回时透传该 from，
-    // 否则来源页的返回按钮会因丢失 from 而错误地回退到当前页
-    const target = base && back
-        ? base + (base.indexOf('?') === -1 ? '?' : '&') + 'from=' + encodeURIComponent(back)
-        : base;
-
-    // 上一页正是来源页时走真实回退，保留页面状态且不新增历史记录
-    if (base) {
-        const prevPage = document.referrer
-            ? document.referrer.split('?')[0].split('#')[0].split('/').pop()
-            : '';
-        if (prevPage === base.split('?')[0]) {
-            window.history.back();
-            return;
-        }
-        window.location.href = target;
-        return;
+function goBack() {
+    if (typeof window.appBack === 'function') {
+        return window.appBack();
     }
-    
     if (window.history.length > 1) {
         window.history.back();
-    } else {
-        window.location.href = defaultPage;
     }
 }
 
