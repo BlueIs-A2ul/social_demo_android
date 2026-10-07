@@ -189,7 +189,7 @@
     >
       <!-- 顶栏：返回 + 作者 + 关注 -->
       <header class="flex-none detail-topbar">
-        <button aria-label="返回" class="detail-back" onclick="goBack()">
+        <button aria-label="返回" class="detail-back" onclick="appBack()">
           <iconify-icon
             icon="solar:alt-arrow-left-linear"
             style="font-size: 23px"
@@ -462,14 +462,6 @@
 
       const baseLikes = 260
       const baseStars = 320
-
-      function goBack() {
-        if (window.history.length > 1) {
-          window.history.back()
-        } else {
-          window.location.href = 'publish.html'
-        }
-      }
 
       function renderDetail(index) {
         const data = feedData[index]
