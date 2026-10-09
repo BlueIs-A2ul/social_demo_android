@@ -2,6 +2,10 @@
    智慧空间 v2 设计系统（青色主题 + 金色点缀）
    用法：<link rel="stylesheet" href="assets/vendor/theme.css">
    ============================================================ */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 :root {
   /* 品牌色 */
   --brand: #4dd0e1;
