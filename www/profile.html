@@ -135,6 +135,12 @@
       .room-section {
         flex: none;
         padding: 24px 21px 0;
+        overflow: hidden;
+        transition: height .25s ease, padding-top .25s ease;
+      }
+      .room-section.rooms-collapsed {
+        height: 0;
+        padding-top: 0;
       }
       .room-grid-v2 {
         display: grid;
@@ -658,35 +664,6 @@
       }
       .community-news-fav-btn:active { transform: scale(.94); }
 
-      /* ====== 下拉刷新 ====== */
-      .pull-to-refresh-indicator {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: #fff;
-        z-index: 10;
-        transform: translateY(-100%);
-        transition: transform 0.3s ease;
-        border-bottom: 1px solid rgba(184, 233, 240, .55);
-        border-radius: 0 0 8px 8px;
-        will-change: transform;
-      }
-      .refresh-icon {
-        width: 40px;
-        height: 40px;
-      }
-      .refresh-text {
-        font-size: 12px;
-        color: var(--ink-500);
-        margin-top: 4px;
-      }
-
       /* ====== Toast ====== */
       #toast {
         visibility: hidden;
@@ -719,16 +696,6 @@
       @keyframes fadeout {
         from { opacity: 1; transform: translate(-50%, -50%); }
         to   { opacity: 0; transform: translate(-50%, -45%); }
-      }
-
-      /* ====== 新闻网格动画 ====== */
-      .news-item-enter {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.3s ease forwards;
-      }
-      @keyframes fadeInUp {
-        to { opacity: 1; transform: translateY(0); }
       }
 
       /* ====== 视觉精修：按压反馈（仅样式，不改布局/图片） ====== */
@@ -932,11 +899,6 @@
         </div>
         <!-- 新闻网格 -->
         <div class="grid grid-cols-2 gap-[9px] p-3 relative" id="newsList">
-          <!-- 下拉刷新指示器 -->
-          <div class="pull-to-refresh-indicator hidden" id="pullToRefreshIndicator">
-            <img src="assets/src_01/icon/下拉加载图.png" alt="加载中" class="refresh-icon" />
-            <span class="refresh-text">下拉刷新...</span>
-          </div>
           <!-- 新闻内容由 JavaScript 动态生成 -->
         </div>
       </div>
@@ -1029,14 +991,57 @@
         }, 3000)
       }
 
-      function toggleRooms() {
-        const section = document.getElementById('roomSection')
+      // ===== 社区空间版块收起/展开（顶部按钮与滑动共用） =====
+      let roomsCollapsed = false
+      let roomsAutoSuppressed = false
+      let roomsAnimating = false
+      let roomsExpandedHeight = 0
+
+      function setRoomsArrow(collapsed) {
         const arrow = document.querySelector('.hh-chevron img')
-        const collapsed = section.classList.contains('hidden')
-        section.classList.toggle('hidden', !collapsed)
         arrow.src = collapsed
-          ? 'assets/v2/processed/双下箭头-银色.png'
-          : 'assets/v2/processed/双下箭头-金色.png'
+          ? 'assets/v2/processed/双下箭头-金色.png'
+          : 'assets/v2/processed/双下箭头-银色.png'
+      }
+
+      function setRoomsCollapsed(next) {
+        const section = document.getElementById('roomSection')
+        if (next === roomsCollapsed || roomsAnimating) return
+        roomsCollapsed = next
+        roomsAnimating = true
+        setRoomsArrow(next)
+
+        section.style.height = section.getBoundingClientRect().height + 'px'
+        void section.offsetHeight
+        if (next) {
+          section.classList.add('rooms-collapsed')
+          section.style.height = '0px'
+        } else {
+          section.classList.remove('rooms-collapsed')
+          section.style.height =
+            (roomsExpandedHeight || section.scrollHeight) + 'px'
+        }
+
+        const finish = () => {
+          section.removeEventListener('transitionend', onEnd)
+          section.style.height = ''
+          roomsAnimating = false
+        }
+        const onEnd = (e) => {
+          if (e.target === section && e.propertyName === 'height') finish()
+        }
+        section.addEventListener('transitionend', onEnd)
+        setTimeout(() => {
+          if (roomsAnimating) finish()
+        }, 400)
+      }
+
+      function toggleRooms() {
+        if (roomsAnimating) return
+        const next = !roomsCollapsed
+        // 手动收起后不再自动展开（需再点按钮）；手动展开则恢复自动逻辑
+        roomsAutoSuppressed = next
+        setRoomsCollapsed(next)
       }
 
       function toggleNews() {
@@ -1413,10 +1418,7 @@
 
       function renderCommunityNews() {
         const newsList = document.getElementById('newsList')
-        // 保留刷新指示器
-        const indicator = document.getElementById('pullToRefreshIndicator')
         newsList.innerHTML = ''
-        if (indicator) newsList.appendChild(indicator)
         communityNewsData.forEach((item) => {
           const card = document.createElement('div')
           card.className = 'news-card'
@@ -1510,119 +1512,71 @@
         closeRoomProfileMenu()
       })
 
-      // 下拉刷新相关变量
-      let startY = 0
-      let currentY = 0
-      let isPulling = false
-      let isRefreshing = false
-      const PULL_THRESHOLD = 80
-
-      // 初始化下拉刷新
-      function initPullToRefresh() {
-        const container = document.getElementById('app-root')
-        const indicator = document.getElementById('pullToRefreshIndicator')
-        const newsList = document.getElementById('newsList')
-        const refreshText = indicator.querySelector('.refresh-text')
-
-        // 触摸开始
-        container.addEventListener('touchstart', (e) => {
-          if (isRefreshing) return
-          startY = e.touches[0].clientY
-          isPulling = true
-          // 移除过渡动画，让手指跟随更流畅
-          indicator.style.transition = 'none'
-          newsList.style.transition = 'none'
-        }, { passive: true })
-
-        // 触摸移动
-        container.addEventListener('touchmove', (e) => {
-          if (!isPulling || isRefreshing) return
-
-          currentY = e.touches[0].clientY
-          const pullDistance = currentY - startY
-
-          // 只有在页面顶部且向下拉时才触发
-          if (window.scrollY <= 0 && pullDistance > 0) {
-            e.preventDefault()
-
-            const moveDistance = Math.min(pullDistance * 0.5, 40)
-
-            indicator.classList.remove('hidden')
-            // 新闻网格整体跟随移动
-            newsList.style.transform = `translateY(${moveDistance}px)`
-
-            if (pullDistance > PULL_THRESHOLD) {
-              refreshText.textContent = '释放刷新...'
-            } else {
-              refreshText.textContent = '下拉刷新...'
-            }
-          }
-        }, { passive: false })
-
-        // 触摸结束
-        container.addEventListener('touchend', () => {
-          if (!isPulling || isRefreshing) return
-
-          const pullDistance = currentY - startY
-
-          // 恢复过渡动画
-          indicator.style.transition = 'transform 0.3s ease'
-          newsList.style.transition = 'transform 0.3s ease'
-
-          if (pullDistance > PULL_THRESHOLD) {
-            isRefreshing = true
-            newsList.style.transform = 'translateY(40px)'
-            refreshText.textContent = '刷新中...'
-
-            setTimeout(() => {
-              refreshNews()
-              hideRefreshIndicator()
-              isRefreshing = false
-            }, 1500)
-          } else {
-            hideRefreshIndicator()
-          }
-
-          isPulling = false
-          startY = 0
-          currentY = 0
-        })
-
-        // 隐藏刷新指示器
-        function hideRefreshIndicator() {
-          indicator.style.transform = 'translateY(-100%)'
-          newsList.style.transform = 'translateY(0)'
-          setTimeout(() => {
-            indicator.classList.add('hidden')
-          }, 300)
+      // ===== 滑动：滚到底自动收起（内容到社区新闻） =====
+      let scrollTicking = false
+      function onProfileScroll() {
+        if (roomsCollapsed || roomsAnimating) return
+        const maxScroll =
+          document.documentElement.scrollHeight - window.innerHeight
+        if (maxScroll > 2 && window.scrollY >= maxScroll - 2) {
+          setRoomsCollapsed(true)
         }
       }
-
-      // 刷新新闻内容
-      function refreshNews() {
-        const newsList = document.getElementById('newsList')
-        const items = newsList.querySelectorAll('.news-card')
-
-        // 添加刷新动画
-        items.forEach((item, index) => {
-          item.classList.add('news-item-enter')
-          item.style.animationDelay = `${index * 0.05}s`
+      window.addEventListener('scroll', () => {
+        if (scrollTicking) return
+        scrollTicking = true
+        requestAnimationFrame(() => {
+          scrollTicking = false
+          onProfileScroll()
         })
+      }, { passive: true })
 
-        // 显示刷新成功提示
-        showToast('新闻已刷新')
-
-        // 移除动画类
-        setTimeout(() => {
-          items.forEach(item => {
-            item.classList.remove('news-item-enter')
-          })
-        }, 500)
+      // ===== 滑动：下滑且新闻横幅可见时恢复社区空间版块 =====
+      function isNewsBandVisible() {
+        const rect = document
+          .querySelector('.news-band')
+          .getBoundingClientRect()
+        return rect.top < window.innerHeight && rect.bottom > 0
       }
 
-      // 页面加载时初始化下拉刷新
-      document.addEventListener('DOMContentLoaded', () => {
-        initPullToRefresh()
+      let gestureStartX = 0
+      let gestureStartY = 0
+      document.addEventListener('touchstart', (e) => {
+        if (e.touches.length !== 1) return
+        gestureStartX = e.touches[0].clientX
+        gestureStartY = e.touches[0].clientY
+      }, { passive: true })
+      document.addEventListener('touchmove', (e) => {
+        if (roomsAnimating || e.touches.length !== 1) return
+        const dx = Math.abs(e.touches[0].clientX - gestureStartX)
+        const dy = e.touches[0].clientY - gestureStartY
+        const vertical = Math.abs(dy) > dx * 1.2
+        if (roomsCollapsed) {
+          if (
+            !roomsAutoSuppressed &&
+            dy > 40 &&
+            vertical &&
+            isNewsBandVisible()
+          ) {
+            setRoomsCollapsed(false)
+          }
+          return
+        }
+        const maxScroll =
+          document.documentElement.scrollHeight - window.innerHeight
+        if (maxScroll <= 2 && dy < -60 && vertical && isNewsBandVisible()) {
+          setRoomsCollapsed(true)
+        }
+      }, { passive: true })
+
+      // 初始化展开态高度（窗口尺寸变化时更新）
+      roomsExpandedHeight =
+        document.getElementById('roomSection').offsetHeight
+      window.addEventListener('resize', () => {
+        if (!roomsCollapsed && !roomsAnimating) {
+          roomsExpandedHeight =
+            document.getElementById('roomSection').offsetHeight
+        }
       })
     </script>
   
