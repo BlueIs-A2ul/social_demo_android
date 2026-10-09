@@ -15,7 +15,7 @@
 | `android\` | 原生 Android 工程（Capacitor 生成） |
 | `android\app\src\main\res\values-v23\styles.xml` | 状态栏 / 导航栏配色（白底 + 深色图标） |
 | `android\app\src\main\res\values-v27\styles.xml` | 刘海 / 挖孔屏适配、手势条深色图标 |
-| `android\app\build\outputs\apk\release\app-release.apk` | 构建产物 / 交付 APK（约 18MB） |
+| `android\app\build\outputs\apk\release\app-release-<版本号>.apk` | 构建产物 / 交付 APK（约 18MB） |
 | `scripts\audit-assets.js` | 素材引用审计：找出 `www\assets` 中无人引用的图片 |
 | `scripts\optimize-images.js` | 图片批量瘦身：尺寸封顶 + PNG 量化 / JPEG mozjpeg |
 | `.git`（git 仓库） | 版本管理，见第七节 |
@@ -68,7 +68,7 @@ cd D:\android-demo\android
 .\gradlew.bat assembleRelease
 
 # 4. 交付物就在本目录内，直接取用即可
-#   android\app\build\outputs\apk\release\app-release.apk（当前约 18.2MB）
+#   android\app\build\outputs\apk\release\app-release-<版本号>.apk（当前约 18.2MB）
 ```
 
 - release 已开启 **R8 混淆 + 资源压缩**（`android\app\build.gradle`），dex 从 debug 的 8.1MB 降到 0.7MB。
@@ -81,7 +81,7 @@ cd D:\android-demo\android
 - **USB 调试**：手机开「开发者选项→USB 调试」，连电脑后：
   ```powershell
   & "C:\Android\Sdk\platform-tools\adb.exe" devices   # 确认手机在线
-  & "C:\Android\Sdk\platform-tools\adb.exe" install -r "D:\android-demo\android\app\build\outputs\apk\release\app-release.apk"
+  & "C:\Android\Sdk\platform-tools\adb.exe" install -r "D:\android-demo\android\app\build\outputs\apk\release\app-release-<版本号>.apk"
   ```
 
 ---
@@ -159,7 +159,7 @@ cd D:\android-demo\android
 ```
 改 www  →  （有新图先跑第八节瘦身）  →  npx cap sync android
 → 设 JAVA_HOME/ANDROID_HOME  →  cd android → .\gradlew.bat assembleRelease
-→ 交付物 = android\app\build\outputs\apk\release\app-release.apk（约 18MB）
+→ 交付物 = android\app\build\outputs\apk\release\app-release-<版本号>.apk（约 18MB）
 ```
 
 ---
